@@ -1,4 +1,3 @@
-
 const flatten = require('./flatten-expr').flatten;
 import * as Constants from './SerapiConstants';
 
@@ -171,7 +170,49 @@ function getLastValidFullStop(text) {
   }
 }
 
+function getGoalsFromResponse(response) {
+  if (isGeneralMessage(response)) {
+    return false;
+  }
+
+  if (response[0] === 'ObjList') {
+    if (!Array.isArray(response[1]) || response[1].length < 1) {
+      return '';
+    }
+
+    const objectives = response[1][0];
+
+    if (objectives === []) {
+      return '';
+    }
+
+    if (objectives[0] === 'CoqString') {
+      return objectives[1].toString();
+    }
+  }
+  return '';
+}
+
+function isGeneralMessage(response) {
+  return response === Constants.MESSAGE_ACK ||
+      response === Constants.MESSAGE_COMPLETED;
+}
+
+function parseToSentence(response) {
+  if (response[0] !== 'Added') {
+    return null;
+  }
+  const sid = +response[1];
+  const options = flatten(response[2]);
+  return {
+    sentenceId: sid,
+    beginIndex: options.bp,
+    endIndex: options.ep,
+  };
+}
+
 export {
   parseFeedback, parseErrorResponse, sanitise, getLastValidFullStop,
+  getGoalsFromResponse, isGeneralMessage, parseToSentence,
 };
 

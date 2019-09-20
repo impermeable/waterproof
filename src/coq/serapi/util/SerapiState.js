@@ -1,12 +1,19 @@
 /**
- * Holds sentenecs from serapi
+ * Class for holding all the shared state of an active serapi instance
+ * This includes:
+ *  - Sentences (id, begin, end, ast, ...)
+ *  - execution (execution state, targets, ...)
  */
-class SerapiSentences {
-  /**
-   * Holds sentenecs from serapi
-   */
+import {Mutex} from 'async-mutex';
+
+class SerapiState {
   constructor() {
+    this.stateLock = new Mutex();
+
     this.sentences = [];
+
+    this.lastExecuted = -1;
+    this.target = -1;
   }
 
   /**
@@ -14,25 +21,29 @@ class SerapiSentences {
    * @param {Number} index
    * @return {Object} the sentence
    */
-  get(index) {
+  getSentenceByIndex(index) {
     return this.sentences[index];
-  }
-
-  /**
-   * Replace the sentence
-   * @param {Number} index the index where to replace
-   * @param {Object} sentence the new sentence
-   */
-  set(index, sentence) {
-    this.sentences.splice(index, 1, sentence);
   }
 
   /**
    * Append sentences at the end
    * @param {Array} sentences the sentences to concat
    */
-  concat(sentences) {
+  concatSentences(sentences) {
     this.sentences = this.sentences.concat(sentences);
+  }
+
+  addSentence(sentenceId, beginIndex, endIndex, text, ast) {
+    if (sentenceId == null || beginIndex == null || endIndex == null) {
+      throw new Error('Sentence must have at least id, bi, ei');
+    }
+    this.sentences.push({
+      sentenceId,
+      beginIndex,
+      endIndex,
+      text: text == null ? null : text,
+      ast: ast == null ? null : ast,
+    });
   }
 
   /**
@@ -40,7 +51,7 @@ class SerapiSentences {
    * @param {Number} index the index of the sentence
    * @return {number} the begin index
    */
-  beginIndex(index) {
+  beginIndexOfSentence(index) {
     return this.sentences[index].beginIndex;
   }
 
@@ -49,7 +60,7 @@ class SerapiSentences {
    * @param {Number} index the index of the sentence
    * @return {number} the end index
    */
-  endIndex(index) {
+  endIndexOfSentence(index) {
     return this.sentences[index].endIndex;
   }
 
@@ -58,8 +69,17 @@ class SerapiSentences {
    * @param {Number} index the index of the sentence
    * @return {number} the begin index
    */
-  id(index) {
+  idOfSentence(index) {
     return this.sentences[index].sentenceId;
+  }
+
+  /**
+   * Get the text of a sentence
+   * @param {Number} index the index of the sentence
+   * @return {String} the text of that sentence
+   */
+  textOfSentence(index) {
+    return this.sentences[index].text;
   }
 
   /**
@@ -69,10 +89,11 @@ class SerapiSentences {
    * @param {Object} ast  The AST of the sentence
    */
   setASTforSID( sid, ast ) {
-    const id = this.index(sid);
-    if ( id !== -1 ) {
-      this.sentences[id].ast = ast;
+    const index = this.indexOfSentence(sid);
+    if (index < 0) {
+      return;
     }
+    this.sentences[index].ast = ast;
   }
 
   /**
@@ -82,9 +103,9 @@ class SerapiSentences {
    * @return {Number}  The index in the sentences array
    * containing the sentence with the requested sid
    */
-  index(sid) {
+  indexOfSentence(sid) {
     for (let j = 0; j < this.sentences.length; j++ ) {
-      if (this.sentences[j].sentenceId == sid) {
+      if (this.sentences[j].sentenceId === sid) {
         return j;
       }
     }
@@ -95,7 +116,7 @@ class SerapiSentences {
    * Get the amount of sentences
    * @return {Number} the amount
    */
-  length() {
+  sentenceSize() {
     return this.sentences.length;
   }
 
@@ -103,7 +124,7 @@ class SerapiSentences {
    * Remove all sentences after index
    * @param {Number} index from where to remove
    */
-  removeAfter(index) {
+  removeSentencesAfter(index) {
     this.sentences = this.sentences.slice(0, index);
   }
 
@@ -112,7 +133,10 @@ class SerapiSentences {
    * @param {Number} sid the Sentence id
    */
   removeSentence(sid) {
-    const index = this.index(sid);
+    const index = this.indexOfSentence(sid);
+    if (index < 0) {
+      return;
+    }
     this.sentences.splice(index, 1);
   }
 
@@ -122,18 +146,18 @@ class SerapiSentences {
    * @return {undefined|number} the sentence before the content
    */
   sentenceBeforeIndex(index) {
-    if (this.length() === 0) {
+    if (this.sentenceSize() === 0) {
       return -1;
     }
 
-    const lastSentence = this.length() - 1;
+    const lastSentence = this.sentenceSize() - 1;
 
-    if (this.endIndex(lastSentence) <= index) {
+    if (this.endIndexOfSentence(lastSentence) <= index) {
       return lastSentence;
     }
 
     for (let i = 0; i <= lastSentence; i++) {
-      const end = this.endIndex(i);
+      const end = this.endIndexOfSentence(i);
 
       if (index < end) {
         return i - 1;
@@ -148,9 +172,9 @@ class SerapiSentences {
    * @return {null|Sentence} the first sentence after that index
    */
   sentenceAfterIndex(index) {
-    for (let i = 0; i < this.length(); i++) {
-      const sentence = this.get(i);
-      if (index < this.beginIndex(i)) {
+    for (let i = 0; i < this.sentenceSize(); i++) {
+      const sentence = this.getSentenceByIndex(i);
+      if (index < this.beginIndexOfSentence(i)) {
         return {
           index: i,
           sentence,
@@ -168,10 +192,9 @@ class SerapiSentences {
    * @return {String} The extracted sentence
    */
   getSentenceAsString(text, sentenceNr) {
-    const returnText = text.slice(this.sentences[sentenceNr].beginIndex,
+    return text.slice(this.sentences[sentenceNr].beginIndex,
         this.sentences[sentenceNr].endIndex);
-    return returnText;
   }
 }
 
-export default SerapiSentences;
+export default SerapiState;

@@ -127,16 +127,21 @@ export default {
      * Updates the goals if they changed, sets executed index, and
      * removes the addError if this is specified
      *
-     * @param {string} goal  The new goals, or null when there is no change
+     * @param {String} goal  The new goals, or null when there is no change
      * @param {number} index  The new execution index
      * @param {boolean} removeAddError  Whether the addError should be removed
      */
     setContentSuccess: function(goal, index, removeAddError) {
       if (goal !== null) {
         this.goals = goal;
+        this.executedIndex = index;
       }
-      this.executedIndex = index;
-      if (removeAddError) this.addError = {message: '', index: -1};
+      if (removeAddError) {
+        this.addError = {
+          message: '',
+          index: -1,
+        };
+      }
     },
 
     /**

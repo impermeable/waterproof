@@ -93,7 +93,7 @@ class SerapiCommands extends SerapiInterface {
    * @param {Function} onError callback for errors (never?)
    */
   cancel(sentence, onSuccess, onError) {
-    // console.log(`cancel ${sentence}`);
+    console.log(`cancel ${sentence}`);
     let message;
     if (Array.isArray(sentence)) {
       const sentencesList = sentence.join(' ');
@@ -577,6 +577,7 @@ class SerapiCommands extends SerapiInterface {
    * @param {object} data the data of the response
    */
   handleGoalsResponse(tag, response, onSuccess, onError, data) {
+    console.log(response);
     if (response === Constants.MESSAGE_ACK) {
       data.completed = false;
       return;
