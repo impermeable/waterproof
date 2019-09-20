@@ -1,0 +1,13 @@
+{
+  "exerciseSheet": false,
+  "blocks": [
+    {
+      "type": "text",
+      "text": "# Waterproof test: libraries"
+    },
+    {
+      "type": "code",
+      "text": "From Coq Require Import Reals.\nOpen Scope R_scope."
+    }
+  ]
+}

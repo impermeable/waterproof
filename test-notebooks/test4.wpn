@@ -1,0 +1,9 @@
+{
+  "exerciseSheet": false,
+  "blocks": [
+    {
+      "type": "text",
+      "text": "## Gaussian integral\n\nIn ```1809```, mathematician *Karl Friedrich Gauss* proved that the following holds:\n$$ \\int_{-\\infty}^{\\infty}e^{-ax^2} \\text{d}x = \\sqrt{\\frac{\\pi}{a}} $$\nThis is a **very interesting** mathematical result. It can be proven using a polar coordinate substitution."
+    }
+  ]
+}

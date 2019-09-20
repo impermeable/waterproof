@@ -1,0 +1,39 @@
+{
+  "exerciseSheet": false,
+  "blocks": [
+    {
+      "type": "text",
+      "text": "# Waterproof test: definitions"
+    },
+    {
+      "type": "code",
+      "text": "Lemma a1 n: n + 0 = n.\nProof.\n  now induction n.\nQed.\n"
+    },
+    {
+      "type": "code",
+      "text": "Definition plus_0 n := n + 0.\nDefinition is_self n := plus_0 n = n.\n"
+    },
+    {
+      "type": "code",
+      "text": "Lemma a2: forall n: nat, is_self n.\nProof.\n  intro n.\n  unfold is_self.\n  unfold plus_0.\n  apply a1.\nQed.\n"
+    },
+    {
+      "type": "code",
+      "text": "Check a1.\nPrint plus_0.\nPrint is_self.\nCheck a2."
+    },
+    {
+      "type": "hint",
+      "text": "This is the hint title.\n<hint>\nThis is the hint description."
+    },
+    {
+      "type": "input",
+      "start": true,
+      "id": "input-0"
+    },
+    {
+      "type": "input",
+      "start": false,
+      "id": "input-0"
+    }
+  ]
+}

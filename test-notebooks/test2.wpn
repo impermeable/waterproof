@@ -1,0 +1,57 @@
+{
+  "exerciseSheet": false,
+  "blocks": [
+    {
+      "type": "code",
+      "text": "Lemma trans (A B C :Prop) :  (A -> B) -> (B->C) -> A -> C.\nProof.\n  intro H.\n  intro G.\n  intro a.\n  specialize (H a).\n  specialize (G H).\n  apply G.\nQed.\n\n"
+    },
+    {
+      "type": "text",
+      "text": "### Dat doen we nog een keer"
+    },
+    {
+      "type": "code",
+      "text": "Lemma trans2 (A B C :Prop) :  (A -> B) -> (B->C) -> A -> C.\nProof.\n  intro H.\n  intro G.\n  intro a.\n  specialize (H a).\n  specialize (G H).\n  apply G.\nQed.\n\n"
+    },
+    {
+      "type": "text",
+      "text": "### Dat doen we nog een keer"
+    },
+    {
+      "type": "code",
+      "text": "Lemma trans3 (A B C :Prop) :  (A -> B) -> (B->C) -> A -> C.\nProof.\n  intro H.\n  intro G.\n  intro a.\n  specialize (H a).\n  specialize (G H).\n  apply G.\nQed.\n\n"
+    },
+    {
+      "type": "text",
+      "text": "### Dat doen we nog een keer"
+    },
+    {
+      "type": "code",
+      "text": "Lemma trans4 (A B C :Prop) :  (A -> B) -> (B->C) -> A -> C.\nProof.\n  intro H.\n  intro G.\n  intro a.\n  specialize (H a).\n  specialize (G H).\n  apply G.\nQed.\n\n"
+    },
+    {
+      "type": "text",
+      "text": "### Dat doen we nog een keer"
+    },
+    {
+      "type": "code",
+      "text": "Lemma trans5 (A B C :Prop) :  (A -> B) -> (B->C) -> A -> C.\nProof.\n  intro H.\n  intro G.\n  intro a.\n  specialize (H a).\n  specialize (G H).\n  apply G.\nQed.\n\n"
+    },
+    {
+      "type": "text",
+      "text": "### Dat doen we nog een keer"
+    },
+    {
+      "type": "code",
+      "text": "Lemma trans6 (A B C :Prop) :  (A -> B) -> (B->C) -> A -> C.\nProof.\n  intro H.\n  intro G.\n  intro a.\n  specialize (H a).\n  specialize (G H).\n  apply G.\nQed.\n\n"
+    },
+    {
+      "type": "text",
+      "text": "### Dat doen we nog een keer"
+    },
+    {
+      "type": "code",
+      "text": "Lemma trans7 (A B C :Prop) :  (A -> B) -> (B->C) -> A -> C.\nProof.\n  intro H.\n  intro G.\n  intro a.\n  specialize (H a).\n  specialize (G H).\n  apply G.\nQed.\n\n"
+    }
+  ]
+}

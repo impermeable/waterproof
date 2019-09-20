@@ -1,0 +1,13 @@
+{
+  "exerciseSheet": false,
+  "blocks": [
+    {
+      "type": "text",
+      "text": "# Waterproof test: notations"
+    },
+    {
+      "type": "code",
+      "text": "Fixpoint power (x n : nat) {struct n} : nat :=\n  match n with\n    | 0 => 1\n    | S m => x * power x m\n  end.\n\nNotation \"x ^ n\" := (power x n).\nLemma a: forall n : nat, n ^ 1 = n * 1.\nProof.\n  intro n.\n  unfold power.\n  reflexivity.\nQed.\nPrint power.\nCheck a."
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "exerciseSheet": false,
+  "blocks": [
+    {
+      "type": "text",
+      "text": "# Waterproof test: definitions"
+    },
+    {
+      "type": "code",
+      "text": "Lemma a1 n: n + 0 = n.\nProof.\n  now induction k.\nQed.\n"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "exerciseSheet": false,
+  "blocks": [
+    {
+      "type": "text",
+      "text": "# Waterproof test: tactics"
+    },
+    {
+      "type": "code",
+      "text": "Definition def1 n := 0 + n = n.\nLtac tac1 var :=\n  intros var;\n  unfold def1.\n\nLtac tac2 var :=\n  tac1 var;\n  rewrite plus_O_n;\n  reflexivity.\n\nLemma l : forall n : nat, def1 n.\nProof.\n  tac2 n.\nQed.\n\nPrint def1.\nPrint tac1.\nPrint tac2.\nCheck l."
+    }
+  ]
+}

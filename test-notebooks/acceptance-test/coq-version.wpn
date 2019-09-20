@@ -1,0 +1,13 @@
+{
+  "exerciseSheet": false,
+  "blocks": [
+    {
+      "type": "text",
+      "text": "# Waterproof test: Coq version"
+    },
+    {
+      "type": "code",
+      "text": "Require Import Lia.\nAbout Lia."
+    }
+  ]
+}

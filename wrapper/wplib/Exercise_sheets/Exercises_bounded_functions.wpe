@@ -1,0 +1,67 @@
+{
+  "exerciseSheet": true,
+  "blocks": [
+    {
+      "type": "text",
+      "text": "# Introduction to bounded functions"
+    },
+    {
+      "type": "text",
+      "text": "We first need to import libraries. \n\nNote: for the lines below to work, the libraries have to be compiled with sercomp from the WaterProof base directory (or compiled files have to be provided). $\\\\$"
+    },
+    {
+      "type": "code",
+      "text": "Add LoadPath \"../../\".\n\nRequire Import Reals.\n\nRequire Import WaterProof.Tactics.Tactics.\nRequire Import WaterProof.Lib.BoundedFunctions.\n\nOpen Scope bdd_func_scope.\n\nDefinition D := BoundedFunctions.D."
+    },
+    {
+      "type": "text",
+      "text": "# Multiplication of functions\n\nGiven functions $f$ and $g$, we define the pointwise multiplication of the functions by $\\\\$"
+    },
+    {
+      "type": "code",
+      "text": "Definition func_mult (f g : D -> R) :=\n  fun x : D => (f x) * (g x)."
+    },
+    {
+      "type": "text",
+      "text": "In the next exercise, you are asked to show that the product of two bounded functions is bounded. $\\\\$"
+    },
+    {
+      "type": "code",
+      "text": "Lemma product_bdd_func_bdd : \n  forall (f g : D -> R),\n    is_bdd f -> is_bdd g -> \n      is_bdd (func_mult f g)."
+    },
+    {
+      "type": "input",
+      "start": true,
+      "id": "input-0"
+    },
+    {
+      "type": "code",
+      "text": "Take f : (D -> R).\nTake g : (D -> R).\nAssume f_bdd : (is_bdd f).\nAssume g_bdd : (is_bdd g)."
+    },
+    {
+      "type": "text",
+      "text": "Type the rest of the proof here."
+    },
+    {
+      "type": "code",
+      "text": "Expand the definition of is_bdd. \nExpand the definition of is_bdd in g_bdd.\nExpand the definition of is_bdd in f_bdd.\nChoose Mf such that f_abs_le_Mf according to \n  f_bdd : (exists Mf : R, \n             forall x : D, Rabs(f x) <= Mf).\nChoose Mg such that g_abs_le_Mg according to \n  g_bdd : (exists Mg : R, \n             forall x : D, Rabs(g x) <= Mg).\nChoose M := (Mf * Mg)."
+    },
+    {
+      "type": "text",
+      "text": "We need to show that for all $x : D$, $|(fg)(x)| \\leq M$."
+    },
+    {
+      "type": "code",
+      "text": "Take x : (BoundedFunctions.D).\nExpand the definition of func_mult.\nrewrite (Rabs_mult (f x) (g x))."
+    },
+    {
+      "type": "code",
+      "text": "We claim that (Rabs(f x) * Rabs(g x)  <= Rabs(f x) * Mg) (H_one_step).\nApply Rmult_le_compat_l.\nApply Rabs_pos.\nApply g_abs_le_Mg.\ntrans_ineq H_one_step.\nApply Rmult_le_compat_r.\nWe claim that (0<= Rabs (g x) ) (H_help).\nApply Rabs_pos.\ntrans_ineq H_help.\nApply g_abs_le_Mg.\nApply f_abs_le_Mf.\nQed."
+    },
+    {
+      "type": "input",
+      "start": false,
+      "id": "input-0"
+    }
+  ]
+}

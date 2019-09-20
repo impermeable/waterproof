@@ -1,0 +1,17 @@
+[
+    {
+        "name": "Check",
+        "description": "Check gives you the type of a Coq object.",
+        "example": "Check plus."
+    },
+    {
+        "name": "Print",
+        "description": "Print gives a more detailed description of a Coq object.",
+        "example": "Print nat."
+    },
+    {
+        "name": "About",
+        "description": "About gives an overview of a Coq object.",
+        "example": "About plus."
+    }
+]

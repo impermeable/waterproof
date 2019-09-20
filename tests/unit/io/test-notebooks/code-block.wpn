@@ -1,0 +1,9 @@
+{
+  "exerciseSheet": false,
+  "blocks": [
+    {
+      "type": "code",
+      "text": "Lemma a: forall n: nat, n + 0 = n."
+    }
+  ]
+}

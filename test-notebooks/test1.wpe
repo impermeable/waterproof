@@ -1,0 +1,44 @@
+{
+  "exerciseSheet": true,
+  "blocks": [
+    {
+      "type": "text",
+      "text": "First, we need to load some libraries."
+    },
+    {
+      "type": "code",
+      "text": "Require Import Reals. Open Scope R_scope."
+    },
+    {
+      "type": "text",
+      "text": "The task is to prove that $c > 0$ implies $c \\neq 0$, for all $c \\in \\mathbb{R}$."
+    },
+    {
+      "type": "code",
+      "text": "Lemma c_pos_neq_0 :\n    forall c : R,\n    (c > 0) -> (c <> 0).\nProof."
+    },
+    {
+      "type": "hint",
+      "text": "You can solve this exercise using two lemmas from the\n standard library Coq.Reals.RIneq, namely Rgt_not_le and Req_le. \nIt is possible that just writing apply Rgt_not_le. won't do, and you need to help Coq a \nbit by providing the variables you want to apply the lemma to by writing apply (Rgt_not_le c 0).. ",
+      "title": "Hints zijn dysfunctional."
+    },
+    {
+      "type": "input",
+      "start": true,
+      "id": "input-0"
+    },
+    {
+      "type": "code",
+      "text": "(*Write your proof here*)"
+    },
+    {
+      "type": "input",
+      "start": false,
+      "id": "input-0"
+    },
+    {
+      "type": "code",
+      "text": "Qed."
+    }
+  ]
+}

@@ -1,0 +1,77 @@
+[
+    {
+        "name": "Take (*name*) : (*set*).",
+        "description": "Take an arbitrary element from (*set*) and call it (*name*).",
+        "example": "Lemma x_is_x : forall x : R, x = x.\nProof.\nTake x : R.\n(*This follows by*) reflexivity.\nQed."
+    },
+    {
+        "name": "Assume (*name*) : ((*statement*)).",
+        "description": "If you need to show A ⇒ B, this allows you to assume that A holds, giving this assumption the name (*name*).",
+        "example": "Lemma A_impl_A : forall A : Prop, A ⇒ A.\nProof.\nTake A : Prop.\nAssume H_A.\nApply H_A.Qed."
+    },
+    {
+        "name": "It holds that ((*statement*)) ((*name*)).",
+        "description": "Tries to automatically show (*statement*). If that works, (*statement*) is added as a hypothesis with name (*name*)",
+        "example": "It holds that (3=3) (three_equals_itself)."
+    },
+    {
+        "name": "This follows immediately.",
+        "description": "Tries to automatically show the current goal.",
+        "example": "Lemma 2_is_2 : 2 = 2. \nProof.\nThis follows immediately.\nQed."
+    },
+    {
+        "name": "We claim that ((*statement*)) ((*name*)).",
+        "description": "Lets you first show (*statement*) before continuing with the rest of the proof. After you showed (*statement*), it will be available as a hypothesis with name (*name*).",
+        "example": "We claim that (2 = 2) (two_is_two)."
+    },
+    {
+        "name": "Because (*name_combined_hyp*) both (*name_hyp_1*) and (*name_hyp_2*).",
+        "description": "If you currently have a hypothesis with name (*name_combined_hyp*) which is in fact of the form H1 ∧ H2, then this tactic splits it up in two separate hypotheses with names (*name_hyp_1*) and (*name_hyp_2*).",
+        "example": "Lemma and_example : for all A B : Prop, A ∧ B ⇒ A.\nTake A : Prop. Take B : Prop.\nAssume A_and_B : A ."
+    },
+    {
+        "name": "Choose (*name_var*) := (*expression*).",
+        "description": "You can use this tactic when you need to show that there exists an x such that a certain property holds. You do this by proposing (*expression*) as a choice for x, giving it the name (*name_var*).",
+        "example": "Lemma exist_0 : ∃ x : ℝ, x = 0.\nProof.\nChoose y:=0.\nThis follows immediately.\nQed."
+    },
+    {
+        "name": "Choose (*name_var*) such that (*name_property*) according to (*name_hyp*).",
+        "description": "In case a hypothesis (*name_hyp*) starts with 'there exists' s.t. some property holds, then you can use this tactic to select such a variable. The variable will be named (*name_var*) and the property it satisfies (*name_property*).",
+        "example": ""
+    },
+    {
+        "name": "Apply (*lemma or assumption*).",
+        "description": "Apply a lemma or an assumption.",
+        "example": "Lemma a: forall A B: Prop, (A -> B) -> A -> B.\nProof.\n  intros.\n  apply H.\n  apply H0.\nQed."
+    },
+    {
+        "name": "Rewrite using (*equality*).",
+        "description": "First attempts to automatically find a proof of the provided equality, and if it succeeds it uses it to replace in the goal the lhs of the equality by the rhs.",
+        "example": "Rewrite using (2 + 3 = 5)."
+    },
+    {
+        "name": "Rewrite using (*equality*) in (*name_hyp*).",
+        "description": "First attempts to automatically find a proof of the provided equality, and if it succeeds it uses it to replace in the hypothesis with name (*name_hyp*) the lhs of the equality by the rhs.",
+        "example": "Rewrite using (2 + 3 = 5) in H0."
+    },
+    {
+        "name": "Expand the definition of (*name_kw*).",
+        "description": "Expands the definition of the keyword (*name_kw*) in the current goal.",
+        "example": "Expand the definition of is_upper_bound."
+    },
+    {
+        "name": "Expand the definition of (*name_kw*) in (*name_hyp*).",
+        "description": "Expands the definition of the keyword (*name_kw*) in hypothesis (*name_hyp*).",
+        "example": "Expand the definition of is_upper_bound in H0."
+    },
+    {
+        "name": "split",
+        "description": "splits the goal in two separate goals, if it is of the form A ∧ B",
+        "example": "Lemma ex_split : forall A B: Prop, A ⇒ (B ⇒ A ∧ B).\nProof.\n Take A : Prop. Take B : Prop.\nAssume H_A. Assume H_B.\n(*We*) split (*the goal*).\nApply H_A. Apply H_B. Qed."
+    },
+    {
+        "name": "reflexivity",
+        "description": "Use this tactic to show that t=t. Sometimes you can even use it to show that u=t, if after some simplication the terms u and t reduce to the same expression.",
+        "example": "Lemma ex_refl : 1=1.\nProof.\n (*This follows by*) reflexivity.\nQed."
+    }
+]

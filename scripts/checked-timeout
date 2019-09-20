@@ -1,0 +1,11 @@
+#!/bin/bash
+
+timeout "$@"
+ret=$?
+
+if [[ ${ret} -eq 124 ]]
+then
+    exit 0
+fi
+
+exit ${ret}

@@ -1,0 +1,161 @@
+{
+  "exerciseSheet": false,
+  "blocks": [
+    {
+      "type": "text",
+      "text": "# Alternative characterization of supremum"
+    },
+    {
+      "type": "text",
+      "text": "We first need to import libraries. \n\nNote: for the lines below to work, the libraries have to be compiled with sercomp from the WaterProof base directory (or compiled files have to be provided). $\\\\$"
+    },
+    {
+      "type": "code",
+      "text": "Add LoadPath \"./wrapper/\".\n\nPwd.\n\nRequire Import Reals.\nRequire Import Classical.\nRequire Import Classical_Pred_Type.\n\nRequire Import wplib.Tactics.Tactics.\nRequire Import wplib.Tactics.TacticsContra.\n\nHint Resolve Rnot_gt_le.\nHint Resolve Rnot_lt_ge.\nHint Resolve Rgt_not_le.\nHint Resolve tech_Rgt_minus.\nHint Resolve Rlt_Rminus.\nHint Resolve Rgt_irrefl."
+    },
+    {
+      "type": "text",
+      "text": "## Exercise 2a\n\nWe first introduce an arbitrary set $A \\subset \\mathbb{R}$. $\\\\$"
+    },
+    {
+      "type": "code",
+      "text": "Variable A : ℝ → Prop."
+    },
+    {
+      "type": "text",
+      "text": "In the next exercise, you need to show that if $M$ is the supremum of $A$, then for all $\\varepsilon > 0$, there exists an $x \\in A$ such that $x > M - \\varepsilon$."
+    },
+    {
+      "type": "code",
+      "text": "Lemma ex_2a : \n  for all M : ℝ,\n    is_lub A M ⇒\n      for all ε : ℝ,\n        ε > 0 ⇒ exists x : ℝ, A x ∧ x > M - ε."
+    },
+    {
+      "type": "input",
+      "start": true,
+      "id": "input-0"
+    },
+    {
+      "type": "code",
+      "text": "Take M : ℝ. Assume M_is_sup_A. \nTake ε : ℝ. Assume ε_gt_0 : (ε > 0)."
+    },
+    {
+      "type": "text",
+      "text": "We need to show that there exists an $x \\in \\mathbb{R}$ such that $x \\in A$ and $x > M - \\varepsilon$. "
+    },
+    {
+      "type": "code",
+      "text": "We argue by contradiction.\n"
+    },
+    {
+      "type": "text",
+      "text": "So suppose $\\neg (\\exists x \\in M, x \\in A \\text{ and } x > M - \\varepsilon)$."
+    },
+    {
+      "type": "code",
+      "text": "We claim that (∀ x : ℝ, A x ⇒ x ≤ M - ε) (H2). \nTake x : ℝ. Assume x_in_A. \nIt holds that (¬ (x > M - ε)) (H4)."
+    },
+    {
+      "type": "text",
+      "text": "We need to show that $x \\leq M - \\varepsilon$."
+    },
+    {
+      "type": "code",
+      "text": "This follows immediately.\n\nExpand the definition of is_lub in M_is_sup_A.\nBecause M_is_sup_A both M_upp_bd and M_smallest_upp_bd.\nIt holds that (M ≤ M - ε) (H5)."
+    },
+    {
+      "type": "code",
+      "text": "It holds that (¬ M ≤ M - ε) (H6). \ncontradiction... Qed."
+    },
+    {
+      "type": "input",
+      "start": false,
+      "id": "input-0"
+    },
+    {
+      "type": "text",
+      "text": "## Preparation for Exercise 2b\n\nFor the next exercise we will need an auxiliary lemma that we state and prove first. "
+    },
+    {
+      "type": "code",
+      "text": "Lemma aux_2b_2 :\n  for all x z : ℝ,\n    (for all ε : ℝ, ε > 0 ⇒ x > z - ε) ⇒\n      x ≥ z."
+    },
+    {
+      "type": "code",
+      "text": "Proof. \nTake x : ℝ. Take z : ℝ. Assume H1 : \n\n  (for all ε : ℝ, ε > 0 ⇒ x > z - ε).\n  \nWe claim that (¬ (x < z)) (not_x_lt_z).\n  Assume x_lt_z.\n  It holds that (0 < z - x) (H2). \n  It holds that (x > z - (z - x)) (H3). \n  Rewrite using (z - (z-x) = x) in H3.\n  It holds that (¬ (x > x)) (H5).\n  contradiction."
+    },
+    {
+      "type": "text",
+      "text": "This finishes the proof of the claim.\nWe now need to show that $x \\geq z$."
+    },
+    {
+      "type": "code",
+      "text": "This follows immediately.\nQed."
+    },
+    {
+      "type": "text",
+      "text": "## Exercise 2b\n\nWe are now ready for the exercise. Show that for all $M, z \\in \\mathbb{R}$, if $M$ is the supremum of $A$, and if $z \\in \\mathbb{R}$ is such that for all $\\varepsilon > 0$ there exists an $x \\in \\mathbb{R}$ such that $x > z - \\varepsilon$, then $\\sup A \\geq z$."
+    },
+    {
+      "type": "code",
+      "text": "Lemma ex_2b :\n  ∀ M z : ℝ,\n    is_lub A M ⇒\n      (∀ ε : ℝ, ε > 0 ⇒ ∃ x : R, A x ∧ x > z - ε) ⇒\n        M ≥ z.\nProof."
+    },
+    {
+      "type": "input",
+      "start": true,
+      "id": "input-1"
+    },
+    {
+      "type": "code",
+      "text": "Take M : ℝ. Take z : ℝ. Assume M_is_sup_A"
+    },
+    {
+      "type": "text",
+      "text": ": $M = \\sup A$"
+    },
+    {
+      "type": "code",
+      "text": ". Assume H1"
+    },
+    {
+      "type": "text",
+      "text": ": for all $\\varepsilon \\in \\mathbb{R}$, if $\\varepsilon >0$ then there exists $x \\in \\mathbb{R}$ such that $x \\in A$ and $x > z - \\varepsilon$"
+    },
+    {
+      "type": "code",
+      "text": "."
+    },
+    {
+      "type": "text",
+      "text": "We will now "
+    },
+    {
+      "type": "code",
+      "text": "apply"
+    },
+    {
+      "type": "text",
+      "text": "the earlier lemma"
+    },
+    {
+      "type": "code",
+      "text": "aux_2b_2."
+    },
+    {
+      "type": "text",
+      "text": "Hence it suffices to show that for all $\\varepsilon \\in \\mathbb{R}$, if $\\varepsilon >0$ then $M > z - \\varepsilon$."
+    },
+    {
+      "type": "code",
+      "text": "Take ε : ℝ. Assume ε_gt_0 : (ε > 0).\nIt holds that (∃ x : ℝ, A x ∧ x > z - ε) (H2)."
+    },
+    {
+      "type": "code",
+      "text": "Choose x such that x_in_A_and_gt_z_min_ε according to H2.\nExpand the definition of is_lub in M_is_sup_A.\nBecause M_is_sup_A both M_upp_bd and M_smallest_upp_bd.\nExpand the definition of is_upper_bound in M_upp_bd. \nBecause x_in_A_and_gt_z_min_ε both x_in_A and x_gt_z_min_ε. \nIt holds that (x ≤ M) (x_le_M).\nApply (Rge_gt_trans _ x _). This follows immediately. assumption. Qed."
+    },
+    {
+      "type": "input",
+      "start": false,
+      "id": "input-1"
+    }
+  ]
+}

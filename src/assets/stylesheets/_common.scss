@@ -1,0 +1,8 @@
+@charset "UTF-8";
+
+// The files under abstracts are imported in all .scss files using
+// style-resources-loader.
+@import './base/_reset.scss';
+@import './base/_base.scss';
+@import './base/_fonts.scss';
+@import './base/_typography.scss';

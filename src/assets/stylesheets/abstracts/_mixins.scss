@@ -1,0 +1,40 @@
+//
+// Contains global mixin definitions used throughout the project.
+//
+
+// Specify styles only for certain window sizes (xs/sm/md/lg). Use:
+//  @include respond-to(xs) { ... } for windows up to 767px,
+//  @include respond-to(sm) { ... } for windows between 768px and 991px,
+//  @include respond-to(md) { ... } for windows between 992px and 1199px,
+//  @include respond-to(lg) { ... } for windows starting from 1200px.
+@mixin respond-to($class) {
+  @if $class == xs {
+    @media (max-width: 767px) {
+      @content;
+    }
+  }
+
+  @else if $class == sm {
+    @media (min-width: 768px) and (max-width: 991px) {
+      @content;
+    }
+  }
+
+  @else if $class == md {
+    @media (min-width: 992px) and (max-width: 1199px) {
+      @content;
+    }
+  }
+
+  @else if $class == lg {
+    @media (min-width: 1200px) {
+      @content;
+    }
+  }
+
+  @else if $class == sm-lower {
+    @media (max-width: 991px) {
+      @content;
+    }
+  }
+}

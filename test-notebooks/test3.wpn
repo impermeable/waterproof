@@ -1,0 +1,61 @@
+{
+  "exerciseSheet": false,
+  "blocks": [
+    {
+      "type": "text",
+      "text": "# Welcome to WATERPROOF!\nBelow is an example proof of transitivity. Transitivity is the property that for three propositions $A, B, C$, if $A \\implies B$ and $B \\implies C$, then also $A \\implies C$ directly. \n"
+    },
+    {
+      "type": "text",
+      "text": "In Coq, this lemma is written as "
+    },
+    {
+      "type": "code",
+      "text": "Lemma trans (A B C: Prop) :  (A -> B) -> (B -> C) -> A -> C."
+    },
+    {
+      "type": "text",
+      "text": "$\\newline[0.3cm]$Now we start the proof."
+    },
+    {
+      "type": "code",
+      "text": "Proof."
+    },
+    {
+      "type": "text",
+      "text": "\nThen we introduce some variables."
+    },
+    {
+      "type": "code",
+      "text": "intro H. intro G. intro a."
+    },
+    {
+      "type": "text",
+      "text": "\nNow, $H$ is a proof of $A \\implies B$, $G$ is a proof of $B \\implies C$, and $a$ is a proof of proposition $A$. We apply $H$ to $a$, and obtain a proof of $B$. Then we apply $G$, which proves $C$. In Coq, this is done using the ```specialize``` tactic:"
+    },
+    {
+      "type": "code",
+      "text": "\nspecialize (H a). specialize (G H)."
+    },
+    {
+      "type": "text",
+      "text": "\nThen we "
+    },
+    {
+      "type": "code",
+      "text": "apply G."
+    },
+    {
+      "type": "text",
+      "text": "\nFinally, we are done with the proof, so we close it."
+    },
+    {
+      "type": "code",
+      "text": "Qed."
+    },
+    {
+      "type": "text",
+      "text": "\n"
+    }
+  ]
+}

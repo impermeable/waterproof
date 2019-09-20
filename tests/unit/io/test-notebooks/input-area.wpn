@@ -1,0 +1,15 @@
+{
+  "exerciseSheet": false,
+  "blocks": [
+    {
+      "type": "input",
+      "start": true,
+      "id": "in1"
+    },
+    {
+      "type": "input",
+      "start": false,
+      "id": "in1"
+    }
+  ]
+}

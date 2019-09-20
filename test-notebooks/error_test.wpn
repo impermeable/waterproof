@@ -1,0 +1,17 @@
+{
+  "exerciseSheet": false,
+  "blocks": [
+    {
+      "type": "text",
+      "text": "# Example code\n\nFirst, we will show some mathematics: $\\forall n \\in \\mathbb{N}: n + 0 = n$. We prove this in Coq."
+    },
+    {
+      "type": "code",
+      "text": "Lemma a: forall n: nat, n + 0 = n.\nProof. intro n.\nQed."
+    },
+    {
+      "type": "text",
+      "text": "This proof does not work, because we don't successfully prove that $n + 0 = n$ for the $n \\in \\mathbb{N}$ we introduced."
+    }
+  ]
+}

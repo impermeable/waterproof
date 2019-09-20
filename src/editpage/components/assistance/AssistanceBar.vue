@@ -1,0 +1,141 @@
+<template>
+  <div class="assistance-bar">
+    <div class="query-area">
+      <textarea rows="1" id="query-input" ref="queryInput"
+        placeholder="Type your (search) query here..."
+        @keydown.enter.exact.prevent
+        @keyup.enter="query()" />
+      <div class="buttons-bottom">
+        <assistance-button
+          v-for="(button, index) in buttonsBottom"
+          v-bind:name="button.name"
+          v-bind:icon="button.icon"
+          v-bind:action="button.action"
+          v-bind:key="'assistance' + index" />
+      </div>
+    </div>
+    <div class="button-area">
+      <assistance-button
+        v-for="(button, index) in buttonsRight"
+        v-bind:name="button.name"
+        v-bind:icon="button.icon"
+        v-bind:action="button.action"
+        v-bind:big="button.big"
+        v-bind:key="'assistance' + index" />
+    </div>
+  </div>
+</template>
+
+<script>
+import AssistanceButton from './AssistanceButton';
+
+export default {
+  name: 'AssistanceBar',
+  components: {
+    AssistanceButton,
+  },
+  props: {
+    eventBus: Object,
+  },
+  data: function() {
+    return {
+      buttonsBottom: [
+        {
+          name: 'Search',
+          icon: require('../../../assets/images/looking_glass_grey.svg'),
+          action: () => {
+            this.query();
+          },
+        },
+        {
+          name: 'Check',
+          icon: require('../../../assets/images/looking_glass_grey.svg'),
+          action: () => {
+            this.query('Check');
+          },
+        },
+        {
+          name: 'Print',
+          icon: require('../../../assets/images/looking_glass_grey.svg'),
+          action: () => {
+            this.query('Print');
+          },
+          big: true,
+        },
+      ],
+      buttonsRight: [
+        {
+          name: 'Tactics',
+          icon: require('../../../assets/images/looking_glass_grey.svg'),
+          action: () => {
+            this.$store.commit('openSideWindow', 1);
+          },
+        },
+        {
+          name: 'Symbols',
+          icon: require('../../../assets/images/looking_glass_grey.svg'),
+          action: () => {
+            this.$store.commit('openSideWindow', 2);
+          },
+        },
+        {
+          name: 'Commands',
+          icon: require('../../../assets/images/looking_glass_grey.svg'),
+          action: () => {
+            this.$store.commit('openSideWindow', 3);
+          },
+        },
+      ],
+    };
+  },
+  methods: {
+    query(command) {
+      const input = this.$refs.queryInput;
+      let query = input.value;
+      if (command !== undefined) {
+        query = command + ' ' + query + '.';
+      }
+
+      this.eventBus.$emit('coqSearch', query);
+    },
+  },
+};
+</script>
+
+<style lang="scss">
+  .assistance-bar {
+    width: 100%;
+    border: 1px solid black;
+    border-top: 0;
+    display: flex;
+    flex-direction: row;
+
+    .query-area {
+      // border-right: 1px solid black;
+      flex-basis: 70%;
+      display: flex;
+      flex-direction: column;
+
+      #query-input {
+        background-color: whitesmoke;
+        width: 100%;
+        flex-basis: 50%;
+        margin: 0;
+        resize: none;
+        font-size: 16px;
+      }
+
+      .buttons-bottom {
+        display: flex;
+        flex-basis: 50%;
+        flex-direction: row;
+      }
+    }
+
+    .button-area {
+      display: flex;
+      flex-flow: row wrap;
+      flex-basis: 30%;
+    }
+  }
+</style>

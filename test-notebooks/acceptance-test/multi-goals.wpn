@@ -1,0 +1,121 @@
+{
+  "exerciseSheet": false,
+  "blocks": [
+    {
+      "type": "text",
+      "text": "# Mathematical induction\n\nIn this notebook, we illustrate how we can use WaterProof to give proofs by induction.\n\nBefore we start, we first define a useful custom tactic."
+    },
+    {
+      "type": "code",
+      "text": "Ltac simplify := simpl."
+    },
+    {
+      "type": "text",
+      "text": "## Natural numbers\n\nNatural numbers are _defined_ by induction. The rules are as follows. For starters, $O$ is a natural number. And then, if $n$ is a natural number, $S n$ is a natural number as well. Here, $S$ is called the _successor_ function. \n\nWe think of $O$ as $0$, and will from now on write $0$ instead of $O$, but it is good to realize that in first instance, it is just a symbol. We interpret $S(O)$ as $1$, and $S(S(S(S(O))))$ as $4$. From now on we will use the notation as numbers."
+    },
+    {
+      "type": "text",
+      "text": "## Addition\n\nAddition is defined inductively as well. If $m$ and $n$ are natural numbers, then\n\n$$\nm + n = \n\\begin{cases}\nn & \\text{if } m = 0,\\\\\nS( k + n ) & \\text{if } m = S k \\text{ for some } k \\in \\mathbb{N}.\n\\end{cases}\n$$"
+    },
+    {
+      "type": "text",
+      "text": "$\\\\$Suppose that we want to show that for every $n \\in \\mathbb{N}$, $S n = n + 1$."
+    },
+    {
+      "type": "code",
+      "text": "Lemma succ_n_plus_1 : \n  forall n : nat,\n     S n = n + 1."
+    },
+    {
+      "type": "text",
+      "text": "We are ready to start the proof.  "
+    },
+    {
+      "type": "code",
+      "text": "\nProof. "
+    },
+    {
+      "type": "text",
+      "text": "We now want to prove by the statement by induction. We tell Coq that we want to do induction on $n$. We can also give an optional name for the parameter $n$, let's say $m$, and a name, say $IH$ to the induction hypothesis."
+    },
+    {
+      "type": "code",
+      "text": "induction n as [ | m IH]."
+    },
+    {
+      "type": "text",
+      "text": "Now, we need to show the base case first, i.e. the case in which $m = 0$. We can ask Coq to simplify the expression."
+    },
+    {
+      "type": "code",
+      "text": "simplify."
+    },
+    {
+      "type": "text",
+      "text": "We now need to show that $1 = 1$, a consequence of reflexivity of equality."
+    },
+    {
+      "type": "code",
+      "text": "reflexivity."
+    },
+    {
+      "type": "text",
+      "text": "$\\\\$\n\nNow we can assume the induction hypothesis, that $S m = m + 1$. We need to show that $S( S m ) = S m + 1$. Again, we try to "
+    },
+    {
+      "type": "code",
+      "text": "simplify"
+    },
+    {
+      "type": "text",
+      "text": "the expression"
+    },
+    {
+      "type": "code",
+      "text": "."
+    },
+    {
+      "type": "text",
+      "text": "The equality we need to show simplified to $S (S m) = S(m+1)$. We now use the induction hypothesis, which stated that $S m = m + 1$, to rewrite the goal. "
+    },
+    {
+      "type": "code",
+      "text": "rewrite IH."
+    },
+    {
+      "type": "text",
+      "text": "Hence, we need to show that $S (m+1) = S(m+1)$, which follows by "
+    },
+    {
+      "type": "code",
+      "text": "reflexivity. Qed."
+    },
+    {
+      "type": "code",
+      "text": ""
+    },
+    {
+      "type": "code",
+      "text": ""
+    },
+    {
+      "type": "text",
+      "text": ""
+    },
+    {
+      "type": "text",
+      "text": ""
+    },
+    {
+      "type": "code",
+      "text": ""
+    },
+    {
+      "type": "code",
+      "text": ""
+    },
+    {
+      "type": "code",
+      "text": ""
+    }
+  ]
+}

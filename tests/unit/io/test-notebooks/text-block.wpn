@@ -1,0 +1,9 @@
+{
+  "exerciseSheet": false,
+  "blocks": [
+    {
+      "type": "text",
+      "text": "This is some sample text."
+    }
+  ]
+}

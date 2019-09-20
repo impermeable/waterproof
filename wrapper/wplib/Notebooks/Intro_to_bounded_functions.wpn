@@ -1,0 +1,51 @@
+{
+  "exerciseSheet": false,
+  "blocks": [
+    {
+      "type": "text",
+      "text": "# Introduction to bounded functions"
+    },
+    {
+      "type": "text",
+      "text": "We first need to import libraries. \n\nNote: for the lines below to work, the libraries have to be compiled with sercomp from the WaterProof base directory (or compiled files have to be provided). $\\\\$"
+    },
+    {
+      "type": "code",
+      "text": "Add LoadPath \"../../\".\n\nRequire Import Reals.\n\nRequire Import WaterProof.Tactics.Tactics.\nRequire Import WaterProof.Lib.BoundedFunctions.\n\nOpen Scope bdd_func_scope.\n\nDefinition D := BoundedFunctions.D."
+    },
+    {
+      "type": "text",
+      "text": "# Multiplication of functions\n\nGiven functions $f$ and $g$, we define the pointwise multiplication of the functions by $\\\\$"
+    },
+    {
+      "type": "code",
+      "text": "Definition func_mult (f g : D -> R) :=\n  fun x : D => (f x) * (g x)."
+    },
+    {
+      "type": "text",
+      "text": "In the next exercise, you are asked to show that the product of two bounded functions is bounded. $\\\\$"
+    },
+    {
+      "type": "code",
+      "text": "Lemma product_bdd_func_bdd : \n  forall (f g : D -> R),\n    is_bdd f -> is_bdd g -> \n      is_bdd (func_mult f g)."
+    },
+    {
+      "type": "input",
+      "start": true,
+      "id": "input-0"
+    },
+    {
+      "type": "code",
+      "text": "Take f : (D -> R).\nTake g : (D -> R).\nAssume f_bdd : (is_bdd f).\nAssume g_bdd : (is_bdd g)."
+    },
+    {
+      "type": "text",
+      "text": "Type the rest of the proof here."
+    },
+    {
+      "type": "input",
+      "start": false,
+      "id": "input-0"
+    }
+  ]
+}

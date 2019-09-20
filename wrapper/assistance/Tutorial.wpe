@@ -1,0 +1,105 @@
+{
+  "exerciseSheet": true,
+  "blocks": [
+    {
+      "type": "text",
+      "text": "# Welcome to the Waterproof Tutorial\n\nThis special notebook will show you the basics of using Waterproof. Let's jump right in!\n\n## 1 - Executing Coq code\n\nWaterproof uses the interactive proof assistant Coq to formulate mathematical proofs. A piece of Coq code looks like this:\n"
+    },
+    {
+      "type": "code",
+      "text": "Lemma a_difficult_lemma: forall n:nat, n+0=n."
+    },
+    {
+      "type": "text",
+      "text": "\nThis code defines a lemma that says that $\\forall n\\in \\mathbb{N}: n+0=n$; i.e., the addition of $n$ and $0$ is equal to $n$.\n\\\nLet's try to execute this code. You can execute any line of code by simply clicking the \"Execute next\" button on the top left of your screen. This button can also be found under the \"Coq\" menu at the top of your screen as the first item in the list that drops down. You can undo execution of a certain line by clicking the button right below, \"Execute previous\". You can also execute up to your cursor position or simply all code in the notebook by the following two buttons, but let's disregard this for now.\n\\\nBack to the lemma. Proving this lemma is actually quite easy:"
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nintro n.\nnow induction n.\nQed."
+    },
+    {
+      "type": "text",
+      "text": "Try to execute the code below and notice the text that appears on the top right of you screen under \"Goals\". Here, your achievements are shown right above your remaining goals, whenever you are in the middle of a proof. Press the \"Execute next\" and \"Execute previous\" buttons to navigate through the proof and see if you can connect the progress in the proof to the goals that are shown."
+    },
+    {
+      "type": "text",
+      "text": "## 2 - Locked and unlocked blocks\n\n"
+    },
+    {
+      "type": "text",
+      "text": "You're currently looking at a so-called \"exercise sheet\", a special type of Waterproof file, next to a classic \"notebook\". In an exercise sheet, by default, all content is \"locked\" - you can't edit it. In a notebook, everything is \"unlocked\" - you can edit it by simply clicking the content you'd like to change.\n\\\nThe only unlocked parts of exercise sheets are the so-called \"input areas\", which you can recognize by their blue outlines:"
+    },
+    {
+      "type": "input",
+      "start": true,
+      "id": "input-0"
+    },
+    {
+      "type": "input",
+      "start": false,
+      "id": "input-0"
+    },
+    {
+      "type": "text",
+      "text": "## 3 - Adding text or code\n\nThere are 2 main types of content: text and code. For editing text, you can use a combination of Markdown and KaTeX. Consider looking up tutorials online to get more familiar with these languages.\n\\\nWithin notebooks or input areas in exercise sheets you can add blocks of these two types. Simply click the corresponding buttons on the left side of the screen or look at the menu under \"Edit\" at the top of your screen.\n\\\nTry adding some blocks in the input area below and start adding some text; maybe you can even try to formulate your own lemma in Coq code! You can provide explanation next to your code through text blocks, which can contain mathematical text and symbols through usage of KaTeX."
+    },
+    {
+      "type": "text",
+      "text": ""
+    },
+    {
+      "type": "text",
+      "text": ""
+    },
+    {
+      "type": "text",
+      "text": ""
+    },
+    {
+      "type": "code",
+      "text": ""
+    },
+    {
+      "type": "text",
+      "text": ""
+    },
+    {
+      "type": "text",
+      "text": ""
+    },
+    {
+      "type": "text",
+      "text": ""
+    },
+    {
+      "type": "code",
+      "text": ""
+    },
+    {
+      "type": "code",
+      "text": ""
+    },
+    {
+      "type": "code",
+      "text": ""
+    },
+    {
+      "type": "code",
+      "text": ""
+    },
+    {
+      "type": "text",
+      "text": ""
+    },
+    {
+      "type": "input",
+      "start": true,
+      "id": "input-1"
+    },
+    {
+      "type": "input",
+      "start": false,
+      "id": "input-1"
+    }
+  ]
+}

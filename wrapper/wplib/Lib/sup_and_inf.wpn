@@ -1,0 +1,257 @@
+{
+  "exerciseSheet": false,
+  "blocks": [
+    {
+      "type": "text",
+      "text": "# Suprema and infima"
+    },
+    {
+      "type": "code",
+      "text": "(*Add LoadPath \"./\".\nAdd LoadPath \"../../\".*)\n\nAdd LoadPath \"./wrapper/\".\n\nRequire Import Reals.\nRequire Import Lra.\nRequire Import Classical.\nRequire Import Classical_Pred_Type.\n\nRequire Import wplib.Tactics.Tactics.\nRequire Import wplib.Tactics.TacticsContra."
+    },
+    {
+      "type": "code",
+      "text": "Definition is_sup := is_lub."
+    },
+    {
+      "type": "text",
+      "text": "### A supremum is an upper bound\n\nIf $M$ is the supremum of a set $A$, it is also an upper bound."
+    },
+    {
+      "type": "code",
+      "text": "Lemma sup_is_upp_bd :\n  forall A : R -> Prop,\n    forall M : R,\n      is_sup A M -> is_upper_bound A M."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake A : (R -> Prop). Take M : R. Assume M_is_sup_A. \nBecause M_is_sup_A both M_is_upp_bd_A and any_upp_bd_A_le_M."
+    },
+    {
+      "type": "text",
+      "text": "We now just"
+    },
+    {
+      "type": "code",
+      "text": "apply M_is_upp_bd_A"
+    },
+    {
+      "type": "text",
+      "text": "to show that $M$ is an upper bound for A"
+    },
+    {
+      "type": "code",
+      "text": "."
+    },
+    {
+      "type": "code",
+      "text": "Qed."
+    },
+    {
+      "type": "text",
+      "text": "### Any upper bound is greater than or equal to the supremum"
+    },
+    {
+      "type": "code",
+      "text": "Lemma any_upp_bd_ge_sup :\n  forall A : R -> Prop,\n    forall M L : R,\n      is_sup A M -> (is_upper_bound A L -> M <= L)."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake A : (R -> Prop). Take M : R. Take L : R. \nAssume A_is_sup_M."
+    },
+    {
+      "type": "code",
+      "text": "Assume L_is_upp_bd_A."
+    },
+    {
+      "type": "code",
+      "text": "Because A_is_sup_M both M_is_upp_bd and any_upp_bd_le_M."
+    },
+    {
+      "type": "text",
+      "text": "We need to show that $M \\leq L$."
+    },
+    {
+      "type": "code",
+      "text": "This follows immediately. Qed."
+    },
+    {
+      "type": "text",
+      "text": "## Infima"
+    },
+    {
+      "type": "code",
+      "text": "Definition is_lower_bound :=\n  fun (A : R -> Prop) m \n    => forall a : R, A a -> m <= a."
+    },
+    {
+      "type": "code",
+      "text": "Definition is_inf :=\n  fun (A : R -> Prop) m \n    => (is_lower_bound A m) /\\ (forall l : R, is_lower_bound A l -> l <= m)."
+    },
+    {
+      "type": "text",
+      "text": "## An infimum is a lower bound"
+    },
+    {
+      "type": "code",
+      "text": "Lemma inf_is_low_bd :\n  forall A : R -> Prop,\n    forall m : R,\n      is_inf A m -> is_lower_bound A m."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake A : (R -> Prop).\nTake m : R.\nAssume m_is_inf_A.\nBecause m_is_inf_A both m_is_low_bd and any_low_bd_ge_m."
+    },
+    {
+      "type": "text",
+      "text": "We now just "
+    },
+    {
+      "type": "code",
+      "text": "apply m_is_low_bd"
+    },
+    {
+      "type": "text",
+      "text": "to show that $m$ is a lower bound of $A$"
+    },
+    {
+      "type": "code",
+      "text": ". Qed."
+    },
+    {
+      "type": "text",
+      "text": "## Any lower bound is less than or equal to the infimum"
+    },
+    {
+      "type": "code",
+      "text": "Lemma any_low_bd_ge_inf :\n  forall A : R -> Prop,\n    forall m l : R,\n      is_inf A m -> is_lower_bound A l -> l <= m."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake A : (R -> Prop).\nTake m : R. Take l : R."
+    },
+    {
+      "type": "code",
+      "text": "Assume m_is_inf_A"
+    },
+    {
+      "type": "text",
+      "text": ": $m = \\inf A$"
+    },
+    {
+      "type": "code",
+      "text": "."
+    },
+    {
+      "type": "code",
+      "text": "Assume l_is_low_bd_A"
+    },
+    {
+      "type": "text",
+      "text": ": $l$ is a lower bound for $A$"
+    },
+    {
+      "type": "code",
+      "text": "."
+    },
+    {
+      "type": "code",
+      "text": "Because m_is_inf_A both m_low_bd and any_low_bd_le_m."
+    },
+    {
+      "type": "text",
+      "text": "We need to show that $l \\leq m$."
+    },
+    {
+      "type": "code",
+      "text": "This follows immediately. Qed."
+    },
+    {
+      "type": "text",
+      "text": "### $\\varepsilon$-characterizations"
+    },
+    {
+      "type": "code",
+      "text": "Lemma exists_almost_maximizer :\n  ∀ (A : ℝ → Prop) (M : ℝ),\n    is_sup A M ⇒\n      ∀ (L : ℝ), L < M ⇒ \n        ∃ a : ℝ, A a ∧ L < a."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake A : (ℝ → Prop). Take M : ℝ.\nAssume M_is_sup_A. Take L : ℝ. Assume L_lt_M.\nWe argue by contradiction. \nWe claim that \n  (∀ x : ℝ, A x ⇒ x ≤ L) (H1).\n  Take x : ℝ. Assume x_in_A. \n  It holds that (¬(L < x)) (H2).\n  We need to show that (x ≤ L). This follows immediately.\nIt holds that (is_upper_bound A L) (H3).\nBy any_upp_bd_ge_sup it holds that (M ≤ L) (H4).\nIt holds that (¬(M ≤ L)) (H5).\ncontradiction.\nQed."
+    },
+    {
+      "type": "code",
+      "text": "Lemma exists_almost_maximizer_ε :\n  ∀ (A : ℝ → Prop) (M : ℝ),\n    is_sup A M ⇒\n      ∀ (ε : ℝ), ε > 0 ⇒ \n        ∃ a : ℝ, A a ∧ M - ε < a."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake A : (ℝ → Prop). Take M : ℝ.\nAssume M_is_sup_A. Take ε : ℝ. Assume ε_gt_0.\nIt holds that (M - ε < M) (H1). \napply exists_almost_maximizer with (L := M- ε) (M := M); assumption.\nQed."
+    },
+    {
+      "type": "code",
+      "text": "Lemma max_or_strict :\n  ∀ (A : ℝ → Prop) (M : ℝ),\n    is_sup A M ⇒ \n      (A M) ∨ (∀ a : ℝ, A a ⇒ a < M)."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake A : (ℝ → Prop). Take M : ℝ. \nAssume M_is_sup_A. We argue by contradiction. \nBy not_or_and it holds that ((¬ (A M)) ∧ \n  ¬(∀ a : ℝ, A a ⇒ a < M) ) (H1).\nBecause H1 both H2 and H3."
+    },
+    {
+      "type": "text",
+      "text": "We only show the proposition on the "
+    },
+    {
+      "type": "code",
+      "text": "right"
+    },
+    {
+      "type": "text",
+      "text": "hand side of the or-sign, i.e. we will show that for all $a \\in \\mathbb{R}$, if $a \\in A$ then $a < M$"
+    },
+    {
+      "type": "code",
+      "text": "."
+    },
+    {
+      "type": "code",
+      "text": "Take a : ℝ. Assume a_in_A.\nBy sup_is_upp_bd it holds that (is_upper_bound A M) (M_upp_bd).\nIt holds that (a ≤ M) (a_le_M).\nWe claim that (¬(a = M)) (a_is_not_M).\nWe argue by contradiction.\nAssume a_eq_M.\nWe claim that (A M) (M_in_A).\nRewrite using (M=a).\nassumption. contradiction. This follows immediately.\nQed."
+    },
+    {
+      "type": "text",
+      "text": "## Suprema and sequences"
+    },
+    {
+      "type": "code",
+      "text": "Lemma seq_ex_almost_maximizer_ε :\n  ∀ (a : ℕ → ℝ) (pr : has_ub a) (ε : ℝ), \n    ε > 0 ⇒ ∃ k : ℕ, a k > lub a pr - ε."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake a : (ℕ → ℝ). Take pr : (has_ub a). \nExpand the definition of lub.\nDefine sup_with_proof := (ub_to_lub a pr).\nChoose l such that l_is_sup according to sup_with_proof.\nTake ε : ℝ. Assume ε_gt_0.\nBy exists_almost_maximizer_ε it holds that (∃ y : ℝ, (EUn a) y ∧ y > l - ε) (H1).\nChoose y such that H2 according to H1.\nBecause H2 both y_in_range and y_gt_l_min_ε.\nExpand the definition of EUn in y_in_range.\nChoose i such that ai_is_y according to y_in_range.\nChoose k := i.\nRewrite using (a i = y).\nApply y_gt_l_min_ε.\nQed."
+    },
+    {
+      "type": "code",
+      "text": "Lemma seq_ex_almost_maximizer_m :\n  ∀ (a : ℕ → ℝ) (pr : has_ub a) (m : ℕ), \n    ∃ k : ℕ, a k > lub a pr - 1 / (INR(m) + 1)."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake a : (ℕ → ℝ). Take pr : (has_ub a). Take m : ℕ.\nApply seq_ex_almost_maximizer_ε."
+    },
+    {
+      "type": "text",
+      "text": "We need to show that $1/(m+1) > 0$."
+    },
+    {
+      "type": "code",
+      "text": " Rewrite using (1 / (INR m + 1) = / (INR m + 1)). "
+    },
+    {
+      "type": "text",
+      "text": "We need to show that $(m+1) > 0$. "
+    },
+    {
+      "type": "code",
+      "text": "This follows immediately. Qed."
+    },
+    {
+      "type": "code",
+      "text": "Lemma exists_almost_lim_sup_aux :\n  ∀ (a : ℕ → ℝ) (pr : has_ub a) (m : ℕ) (N : ℕ),\n    ∃ k : ℕ, (k ≥ N)%nat ∧ a k > sequence_ub a pr N - 1 / (INR(m) + 1)."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake a : (ℕ → ℝ). Take pr : (has_ub a). Take m : ℕ. Take N : ℕ.\nWe claim that (∃ i : ℕ, a (N + i)%nat > sequence_ub a pr N - 1 / (INR m + 1)) (H1).\nApply seq_ex_almost_maximizer_m.\nChoose i such that i_good according to H1.\nChoose k := (N+i)%nat.\nThis follows immediately.\nQed."
+    }
+  ]
+}

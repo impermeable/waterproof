@@ -1,0 +1,99 @@
+[
+    {
+        "name": "Greek lowercase",
+        "elements": [
+            { "symbol": "α", "name": "alpha" },
+            { "symbol": "β", "name": "beta" },
+            { "symbol": "γ", "name": "gamma" },
+            { "symbol": "δ", "name": "delta" },
+            { "symbol": "ε", "name": "epsilon" },
+            { "symbol": "ζ", "name": "zeta" },
+            { "symbol": "η", "name": "eta" },
+            { "symbol": "θ", "name": "theta" },
+            { "symbol": "ι", "name": "iota" },
+            { "symbol": "κ", "name": "kappa" },
+            { "symbol": "λ", "name": "lambda" },
+            { "symbol": "μ", "name": "mu" },
+            { "symbol": "ν", "name": "nu" },
+            { "symbol": "ξ", "name": "ksi" },
+            { "symbol": "π", "name": "pi" },
+            { "symbol": "ο", "name": "pi" },
+            { "symbol": "ρ", "name": "rho" },
+            { "symbol": "ς", "name": "sigma1" },
+            { "symbol": "σ", "name": "sigma2" },
+            { "symbol": "τ", "name": "tau" },
+            { "symbol": "υ", "name": "upsilon" },
+            { "symbol": "φ", "name": "phi1" },
+            { "symbol": "ϕ", "name": "phi2" },
+            { "symbol": "χ", "name": "chi" },
+            { "symbol": "ψ", "name": "psi" },
+            { "symbol": "ω", "name": "omega" }
+        ]
+    },
+    {
+        "name": "Greek uppercase",
+        "elements": [
+            { "symbol": "Α", "name": "Alpha" },
+            { "symbol": "Β", "name": "Beta" },
+            { "symbol": "Γ", "name": "Gamma" },
+            { "symbol": "Δ", "name": "Delta" },
+            { "symbol": "Ε", "name": "Epsilon" },
+            { "symbol": "Ζ", "name": "Zeta" },
+            { "symbol": "Η", "name": "Eta" },
+            { "symbol": "Θ", "name": "Theta" },
+            { "symbol": "Ι", "name": "Iota" },
+            { "symbol": "Κ", "name": "Kappa" },
+            { "symbol": "Λ", "name": "Lambda" },
+            { "symbol": "Μ", "name": "Mu" },
+            { "symbol": "Ν", "name": "Nu" },
+            { "symbol": "Ξ", "name": "Ksi" },
+            { "symbol": "Ο", "name": "Omicron"},
+            { "symbol": "Π", "name": "Pi" },
+            { "symbol": "Ρ", "name": "Rho" },
+            { "symbol": "Σ", "name": "Sigma" },
+            { "symbol": "Τ", "name": "Tau" },
+            { "symbol": "Υ", "name": "Upsilon" },
+            { "symbol": "Φ", "name": "Phi1" },
+            { "symbol": "Χ", "name": "Chi" },
+            { "symbol": "Ψ", "name": "Psi" },
+            { "symbol": "Ω", "name": "Omega" }
+        ]
+    },
+    {
+        "name": "Mathematical",
+        "elements": [
+            { "symbol": "∀", "name": "forall" },
+            { "symbol": "∃", "name": "exists" },
+            { "symbol": "∈", "name": "in" },
+            { "symbol": "∎", "name": "QED" },
+            { "symbol": "∞", "name": "infty" },
+            { "symbol": "∧", "name": "and" },
+            { "symbol": "∨", "name": "or" },
+            { "symbol": "∩", "name": "intersection" },
+            { "symbol": "∪", "name": "union" },
+            { "symbol": "≤", "name": "less-or-equal" },
+            { "symbol": "≥", "name": "greater-or-equal" },
+            { "symbol": "≠", "name": "not-equal" },
+            { "symbol": "¬", "name": "not" }
+        ]
+    },
+    {
+        "name": "Arrows",
+        "elements": [
+            { "symbol": "→", "name": "rightwards arrow" },
+            { "symbol": "⇒", "name": "rightwards double arrow" },
+            { "symbol": "⇔", "name": "left right double arrow" },
+            { "symbol": "↦", "name": "rightwards arrow from bar"}
+        ]
+    },
+    {
+        "name": "Number systems",
+        "elements": [
+            {"symbol": "ℕ", "name": "naturals"},
+            {"symbol": "ℤ", "name": "integers"},
+            {"symbol": "ℚ", "name": "rationals"},
+            {"symbol": "ℝ", "name": "reals"},
+            {"symbol": "ℂ", "name": "complex-numbers"}
+        ]
+    }
+]

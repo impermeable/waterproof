@@ -1,0 +1,10 @@
+{
+  "reporterEnabled": "mochawesome,mocha-junit-reporter",
+  "mochawesomeReporterOptions": {
+    "reportFilename": "index",
+    "reportDir": "out/test-unit"
+  },
+  "mochaJunitReporterReporterOptions": {
+    "mochaFile": "out/test-unit.xml"
+  }
+}

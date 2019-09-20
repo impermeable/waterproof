@@ -1,0 +1,10 @@
+{
+  "reporterEnabled": "mochawesome,mocha-junit-reporter",
+  "mochawesomeReporterOptions": {
+    "reportFilename": "index",
+    "reportDir": "out/test-e2e"
+  },
+  "mochaJunitReporterReporterOptions": {
+    "mochaFile": "out/test-e2e.xml"
+  }
+}

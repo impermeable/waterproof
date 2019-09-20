@@ -1,0 +1,24 @@
+{
+  "productName": "Waterproof",
+  "remoteBuild": true,
+  "extraFiles": ["wrapper/assistance"],
+  "win": {
+    "extraFiles": ["wrapper/win"]
+  },
+  "mac": {
+    "extraFiles": ["wrapper/mac"]
+  },
+  "linux": {
+    "extraFiles": ["wrapper/lin"]
+  },
+  "fileAssociations": [
+    {
+      "ext": "wpn",
+      "name": "Waterproof notebook"
+    },
+    {
+      "ext": "wpe",
+      "name": "Waterproof exercise"
+    }
+  ]
+}

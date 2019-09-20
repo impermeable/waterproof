@@ -1,0 +1,31 @@
+{
+ "exerciseSheet": false,
+ "blocks": [
+   {
+       "type": "text",
+       "text": "This is sample text"
+   },
+   {
+       "type": "input",
+       "start": true,
+       "id": "in1"
+   },
+   {
+       "type": "code",
+       "text": "Lemma a n: n + 0 = n."
+   },
+   {
+       "type": "text",
+       "text": "This is sample text"
+   },
+   {
+        "type": "input",
+        "start": false,
+        "id": "in1"
+   },
+   {
+       "type": "code",
+       "text": "Proof."
+   }
+ ]
+}

@@ -1,0 +1,36 @@
+#!/bin/bash
+
+mkdir -p out
+
+# Count SLOC / LOCW
+cloc --by-file --csv --quiet --out=out/cloc.csv --include-lang=JavaScript src
+
+# Convert CSV output to JSON
+jq --slurp --raw-input \
+    'split("\n") | .[1:] | map(split(",")) | map(select(length > 0)) |
+    map({
+        "file": .[1],
+        "code": (.[4] | tonumber),
+        "comments": (.[3] | tonumber),
+        "sum": ((.[3] | tonumber)+ (.[4] | tonumber))
+        })' \
+    out/cloc.csv > out/cloc.json
+
+# Compute min and avg percentages and trim whitespace
+min=$(jq 'map(.comments / .sum) | min' out/cloc.json | tr -d '[:space:]')
+avg=$(jq 'map(.comments / .sum) | add / length' out/cloc.json | tr -d '[:space:]')
+code=$(jq 'map(.code) | add' out/cloc.json | tr -d '[:space:]')
+comm=$(jq 'map(.comments) | add' out/cloc.json | tr -d '[:space:]')
+
+if [[ ! -e out/metrics.txt ]]
+then
+    touch out/metrics.txt
+fi
+
+min=$(dc <<< "1 k 100 $min * 1 / p")
+avg=$(dc <<< "1 k 100 $avg * 1 / p")
+
+echo "min_comments_percentage $min" >> out/metrics.txt
+echo "avg_comments_percentage $avg" >> out/metrics.txt
+echo "total_sloc $code" >> out/metrics.txt
+echo "total_locw $comm" >> out/metrics.txt

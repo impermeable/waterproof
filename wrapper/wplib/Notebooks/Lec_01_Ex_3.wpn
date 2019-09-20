@@ -1,0 +1,165 @@
+{
+  "exerciseSheet": false,
+  "blocks": [
+    {
+      "type": "text",
+      "text": "# Calculation rules for suprema"
+    },
+    {
+      "type": "text",
+      "text": "We first need to import libraries. \n\nNote: for the lines below to work, the libraries have to be compiled with sercomp from the WaterProof base directory (or compiled files have to be provided). $\\\\$"
+    },
+    {
+      "type": "code",
+      "text": "Add LoadPath \"./wrapper/\".\n\nRequire Import Reals.\nRequire Import Lra.\nRequire Import Classical.\nRequire Import Classical_Pred_Type.\n\nRequire Import wplib.Tactics.Tactics.\nRequire Import wplib.Tactics.TacticsContra.\nRequire Import wplib.Lib.sup_and_inf."
+    },
+    {
+      "type": "code",
+      "text": "Definition set_sum :=\n  fun (A B: ℝ → Prop) \n    => (fun (x : ℝ) ↦ exists a b : ℝ,\n      A a ∧ B b ∧ x = a + b)."
+    },
+    {
+      "type": "code",
+      "text": "Lemma sum_in_set_sum :\n  for all (A B : ℝ → Prop),\n    for all (a b : ℝ),\n      A a ⇒ B b ⇒ (set_sum A B) (a + b)."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake A : (ℝ → Prop). Take B : (ℝ → Prop). Take a : ℝ. Take b : ℝ.\nAssume a_in_A. Assume b_in_B. \nExpand the definition of set_sum."
+    },
+    {
+      "type": "text",
+      "text": "We need to show there exist $a_0$ and $b_0$ in $\\mathbb{R}$ such that $a_0 \\in A$, $b_0 \\in B$ and $a + b = a_0 + b_0$."
+    },
+    {
+      "type": "code",
+      "text": "Choose a0 := a. Choose b0 := b. This follows immediately.\nQed."
+    },
+    {
+      "type": "text",
+      "text": "## Exercise 3a\n\nIn this exercise, you are going to verify some calculation rules for suprema and infima."
+    },
+    {
+      "type": "code",
+      "text": "Lemma ex_3a_0 :\n  for all A B : ℝ → Prop,\n    for all L_A L_B : ℝ,\n      is_upper_bound A L_A ⇒ \n        is_upper_bound B L_B ⇒ \n          is_upper_bound (set_sum A B) (L_A + L_B)."
+    },
+    {
+      "type": "input",
+      "start": true,
+      "id": "input-2"
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake A : (ℝ → Prop). Take B : (ℝ → Prop).\nTake L_A : ℝ. Take L_B : ℝ.\nAssume L_A_is_upp_bd_A. Assume L_B_is_upp_bd_B.\nExpand the definition of is_upper_bound.\nTake x : ℝ. Assume x_in_A_plus_B. "
+    },
+    {
+      "type": "text",
+      "text": "In the next steps we write $x$ as $a + b$."
+    },
+    {
+      "type": "code",
+      "text": "Choose a such that H according to x_in_A_plus_B.\nChoose b such that H according to H.\nChoose a_in_A such that H according to H.\nChoose b_in_B such that x_is_a_plus_b according to H."
+    },
+    {
+      "type": "code",
+      "text": "It holds that (a ≤ L_A) (a_le_M_A). \nIt holds that (b ≤ L_B) (b_le_M_B).\nRewrite using (x = a + b)."
+    },
+    {
+      "type": "text",
+      "text": "We need to show that $a + b \\leq L_A + L_B$."
+    },
+    {
+      "type": "code",
+      "text": "This follows immediately.\nQed."
+    },
+    {
+      "type": "input",
+      "start": false,
+      "id": "input-2"
+    },
+    {
+      "type": "code",
+      "text": "Lemma ex_3a_1 :\n  for all M M_A M_B : ℝ,\n    for all A B : ℝ → Prop,\n      is_sup A M_A ⇒ is_sup B M_B ⇒ is_sup (set_sum A B) M\n        ⇒ M = M_A + M_B.\nProof."
+    },
+    {
+      "type": "input",
+      "start": true,
+      "id": "input-1"
+    },
+    {
+      "type": "text",
+      "text": "We first introduce all the variables."
+    },
+    {
+      "type": "code",
+      "text": "Take M : ℝ. Take M_A : ℝ. Take M_B : ℝ. \nTake A : (ℝ → Prop). Take B : (ℝ → Prop)."
+    },
+    {
+      "type": "text",
+      "text": "Next we make the appropriate assumptions."
+    },
+    {
+      "type": "code",
+      "text": "Assume M_A_is_sup_A.\nAssume M_B_is_sup_B.\nAssume M_is_sup_A_plus_B.\nHint Resolve sup_is_upp_bd."
+    },
+    {
+      "type": "text",
+      "text": "We will first show that $M_A + M_B$ is an upper bound for $A + B$."
+    },
+    {
+      "type": "code",
+      "text": "By ex_3a_0 it holds that (is_upper_bound (set_sum A B) (M_A + M_B)) (M_A_plus_M_B_upp_bd).\n\nBy any_upp_bd_le_sup it holds that (M ≤ M_A + M_B) (M_le_M_A_plus_M_B)."
+    },
+    {
+      "type": "text",
+      "text": "Next, we show that for all $b \\in B$, $M-b$ is an upper bound for $A$."
+    },
+    {
+      "type": "code",
+      "text": "We claim that (∀ b : ℝ, B b ⇒ is_upper_bound A (M-b))\n  (M_min_b_upp_bd)."
+    },
+    {
+      "type": "code",
+      "text": "Take b : ℝ. Assume b_in_B. \nExpand the definition of is_upper_bound. Take a : ℝ. Assume a_in_A. \nBecause M_is_sup_A_plus_B both M_upp_bd_A_plus_B and every_upp_bd_A_plus_B_ge_M.\nBy sum_in_set_sum it holds that (a + b ≤ M) (a_plus_b_le_M).\nWe need to show that (a ≤ M - b).\nThis follows immediately. "
+    },
+    {
+      "type": "text",
+      "text": "We will now show that $(M-M_A)$ is an upper bound for $B$."
+    },
+    {
+      "type": "code",
+      "text": "We claim that (is_upper_bound (B) (M-M_A)) (M_min_M_A_upp_bd_B).\nExpand the definition of is_upper_bound. \nTake b : ℝ. Assume b_in_B.\nIt holds that (is_upper_bound A (M-b)) (H4). \nBecause M_A_is_sup_A both M_A_upp_bd and any_upp_bd_le_M_A. It holds that (M_A ≤ M-b) (M_A_le_M_min_b)."
+    },
+    {
+      "type": "text",
+      "text": "We need to show that $b \\leq M - M_A$."
+    },
+    {
+      "type": "code",
+      "text": " This follows immediately. "
+    },
+    {
+      "type": "code",
+      "text": "Because M_B_is_sup_B both M_B_upp_bd and any_upp_bd_le_M_B. \nIt holds that (M_B ≤ M - M_A) (M_B_le_M_min_M_A). "
+    },
+    {
+      "type": "text",
+      "text": "We need to show that $M = M_A + M_B$."
+    },
+    {
+      "type": "text",
+      "text": ""
+    },
+    {
+      "type": "code",
+      "text": "This follows immediately.\nQed."
+    },
+    {
+      "type": "code",
+      "text": ""
+    },
+    {
+      "type": "input",
+      "start": false,
+      "id": "input-1"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "exerciseSheet": false,
+  "blocks": [
+    {
+      "type": "text",
+      "text": "# Waterproof test: goals and hypotheses"
+    },
+    {
+      "type": "code",
+      "text": "Lemma a: forall m n: nat, m >= 0 -> n >= 0 -> m = m /\\ n = n.\nProof.\n  intro m.\n  intro n.\n  split.\n  reflexivity.\n  reflexivity.\nQed."
+    }
+  ]
+}

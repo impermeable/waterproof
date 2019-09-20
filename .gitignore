@@ -1,0 +1,46 @@
+doc/
+node_modules/
+out/
+.DS_Store
+/dist
+
+/tests/e2e/reports/
+selenium-debug.log
+
+# local env files
+.env.local
+.env.*.local
+
+# Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+#Electron-builder output
+/dist_electron
+.nyc_output
+
+# Recent files list
+src/io/recentFileList.json
+recentFileList.json
+
+# Shortcuts
+shortKeys.json
+
+build/icons/*
+scripts/unit_tests.tex
+
+# wpwrapper logs
+wpwrapper.*
+
+# compiled Coq libraries
+*.vo
