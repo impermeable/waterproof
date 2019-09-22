@@ -302,7 +302,7 @@ describe('serapi combined content & execution processor', () => {
     expect(onResult.callCount).to.equal(1);
 
     // TODO: check if right thing is given to onResult
-    expect(false).to.equal(true);
+    expect('check that return values are correct').to.equal('not done');
   });
 
   it('should get results from search', async () => {
@@ -324,7 +324,7 @@ describe('serapi combined content & execution processor', () => {
     expect(onResult.callCount).to.equal(7);
 
     // TODO: check if right thing is given to onResult
-    expect(false).to.equal(true);
+    expect('check that return values are correct').to.equal('not done');
   });
 
   it('should get results from text search', async () => {
@@ -347,14 +347,47 @@ describe('serapi combined content & execution processor', () => {
     expect(onResult.callCount).to.equal(6);
 
     // TODO: check if right thing is given to onResult
-    expect(false).to.equal(true);
+    expect('check that return values are correct').to.equal('not done');
   });
 
   it('should ignore results with \'?\'', async () => {
-    expect(false).to.equal(true);
+    const query = '_';
+    worker.addExpectedCall(`Check (${query}).`,
+        require('./responses/checkQuestionMarkResult'));
+
+    worker.addExpectedCall(`"Search (${query})."`, emptyResponse);
+    worker.addExpectedCall(`"Search \\"${query}\\"."`, emptyResponse);
+
+    const onResult = sinon.fake();
+    const onDone = sinon.fake();
+
+    await proc.searchFor(query, onResult, onDone);
+
+    expect(worker.getCallAmount()).to.equal(3);
+
+    expect(onDone.callCount).to.equal(1);
+    expect(onResult.callCount).to.equal(0);
   });
 
   it('should get the correct name even with \':\'', async () => {
-    expect(false).to.equal(true);
+    const query = 'add';
+    worker.addExpectedCall(`Check (${query}).`, emptyResponse);
+
+    worker.addExpectedCall(`"Search (${query})."`,
+        require('./responses/searchAddColonResult'));
+    worker.addExpectedCall(`"Search \\"${query}\\"."`, emptyResponse);
+
+    const onResult = sinon.fake();
+    const onDone = sinon.fake();
+
+    await proc.searchFor(query, onResult, onDone);
+
+    expect(worker.getCallAmount()).to.equal(3);
+
+    expect(onDone.callCount).to.equal(1);
+    expect(onResult.callCount).to.equal(4);
+
+    // TODO: check return values
+    expect('check that return values are correct').to.equal('not done');
   });
 });
