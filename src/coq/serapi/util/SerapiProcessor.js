@@ -17,6 +17,7 @@ class SerapiProcessor extends SerapiCallbacks {
     this.commandStatus = {
       resolver: null,
       result: {},
+      extraTag: null,
     };
     this.afterCommand = null;
   }
@@ -29,6 +30,7 @@ class SerapiProcessor extends SerapiCallbacks {
       this.commandStatus = {
         resolver: resolve,
         result: {},
+        extraTag,
       };
       this.tagger.sendCommand(command,
           (m, t) => this.handleMessage(m, t),
@@ -49,19 +51,30 @@ class SerapiProcessor extends SerapiCallbacks {
     }
   }
 
-  handleMessage(data, extraTag) {
-    const partialResult = this.handleSerapiMessage(data, extraTag);
-    if (partialResult !== undefined) {
+  _addToResult(partial) {
+    if (partial !== undefined) {
       this.commandStatus.result =
-          Object.assign(this.commandStatus.result, partialResult);
+          Object.assign(this.commandStatus.result, partial);
     }
+  }
+
+  handleMessage(data, extraTag) {
+    this._addToResult(this.handleSerapiMessage(data, extraTag));
     if (data === Constants.MESSAGE_COMPLETED) {
       // command completed resolve promise
       this._resolveCommand();
     }
   }
 
+  handleFeedback(data) {
+    this._addToResult(
+        this.handleSerapiFeedback(data, this.commandStatus.extraTag));
+  }
+
   handleSerapiMessage(data, extraTag) {
+  }
+
+  handleSerapiFeedback(data, extraTag) {
   }
 }
 

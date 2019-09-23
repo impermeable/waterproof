@@ -237,9 +237,7 @@ class SerapiContentProcessor extends SerapiProcessor {
     }
   }
 
-  handleFeedback(feedback) {
-    console.log('Content processor got feedback:');
-    console.log(feedback);
+  handleSerapiFeedback(data, extraTag) {
   }
 }
 

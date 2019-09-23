@@ -175,6 +175,9 @@ class SerapiExecutionProcessor extends SerapiProcessor {
       }
     }
   }
+
+  handleSerapiFeedback(data, extraTag) {
+  }
 }
 
 export default SerapiExecutionProcessor;

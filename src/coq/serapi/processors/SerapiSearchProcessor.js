@@ -54,13 +54,9 @@ class SerapiSearchProcessor extends SerapiProcessor {
   }
 
   async _continueSearch(searchNumber) {
-    console.log('locked?', this.searchNumLock.isLocked());
     const release = await this.searchNumLock.acquire();
-    console.log('lock search');
-    console.log(searchNumber, 'vs', this.currentSearch);
     const stillCurrent = this.currentSearch === searchNumber;
     release();
-    console.log('unlock search');
     return stillCurrent;
   }
 
@@ -73,7 +69,6 @@ class SerapiSearchProcessor extends SerapiProcessor {
   }
 
   async _searchStringQuery(query) {
-    console.log('_searchStringQuery');
     return this.sendCommand(createSearchCommand('"' + query + '"'), 't');
   }
 
@@ -81,8 +76,8 @@ class SerapiSearchProcessor extends SerapiProcessor {
     console.log(extraTag +'-message:' + data);
   }
 
-  handleFeedback(feedback) {
-    console.log('feedback:' + feedback);
+  handleFeedback(data, extraTag) {
+    console.log('feedback:' + data);
   }
 }
 

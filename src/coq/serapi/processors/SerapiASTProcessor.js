@@ -18,7 +18,7 @@ class SerapiASTProcessor extends SerapiProcessor {
   handleSerapiMessage(data, extraTag) {
   }
 
-  handleFeedback(feedback) {
+  handleSerapiFeedback(data, extraTag) {
   }
 }
 
