@@ -20,7 +20,10 @@ const checkPlusFeedback = '(Feedback((doc_id 0)(span_id 1)(route 0)' +
   '(Pp_tag constr.notation(Pp_string" ->"))(Pp_print_break 1 0)' +
   '(Pp_tag constr.variable(Pp_string nat))))))))))))))';
 
+// truncated to 3
 const searchPlusFeedbacks = require('./responses/searchPlusResponse');
+
+// truncated to 4 (shares 2 with non quotes)
 const searchQuotesPlusFeedbacks =
   require('./responses/searchQuotesPlusResponse');
 
@@ -299,8 +302,10 @@ describe('serapi combined content & execution processor', () => {
     expect(onDone.callCount).to.equal(1);
     expect(onResult.callCount).to.equal(1);
 
-    // TODO: check if right thing is given to onResult
-    expect('check that return values are correct').to.equal('not done');
+    expect(onResult.lastCall.args[0]).to.include({
+      name: 'Nat.add',
+      content: 'nat -> nat -> nat',
+    });
   });
 
   it('should get results from search', async () => {
@@ -319,10 +324,23 @@ describe('serapi combined content & execution processor', () => {
     expect(worker.getCallAmount()).to.equal(3);
 
     expect(onDone.callCount).to.equal(1);
-    expect(onResult.callCount).to.equal(7);
+    expect(onResult.callCount).to.equal(3);
 
-    // TODO: check if right thing is given to onResult
-    expect('check that return values are correct').to.equal('not done');
+    expect(onResult.args.flatMap((res) =>
+      ({name: res.name, content: res.content}))).to.have.members([
+      {
+        name: 'plus_O_n',
+        content: 'forall n : nat, 0 + n = n',
+      },
+      {
+        name: 'plus_n_O',
+        content: 'forall n : nat, n + 0 = n',
+      },
+      {
+        name: 'mult_n_Sm',
+        content: 'forall n m : nat, n * m + n = n * S m',
+      },
+    ]);
   });
 
   it('should get results from text search', async () => {
@@ -342,13 +360,30 @@ describe('serapi combined content & execution processor', () => {
     expect(worker.getCallAmount()).to.equal(3);
 
     expect(onDone.callCount).to.equal(1);
-    expect(onResult.callCount).to.equal(6);
+    expect(onResult.callCount).to.equal(4);
 
-    // TODO: check if right thing is given to onResult
-    expect('check that return values are correct').to.equal('not done');
+    expect(onResult.args.flatMap((res) =>
+      ({name: res.name, content: res.content}))).to.have.members([
+      {
+        name: 'plus_O_n',
+        content: 'forall n : nat, 0 + n = n',
+      },
+      {
+        name: 'plus_n_O',
+        content: 'forall n : nat, n + 0 = n',
+      },
+      {
+        name: 'plus_n_Sm',
+        content: 'forall n m : nat, S (n + m) = n + S m',
+      },
+      {
+        name: 'plus_Sn_m',
+        content: 'forall n m : nat, S n + m = S (n + m)',
+      },
+    ]);
   });
 
-  it('should combine results results from all 3 calls', async () => {
+  it('should combine results from all 3 calls without duplicates', async () => {
     const query = 'plus';
 
     worker.addExpectedCall(`Check (${query}).`, [
@@ -372,10 +407,35 @@ describe('serapi combined content & execution processor', () => {
     expect(worker.getCallAmount()).to.equal(3);
 
     expect(onDone.callCount).to.equal(1);
-    expect(onResult.callCount).to.equal(14);
+    expect(onResult.callCount).to.equal(6);
 
-    // TODO: check if right thing is given to onResult
-    expect('check that return values are correct').to.equal('not done');
+    expect(onResult.args.flatMap((res) =>
+      ({name: res.name, content: res.content}))).to.have.members([
+      {
+        name: 'Nat.add',
+        content: 'nat -> nat -> nat',
+      },
+      {
+        name: 'plus_O_n',
+        content: 'forall n : nat, 0 + n = n',
+      },
+      {
+        name: 'plus_n_O',
+        content: 'forall n : nat, n + 0 = n',
+      },
+      {
+        name: 'mult_n_Sm',
+        content: 'forall n m : nat, n * m + n = n * S m',
+      },
+      {
+        name: 'plus_n_Sm',
+        content: 'forall n m : nat, S (n + m) = n + S m',
+      },
+      {
+        name: 'plus_Sn_m',
+        content: 'forall n m : nat, S n + m = S (n + m)',
+      },
+    ]);
   });
 
   it('should ignore results with \'?\'', async () => {
@@ -415,7 +475,7 @@ describe('serapi combined content & execution processor', () => {
     expect(onDone.callCount).to.equal(1);
     expect(onResult.callCount).to.equal(4);
 
-    expect(onResult.args.flatMap((res) => res.name)).to.have.members(
-        ['Nat.tail_add', 'Nat.add', 'Nat.tail_addmul', 'eq_add_S']);
+    expect(onResult.args.flatMap((res) => res.name)).to.have.members([
+      'Nat.tail_add', 'Nat.add', 'Nat.tail_addmul', 'eq_add_S']);
   });
 });
