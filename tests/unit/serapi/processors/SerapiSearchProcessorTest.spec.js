@@ -96,9 +96,7 @@ describe('serapi combined content & execution processor', () => {
     const onDone1 = sinon.fake();
 
     await proc.searchFor(firstQuery, onResult, onDone1);
-    console.log('search 1 resolved');
     await secondSearch();
-    console.log('search 2 resolved');
 
     expect(worker.getCallAmount()).to.equal(firstCalls + 3);
 
@@ -350,6 +348,36 @@ describe('serapi combined content & execution processor', () => {
     expect('check that return values are correct').to.equal('not done');
   });
 
+  it('should combine results results from all 3 calls', async () => {
+    const query = 'plus';
+
+    worker.addExpectedCall(`Check (${query}).`, [
+      'Ack',
+      '(Feedback((doc_id 0)(span_id 1)(route 0)(contents Processed)))',
+      checkPlusFeedback,
+      '(ObjList())',
+      'Completed',
+    ]);
+
+    worker.addExpectedCall(`"Search (${query})."`, searchPlusFeedbacks);
+
+    worker.addExpectedCall(`"Search \\"${query}\\"."`,
+        searchQuotesPlusFeedbacks);
+
+    const onResult = sinon.fake();
+    const onDone = sinon.fake();
+
+    await proc.searchFor(query, onResult, onDone);
+
+    expect(worker.getCallAmount()).to.equal(3);
+
+    expect(onDone.callCount).to.equal(1);
+    expect(onResult.callCount).to.equal(14);
+
+    // TODO: check if right thing is given to onResult
+    expect('check that return values are correct').to.equal('not done');
+  });
+
   it('should ignore results with \'?\'', async () => {
     const query = '_';
     worker.addExpectedCall(`Check (${query}).`,
@@ -387,7 +415,7 @@ describe('serapi combined content & execution processor', () => {
     expect(onDone.callCount).to.equal(1);
     expect(onResult.callCount).to.equal(4);
 
-    // TODO: check return values
-    expect('check that return values are correct').to.equal('not done');
+    expect(onResult.args.flatMap((res) => res.name)).to.have.members(
+        ['Nat.tail_add', 'Nat.add', 'Nat.tail_addmul', 'eq_add_S']);
   });
 });
