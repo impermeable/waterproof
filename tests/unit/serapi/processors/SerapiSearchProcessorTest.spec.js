@@ -42,6 +42,16 @@ const errorResponse = [
   'Completed',
 ];
 
+const errorWithResultResponse = [
+  'Ack',
+  '(Feedback((doc_id 0)(span_id 1)(route 0)(contents Processed)))',
+  checkPlusFeedback,
+  '(CoqExn(((fname ToplevelInput)(line_nb 1)(bol_pos 0)(line_nb_last 1)' +
+  '(bol_pos_last 0)(bp 6)(ep 9)))()(Backtrace())(ExplainErr.EvaluatedError' +
+  '"The reference abc was not found in the current environment."))',
+  'Completed',
+];
+
 
 describe('serapi combined content & execution processor', () => {
   let proc;
@@ -67,6 +77,9 @@ describe('serapi combined content & execution processor', () => {
     sinon.restore();
   });
 
+
+  const mapToNameContent = (res) =>
+    ({name: res[0].name, content: res[0].content});
 
   it('should send three commands when searching (no results)', async () => {
     const searchQuery = 'no_results';
@@ -278,6 +291,27 @@ describe('serapi combined content & execution processor', () => {
     expect(onResult.callCount).to.equal(0);
   });
 
+  it('should ignore results if an error occurred', async () => {
+    const searchQuery = '"" \\\\ ""';
+    const sanitisedQuery = `\\"\\" \\\\\\\\ \\"\\"`;
+    worker.addExpectedCall(`Vernac "Check (${sanitisedQuery})."`,
+        errorWithResultResponse);
+
+    worker.addExpectedCall(`"Search (${sanitisedQuery})."`, emptyResponse);
+
+    worker.addExpectedCall(`"Search \\"${sanitisedQuery}\\"."`, emptyResponse);
+
+    const onResult = sinon.fake();
+    const onDone = sinon.fake();
+
+    await proc.searchFor(searchQuery, onResult, onDone);
+
+    expect(worker.getCallAmount()).to.equal(3);
+
+    expect(onDone.callCount).to.equal(1);
+    expect(onResult.callCount).to.equal(0);
+  });
+
   it('should get results from check', async () => {
     const query = 'plus';
     worker.addExpectedCall(`Check (${query}).`, [
@@ -326,15 +360,14 @@ describe('serapi combined content & execution processor', () => {
     expect(onDone.callCount).to.equal(1);
     expect(onResult.callCount).to.equal(3);
 
-    expect(onResult.args.flatMap((res) =>
-      ({name: res.name, content: res.content}))).to.have.members([
+    expect(onResult.args.flatMap(mapToNameContent)).to.have.deep.members([
       {
         name: 'plus_O_n',
         content: 'forall n : nat, 0 + n = n',
       },
       {
         name: 'plus_n_O',
-        content: 'forall n : nat, n + 0 = n',
+        content: 'forall n : nat, n = n + 0',
       },
       {
         name: 'mult_n_Sm',
@@ -362,15 +395,14 @@ describe('serapi combined content & execution processor', () => {
     expect(onDone.callCount).to.equal(1);
     expect(onResult.callCount).to.equal(4);
 
-    expect(onResult.args.flatMap((res) =>
-      ({name: res.name, content: res.content}))).to.have.members([
+    expect(onResult.args.flatMap(mapToNameContent)).to.have.deep.members([
       {
         name: 'plus_O_n',
         content: 'forall n : nat, 0 + n = n',
       },
       {
         name: 'plus_n_O',
-        content: 'forall n : nat, n + 0 = n',
+        content: 'forall n : nat, n = n + 0',
       },
       {
         name: 'plus_n_Sm',
@@ -409,8 +441,7 @@ describe('serapi combined content & execution processor', () => {
     expect(onDone.callCount).to.equal(1);
     expect(onResult.callCount).to.equal(6);
 
-    expect(onResult.args.flatMap((res) =>
-      ({name: res.name, content: res.content}))).to.have.members([
+    expect(onResult.args.flatMap(mapToNameContent)).to.have.deep.members([
       {
         name: 'Nat.add',
         content: 'nat -> nat -> nat',
@@ -421,7 +452,7 @@ describe('serapi combined content & execution processor', () => {
       },
       {
         name: 'plus_n_O',
-        content: 'forall n : nat, n + 0 = n',
+        content: 'forall n : nat, n = n + 0',
       },
       {
         name: 'mult_n_Sm',
@@ -475,7 +506,7 @@ describe('serapi combined content & execution processor', () => {
     expect(onDone.callCount).to.equal(1);
     expect(onResult.callCount).to.equal(4);
 
-    expect(onResult.args.flatMap((res) => res.name)).to.have.members([
+    expect(onResult.args.flatMap((res) => res[0].name)).to.have.members([
       'Nat.tail_add', 'Nat.add', 'Nat.tail_addmul', 'eq_add_S']);
   });
 });

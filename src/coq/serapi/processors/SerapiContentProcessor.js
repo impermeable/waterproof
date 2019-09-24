@@ -237,7 +237,7 @@ class SerapiContentProcessor extends SerapiProcessor {
     }
   }
 
-  handleSerapiFeedback(data, extraTag) {
+  handleSerapiFeedback(feedback, extraTag) {
   }
 }
 

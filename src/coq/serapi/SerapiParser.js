@@ -35,6 +35,21 @@ function parseFeedback(data) {
   return feedback;
 }
 
+function parseErrorableFeedback(data) {
+  const feedback = parseFeedback(data);
+  if (feedback.string === '') {
+    return feedback;
+  }
+  feedback.string = feedback.string
+      .replace(/ \)/g, ')')
+      .replace(/\( /g, '(')
+      .replace(/ ,/g, ',');
+  if (feedback.errorFlag === true) {
+    feedback.string = 'Error: ' + feedback.string;
+  }
+  return feedback;
+}
+
 /**
  * Try to get just the informative parts of a serapi recursive message
  * @param {Object|string|Array} response the response
@@ -212,7 +227,8 @@ function parseToSentence(response) {
 }
 
 export {
-  parseFeedback, parseErrorResponse, sanitise, getLastValidFullStop,
+  parseFeedback, parseErrorableFeedback, parseErrorResponse,
+  sanitise, getLastValidFullStop,
   getGoalsFromResponse, isGeneralMessage, parseToSentence,
 };
 

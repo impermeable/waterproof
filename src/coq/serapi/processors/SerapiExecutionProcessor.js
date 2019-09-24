@@ -176,7 +176,7 @@ class SerapiExecutionProcessor extends SerapiProcessor {
     }
   }
 
-  handleSerapiFeedback(data, extraTag) {
+  handleSerapiFeedback(feedback, extraTag) {
   }
 }
 

@@ -4,6 +4,7 @@ import {
   createCheckCommand,
   createSearchCommand,
 } from '../util/SerapiCommandFactory';
+import * as Constants from '../SerapiConstants';
 
 class SerapiSearchProcessor extends SerapiProcessor {
   /**
@@ -22,17 +23,21 @@ class SerapiSearchProcessor extends SerapiProcessor {
 
   async searchFor(query, onResult, onDone) {
     const searchNum = await this._startNewSearch();
-    await this._checkQuery(query);
+    const results = [];
+
+    await this._checkQuery(query, onResult, results);
+
     if (!await this._continueSearch(searchNum)) {
       return;
     }
 
-    await this._searchQuery(query);
+    await this._searchQuery(query, onResult, results);
+
     if (!await this._continueSearch(searchNum)) {
       return;
     }
 
-    await this._searchStringQuery(query);
+    await this._searchStringQuery(query, onResult, results);
 
     // TODO: should we really check here?
     if (!await this._continueSearch(searchNum)) {
@@ -60,24 +65,69 @@ class SerapiSearchProcessor extends SerapiProcessor {
     return stillCurrent;
   }
 
-  async _checkQuery(query) {
-    return this.sendCommand(createCheckCommand(query), 'c');
+  _processResults(result, onResult, ignoredResults) {
+    if (result.hasOwnProperty('error')) {
+      return;
+    }
+
+    for (const [key, value] of Object.entries(result)) {
+      if (ignoredResults.indexOf(key) < 0) {
+        onResult(value);
+        ignoredResults.push(key);
+      }
+    }
   }
 
-  async _searchQuery(query) {
-    return this.sendCommand(createSearchCommand('(' + query + ')'), 'q');
+  async _checkQuery(query, onResult, ignored) {
+    return this.sendCommand(createCheckCommand(query), 'c')
+        .then((result) => this._processResults(result, onResult, ignored));
   }
 
-  async _searchStringQuery(query) {
-    return this.sendCommand(createSearchCommand('"' + query + '"'), 't');
+  async _searchQuery(query, onResult, ignored) {
+    return this.sendCommand(createSearchCommand('(' + query + ')'), 'q')
+        .then((result) => this._processResults(result, onResult, ignored));
+  }
+
+  async _searchStringQuery(query, onResult, ignored) {
+    return this.sendCommand(createSearchCommand('"' + query + '"'), 't')
+        .then((result) => this._processResults(result, onResult, ignored));
   }
 
   handleSerapiMessage(data, extraTag) {
-    console.log(extraTag +'-message:' + data);
+    // this is not actually needed but used in case?? results come in and an
+    // error occurred
+    if (data.length > 0 && data[0] === Constants.COQ_EXCEPTION) {
+      return {
+        error: true,
+      };
+    }
   }
 
-  handleFeedback(data, extraTag) {
-    console.log('feedback:' + data);
+  handleSerapiFeedback(feedback, extraTag) {
+    const feedbackText = feedback.string;
+
+    let resultName = feedbackText.split(' ', 1)[0];
+
+    if (resultName === 'Error:' || resultName.indexOf('?') > -1) {
+      return;
+    }
+
+    if (resultName.endsWith(':')) {
+      resultName = resultName.substr(0, resultName.length - 1);
+    }
+
+    let resultData = feedbackText.substring(resultName.length + 1).trim();
+    if (resultData[0] === ':') {
+      resultData = resultData.substring(1).trim();
+    }
+    // TODO: do onResult call here?
+
+    return {
+      [resultName]: {
+        name: resultName,
+        content: resultData,
+      },
+    };
   }
 }
 

@@ -74,7 +74,7 @@ class SerapiProcessor extends SerapiCallbacks {
   handleSerapiMessage(data, extraTag) {
   }
 
-  handleSerapiFeedback(data, extraTag) {
+  handleSerapiFeedback(feedback, extraTag) {
   }
 }
 
