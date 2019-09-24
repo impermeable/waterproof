@@ -82,11 +82,12 @@ export default {
   overflow: hidden;
 
   .sidebar {
-    background: $color-primary;
-    color: $color-on-primary;
     flex: 0 0 auto;
     padding: 1.5rem;
     width: 250px;
+
+    background: $color-primary;
+    color: $color-on-primary;
 
     @include respond-to(xs) {
       display: none;
@@ -96,29 +97,29 @@ export default {
       border-bottom: 1px solid $color-on-primary;
       border-top: 1px solid $color-on-primary;
       padding-inline-start: 0;
-    }
 
-    .recent-file {
-      text-overflow: ellipsis;
-      overflow: hidden;
+      .recent-file {
+        text-overflow: ellipsis;
+        overflow: hidden;
+      }
     }
   }
 
   .container {
     @include flex-style(column);
-    flex: 1 0 0;
     align-items: stretch;
+    flex: 1 0 0;
 
     .logo-container {
-      display: flex;
       align-items: center;
-      justify-content: center;
+      display: flex;
       height: 40%;
+      justify-content: center;
 
       .logo {
         box-sizing: content-box;
         flex: 0 0 auto;
-        height: 50%;
+        height: 150px;
         width: auto;
         padding: 25px;
 
@@ -130,6 +131,11 @@ export default {
         @include respond-to(xs) {
           padding: 50px;
           height: 75px;
+        }
+
+        @include respond-to(lg) {
+          padding: 12.5px;
+          height: 175px;
         }
       }
     }
