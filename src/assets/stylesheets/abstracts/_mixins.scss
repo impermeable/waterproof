@@ -38,3 +38,9 @@
     }
   }
 }
+
+@mixin flex-style($direction, $wrap: nowrap) {
+  display: flex;
+  flex-direction: $direction;
+  flex-wrap: $wrap;
+}

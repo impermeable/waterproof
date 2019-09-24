@@ -77,8 +77,7 @@ export default {
 
 <style lang="scss">
 .app#home {
-  display: flex;
-  flex-direction: row;
+  @include flex-style(row);
   height: 100vh;
   overflow: hidden;
 
@@ -89,6 +88,10 @@ export default {
     padding: 1.5rem;
     width: 250px;
 
+    @include respond-to(xs) {
+      display: none;
+    }
+
     .recent-files {
       border-bottom: 1px solid $color-on-primary;
       border-top: 1px solid $color-on-primary;
@@ -96,14 +99,14 @@ export default {
     }
 
     .recent-file {
+      text-overflow: ellipsis;
       overflow: hidden;
     }
   }
 
   .container {
-    display: flex;
+    @include flex-style(column);
     flex: 1 0 0;
-    flex-direction: column;
     align-items: stretch;
 
     .logo-container {
@@ -132,9 +135,8 @@ export default {
     }
 
     .buttons {
-      display: flex;
+      @include flex-style(row);
       flex: 1 0 0;
-      flex-direction: row;
       justify-content: space-evenly;
       align-items: center;
 
