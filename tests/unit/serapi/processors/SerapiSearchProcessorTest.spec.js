@@ -53,7 +53,7 @@ const errorWithResultResponse = [
 ];
 
 
-describe('serapi combined content & execution processor', () => {
+describe('serapi search processor', () => {
   let proc;
   let worker;
   const editor = new EditorInterface();

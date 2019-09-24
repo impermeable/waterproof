@@ -60,7 +60,7 @@ describe('setContent', () => {
       impl.setContent(text);
 
       while (!setContentDone) {
-        await new Promise((resolve) => setTimeout(resolve, 2));
+        await new Promise((resolve) => setTimeout(resolve, 0));
       }
       setContentDone = false;
       resolve();
