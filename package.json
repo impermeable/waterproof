@@ -9,7 +9,7 @@
     "lint": "vue-cli-service lint",
     "test-unit": "vue-cli-service test:unit",
     "test-e2e": "mocha \"tests/e2e/*.e2e.js\"",
-    "test": "npm run test-unit && npm run test-e2e",
+    "test": "npm run test-unit",
     "electron:build": "vue-cli-service electron:build --config electron-builder.json",
     "electron:serve": "vue-cli-service electron:serve",
     "postinstall": "electron-builder install-app-deps",
