@@ -22,6 +22,7 @@ class SerapiTagger {
     this.commandStartTime = null;
 
     this.timing = false;
+    this.logging = true;
   }
 
   _getTag() {
@@ -51,12 +52,16 @@ class SerapiTagger {
       handleFeedback: feedbackHandler,
     };
     const serapiCommand = `(${this.lastTag} ${command})`;
-    console.log(`Serapi <- ${serapiCommand}`);
+    if (this.logging) {
+      console.log(`Serapi <- ${serapiCommand}`);
+    }
     this.worker.postMessage(serapiCommand);
   }
 
   handleMessage(message) {
-    console.log(`Serapi -> ${message}`);
+    if (this.logging) {
+      console.log(`Serapi -> ${message}`);
+    }
     if (!this.lastCallbacks) {
       // no callback ignore
       console.error('Got message while no callback registered');

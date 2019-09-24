@@ -37,7 +37,8 @@ class ExpectingSerapiWorker extends SerapiWorker {
       }
 
       for (const partialResult of currentCall.responses) {
-        if (partialResult.startsWith('(Feedback')) {
+        if (partialResult.startsWith('(Feedback')
+          || partialResult.startsWith('(Answer')) {
           this.onMessage(partialResult);
         } else {
           if (!partialResult.startsWith('(')) {

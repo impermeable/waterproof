@@ -29,7 +29,6 @@ class SerapiContentProcessor extends SerapiProcessor {
   }
 
   async setContent(content) {
-    console.log(`setContent(${content})`);
     const releaseNewContent = await this.addLock.acquire();
 
     this.addContent = content;
