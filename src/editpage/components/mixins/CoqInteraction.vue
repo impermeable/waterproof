@@ -40,8 +40,8 @@ export default {
                 this.message, this.onReady), this);
         this.eventBus.$emit('clear-messages');
         this.goals = '';
-      }, () => {
-        console.err('error in reading config file');
+      }, (reason) => {
+        console.log(`error in reading config file with reason: ${reason}`);
       });
     },
 

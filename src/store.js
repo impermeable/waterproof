@@ -1,8 +1,10 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+const remote = require('electron').remote;
 const path = require('path');
 
 import readFile from './io/readfile';
+import {readConfiguration} from './io/readconfiguration';
 
 Vue.use(Vuex);
 
@@ -76,17 +78,15 @@ export default new Vuex.Store({
         commit('setAssistanceItems', {index: 2, result: result});
       });
     },
-    readConfig: function({commit, state}) {
+    readConfig: function({commit}) {
       return new Promise((resolve, reject) => {
-        let basePath;
-        if (process.env.NODE_ENV === 'production') {
-          basePath = path.join(__dirname, '../../wrapper/configuration/');
-        } else {
-          basePath = './wrapper/configuration';
-        }
-        readFile(path.join(basePath, 'wpconfig.json'), (result) => {
-          commit('setConfig', result);
-          resolve();
+        readConfiguration(remote).then(
+            (data) => {
+              commit('setConfig', data);
+              resolve();
+            }).catch((err) => {
+          console.log(err);
+          reject(err);
         });
       });
     },
@@ -97,8 +97,8 @@ export default new Vuex.Store({
         } else {
           dispatch('readConfig').then((result) => {
             resolve(state.sertopPath);
-          }, (reject) => {
-            console.err('could not read config file');
+          }, (reason) => {
+            reject( reason );
           } );
         }
       });
