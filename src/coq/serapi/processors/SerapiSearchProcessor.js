@@ -23,9 +23,13 @@ class SerapiSearchProcessor extends SerapiProcessor {
 
   async searchFor(query, onResult, onDone) {
     const searchNum = await this._startNewSearch();
-
     // make sure the search number is updated before 'starting'
+
+    // ensure no execution is taking place
+    const noExecution = await this.state.executionLock.acquire();
+
     const releaseContent = await this.state.stateLock.acquire();
+    noExecution();
 
     const results = [];
 

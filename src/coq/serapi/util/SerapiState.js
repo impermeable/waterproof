@@ -9,6 +9,7 @@ import {Mutex} from 'async-mutex';
 class SerapiState {
   constructor() {
     this.stateLock = new Mutex();
+    this.executionLock = new Mutex();
 
     this.sentences = [];
 

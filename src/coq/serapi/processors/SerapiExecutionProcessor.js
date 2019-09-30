@@ -3,7 +3,6 @@ import {
   getGoalsFromResponse, isGeneralMessage, parseErrorResponse,
 } from '../SerapiParser';
 import * as Constants from '../SerapiConstants';
-import {Mutex} from 'async-mutex';
 import {
   createExecuteCommand, createGoalCommand,
 } from '../util/SerapiCommandFactory';
@@ -11,7 +10,7 @@ import {
 class SerapiExecutionProcessor extends SerapiProcessor {
   constructor(tagger, state, editor) {
     super(tagger, state, editor);
-    this.executionLock = new Mutex();
+    // this.executionLock = new Mutex();
   }
 
   async executeNext() {
@@ -75,12 +74,14 @@ class SerapiExecutionProcessor extends SerapiProcessor {
   }
 
   async _executeToTarget(stateRelease) {
-    if (this.executionLock.isLocked()) {
+    if (this.state.executionLock.isLocked()) {
       stateRelease();
       return Promise.resolve();
     }
 
-    const releaseExecutionLock = await this.executionLock.acquire();
+    const releaseExecutionLock = await this.state.executionLock.acquire();
+    console.log('got execute');
+
 
     let targetValue = this.state.target;
 
