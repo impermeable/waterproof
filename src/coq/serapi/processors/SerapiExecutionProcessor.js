@@ -21,9 +21,8 @@ class SerapiExecutionProcessor extends SerapiProcessor {
     }
 
     this.state.target++;
-    stateRelease();
 
-    return this._executeToTarget();
+    return this._executeToTarget(stateRelease);
   }
 
   async executePrevious() {
@@ -33,31 +32,29 @@ class SerapiExecutionProcessor extends SerapiProcessor {
     }
 
     this.state.target--;
-    stateRelease();
 
-    return this._executeToTarget();
+    return this._executeToTarget(stateRelease);
   }
 
   async reset() {
     const stateRelease = await this.state.stateLock.acquire();
     this.state.target = -1;
-    stateRelease();
 
-    return this._executeToTarget();
+    return this._executeToTarget(stateRelease);
   }
 
   async executeAll() {
     const stateRelease = await this.state.stateLock.acquire();
     this.state.target = this.state.sentenceSize() - 1;
-    stateRelease();
-    return this._executeToTarget();
+
+    return this._executeToTarget(stateRelease);
   }
 
   async executeTo(textIndex) {
     const stateRelease = await this.state.stateLock.acquire();
     this.state.target = this.state.sentenceBeforeIndex(textIndex);
-    stateRelease();
-    return this._executeToTarget();
+
+    return this._executeToTarget(stateRelease);
   }
 
   _parseError(error) {
@@ -77,8 +74,7 @@ class SerapiExecutionProcessor extends SerapiProcessor {
     });
   }
 
-  async _executeToTarget() {
-    let stateRelease = await this.state.stateLock.acquire();
+  async _executeToTarget(stateRelease) {
     if (this.executionLock.isLocked()) {
       stateRelease();
       return Promise.resolve();

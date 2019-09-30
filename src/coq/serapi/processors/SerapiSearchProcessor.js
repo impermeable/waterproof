@@ -23,17 +23,23 @@ class SerapiSearchProcessor extends SerapiProcessor {
 
   async searchFor(query, onResult, onDone) {
     const searchNum = await this._startNewSearch();
+
+    // make sure the search number is updated before 'starting'
+    const releaseContent = await this.state.stateLock.acquire();
+
     const results = [];
 
     await this._checkQuery(query, onResult, results);
 
     if (!await this._continueSearch(searchNum)) {
+      releaseContent();
       return;
     }
 
     await this._searchQuery(query, onResult, results);
 
     if (!await this._continueSearch(searchNum)) {
+      releaseContent();
       return;
     }
 
@@ -41,9 +47,11 @@ class SerapiSearchProcessor extends SerapiProcessor {
 
     // TODO: should we really check here?
     if (!await this._continueSearch(searchNum)) {
+      releaseContent();
       return;
     }
 
+    releaseContent();
     onDone();
     return Promise.resolve();
   }

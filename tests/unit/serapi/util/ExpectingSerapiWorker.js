@@ -31,23 +31,25 @@ class ExpectingSerapiWorker extends SerapiWorker {
 
       expect(message).to.include(currentCall.command);
 
+      setTimeout(() => {
+        for (const partialResult of currentCall.responses) {
+          if (partialResult.startsWith('(Feedback')
+            || partialResult.startsWith('(Answer')) {
+            this.onMessage(partialResult);
+          } else {
+            if (!partialResult.startsWith('(')) {
+              this.onMessage(`(Answer ${tag} ${partialResult})`);
+            } else {
+              // no space between
+              this.onMessage(`(Answer ${tag}${partialResult})`);
+            }
+          }
+        }
+      }, 0);
+
       // first callback then any possible messages
       if (currentCall.callback) {
         await currentCall.callback(message);
-      }
-
-      for (const partialResult of currentCall.responses) {
-        if (partialResult.startsWith('(Feedback')
-          || partialResult.startsWith('(Answer')) {
-          this.onMessage(partialResult);
-        } else {
-          if (!partialResult.startsWith('(')) {
-            this.onMessage(`(Answer ${tag} ${partialResult})`);
-          } else {
-            // no space between
-            this.onMessage(`(Answer ${tag}${partialResult})`);
-          }
-        }
       }
     } else {
       console.log('Not expecting any message!');
