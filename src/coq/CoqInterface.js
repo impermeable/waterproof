@@ -58,10 +58,10 @@ class CoqInterface {
    * [TODO: Check search restrictions]
    *
    * @param {String} searchQuery Query to search for
-   * @param {Object} filters Boolean values specifying what to search for
-   * @param {Function} onSuccess on success callback
+   * @param {Function} onResult callback for when a search result has been found
+   * @param {Function} onDone callback for when searching is done
    */
-  getSearchResults(searchQuery, filters, onSuccess) {
+  getSearchResults(searchQuery, onResult, onDone) {
   }
 
   /**

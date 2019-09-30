@@ -10,7 +10,6 @@ import {
 class SerapiExecutionProcessor extends SerapiProcessor {
   constructor(tagger, state, editor) {
     super(tagger, state, editor);
-    // this.executionLock = new Mutex();
   }
 
   async executeNext() {
