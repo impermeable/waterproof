@@ -25,7 +25,7 @@ class SerapiTagger {
     };
     this.commandStartTime = null;
 
-    this.timing = false;
+    this.timing = true;
     this.logging = true;
   }
 

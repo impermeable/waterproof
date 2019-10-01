@@ -25,6 +25,7 @@ class CoqSerapiProcessors extends CoqInterface {
     this.tagger = new SerapiTagger(worker, () => {
       if (!this.stopped) {
         this.ready = true;
+        editor.onReady();
       } else {
         this.worker.terminate();
       }

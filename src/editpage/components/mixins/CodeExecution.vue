@@ -23,18 +23,17 @@ export default {
       const sentences = this.coq.sentences;
       // Edge case: if the document is empty,
       // nothing is executed/executing/pending
+
       if (sentences.length() === 0
         || !this.executedUpTo
         || this.executedUpTo < 0) {
         return {executed: null, executing: null, pending: null};
       }
-
       // Compute what interval of characters that is executed
       const executed = {
         start: sentences.beginIndex(0),
         end: this.executedUpTo,
       };
-
       // Take the first unexecuted sentence. If it does not exist or starts
       // after what is still pending, then we are done so only executed is
       // non-null
@@ -44,7 +43,6 @@ export default {
         || executingSentence.sentence.endIndex > this.pendingUpTo) {
         return {executed, executing: null, pending: null};
       }
-
       const executing = {
         start: executingSentence.sentence.beginIndex,
         end: executingSentence.sentence.endIndex,
@@ -55,7 +53,7 @@ export default {
         executed.end = executing.start;
       }
 
-      const firstPendingSentence = this.coq.sentences
+      const firstPendingSentence = sentences
           .sentenceAfterIndex(executing.end);
       if (firstPendingSentence === null || this.pendingUpTo === null) {
         return {executed, executing, pending: null};

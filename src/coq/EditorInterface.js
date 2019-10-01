@@ -62,6 +62,9 @@ class EditorInterface {
    */
   message(message) {
   }
+
+  onReady() {
+  }
 }
 
 export default EditorInterface;

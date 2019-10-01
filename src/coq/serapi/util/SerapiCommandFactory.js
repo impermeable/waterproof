@@ -1,7 +1,7 @@
 import {sanitise} from '../SerapiParser';
 
 export function createAddCommand(content) {
-  return `(Add () "${sanitise(content)}"`;
+  return `(Add () "${sanitise(content)}")`;
 }
 
 export function createCancelCommand(sentences) {
@@ -13,7 +13,7 @@ export function createExecuteCommand(sentenceId) {
 }
 
 function querySentenceCommand(sentenceId, format, command) {
-  return `(Query ((sid ${sentenceId})(pp ((pp_format ${format})))) ${command}`;
+  return `(Query ((sid ${sentenceId})(pp ((pp_format ${format})))) ${command})`;
 }
 
 export function createGoalCommand(sentenceId, format = 'PpStr') {

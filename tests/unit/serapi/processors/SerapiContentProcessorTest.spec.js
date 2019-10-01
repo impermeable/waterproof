@@ -34,7 +34,7 @@ describe('serapi content processor', () => {
   it('should send add command on content set', async () => {
     // from empty content
     const text = 'Lemma a n:n+0=n.';
-    worker.addExpectedCall(text, [
+    worker.addExpectedCall(`(Add () "${text}")`, [
       'Ack',
       '(Added 2((fname ToplevelInput)(line_nb 1)(bol_pos 0)' +
       '(line_nb_last 1)(bol_pos_last 0)(bp 0)(ep 16))NewTip)',

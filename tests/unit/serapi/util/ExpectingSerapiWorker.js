@@ -4,6 +4,11 @@ import SerapiWorker from '../../../../src/coq/serapi/workers/SerapiWorker';
 const chai = require('chai');
 const expect = chai.expect;
 
+function checkBalancedParenthesis(message) {
+  expect(message.match(/\(/g) || [], `balanced parenthesis of ${message}`)
+      .to.have.lengthOf((message.match(/\)/g) || []).length);
+}
+
 class ExpectingSerapiWorker extends SerapiWorker {
   constructor() {
     super();
@@ -21,8 +26,9 @@ class ExpectingSerapiWorker extends SerapiWorker {
   }
 
   async postMessage(message) {
-    this.calls.push(message);
+    checkBalancedParenthesis(message);
 
+    this.calls.push(message);
     if (this.expectedCalls.length > this.expectedIndex) {
       // if we have an expected call check and return the response
       const tag = message.split('(')[1];

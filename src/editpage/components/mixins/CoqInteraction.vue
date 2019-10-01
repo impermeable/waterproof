@@ -2,6 +2,8 @@
 import SerapiCommands from '../../../coq/serapi/SerapiCommands';
 import CoqSerapi from '../../../coq/serapi/CoqSerapi';
 import TCPManager from '../../../coq/serapi/workers/TCPManager';
+// import CoqSerapiProcessors from
+//   '../../../coq/serapi/processors/CoqSerapiProcessors';
 
 export default {
   name: 'CoqInteraction',
@@ -38,6 +40,7 @@ export default {
         this.coq = new CoqSerapi(
             new SerapiCommands(worker,
                 this.message, this.onReady), this);
+        // this.coq = new CoqSerapiProcessors(worker, this);
         this.eventBus.$emit('clear-messages');
         this.goals = '';
       }, () => {
