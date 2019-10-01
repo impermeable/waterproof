@@ -45,7 +45,7 @@
     "electron-icon-builder": "^1.0.1",
     "eslint": "^5.16.0",
     "eslint-config-google": "^0.13.0",
-    "jsdoc": "^3.6.2",
+    "jsdoc": "^3.6.3",
     "mocha-junit-reporter": "^1.23.0",
     "mocha-multi-reporters": "^1.1.7",
     "mochawesome": "^4.0.1",

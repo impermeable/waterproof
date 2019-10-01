@@ -1,13 +1,73 @@
 # Waterproof
 
-
 ## How to get working
-To run the app [Node.js](https://nodejs.org/en/download/) needs to be installed.
 
-To install the necessary node modules run:
+To get working with Waterproof, the following steps are necessary:
+
+* Install SerAPI
+* Install Node.js
+* Clone the repository
+* Build the app
+
+We now describe these steps in detail.
+
+### Installation of SerAPI
+
+Waterproof communicates with the interactive theorem prover CoQ through the SerAPI library.
+
+The following steps describe how to install SerAPI.
+
+#### Installation of SerAPI on Windows
+
+##### Install OCaml for Windows 
+
+Install OCaml for Windows from https://fdopen.github.io/opam-repository-mingw/installation/
+
+##### Install opam
+
+OCaml for Windows installs a cygwin terminal. In the terminal, execute the following commands (corresponding to instructions on https://ocaml.org/docs/install.html).
+
+First initialize the environment with
+```
+opam init
+eval `opam env`
+```
+
+Then install OCaml with
+```
+opam switch create 4.07.1+mingw64c 
+eval `opam env`
+```
+To see if you installed the correct version, execute
+```
+which ocaml
+ocaml -version
+```
+
+#### Install SerAPI with opam
+
+```
+opam install coq-serapi
+```
+
+### Clone this repository
+
+### Point Waterproof to the location of sertop
+
+Change the `sertopPath` variable in the `wrapper/configuration/wpconfig.json` file to the location where the `sertop` executable was installed.
+
+### Install Node.js
+
+Install Node.js, for instance from [Node.js](https://nodejs.org/en/download/)
+
+### Install the necessary modules
+
+In a terminal, move to the Waterproof base directory. Then, to install the necessary Node.js modules, run:
 ```
 npm install
 ```
+
+### Build the electron app
 
 To build the Electron app run:
 ```

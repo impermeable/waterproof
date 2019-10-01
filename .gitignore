@@ -2,9 +2,9 @@ doc/
 node_modules/
 out/
 .DS_Store
-/dist
+dist/
 
-/tests/e2e/reports/
+tests/e2e/reports/
 selenium-debug.log
 
 # local env files
@@ -40,7 +40,7 @@ build/icons/*
 scripts/unit_tests.tex
 
 # wpwrapper logs
-wpwrapper.*
+/wpwrapper.*
 
 # compiled Coq libraries
 *.vo
