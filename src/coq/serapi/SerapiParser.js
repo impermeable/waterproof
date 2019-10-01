@@ -226,9 +226,17 @@ function parseToSentence(response) {
   };
 }
 
+function isReadyFeedback(response) {
+  return response[0] === 'Feedback'
+      && response[1].length === 4
+      && response[1][3].length === 2
+      && response[1][3][0] === 'contents'
+      && response[1][3][1] === 'Processed';
+}
+
 export {
   parseFeedback, parseErrorableFeedback, parseErrorResponse,
-  sanitise, getLastValidFullStop,
+  sanitise, getLastValidFullStop, isReadyFeedback,
   getGoalsFromResponse, isGeneralMessage, parseToSentence,
 };
 

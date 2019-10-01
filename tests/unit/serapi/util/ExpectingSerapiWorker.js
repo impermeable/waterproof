@@ -32,19 +32,7 @@ class ExpectingSerapiWorker extends SerapiWorker {
       expect(message).to.include(currentCall.command);
 
       setTimeout(() => {
-        for (const partialResult of currentCall.responses) {
-          if (partialResult.startsWith('(Feedback')
-            || partialResult.startsWith('(Answer')) {
-            this.onMessage(partialResult);
-          } else {
-            if (!partialResult.startsWith('(')) {
-              this.onMessage(`(Answer ${tag} ${partialResult})`);
-            } else {
-              // no space between
-              this.onMessage(`(Answer ${tag}${partialResult})`);
-            }
-          }
-        }
+        this.sendMessages(currentCall.responses, tag);
       }, 0);
 
       // first callback then any possible messages
@@ -65,13 +53,19 @@ class ExpectingSerapiWorker extends SerapiWorker {
     return this.calls[n];
   }
 
-  hasCall(condition) {
-    return this.calls.some(condition);
-  }
-
-  sendMessages(messages) {
-    for (const message of messages) {
-      this.onMessage(message);
+  sendMessages(messages, tag) {
+    for (const partialResult of messages) {
+      if (partialResult.startsWith('(Feedback')
+        || partialResult.startsWith('(Answer')) {
+        this.onMessage(partialResult);
+      } else {
+        if (!partialResult.startsWith('(')) {
+          this.onMessage(`(Answer ${tag} ${partialResult})`);
+        } else {
+          // no space between
+          this.onMessage(`(Answer ${tag}${partialResult})`);
+        }
+      }
     }
   }
 }

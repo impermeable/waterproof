@@ -12,7 +12,7 @@ import SerapiSearchProcessor from './SerapiSearchProcessor';
  * are sent with onSuccess and onError handlers, one of which will be called
  * when SerAPI's responses to the command come in.
  */
-class CoqSerapi extends CoqInterface {
+class CoqSerapiProcessors extends CoqInterface {
   constructor(worker, editor) {
     super();
 
@@ -44,23 +44,25 @@ class CoqSerapi extends CoqInterface {
     return this.contentProcessor.setContent(content);
   }
 
-  executeTo(index) {
-    if (!this.ready) {
-      return Promise.resolve();
-    }
-    return this.executeTo(index);
-  }
-
   executeNext() {
     if (!this.ready) {
       return Promise.resolve();
     }
+    return this.executionProcessor.executeNext();
   }
 
   executePrevious() {
     if (!this.ready) {
       return Promise.resolve();
     }
+    return this.executionProcessor.executePrevious();
+  }
+
+  executeTo(index) {
+    if (!this.ready) {
+      return Promise.resolve();
+    }
+    return this.executionProcessor.executeTo(index);
   }
 
   getGoals(index, onSuccess, onError) {
@@ -82,3 +84,5 @@ class CoqSerapi extends CoqInterface {
     }
   }
 }
+
+export default CoqSerapiProcessors;

@@ -34,7 +34,11 @@ class SerapiProcessor extends SerapiCallbacks {
       };
       this.tagger.sendCommand(command,
           (m, t) => this.handleMessage(m, t),
-          (f) => this.handleFeedback(f), extraTag);
+          (f, raw) => {
+            if (!raw) {
+              this.handleFeedback(f);
+            }
+          }, extraTag);
     }));
   }
 

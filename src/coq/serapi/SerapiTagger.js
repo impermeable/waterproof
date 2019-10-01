@@ -1,6 +1,6 @@
 import parse from 's-expression';
 import * as Constants from './SerapiConstants';
-import {parseErrorableFeedback} from './SerapiParser';
+import {parseErrorableFeedback, isReadyFeedback} from './SerapiParser';
 
 class SerapiTagger {
   /**
@@ -16,8 +16,12 @@ class SerapiTagger {
 
     this.lastTag = null;
     this.lastCallbacks = {
-      handleMessage: () => readyCallback,
-      handleFeedback: () => {},
+      handleMessage: () => {},
+      handleFeedback: (message, raw) => {
+        if (raw && isReadyFeedback(message)) {
+          readyCallback();
+        }
+      },
     };
     this.commandStartTime = null;
 
@@ -103,7 +107,9 @@ class SerapiTagger {
       // feedback is not tagged but should be from the current command
       const feedback = parseErrorableFeedback(parsedData);
       if (feedback.string !== '') {
-        this.lastCallbacks.handleFeedback(feedback);
+        this.lastCallbacks.handleFeedback(feedback, false);
+      } else {
+        this.lastCallbacks.handleFeedback(parsedData, true);
       }
     }
   }
