@@ -65,10 +65,9 @@ function remoteGen( userPath ) {
   };
 }
 
-describe.only('Reading the configuration file', () => {
+describe('Reading the configuration file', () => {
   beforeEach(() => {
     sandbox.replace(fs, 'readFile', readFileReplacement);
-    // sandbox.replace(SertopFinder, 'findSertop', findSertopReplacement);
   });
 
   afterEach(() => {
