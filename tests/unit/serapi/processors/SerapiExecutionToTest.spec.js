@@ -213,7 +213,7 @@ describe('serapi execute to processor', () => {
         expect(worker.getCallAmount()).to.equal(3);
 
         expect(editor.executeStarted.callCount).to.be.at.least(1);
-        expect(editor.executeSuccess.callCount).to.equal(1);
+        expect(editor.executeSuccess.callCount).to.equal(2);
         // TODO: check params of success
 
         expect(proc.state.lastExecuted).to.equal(1);
@@ -312,7 +312,7 @@ describe('serapi execute to processor', () => {
         expect(worker.getCallAmount()).to.equal(3);
 
         expect(editor.executeStarted.callCount).to.be.at.least(1);
-        expect(editor.executeSuccess.callCount).to.equal(1);
+        expect(editor.executeSuccess.callCount).to.equal(2);
         // TODO: check params of success
 
         expect(proc.state.lastExecuted).to.equal(1);

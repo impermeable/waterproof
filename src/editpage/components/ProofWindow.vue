@@ -242,14 +242,15 @@ export default {
         return;
       }
 
+      const coqState = this.coq.getState();
+
       // make sure the error interval is exactly one sentence
-      const sentence = this.coq.sentences
-          .sentenceAfterIndex(this.executedIndex);
+      const sentence = coqState.sentenceAfterIndex(this.executedIndex);
 
       if (sentence === null) {
-        if (this.coq.sentences.length() > 0) {
-          errorBeginIndex = this.coq.sentences.beginIndex(0);
-          errorEndIndex = this.coq.sentences.beginIndex(0);
+        if (coqState.sentenceSize() > 0) {
+          errorBeginIndex = coqState.beginIndexOfSentence(0);
+          errorEndIndex = coqState.endIndexOfSentence(0);
         } else {
           errorBeginIndex = 0;
           errorEndIndex = this.coqCode.length - 1;
@@ -289,8 +290,8 @@ export default {
         index += block.text.length + 1;
       }
 
-      const sn = this.coq.sentences.sentenceBeforeIndex(errorBeginIndex - 1);
-      this.executedIndex = sn >= 0 ? this.coq.sentences.endIndex(sn) : -1;
+      const sn = coqState.sentenceBeforeIndex(errorBeginIndex - 1);
+      this.executedIndex = sn >= 0 ? coqState.endIndexOfSentence(sn) : -1;
     },
 
     /**

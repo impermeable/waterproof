@@ -84,6 +84,10 @@ class CoqSerapiProcessors extends CoqInterface {
       this.worker.terminate();
     }
   }
+
+  getState() {
+    return this.state;
+  }
 }
 
 export default CoqSerapiProcessors;

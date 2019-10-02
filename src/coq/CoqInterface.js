@@ -69,6 +69,14 @@ class CoqInterface {
    */
   stop() {
   }
+
+  /**
+   * Get the current state
+   * @return {CoqState} the current coq state
+   */
+  getState() {
+    return undefined;
+  }
 }
 
 export default CoqInterface;

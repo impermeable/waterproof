@@ -14,7 +14,8 @@ class SerapiExecutionProcessor extends SerapiProcessor {
 
   async executeNext() {
     const stateRelease = await this.state.stateLock.acquire();
-    if (this.state.lastExecuted >= this.state.sentenceSize() - 1) {
+    if (this.state.target >= this.state.sentenceSize() - 1) {
+      stateRelease();
       return Promise.resolve();
     }
 
@@ -25,7 +26,8 @@ class SerapiExecutionProcessor extends SerapiProcessor {
 
   async executePrevious() {
     const stateRelease = await this.state.stateLock.acquire();
-    if (this.state.lastExecuted <= -1) {
+    if (this.state.target <= -1) {
+      stateRelease();
       return Promise.resolve();
     }
 
@@ -50,7 +52,8 @@ class SerapiExecutionProcessor extends SerapiProcessor {
 
   async executeTo(textIndex) {
     const stateRelease = await this.state.stateLock.acquire();
-    this.state.target = this.state.sentenceBeforeIndex(textIndex);
+    this.state.target = Math.min(this.state.sentenceBeforeIndex(textIndex),
+        this.state.sentenceSize() - 1);
 
     return this._executeToTarget(stateRelease);
   }
@@ -79,41 +82,43 @@ class SerapiExecutionProcessor extends SerapiProcessor {
     }
 
     const releaseExecutionLock = await this.state.executionLock.acquire();
-    console.log('got execute');
-
 
     let targetValue = this.state.target;
+    let error = null;
 
     while (targetValue !== this.state.lastExecuted) {
       stateRelease();
-
-      if (this.state.target < this.state.lastExecuted) {
+      if (targetValue < this.state.lastExecuted) {
         this.state.lastExecuted = this.state.target;
 
         releaseExecutionLock();
         return this._getGoal(this.state.target);
-      }
-
-      let error = null;
+      }/* else if (this.state.target > this.state.sentenceSize() - 1) {
+        targetValue = this.state.sentenceSize() - 1;
+        this.state.target = this.state.sentenceSize() - 1;
+      }*/
 
       this.editor.executeStarted(
           this.state.endIndexOfSentence(this.state.target));
 
-      while (this.state.target > this.state.lastExecuted) {
+      while (targetValue > this.state.lastExecuted) {
         const nextSentence = this.state.lastExecuted + 1;
         const executionFailed =
             await this._executeSentence(this.state.idOfSentence(nextSentence));
+
+        stateRelease = await this.state.stateLock.acquire();
+
         if (executionFailed != null) {
           this.state.target = this.state.lastExecuted;
           error = this._parseError(executionFailed);
         }
-      }
 
-      if (error != null) {
-        this.editor.executeError(error.message, {
-          start: error.beginIndex,
-          end: error.endIndex,
-        });
+        targetValue = this.state.target;
+        if (!executionFailed && targetValue !== nextSentence) {
+          this.editor.executeSuccess(null,
+              this.state.endIndexOfSentence(nextSentence), false);
+        }
+        stateRelease();
       }
 
       stateRelease = await this.state.stateLock.acquire();
@@ -122,6 +127,13 @@ class SerapiExecutionProcessor extends SerapiProcessor {
 
     if (this.state.lastExecuted >= 0) {
       await this._getGoal(this.state.lastExecuted);
+    }
+
+    if (error != null) {
+      this.editor.executeError(error.message, {
+        start: error.beginIndex,
+        end: error.endIndex,
+      });
     }
 
     releaseExecutionLock();

@@ -46,8 +46,7 @@ class ExpectingSerapiWorker extends SerapiWorker {
         await currentCall.callback(message);
       }
     } else {
-      console.log('Not expecting any message!');
-      expect(true).to.equal(false);
+      expect.fail('Not expecting any message!');
     }
   }
 

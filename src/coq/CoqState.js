@@ -1,22 +1,13 @@
+/* eslint-disable valid-jsdoc */
 /**
- * Class for holding all the shared state of an active serapi instance
+ * Class for holding all the shared state of an active coq instance
  * This includes:
  *  - Sentences (id, begin, end, ast, ...)
  *  - execution (execution state, targets, ...)
  */
-import {Mutex} from 'async-mutex';
-import CoqState from '../../CoqState';
 
-class SerapiState extends CoqState {
+class CoqState {
   constructor() {
-    super();
-    this.stateLock = new Mutex();
-    this.executionLock = new Mutex();
-
-    this.sentences = [];
-
-    this.lastExecuted = -1;
-    this.target = -1;
   }
 
   /**
@@ -25,7 +16,6 @@ class SerapiState extends CoqState {
    * @return {Object} the sentence
    */
   getSentenceByIndex(index) {
-    return this.sentences[index];
   }
 
   /**
@@ -33,20 +23,9 @@ class SerapiState extends CoqState {
    * @param {Array} sentences the sentences to concat
    */
   concatSentences(sentences) {
-    this.sentences = this.sentences.concat(sentences);
   }
 
   addSentence(sentenceId, beginIndex, endIndex, text, ast) {
-    if (sentenceId == null || beginIndex == null || endIndex == null) {
-      throw new Error('Sentence must have at least id, bi, ei');
-    }
-    this.sentences.push({
-      sentenceId,
-      beginIndex,
-      endIndex,
-      text: text == null ? null : text,
-      ast: ast == null ? null : ast,
-    });
   }
 
   /**
@@ -55,7 +34,6 @@ class SerapiState extends CoqState {
    * @return {number} the begin index
    */
   beginIndexOfSentence(index) {
-    return this.sentences[index].beginIndex;
   }
 
   /**
@@ -64,7 +42,6 @@ class SerapiState extends CoqState {
    * @return {number} the end index
    */
   endIndexOfSentence(index) {
-    return this.sentences[index].endIndex;
   }
 
   /**
@@ -73,7 +50,6 @@ class SerapiState extends CoqState {
    * @return {number} the begin index
    */
   idOfSentence(index) {
-    return this.sentences[index].sentenceId;
   }
 
   /**
@@ -82,22 +58,8 @@ class SerapiState extends CoqState {
    * @return {String} the text of that sentence
    */
   textOfSentence(index) {
-    return this.sentences[index].text;
   }
 
-  /**
-   * Adorn the sentence with sentenceId sid with
-   * an AST
-   * @param {Number} sid  sentenceId of the sentence
-   * @param {Object} ast  The AST of the sentence
-   */
-  setASTforSID( sid, ast ) {
-    const index = this.indexOfSentence(sid);
-    if (index < 0) {
-      return;
-    }
-    this.sentences[index].ast = ast;
-  }
 
   /**
    * Get the sentence index for a given sentenceId
@@ -107,12 +69,6 @@ class SerapiState extends CoqState {
    * containing the sentence with the requested sid
    */
   indexOfSentence(sid) {
-    for (let j = 0; j < this.sentences.length; j++ ) {
-      if (this.sentences[j].sentenceId === sid) {
-        return j;
-      }
-    }
-    return -1;
   }
 
   /**
@@ -120,7 +76,6 @@ class SerapiState extends CoqState {
    * @return {Number} the amount
    */
   sentenceSize() {
-    return this.sentences.length;
   }
 
   /**
@@ -128,7 +83,6 @@ class SerapiState extends CoqState {
    * @param {Number} index from where to remove
    */
   removeSentencesAfter(index) {
-    this.sentences = this.sentences.slice(0, index);
   }
 
   /**
@@ -136,11 +90,6 @@ class SerapiState extends CoqState {
    * @param {Number} sid the Sentence id
    */
   removeSentence(sid) {
-    const index = this.indexOfSentence(sid);
-    if (index < 0) {
-      return;
-    }
-    this.sentences.splice(index, 1);
   }
 
   /**
@@ -149,24 +98,6 @@ class SerapiState extends CoqState {
    * @return {undefined|number} the sentence before the content
    */
   sentenceBeforeIndex(index) {
-    if (this.sentenceSize() === 0) {
-      return -1;
-    }
-
-    const lastSentence = this.sentenceSize() - 1;
-
-    if (this.endIndexOfSentence(lastSentence) <= index) {
-      return lastSentence;
-    }
-
-    for (let i = 0; i <= lastSentence; i++) {
-      const end = this.endIndexOfSentence(i);
-
-      if (index < end) {
-        return i - 1;
-      }
-    }
-    return -1;
   }
 
   /**
@@ -175,16 +106,6 @@ class SerapiState extends CoqState {
    * @return {null|Sentence} the first sentence after that index
    */
   sentenceAfterIndex(index) {
-    for (let i = 0; i < this.sentenceSize(); i++) {
-      const sentence = this.getSentenceByIndex(i);
-      if (index < this.beginIndexOfSentence(i)) {
-        return {
-          index: i,
-          sentence,
-        };
-      }
-    }
-    return null;
   }
 
   /**
@@ -195,9 +116,7 @@ class SerapiState extends CoqState {
    * @return {String} The extracted sentence
    */
   getSentenceAsString(text, sentenceNr) {
-    return text.slice(this.sentences[sentenceNr].beginIndex,
-        this.sentences[sentenceNr].endIndex);
   }
 }
 
-export default SerapiState;
+export default CoqState;

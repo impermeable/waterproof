@@ -153,6 +153,116 @@ describe('serapi execution processor', () => {
     });
   });
 
+  it('should be able to \'revert\' execution with executePrevious',
+      async () => {
+        proc.state.concatSentences([
+          {
+            beginIndex: 0,
+            endIndex: 6,
+            sentenceId: 2,
+          },
+          {
+            beginIndex: 7,
+            endIndex: 12,
+            sentenceId: 3,
+          },
+          {
+            beginIndex: 13,
+            endIndex: 20,
+            sentenceId: 4,
+          },
+        ]);
+
+        worker.addExpectedCall('Exec 3', [
+          'Ack',
+          '(Feedback((doc_id 0)(span_id 3)(route 0)' +
+      '(contents(ProcessingIn master))))',
+          '(Feedback((doc_id 0)(span_id 2)(route 0)(contents Processed)))',
+          '(Feedback((doc_id 0)(span_id 3)(route 0)(contents Processed)))',
+          'Completed',
+        ]);
+
+        worker.addExpectedCall('Query ((sid 3', [
+          'Ack',
+          '(ObjList())',
+          'Completed',
+        ]);
+
+        worker.addExpectedCall('Query ((sid 2', [
+          'Ack',
+          '(ObjList())',
+          'Completed',
+        ]);
+
+        setLastExecuted(0);
+
+        await proc.executeNext();
+        await proc.executePrevious();
+
+        expect(worker.getCallAmount()).to.equal(3);
+
+        expect(editor.executeSuccess.callCount).to.equal(2);
+        // TODO: check params of success
+
+        expect(proc.state.lastExecuted).to.equal(0);
+      });
+
+  it('should be able to \'revert\' execution when all exec\'d', async () => {
+    let during1 = Promise.resolve();
+    let during2 = Promise.resolve();
+    proc.state.concatSentences([
+      {
+        beginIndex: 0,
+        endIndex: 6,
+        sentenceId: 2,
+      },
+      {
+        beginIndex: 7,
+        endIndex: 12,
+        sentenceId: 3,
+      },
+    ]);
+
+    worker.addExpectedCall('Exec 2', [
+      'Ack',
+      '(Feedback((doc_id 0)(span_id 2)(route 0)' +
+      '(contents(ProcessingIn master))))',
+      '(Feedback((doc_id 0)(span_id 1)(route 0)(contents Processed)))',
+      '(Feedback((doc_id 0)(span_id 2)(route 0)(contents Processed)))',
+      'Completed',
+    ], () => {
+      during1 = proc.executeNext();
+    });
+
+    worker.addExpectedCall('Exec 3', [
+      'Ack',
+      '(Feedback((doc_id 0)(span_id 3)(route 0)' +
+      '(contents(ProcessingIn master))))',
+      '(Feedback((doc_id 0)(span_id 2)(route 0)(contents Processed)))',
+      '(Feedback((doc_id 0)(span_id 3)(route 0)(contents Processed)))',
+      'Completed',
+    ], () => {
+      during2 = proc.executePrevious();
+    });
+
+    worker.addExpectedCall('Query ((sid 2', [
+      'Ack',
+      '(ObjList())',
+      'Completed',
+    ]);
+
+    await proc.executeNext();
+    await during1;
+    await during2;
+
+    expect(worker.getCallAmount()).to.equal(3);
+
+    expect(editor.executeSuccess.callCount).to.equal(3);
+    // TODO: check params of success
+
+    expect(proc.state.lastExecuted).to.equal(0);
+  });
+
   it('should \'store\' calls to execute while busy and only show goal once',
       async () => {
         proc.state.concatSentences([
@@ -200,7 +310,7 @@ describe('serapi execution processor', () => {
 
         expect(worker.getCallAmount()).to.equal(3);
         expect(editor.executeStarted.callCount).to.be.at.least(1);
-        expect(editor.executeSuccess.callCount).to.be.at.least(1);
+        expect(editor.executeSuccess.callCount).to.be.at.least(2);
         expect(editor.executeSuccess.lastCall.args[1]).to.equal(12);
 
         // only one goal call
@@ -435,5 +545,11 @@ describe('serapi execution processor', () => {
 
         expect(editor.executeSuccess.callCount).to.equal(1);
         expect(editor.executeSuccess.lastCall.args[0]).to.equal(previousGoal);
+
+        // TODO: this might not even be right and certainly is not supported!
+        // So maybe use custom callbacks?
+        // this checks whether the error is called after success
+        expect(editor.executeError.lastCall.callId).is.at.least(
+            editor.executeSuccess.lastCall.callId);
       });
 });

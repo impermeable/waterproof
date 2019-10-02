@@ -160,7 +160,7 @@ describe('serapi combined content & execution processor', () => {
         expect(contentProc.state.sentenceSize()).to.equal(1);
 
         expect(editor.executeStarted.callCount).to.be.at.least(1);
-        expect(editor.executeSuccess.callCount).to.equal(1);
+        expect(editor.executeSuccess.callCount).to.equal(2);
         expect(editor.executeError.callCount).to.equal(0);
 
         expect(execProc.state.lastExecuted).to.equal(0);
