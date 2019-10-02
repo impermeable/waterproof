@@ -2,7 +2,7 @@
     <div>
         <b-dropdown-item
           :title="buttonInfo.disabled ? '' : titleText"
-          :class="{'topbar-button': true, 'disabled': buttonInfo.disabled}"
+          :class="{'disabled': buttonInfo.disabled}"
           @click="sendEvent" href="javascript:void(0)">
             <div v-shortkey="shortcut" @shortkey="sendEvent"
                       :class="{'disabled': buttonInfo.disabled}">

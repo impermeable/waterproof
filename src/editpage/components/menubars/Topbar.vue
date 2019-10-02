@@ -3,7 +3,7 @@
     <div class="button-container">
       <img src="../../../assets/images/WaterproofIconWhite.svg"
           @click='eventBus.$emit("goto-homescreen")'
-           alt="logo" class="topbar-button top-icon" />
+           alt="logo" class="top-icon" />
 
       <b-dropdown id="file-dropdown"
                   text="File"
@@ -322,8 +322,6 @@ export default {
 </script>
 
 <style lang="scss">
-  //@import '../../../assets/sass/layout/topbar.scss';
-
   .show > .btn-secondary.dropdown-toggle {
     background-color: $color-primary-dark!important;
     border: none;

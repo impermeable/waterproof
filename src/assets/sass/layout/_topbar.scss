@@ -1,57 +1,87 @@
+$font-to-use: Century Gothic;
+
+/**
+  The topbar is build up as follows:
+  - Topbar
+    - Button container
+      - Icon
+      - Dropdown
+        - buttons
+        - links
+        - items
+    - Search container
+      -
+
+*/
+
+/** Contains the the button- and the search-container. */
 .topbar {
   display: flex;
   flex-direction: row;
-  background-color: $color-primary;
   height: 40px;
+  background-color: $color-primary;
 
+  /** Contains the icon and all the dropdown menus. */
   .button-container {
     display: flex;
-    flex: 1 1 auto;
+    flex: 1 2 auto;
+    height: 100%;
     justify-content: left;
-  }
 
-  .topbar-dropdown {
-    color: $color-on-primary;
-
-    button {
-      background-color: $color-primary;
-      border: none;
-      border-radius: 0;
-      height: 40px;
-      box-shadow: none !important;
-
-      &:hover {
-        background-color: $color-primary-light;
-        border: none;
-      }
-
-      &:active {
-        background-color: $color-primary-dark !important;
-        border: none;
-      }
+    .top-icon {
+      float: left;
+      height: 100%;
+      padding: 9px 5px 9px 6px;
+      background-color: $color-primary !important;
+      cursor: pointer;
     }
 
-    ul {
-      background-color: $color-primary-dark;
-      color: $color-on-primary;
-      border: none;
-      border-radius: 0;
-      padding: 0;
-      margin: 0;
-    }
+    /** Contains the components of each dropdown menu
+        (so buttons, list items and links). */
+    .topbar-dropdown {
+      /** The menu buttons (File, Edit, Coq, Help) */
+      button {
+        border: none;
+        border-radius: 0;
+        box-shadow: none !important;
+        height: 40px;
+        background-color: $color-primary;
 
-    a {
-      color: white;
-      font-family: Century Gothic;
-      display: flex;
-      flex-flow: row nowrap;
-      justify-content: space-between;
+        &:hover {
+          border: none;
+          background-color: $color-primary-light;
+        }
 
-      &:hover {
-        background-color: $color-primary-light;
+        &:active {
+          border: none;
+          background-color: $color-primary-dark !important;
+        }
       }
-      &:focus {
-        background-color: $color-primary-light;
+
+      /** The items in each dropdown menu */
+      ul {
+        border: none;
+        border-radius: 0;
+        padding: 0;
+        margin: 0;
+        background-color: $color-primary-dark;
+        color: $color-on-primary;
+      }
+
+      /** The actions of each item*/
+      a {
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: space-between;
+        color: white;
+        font-family: Century Gothic;
+
+        &:hover {
+          background-color: $color-primary-light;
+        }
+        &:focus {
+          background-color: $color-primary-light;
+        }
       }
     }
   }

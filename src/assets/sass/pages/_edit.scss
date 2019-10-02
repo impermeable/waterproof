@@ -60,25 +60,6 @@ $bar-animation-timing: ease-in-out;
   z-index: 2;
 }
 
-.topbar-button {
-  height: 100%;
-  font-family: $font-to-use;
-  border: none;
-  background-color: $color-primary-dark;
-  color: white;
-  transition: 0.3s;
-  outline: none;
-}
-
-.topbar-button:hover {
-  background-color: $color-primary-light;
-}
-
-.topbar-button:active {
-  background-color: $color-primary-light;
-  border: none;
-}
-
 .top-icon {
   height: 40px;
   padding: 9px 5px 9px 6px;
