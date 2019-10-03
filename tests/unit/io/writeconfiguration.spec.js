@@ -4,15 +4,14 @@ const chai = require('chai');
 const sandbox = sinon.createSandbox();
 const expect = chai.expect;
 
-import {readConfiguration, defaultConfigData}
-  from '../../../src/io/readconfiguration.js';
+import {updateConfiguration}
+  from '../../../src/io/writeconfiguration.js';
 
 // example configuration file contents
 const configUserSertop =
     JSON.stringify({'sertopPath': 'C:\\Users\\UserSertop\\sertop.exe'});
 const configUserEmptySertop = JSON.stringify({'sertopPath': ''});
 const configUserNoSertop = JSON.stringify({'irrelevantProps': ''});
-const configUserBadJSON = '{ not : valid : json }';
 
 // dictionary to be used by the mock file system
 const mockFiles = {
@@ -22,12 +21,10 @@ const mockFiles = {
     configUserEmptySertop,
   'C:\\Users\\UserNoSertop\\AppData\\Roaming\\waterproof\\wpconfig.json':
     configUserNoSertop,
-  'C:\\Users\\UserBadJSON\\AppData\\Roaming\\waterproof\\wpconfig.json':
-    configUserBadJSON,
 };
 
 // Replace the writeFile instance
-const stubForWriteFile = sinon.stub();
+// const writeFileStub = sinon.stub(fs, 'writeFile');
 
 /**
  * Function to replace the fs.readFile function
@@ -65,22 +62,25 @@ function remoteGen( userPath ) {
   };
 }
 
-describe('Reading the configuration file', () => {
+const fileWriterStub = sinon.stub().yields(null);
+
+describe('Updating the configuration file', () => {
   beforeEach(() => {
     sandbox.replace(fs, 'readFile', readFileReplacement);
-    sandbox.replace(fs, 'writeFile', stubForWriteFile);
+    sandbox.replace(fs, 'writeFile', fileWriterStub);
   });
 
   afterEach(() => {
     sandbox.restore();
   });
 
-  it('should return correct sertopPath if it is in config file', (done)=> {
-    const sertopPath = 'C:\\Users\\UserSertop\\sertop.exe';
+  it('should write correct data to config file', (done)=> {
+    const mySertopPath = 'C:\\Users\\UserSertop\\sertop.exe';
     const userPath = 'C:\\Users\\UserSertop\\AppData\\Roaming\\waterproof\\';
-    readConfiguration(remoteGen(userPath)).then(
+    updateConfiguration(remoteGen(userPath), {sertopPath: mySertopPath}).then(
         (result) => {
-          expect(result['sertopPath']).to.equal(sertopPath);
+          expect(fileWriterStub.getCall(0).args[1]).to.deep.equal(
+              JSON.stringify({sertopPath: mySertopPath}, null, 4));
           done();
         })
         .catch((err) => {
@@ -88,57 +88,22 @@ describe('Reading the configuration file', () => {
         });
   });
 
-  it('should return empty path if sertopPath empty in config file', (done)=> {
-    const sertopPath = '';
-    const userPath =
-        'C:\\Users\\UserEmptySertop\\AppData\\Roaming\\waterproof\\';
-    readConfiguration(remoteGen(userPath)).then(
-        (result) => {
-          expect(result['sertopPath']).to.equal(sertopPath);
-          done();
-        })
-        .catch((err) => {
-          done(err);
-        });
-  });
-
-  it('should return read configData if sertopPath not in config file',
+  it('should add sertopPath to configuration file if it was not there',
       (done) => {
+        const mySertopPath = 'C:\\Users\\UserNoSertop\\sertop.exe';
         const userPath =
             'C:\\Users\\UserNoSertop\\AppData\\Roaming\\waterproof\\';
-        readConfiguration(remoteGen(userPath)).then(
+        updateConfiguration(remoteGen(userPath),
+            {
+              sertopPath: mySertopPath}).then(
             (result) => {
-              expect(result).to.deep.equal({'irrelevantProps': ''});
+              expect(fileWriterStub.getCall(1).args[1]).to.deep.equal(
+                  JSON.stringify({irrelevantProps: '',
+                    sertopPath: mySertopPath}, null, 4));
               done();
             })
             .catch((err) => {
               done(err);
             });
       });
-
-  it('should return default configData if JSON cannot be parsed', (done)=> {
-    const userPath =
-        'C:\\Users\\UserBadJSON\\AppData\\Roaming\\waterproof\\';
-    readConfiguration(remoteGen(userPath)).then(
-        (result) => {
-          expect(result).to.equal(defaultConfigData);
-          done();
-        })
-        .catch((err) => {
-          done(err);
-        });
-  });
-
-  it('should return empty path if not in config file', (done) => {
-    const sertopPath = '';
-    const userPath = 'C:\\Users\\UserNoConfig\\AppData\\Roaming\\waterproof\\';
-    readConfiguration(remoteGen(userPath)).then(
-        (result) => {
-          expect(result['sertopPath']).to.equal(sertopPath);
-          done();
-        })
-        .catch((err) => {
-          done(err);
-        });
-  });
 });

@@ -5,6 +5,8 @@ const path = require('path');
 
 import readFile from './io/readfile';
 import {readConfiguration} from './io/readconfiguration';
+import {updateConfiguration} from './io/writeconfiguration';
+import {findSertop, userHelpFindSertop} from './io/findsertop';
 
 Vue.use(Vuex);
 
@@ -96,7 +98,25 @@ export default new Vuex.Store({
           resolve(state.sertopPath);
         } else {
           dispatch('readConfig').then((result) => {
-            resolve(state.sertopPath);
+            if (state.sertopPath === '') {
+              const result = userHelpFindSertop(remote,
+                  findSertop(process.platform));
+              console.log(`user selected sertop at: ${result}`);
+              if (result.endsWith('sertop.exe')) {
+                updateConfiguration(remote,
+                    {sertopPath: result}).then((outcome) => {
+                  commit('setConfig', {sertopPath: result});
+                  resolve(result);
+                }).catch((err) => {
+                  console.log(err);
+                  reject(err);
+                });
+              } else {
+                resolve('');
+              }
+            } else {
+              resolve(state.sertopPath);
+            }
           }, (reason) => {
             reject( reason );
           } );
