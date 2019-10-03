@@ -5,12 +5,12 @@ $font-to-use: Century Gothic;
   - Topbar
     - Button container
       - Icon
-      - Dropdown
+      - Dropdown (in components/_topbar-dropdown.scss)
         - buttons
         - links
         - items
-    - Search container
-      -
+    - Search bar
+      - Search bar
 
 */
 
@@ -35,52 +35,64 @@ $font-to-use: Century Gothic;
       background-color: $color-primary !important;
       cursor: pointer;
     }
+  }
 
-    /** Contains the components of each dropdown menu
-        (so buttons, list items and links). */
-    .topbar-dropdown {
-      /** The menu buttons (File, Edit, Coq, Help) */
-      button {
-        border: none;
-        border-radius: 0;
-        box-shadow: none !important;
-        height: 40px;
-        background-color: $color-primary;
+  /** Contains the sidewindow buttons and the search bar. */
+  .search-bar {
+    display: flex;
+    align-items: center;
+    margin-top: 40px;
 
-        &:hover {
-          border: none;
-          background-color: $color-primary-light;
-        }
+    @include respond-to(xs) {
+      margin-top: 0;
+      height: 100%;
+    }
 
-        &:active {
-          border: none;
-          background-color: $color-primary-dark !important;
-        }
+    .sidewindow-button {
+      height: 25px;
+      margin-right: 8px;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .hide-assistance-buttons {
+      @include respond-to(sm-lower) {
+        display: none;
       }
+    }
 
-      /** The items in each dropdown menu */
-      ul {
-        border: none;
-        border-radius: 0;
-        padding: 0;
-        margin: 0;
-        background-color: $color-primary-dark;
-        color: $color-on-primary;
-      }
+    .toggle-search {
+      display: none;
+      overflow: hidden;
 
-      /** The actions of each item*/
-      a {
+      @include respond-to(sm-lower) {
         display: flex;
-        flex-flow: row nowrap;
-        justify-content: space-between;
-        color: white;
-        font-family: Century Gothic;
+      }
+    }
 
-        &:hover {
-          background-color: $color-primary-light;
+    .search-container {
+      height: 45px;
+      position: relative;
+
+      .input-field {
+        height: 35px;
+        outline: 0;
+        width: 350px;
+        resize: none;
+        border-radius: 20px;
+        border: 1px #000 solid;
+        padding: 5px 5px 5px 40px;
+        margin-right: 10px;
+        overflow: hidden;
+
+        @include respond-to(sm) {
+          width: 200px;
+          margin-top: 5px;
         }
-        &:focus {
-          background-color: $color-primary-light;
+
+        @include respond-to(xs) {
+          width: 150px;
+          margin-top: 5px;
         }
       }
     }

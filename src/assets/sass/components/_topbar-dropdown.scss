@@ -1,0 +1,51 @@
+/** Contains the components of each dropdown menu
+        (so buttons, list items and links). */
+.topbar-dropdown {
+  /** The menu buttons (File, Edit, Coq, Help) */
+  button {
+    border: none;
+    border-radius: 0;
+    box-shadow: none !important;
+    height: 40px;
+    background-color: $color-primary;
+
+    &:hover {
+      border: none;
+      background-color: $color-primary-light;
+    }
+
+    &:active {
+      border: none;
+      background-color: $color-primary-dark !important;
+    }
+  }
+
+  /** The items in each dropdown menu */
+  ul {
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    margin: 0;
+    background-color: $color-primary-dark;
+    color: $color-on-primary;
+  }
+
+  /** The actions of each item*/
+  a {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    color: white !important;
+    font-family: Century Gothic;
+
+    &:hover {
+      background-color: $color-primary-light;
+    }
+    &:focus {
+      background-color: $color-primary-light;
+    }
+    &.disabled {
+      color: gray;
+    }
+  }
+}

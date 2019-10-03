@@ -25,16 +25,11 @@ export default {
 };
 </script>
 
-<style scoped>
-
+<style lang="scss" scoped>
     .topbar-shortcut {
         padding-top: 3px;
         font-family: monospace;
         color: gray;
         padding-left: 10px;
-    }
-
-    a.disabled {
-      color: gray;
     }
 </style>
