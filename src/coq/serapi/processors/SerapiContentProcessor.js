@@ -1,10 +1,10 @@
 import SerapiProcessor from '../util/SerapiProcessor';
 import {
+  byteIndexToStringIndex,
   getGoalsFromResponse, getLastValidFullStop,
   isGeneralMessage, parseErrorResponse, parseToSentence,
 } from '../SerapiParser';
 import * as Constants from '../SerapiConstants';
-import {byteIndexToStringIndex} from '../StringIndices';
 import {Mutex} from 'async-mutex';
 import {
   createAddCommand, createCancelCommand, createGoalCommand,

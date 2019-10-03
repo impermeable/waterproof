@@ -227,6 +227,8 @@ function parseToSentence(response) {
 }
 
 function isReadyFeedback(response) {
+  // this is not great... but there is nothing really unique about so it will
+  // suffice
   return response[0] === 'Feedback'
       && response[1].length === 4
       && response[1][3].length === 2
@@ -234,9 +236,26 @@ function isReadyFeedback(response) {
       && response[1][3][1] === 'Processed';
 }
 
+/**
+ * For a given string, convert an index in terms of bytes (as often
+ * provided by serapi) to an index in terms of a string
+ * @param {String} str The string to perform the conversion for
+ * @param {Number} byteIndex The index in terms of bytes
+ * @return {Number} The index in the string corresponding to the
+ * given byte, or -1 if it cannot be found
+ */
+function byteIndexToStringIndex(str, byteIndex) {
+  for (let j = Math.floor(byteIndex / 2); j <= byteIndex; j++) {
+    if (Buffer.byteLength(str.slice(0, j)) === byteIndex) {
+      return j;
+    }
+  }
+  return -1;
+}
+
 export {
   parseFeedback, parseErrorableFeedback, parseErrorResponse,
   sanitise, getLastValidFullStop, isReadyFeedback,
   getGoalsFromResponse, isGeneralMessage, parseToSentence,
+  byteIndexToStringIndex,
 };
-
