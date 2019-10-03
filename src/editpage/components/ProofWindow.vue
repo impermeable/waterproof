@@ -399,23 +399,11 @@ export default {
     width: 100%;
     display: flex;
     height: inherit;
-  }
+    flex-direction: row;
 
-  @media screen and (min-width: 1200px) {
-    .proof-window {
-      flex-direction: row;
+    @include respond-to(sm-lower) {
+      flex-direction: column;
     }
-  }
-
-  @media screen and (max-width: 1200px) {
-    .proof-window {
-      flex-direction: column-reverse;
-    }
-  }
-
-  .divider {
-    background-color: #232D73;
-    flex-basis: 2px;
   }
 
   .executeError {

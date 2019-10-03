@@ -29,7 +29,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
     .response-window {
         /* applies to self */
         flex: 1 1 50%;
@@ -38,5 +38,9 @@ export default {
         display: flex;
         flex-direction: column;
         flex-wrap: wrap;
+
+        @include respond-to(sm-lower) {
+          flex-direction: row;
+        }
     }
 </style>
