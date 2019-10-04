@@ -1,6 +1,6 @@
 import SerapiProcessor from '../util/SerapiProcessor';
 import {
-  getGoalsFromResponse, isGeneralMessage, parseErrorResponse,
+  getGoalsFromResponse, parseErrorResponse,
 } from '../SerapiParser';
 import * as Constants from '../SerapiConstants';
 import {
@@ -170,11 +170,9 @@ class SerapiExecutionProcessor extends SerapiProcessor {
 
   handleSerapiMessage(data, extraTag) {
     if (extraTag === 'g') {
-      if (!isGeneralMessage(data)) {
-        return {
-          goal: getGoalsFromResponse(data),
-        };
-      }
+      return {
+        goal: getGoalsFromResponse(data),
+      };
     } else if (extraTag === 'e') {
       if (data[0] === Constants.COQ_EXCEPTION) {
         return {

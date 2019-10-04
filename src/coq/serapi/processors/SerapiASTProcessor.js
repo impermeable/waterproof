@@ -16,21 +16,24 @@ class SerapiASTProcessor extends SerapiProcessor {
   async getAllAsts() {
     const stateRelease = await this.state.stateLock.acquire();
     for (let i = 0; i < this.state.sentenceSize(); i++) {
-      await this._setASTFor(this.state.idOfSentence(i));
+      await this._fetchASTFor(this.state.idOfSentence(i));
     }
     stateRelease();
+    return Promise.resolve();
   }
 
   async getAstForSentence(sentenceIndex) {
     const stateRelease = await this.state.stateLock.acquire();
-    await this._setASTFor(this.state.idOfSentence(sentenceIndex));
+    await this._fetchASTFor(this.state.idOfSentence(sentenceIndex));
     stateRelease();
+    return Promise.resolve();
   }
 
-  async _setASTFor(sentenceId) {
-    return this.sendCommand(createASTCommand(sentenceId), 't')
-        .then((ast) => {
-          this.state.setASTforSID(sentenceId, ast);
+  async _fetchASTFor(sentenceId) {
+    return this.sendCommand(createASTCommand(sentenceId), 'ast')
+        .then((result) => {
+          this.state.setASTforSID(sentenceId, result.ast);
+          return Promise.resolve();
         });
   }
 

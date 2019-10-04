@@ -1,5 +1,6 @@
 import SerapiCallbacks from './SerapiCallbacks';
 import * as Constants from '../SerapiConstants';
+import {isGeneralMessage} from '../SerapiParser';
 
 class SerapiProcessor extends SerapiCallbacks {
   /**
@@ -63,7 +64,9 @@ class SerapiProcessor extends SerapiCallbacks {
   }
 
   handleMessage(data, extraTag) {
-    this._addToResult(this.handleSerapiMessage(data, extraTag));
+    if (!isGeneralMessage(data)) {
+      this._addToResult(this.handleSerapiMessage(data, extraTag));
+    }
     if (data === Constants.MESSAGE_COMPLETED) {
       // command completed resolve promise
       this._resolveCommand();

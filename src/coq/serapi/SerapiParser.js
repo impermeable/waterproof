@@ -186,10 +186,6 @@ function getLastValidFullStop(text) {
 }
 
 function getGoalsFromResponse(response) {
-  if (isGeneralMessage(response)) {
-    return false;
-  }
-
   if (response[0] === 'ObjList') {
     if (!Array.isArray(response[1]) || response[1].length < 1) {
       return '';

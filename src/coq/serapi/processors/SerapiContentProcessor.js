@@ -2,7 +2,7 @@ import SerapiProcessor from '../util/SerapiProcessor';
 import {
   byteIndexToStringIndex,
   getGoalsFromResponse, getLastValidFullStop,
-  isGeneralMessage, parseErrorResponse, parseToSentence,
+  parseErrorResponse, parseToSentence,
 } from '../SerapiParser';
 import * as Constants from '../SerapiConstants';
 import {Mutex} from 'async-mutex';
@@ -213,24 +213,20 @@ class SerapiContentProcessor extends SerapiProcessor {
       }
     } else if (extraTag === 'g') {
       // rerolled goal
-      if (!isGeneralMessage(data)) {
-        return {
-          goal: getGoalsFromResponse(data),
-        };
-      }
+      return {
+        goal: getGoalsFromResponse(data),
+      };
     } else if (extraTag === 'a') {
-      if (!isGeneralMessage(data)) {
-        if (data[0] === Constants.COQ_EXCEPTION) {
-          return {
-            error: parseErrorResponse(data),
-          };
-        }
-        // update offset?
-        const sentence = parseToSentence(data);
+      if (data[0] === Constants.COQ_EXCEPTION) {
         return {
-          [sentence.sentenceId]: sentence,
+          error: parseErrorResponse(data),
         };
       }
+      // update offset?
+      const sentence = parseToSentence(data);
+      return {
+        [sentence.sentenceId]: sentence,
+      };
     } else {
       console.log('Unknown extra tag in SerapiContentProcessor');
     }

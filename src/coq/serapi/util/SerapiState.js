@@ -100,6 +100,15 @@ class SerapiState extends CoqState {
   }
 
   /**
+   * Get the AST of the sentence
+   * @param {Number} index the index of the sentence
+   * @return {*} the AST or undefined if not loaded
+   */
+  getASTOfSentence(index) {
+    return this.sentences[index].ast;
+  }
+
+  /**
    * Get the sentence index for a given sentenceId
    * TODO: optimize
    * @param {Number} sid  The sentenceId of the sentence

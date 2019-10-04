@@ -1,6 +1,9 @@
 import parse from 's-expression';
 import * as Constants from './SerapiConstants';
-import {parseErrorableFeedback, isReadyFeedback} from './SerapiParser';
+import {
+  parseErrorableFeedback,
+  isReadyFeedback,
+} from './SerapiParser';
 
 class SerapiTagger {
   /**
@@ -25,7 +28,7 @@ class SerapiTagger {
     };
     this.commandStartTime = null;
 
-    this.timing = true;
+    this.timing = false;
     this.logging = true;
   }
 
