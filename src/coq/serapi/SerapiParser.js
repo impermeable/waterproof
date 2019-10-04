@@ -1,5 +1,9 @@
 const flatten = require('./flatten-expr').flatten;
-import * as Constants from './SerapiConstants';
+
+// constants
+const MESSAGE_COMPLETED = 'Completed';
+const MESSAGE_ACK = 'Ack';
+const COQ_EXCEPTION = 'CoqExn';
 
 /**
  * Function to handle feedback message received from SerAPI
@@ -35,6 +39,12 @@ function parseFeedback(data) {
   return feedback;
 }
 
+/**
+ * Parse feedback which could contain an error
+ * @param {*} data the feedback
+ * @return {{string: string, errorFlag: boolean}} the text in the feedback
+ *   with errorflag set if true
+ */
 function parseErrorableFeedback(data) {
   const feedback = parseFeedback(data);
   if (feedback.string === '') {
@@ -96,7 +106,7 @@ function parseErrorResponse(response) {
     };
   }
 
-  if (response[0] !== Constants.COQ_EXCEPTION) {
+  if (response[0] !== COQ_EXCEPTION) {
     console.log('Warning might not be an error');
   }
 
@@ -185,6 +195,11 @@ function getLastValidFullStop(text) {
   }
 }
 
+/**
+ * Parse goals from serapi message
+ * @param {*} response the serapi message
+ * @return {string|*} the resulting goal
+ */
 function getGoalsFromResponse(response) {
   if (response[0] === 'ObjList') {
     if (!Array.isArray(response[1]) || response[1].length < 1) {
@@ -204,11 +219,22 @@ function getGoalsFromResponse(response) {
   return '';
 }
 
+/**
+ * Checks whether a given message is acknowledge or complete (a general message)
+ * @param {*} response the serapi message
+ * @return {boolean} whether it is a general message
+ */
 function isGeneralMessage(response) {
-  return response === Constants.MESSAGE_ACK ||
-      response === Constants.MESSAGE_COMPLETED;
+  return response === MESSAGE_ACK ||
+      response === MESSAGE_COMPLETED;
 }
 
+/**
+ * Parse Add output to a sentence
+ * @param {*} response the serapi message
+ * @return {{endIndex: *, beginIndex: *, sentenceId: *}|null} the resulting
+ *   sentence
+ */
 function parseToSentence(response) {
   if (response[0] !== 'Added') {
     return null;
@@ -222,6 +248,11 @@ function parseToSentence(response) {
   };
 }
 
+/**
+ * Check if the response is (a general) ready feedback message
+ * @param {*} response the response to check
+ * @return {boolean} whether it is the ready responds
+ */
 function isReadyFeedback(response) {
   // this is not great... but there is nothing really unique about so it will
   // suffice
@@ -254,4 +285,5 @@ export {
   sanitise, getLastValidFullStop, isReadyFeedback,
   getGoalsFromResponse, isGeneralMessage, parseToSentence,
   byteIndexToStringIndex,
+  COQ_EXCEPTION, MESSAGE_ACK, MESSAGE_COMPLETED,
 };

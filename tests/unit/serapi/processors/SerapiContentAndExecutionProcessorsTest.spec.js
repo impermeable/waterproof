@@ -27,7 +27,7 @@ describe('serapi combined content & execution processor', () => {
     sinon.spy(editor, 'executeSuccess');
     sinon.spy(editor, 'executeError');
 
-    const tagger = new SerapiTagger(worker, () => {});
+    const tagger = new SerapiTagger(worker, null);
     const state = new SerapiState();
 
     contentProc = new SerapiContentProcessor(tagger, state, editor);

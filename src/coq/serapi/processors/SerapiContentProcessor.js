@@ -1,21 +1,29 @@
 import SerapiProcessor from '../util/SerapiProcessor';
 import {
   byteIndexToStringIndex,
-  getGoalsFromResponse, getLastValidFullStop,
-  parseErrorResponse, parseToSentence,
+  COQ_EXCEPTION,
+  getGoalsFromResponse,
+  getLastValidFullStop,
+  parseErrorResponse,
+  parseToSentence,
 } from '../SerapiParser';
-import * as Constants from '../SerapiConstants';
 import {Mutex} from 'async-mutex';
 import {
-  createAddCommand, createCancelCommand, createGoalCommand,
+  createAddCommand,
+  createCancelCommand,
+  createGoalCommand,
 } from '../util/SerapiCommandFactory';
 
+/**
+ * Processor for content
+ * Add, cancels and get the goal after modification of content
+ */
 class SerapiContentProcessor extends SerapiProcessor {
   /**
-   *
-   * @param {SerapiTagger} tagger
-   * @param {SerapiState} state
-   * @param {EditorInterface} editor
+   * Create a SerapiContentProcessor
+   * @param {SerapiTagger} tagger the tagger to use
+   * @param {SerapiState} state the state to use
+   * @param {EditorInterface} editor the editor to use
    */
   constructor(tagger, state, editor) {
     super(tagger, state, editor);
@@ -28,6 +36,10 @@ class SerapiContentProcessor extends SerapiProcessor {
     this.addContent = '';
   }
 
+  /**
+   * Sets the Coq content to the given string.
+   * @param {string} content The Coq code to set the content to.
+   */
   async setContent(content) {
     const releaseNewContent = await this.addLock.acquire();
 
@@ -90,6 +102,10 @@ class SerapiContentProcessor extends SerapiProcessor {
     return Promise.resolve();
   }
 
+  /**
+   * Get new content (with lock)
+   * @private
+   */
   async _getCurrentNewContent() {
     const release = await this.addLock.acquire();
     const newContentValue = this.addContent + '';
@@ -97,6 +113,13 @@ class SerapiContentProcessor extends SerapiProcessor {
     return newContentValue;
   }
 
+  /**
+   * Get goal from serapi if rerolling
+   * @param {Number} lastUnchangedSentence the sentence index of the last valid
+   *   sentence
+   * @param {Number} editIndex the index where the first edit was made
+   * @private
+   */
   async _getRerolledGoal(lastUnchangedSentence, editIndex) {
     if (lastUnchangedSentence < 0) {
       // reroll everything
@@ -111,11 +134,21 @@ class SerapiContentProcessor extends SerapiProcessor {
         });
   }
 
-  // TODO: move command creation to separate file
+  /**
+   * Send a cancel command
+   * @param {*} sentences sentences to cancel
+   * @private
+   */
   async _cancelSentences(sentences) {
     return this.sendCommand(createCancelCommand(sentences), 'c');
   }
 
+  /**
+   * Sanitize and validate new content and send command to set it
+   * @param {String} contentToAdd the new command
+   * @return {Promise<void>}
+   * @private
+   */
   async _setNewContent(contentToAdd) {
     const validatedContent = this._toValidContent(contentToAdd);
     if (validatedContent !== '') {
@@ -127,6 +160,12 @@ class SerapiContentProcessor extends SerapiProcessor {
     }
   }
 
+  /**
+   * Process results of add commands
+   * @param {*} result the sentence
+   * @param {String} contentAdded the text content which was added
+   * @private
+   */
   _processSentences(result, contentAdded) {
     const baseOffset = this.currentContent.length;
     let furthestIndex = -1;
@@ -156,6 +195,12 @@ class SerapiContentProcessor extends SerapiProcessor {
     }
   }
 
+  /**
+   * Check if sentence ends in . or *)
+   * @param {String} contentToAdd the content to check
+   * @return {String} the valid content to add
+   * @private
+   */
   _toValidContent(contentToAdd) {
     const trimmed = contentToAdd.trim();
     if (trimmed === '') {
@@ -179,6 +224,12 @@ class SerapiContentProcessor extends SerapiProcessor {
     return contentToAdd;
   }
 
+  /**
+   * Calculate the last still valid sentence when using other content
+   * @param {String} otherContent the content to check with
+   * @return {Number} the index of the last valid sentence
+   * @private
+   */
   _getLastUnchangedSentence(otherContent) {
     const firstDifference = this._getDifferenceIndex(otherContent);
     if (firstDifference >= otherContent.length ||
@@ -191,6 +242,12 @@ class SerapiContentProcessor extends SerapiProcessor {
     }
   }
 
+  /**
+   * Find the first difference index between two string
+   * @param {String} otherContent the content to compare to
+   * @return {number} the index of the first difference
+   * @private
+   */
   _getDifferenceIndex(otherContent) {
     const minLength = Math.min(this.currentContent.length, otherContent.length);
     if (minLength === 0) {
@@ -204,6 +261,12 @@ class SerapiContentProcessor extends SerapiProcessor {
     return minLength;
   }
 
+  /**
+   * Handle a serapi message
+   * @param {*} data the serapi message (parsed)
+   * @param {String} extraTag the extra identifying tag
+   * @return {*} partial of this command
+   */
   handleSerapiMessage(data, extraTag) {
     if (extraTag === 'c') {
       if (Array.isArray(data) && data[0] === 'Canceled') {
@@ -217,7 +280,7 @@ class SerapiContentProcessor extends SerapiProcessor {
         goal: getGoalsFromResponse(data),
       };
     } else if (extraTag === 'a') {
-      if (data[0] === Constants.COQ_EXCEPTION) {
+      if (data[0] === COQ_EXCEPTION) {
         return {
           error: parseErrorResponse(data),
         };
@@ -232,6 +295,11 @@ class SerapiContentProcessor extends SerapiProcessor {
     }
   }
 
+  /**
+   * Handle a serapi feedback
+   * @param {*} feedback the serapi feedback (parsed)
+   * @param {String} extraTag the extra identifying tag
+   */
   handleSerapiFeedback(feedback, extraTag) {
   }
 }

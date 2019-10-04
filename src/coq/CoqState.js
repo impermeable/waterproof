@@ -5,11 +5,7 @@
  *  - Sentences (id, begin, end, ast, ...)
  *  - execution (execution state, targets, ...)
  */
-
 class CoqState {
-  constructor() {
-  }
-
   /**
    * Get the sentence at the index
    * @param {Number} index
@@ -25,6 +21,15 @@ class CoqState {
   concatSentences(sentences) {
   }
 
+
+  /**
+   * Add a sentence with the given id, begin, end, text content and ast
+   * @param {Number} sentenceId the sentence id
+   * @param {Number} beginIndex the begin index
+   * @param {Number} endIndex the end index
+   * @param {String} text the textual content
+   * @param {*} ast The AST
+   */
   addSentence(sentenceId, beginIndex, endIndex, text, ast) {
   }
 
@@ -103,7 +108,7 @@ class CoqState {
   /**
    * Get the first sentence that starts after the index
    * @param {Number} index the index in the content
-   * @return {null|Sentence} the first sentence after that index
+   * @return {*} the first sentence after that index
    */
   sentenceAfterIndex(index) {
   }

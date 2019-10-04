@@ -1,7 +1,11 @@
 import SerapiCallbacks from './SerapiCallbacks';
-import * as Constants from '../SerapiConstants';
-import {isGeneralMessage} from '../SerapiParser';
+import {isGeneralMessage, MESSAGE_COMPLETED} from '../SerapiParser';
 
+/**
+ * The interface for a SerapiProcessor (And SerapiCallbacks)
+ * Passes commands through and collects the results of each partial command
+ * @interface
+ */
 class SerapiProcessor extends SerapiCallbacks {
   /**
    *
@@ -23,6 +27,13 @@ class SerapiProcessor extends SerapiCallbacks {
     this.afterCommand = null;
   }
 
+  /**
+   * Send command to serapi with an optional tag
+   * @param {String} command the command
+   * @param {String} extraTag an extra identifying tag
+   * @return {Promise<*|Promise<unknown>>} a promise which resolves
+   *   when the command is complete
+   */
   async sendCommand(command, extraTag=null) {
     if (this.commandStatus.resolver != null) {
       console.log('message send before last message resolved');
@@ -43,6 +54,11 @@ class SerapiProcessor extends SerapiCallbacks {
     }));
   }
 
+
+  /**
+   * Called when command is finished
+   * @private
+   */
   _resolveCommand() {
     if (this.commandStatus.resolver != null) {
       const resolve = this.commandStatus.resolver;
@@ -56,6 +72,11 @@ class SerapiProcessor extends SerapiCallbacks {
     }
   }
 
+  /**
+   * Add part to result
+   * @param {Object} partial the part to be added
+   * @private
+   */
   _addToResult(partial) {
     if (partial !== undefined) {
       this.commandStatus.result =
@@ -63,25 +84,30 @@ class SerapiProcessor extends SerapiCallbacks {
     }
   }
 
+  /**
+   * Handle a serapi message
+   * Passes through to handleSerapiMessage
+   * @param {*} data the message
+   * @param {String} extraTag the tag of the message
+   */
   handleMessage(data, extraTag) {
     if (!isGeneralMessage(data)) {
       this._addToResult(this.handleSerapiMessage(data, extraTag));
     }
-    if (data === Constants.MESSAGE_COMPLETED) {
+    if (data === MESSAGE_COMPLETED) {
       // command completed resolve promise
       this._resolveCommand();
     }
   }
 
+  /**
+   * Handle serapi feedback
+   * Passes through to handleSerapiFeedback
+   * @param {*} data the feedback
+   */
   handleFeedback(data) {
     this._addToResult(
         this.handleSerapiFeedback(data, this.commandStatus.extraTag));
-  }
-
-  handleSerapiMessage(data, extraTag) {
-  }
-
-  handleSerapiFeedback(feedback, extraTag) {
   }
 }
 

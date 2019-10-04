@@ -22,7 +22,7 @@ describe('serapi content processor', () => {
     sinon.spy(editor, 'setContentError');
 
     proc = new SerapiContentProcessor(
-        new SerapiTagger(worker, () => {}),
+        new SerapiTagger(worker, null),
         new SerapiState(),
         editor);
   });
@@ -279,7 +279,6 @@ describe('serapi content processor', () => {
   it('should update to new content if called while adding', async () => {
     const initialContent = 'Proof.';
     const duringContent = 'Lemma a n:n+0=n.';
-    let duringPromise;
     worker.addExpectedCall(`Add () "${initialContent}"`, [
       'Ack',
       '(Added 2((fname ToplevelInput)(line_nb 1)(bol_pos 0)' +
@@ -304,7 +303,6 @@ describe('serapi content processor', () => {
 
     // TODO: should not final content reject a promise?
     await proc.setContent(initialContent);
-    await (duringPromise || Promise.resolve());
 
     expect(worker.getCallAmount()).to.equal(3);
 
@@ -317,7 +315,7 @@ describe('serapi content processor', () => {
     const initialContent = 'Proof.';
     const duringContentIntermediate = 'Check plus.';
     const duringContentFinal = 'Lemma a n:n+0=n.';
-    let duringPromise;
+    let duringPromise = Promise.resolve();
     worker.addExpectedCall(`Add () "${initialContent}"`, [
       'Ack',
       '(Added 2((fname ToplevelInput)(line_nb 1)(bol_pos 0)' +
@@ -343,7 +341,7 @@ describe('serapi content processor', () => {
 
     // TODO: should not final content reject a promise?
     await proc.setContent(initialContent);
-    await (duringPromise || Promise.resolve());
+    await duringPromise;
 
     expect(worker.getCallAmount()).to.equal(3);
 
@@ -354,7 +352,7 @@ describe('serapi content processor', () => {
   it('should not call if the newContent only changed in between', async () => {
     const initialContent = 'Proof.';
     const duringContent = '';
-    let duringPromise;
+    let duringPromise = Promise.resolve();
     worker.addExpectedCall(`Add () "${initialContent}"`, [
       'Ack',
       '(Added 2((fname ToplevelInput)(line_nb 1)(bol_pos 0)' +
@@ -368,7 +366,7 @@ describe('serapi content processor', () => {
 
     // TODO: should not final content reject a promise?
     await proc.setContent(initialContent);
-    await (duringPromise || Promise.resolve());
+    await duringPromise;
 
     expect(worker.getCallAmount()).to.equal(1);
 

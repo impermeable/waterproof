@@ -28,7 +28,7 @@ describe('serapi ast processor', () => {
     worker = new ExpectingSerapiWorker();
 
     proc = new SerapiASTProcessor(
-        new SerapiTagger(worker, () => {}),
+        new SerapiTagger(worker, null),
         new SerapiState(),
         editor);
   });

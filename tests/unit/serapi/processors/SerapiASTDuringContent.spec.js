@@ -30,7 +30,7 @@ describe('serapi ast during content processor', () => {
   beforeEach(() => {
     worker = new ExpectingSerapiWorker();
 
-    const tagger = new SerapiTagger(worker, () => {});
+    const tagger = new SerapiTagger(worker, null);
     const state = new SerapiState();
     proc = new SerapiASTProcessor(tagger, state, editor);
     contentProc = new SerapiContentProcessor(tagger, state, editor);

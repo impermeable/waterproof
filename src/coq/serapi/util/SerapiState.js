@@ -1,13 +1,17 @@
-/**
- * Class for holding all the shared state of an active serapi instance
- * This includes:
- *  - Sentences (id, begin, end, ast, ...)
- *  - execution (execution state, targets, ...)
- */
 import {Mutex} from 'async-mutex';
 import CoqState from '../../CoqState';
 
+/**
+ * Class for holding all the shared state of an active serapi! instance
+ * This includes:
+ *  - Sentences (id, begin, end, ast, ...)
+ *  - execution (execution state, targets, ...)
+ *  Implements CoqState
+ */
 class SerapiState extends CoqState {
+  /**
+   * Constructor of SerapiState
+   */
   constructor() {
     super();
     this.stateLock = new Mutex();
@@ -36,6 +40,14 @@ class SerapiState extends CoqState {
     this.sentences = this.sentences.concat(sentences);
   }
 
+  /**
+   * Add a sentence with the given id, begin, end, text content and ast
+   * @param {Number} sentenceId the sentence id
+   * @param {Number} beginIndex the begin index
+   * @param {Number} endIndex the end index
+   * @param {String} text the textual content
+   * @param {*} ast The AST
+   */
   addSentence(sentenceId, beginIndex, endIndex, text, ast) {
     if (sentenceId == null || beginIndex == null || endIndex == null) {
       throw new Error('Sentence must have at least id, bi, ei');
@@ -181,7 +193,7 @@ class SerapiState extends CoqState {
   /**
    * Get the first sentence that starts after the index
    * @param {Number} index the index in the content
-   * @return {null|Sentence} the first sentence after that index
+   * @return {*} the first sentence after that index
    */
   sentenceAfterIndex(index) {
     for (let i = 0; i < this.sentenceSize(); i++) {

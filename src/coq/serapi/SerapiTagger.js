@@ -1,10 +1,15 @@
 import parse from 's-expression';
-import * as Constants from './SerapiConstants';
 import {
-  parseErrorableFeedback,
   isReadyFeedback,
+  MESSAGE_ACK,
+  MESSAGE_COMPLETED,
+  parseErrorableFeedback,
 } from './SerapiParser';
 
+/**
+ * A class that wraps promises around messages send to Serapi
+ * It also keep track of tags to allow differentiation of messages
+ */
 class SerapiTagger {
   /**
    *
@@ -18,26 +23,36 @@ class SerapiTagger {
     this.currentTag = 0;
 
     this.lastTag = null;
-    this.lastCallbacks = {
-      handleMessage: () => {},
+    this.lastCallbacks = readyCallback ? {
+      handleMessage: () => {
+      },
       handleFeedback: (message, raw) => {
         if (raw && isReadyFeedback(message)) {
           readyCallback();
         }
       },
-    };
+    } : null;
     this.commandStartTime = null;
 
     this.timing = false;
-    this.logging = true;
+    this.logging = false;
   }
 
+  /**
+   * Get the tag for the next message
+   * @return {string} the tag for the next message
+   * @private
+   */
   _getTag() {
     const tag = 'wp' + this.currentTag;
     this.currentTag++;
     return tag;
   }
 
+  /**
+   * Reset and get ready for new message
+   * @private
+   */
   _resetCurrentMessage() {
     this.lastTag = null;
     this.lastCallbacks = null;
@@ -45,13 +60,16 @@ class SerapiTagger {
   }
 
   /**
-   *
-   * @param {String} command
-   * @param {Function} messageHandler
-   * @param {Function} feedbackHandler
-   * @param {String} extraTag
+   * Send a command to serapi with a unique tag
+   * @param {String} command The command to send
+   * @param {Function} messageHandler the message handler
+   * @param {Function} feedbackHandler the feedback handler
+   * @param {String} extraTag the extra identifying tag
    */
   sendCommand(command, messageHandler, feedbackHandler, extraTag) {
+    if (this.lastCallbacks != null) {
+      console.log('overwriting message while previous not finished!');
+    }
     this.lastTag = extraTag == null ? this._getTag() :
         this._getTag() + '-' + extraTag;
     this.lastCallbacks = {
@@ -65,6 +83,10 @@ class SerapiTagger {
     this.worker.postMessage(serapiCommand);
   }
 
+  /**
+   * Hanlde a message from the worker
+   * @param {String} message the serapi message (generic can be feedback)
+   */
   handleMessage(message) {
     if (this.logging) {
       console.log(`Serapi -> ${message}`);
@@ -84,7 +106,7 @@ class SerapiTagger {
       const tag = parsedData[1];
       if (tag !== this.lastTag) {
         console.log('Received message with non current tag');
-      } else if (this.timing && parsedData[2] === Constants.MESSAGE_ACK) {
+      } else if (this.timing && parsedData[2] === MESSAGE_ACK) {
         this.commandStartTime = +new Date();
       }
 
@@ -98,7 +120,7 @@ class SerapiTagger {
 
       this.lastCallbacks.handleMessage(parsedData[2], extraTag);
 
-      if (parsedData[2] === Constants.MESSAGE_COMPLETED) {
+      if (parsedData[2] === MESSAGE_COMPLETED) {
         if (this.timing && this.commandStartTime != null) {
           const time = Math.round(
               (+new Date()) - this.commandStartTime) / 1000;

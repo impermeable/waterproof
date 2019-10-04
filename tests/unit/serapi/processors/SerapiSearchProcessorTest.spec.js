@@ -68,7 +68,7 @@ describe('serapi search processor', () => {
     sinon.spy(editor, 'executeError');
 
     proc = new SerapiSearchProcessor(
-        new SerapiTagger(worker, () => {}),
+        new SerapiTagger(worker, null),
         new SerapiState(),
         editor);
   });

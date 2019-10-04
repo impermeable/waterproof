@@ -23,7 +23,7 @@ describe('serapi execute to processor', () => {
     sinon.spy(editor, 'executeError');
 
     proc = new SerapiExecutionProcessor(
-        new SerapiTagger(worker, () => {}),
+        new SerapiTagger(worker, null),
         new SerapiState(),
         editor);
   });

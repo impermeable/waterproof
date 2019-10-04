@@ -63,6 +63,9 @@ class EditorInterface {
   message(message) {
   }
 
+  /**
+   * Called whenever the coq instance is ready to receive messages
+   */
   onReady() {
   }
 }
