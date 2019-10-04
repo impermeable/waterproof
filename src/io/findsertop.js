@@ -46,15 +46,21 @@ function findSertop(platform) {
  * gives back a string with the sertop Path
  */
 function userHelpFindSertop(remote, guess='') {
+  const userPath = remote.app.getPath('userData');
+  const configPath = path.join(userPath, 'wpconfig.json');
   const result = remote.dialog.showOpenDialog({
     title: 'Please select sertop',
     defaultPath: guess,
     properties: ['openFile']});
   if (result) {
-    return result[0];
+    if (result[0].endsWith('sertop.exe')) {
+      return result[0];
+    } else {
+      console.warn('Please specify a valid path for sertop ' +
+         `in the configuration file ${configPath}`);
+      return '';
+    }
   } else {
-    const userPath = remote.app.getPath('userData');
-    const configPath = path.join(userPath, 'wpconfig.json');
     console.warn('Please specify a path for sertop ' +
          `in the configuration file ${configPath}`);
   }

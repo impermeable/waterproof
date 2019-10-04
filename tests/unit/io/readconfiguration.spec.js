@@ -69,6 +69,9 @@ describe('Reading the configuration file', () => {
   beforeEach(() => {
     sandbox.replace(fs, 'readFile', readFileReplacement);
     sandbox.replace(fs, 'writeFile', stubForWriteFile);
+    sandbox.replace(console, 'log', sinon.fake());
+    sandbox.replace(console, 'warn', sinon.fake());
+    sandbox.replace(console, 'error', sinon.fake());
   });
 
   afterEach(() => {

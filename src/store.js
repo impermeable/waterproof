@@ -102,7 +102,7 @@ export default new Vuex.Store({
               const result = userHelpFindSertop(remote,
                   findSertop(process.platform));
               console.log(`user selected sertop at: ${result}`);
-              if (result.endsWith('sertop.exe')) {
+              if (result) {
                 updateConfiguration(remote,
                     {sertopPath: result}).then((outcome) => {
                   commit('setConfig', {sertopPath: result});

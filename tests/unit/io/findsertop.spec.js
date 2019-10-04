@@ -52,6 +52,12 @@ const sertopPath = `C:\\OCaml64\\home\\${userName}\\.opam` +
         '\\ocaml-variants.4.07.1+mingw64c\\bin\\sertop.exe';
 
 describe('Finding sertop', () => {
+  beforeEach(() => {
+    sandbox.replace(console, 'log', sinon.fake());
+    sandbox.replace(console, 'warn', sinon.fake());
+    sandbox.replace(console, 'error', sinon.fake());
+  });
+
   afterEach(() => {
     sandbox.restore();
   });
@@ -76,6 +82,15 @@ describe('Finding sertop', () => {
       const userPath = 'C:\\Users\\UserSertop\\AppData\\Roaming\\waterproof\\';
       expect(sertopFinder.userHelpFindSertop(remoteGen(userPath, [sertopPath])))
           .to.equal(sertopPath);
+      done();
+    });
+
+    it('should return empty string if path does not ' +
+       'end with \'sertop.exe\'', (done)=> {
+      const sertopPath = 'C:\\Users\\UserSertop\\sercomp.exe';
+      const userPath = 'C:\\Users\\UserSertop\\AppData\\Roaming\\waterproof\\';
+      expect(sertopFinder.userHelpFindSertop(remoteGen(userPath, [sertopPath])))
+          .to.equal('');
       done();
     });
   });
