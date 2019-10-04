@@ -106,7 +106,7 @@ export default {
 
 <style lang="scss" scoped>
     .messages-window {
-        flex-basis: 50%;
+        flex-basis: 30%;
         min-height: 100px;
         flex-grow: 1;
         position: relative;

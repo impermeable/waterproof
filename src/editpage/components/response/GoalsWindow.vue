@@ -60,7 +60,7 @@ export default {
 
   .goals-window {
     flex-grow: 1;
-    flex-basis: 50%;
+    flex-basis: 70%;
     min-height: 100px;
     border-bottom: 1px solid $color-primary-light;
   }
