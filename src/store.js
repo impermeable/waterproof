@@ -38,7 +38,12 @@ export default new Vuex.Store({
       state.searchResults.push(result);
     },
     openSideWindow: function(state, index) {
-      state.sideWindowIndex = index;
+      if (state.sideWindowIndex === index) {
+        console.log('hi');
+        state.sideWindowIndex = -1;
+      } else {
+        state.sideWindowIndex = index;
+      }
     },
     closeSideWindow: function(state) {
       state.sideWindowIndex = -1;

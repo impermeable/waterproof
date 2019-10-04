@@ -107,10 +107,15 @@ export default {
 <style lang="scss" scoped>
     .messages-window {
         flex-basis: 30%;
-        min-height: 100px;
+        // min-height: 100px;
         flex-grow: 1;
         position: relative;
         border-bottom: 1px solid $color-primary-light;
+
+        @include respond-to(sm-lower) {
+          border-bottom: none;
+          border-left: 2px solid $color-primary-light;
+        }
     }
 
     .clear-messages-button {
@@ -133,13 +138,13 @@ export default {
     }
 
     .message-header {
-        display: flex;
-        flex-flow: row nowrap;
-        justify-content: space-between;
-        height: 40px;
-        background: $color-primary-light;
-        color: $color-on-primary;
-        padding-left: 5px;
+      display: flex;
+      flex-flow: row nowrap;
+      justify-content: space-between;
+      height: 40px;
+      background: $color-primary-light;
+      color: $color-on-primary;
+      padding-left: 5px;
     }
 
     .message {

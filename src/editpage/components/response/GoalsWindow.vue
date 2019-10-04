@@ -1,15 +1,15 @@
 <template>
   <div class="goals-window">
     <div class="goals-header">
-      <h3>What is given / what you still need to show</h3>
+      <h3>Progress of proof</h3>
     </div>
     <div v-if="ready" class="goals">
       <Goal v-for="(goal, index) in coqGoals" class="subgoal"
             :goal="goal" :index="index" :key="'goal' + index"
             :total="coqGoals.length">
       </Goal>
-      <span v-if="!coqGoals">
-        No goals active.
+      <span v-if="!coqGoals.length">
+        Done.
       </span>
     </div>
     <div style="text-align: center" v-else>
@@ -51,18 +51,20 @@ export default {
     display: flex;
     flex-flow: row nowrap;
     justify-content: space-between;
-    border-bottom: 1px black solid;
     height: 40px;
     background: $color-primary-light;
     color: $color-on-primary;
     padding-left: 5px;
+
+    // @include respond-to(sm-lower) {
+    //   height: 2px;
+    // }
   }
 
   .goals-window {
     flex-grow: 1;
     flex-basis: 70%;
-    min-height: 100px;
-    border-bottom: 1px solid $color-primary-light;
+    // min-height: 100px;
   }
 
   .goals {
