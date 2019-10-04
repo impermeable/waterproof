@@ -53,7 +53,7 @@ function userHelpFindSertop(remote, guess='') {
     defaultPath: guess,
     properties: ['openFile']});
   if (result) {
-    if (result[0].endsWith('sertop.exe')) {
+    if (result[0].endsWith('sertop.exe') || result[0].endsWith('sertop')) {
       return result[0];
     } else {
       console.warn('Please specify a valid path for sertop ' +
