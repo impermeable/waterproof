@@ -1,7 +1,6 @@
 <template>
   <div class="container-fluid" id="app">
-    <topbar v-bind:shortKeys="shortKeys" :eventBus="mainBus" :recents="recents">
-    </topbar>
+    <topbar v-bind:shortKeys="shortKeys" :eventBus="mainBus" :recents="recents"/>
     <div class="content">
       <sidebar v-bind:shortKeys="shortKeys" :eventBus="mainBus">
       </sidebar>

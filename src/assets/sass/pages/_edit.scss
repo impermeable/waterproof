@@ -1,5 +1,5 @@
 $font-to-use: Century Gothic;
-$tab-height: 36px;
+$tab-height: 10px;
 
 html, body {
   height: 100%;
@@ -19,7 +19,7 @@ html, body {
   /** It contains two components: the topbar and the content div */
   .content {
     @include flex-style(row);
-    height: 100%;
+    height: calc(100% - 40px);
     overflow: auto;
   }
 }
