@@ -1,10 +1,10 @@
 <template>
   <div class="goals-window">
-    <div class="goals-header">
+    <div class="response-header">
       <h3>Progress of proof</h3>
     </div>
     <div v-if="ready" class="goals">
-      <Goal v-for="(goal, index) in coqGoals" class="subgoal"
+      <Goal v-for="(goal, index) in coqGoals"
             :goal="goal" :index="index" :key="'goal' + index"
             :total="coqGoals.length">
       </Goal>
@@ -47,43 +47,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .goals-header {
-    display: flex;
-    flex-flow: row nowrap;
-    justify-content: space-between;
-    height: 40px;
-    background: $color-primary-light;
-    color: $color-on-primary;
-    padding-left: 5px;
-
-    @include respond-to(sm-lower) {
-      height: 20px;
-    }
-
-    h3 {
-      @include respond-to(sm-lower) {
-        font-size: 14px;
-      }
-    }
-  }
-
-  .goals-window {
-    flex-grow: 1;
-    flex-basis: 70%;
-    // min-height: 100px;
-  }
-
-  .goals {
-    width: calc(100% - 5px);
-    height: calc(100% - 40px);
-    margin-right: 5px;
-    margin-bottom: 10px;
-    overflow-y: auto;
-  }
-
-  .goals>:first-child {
-    padding-top: 1.2em;
-  }
 
   .load-dot {
       animation: 0.9s blink step-end infinite;

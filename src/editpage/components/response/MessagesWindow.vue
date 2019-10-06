@@ -1,10 +1,10 @@
 <template>
     <div class="messages-window">
-        <div class="message-header">
+        <div class="response-header">
             <h3>Messages</h3>
             <span class="clear-messages-button" @click="clear">
                 <img src="../../../assets/images/trash-solid.svg"
-                     alt="Clear all" height="20px">
+                     alt="Clear all" class="trash-icon">
             </span>
         </div>
         <div class="messages" v-if="ready">
@@ -105,58 +105,6 @@ export default {
 
 
 <style lang="scss" scoped>
-    .messages-window {
-        flex-basis: 30%;
-        // min-height: 100px;
-        flex-grow: 1;
-        position: relative;
-        border-bottom: 1px solid $color-primary-light;
-
-        @include respond-to(sm-lower) {
-          border-bottom: none;
-          border-left: 2px solid $color-primary-light;
-        }
-    }
-
-    .clear-messages-button {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 40px;
-        transition: 0.3s;
-        &:hover {
-            background-color: $color-primary-dark;
-            cursor: pointer;
-        }
-    }
-
-    .messages {
-        height: calc(100% - 2em);
-        padding: 0.2em 0;
-        overflow-y: auto;
-
-    }
-
-    .message-header {
-      display: flex;
-      flex-flow: row nowrap;
-      justify-content: space-between;
-      height: 40px;
-      background: $color-primary-light;
-      color: $color-on-primary;
-      padding-left: 5px;
-
-      @include respond-to(sm-lower) {
-        height: 20px;
-      }
-
-      h3 {
-        @include respond-to(sm-lower) {
-          font-size: 14px;
-        }
-      }
-    }
-
     .message {
         margin: 0 19px;
         border-bottom: 1px solid gray;
