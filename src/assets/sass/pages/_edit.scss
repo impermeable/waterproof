@@ -1,5 +1,4 @@
 $font-to-use: Century Gothic;
-$tab-height: 10px;
 
 html, body {
   height: 100%;
@@ -13,17 +12,21 @@ html, body {
 /** Largest building block of Edit */
 .container-fluid {
   @include flex-style(column);
-  height: inherit;
+  height: 100%;
   padding: 0;
+  overflow: hidden;
 
   /** It contains two components: the topbar and the content div */
   .content {
     @include flex-style(row);
     height: calc(100% - 40px);
-    overflow: auto;
+    overflow: hidden;
+
+    @include respond-to(sm-lower) {
+      height: calc(100% - 30px);
+    }
   }
 }
-
 
 // This is the gutter that keeps track of how far along the execution is
 .exec-gutter {
@@ -88,58 +91,6 @@ $bar-animation-timing: ease-in-out;
   background-color: $color-primary;
 }
 
-.nav {
-  margin: 0;
-  padding: 0;
-  background-color: $color-primary;
-  max-width: 50%;
-  height: $tab-height;
-  border: none;
-  overflow-x: hidden;
-  overflow-y: hidden;
-  flex-wrap: nowrap;
-
-  &:hover {
-    overflow-x: auto;
-  }
-}
-
-.nav::-webkit-scrollbar {
-  height: 4px;
-}
-
-.nav::-webkit-scrollbar-track {
-  background: $color-gray-dark;
-}
-
-.nav::-webkit-scrollbar-thumb {
-  background: $color-primary;
-}
-
-.nav-link {
-  padding: 3px 10px 4px 10px;
-  margin-right: 1px;
-  color: $color-on-background;
-  background-color: $color-gray-dark;
-  display: flex;
-  align-items: center;
-  height: $tab-height - 1px;
-
-  &:hover {
-    background-color: $color-gray-light;
-  }
-}
-
-.tab-active {
-  background-color: $color-on-primary;
-  padding: 3px 10px 5px 10px;
-  height: $tab-height;
-
-  &:hover {
-    background-color: $color-on-primary;
-  }
-}
-
 .tab-text {
   color: $color-on-background;
   white-space: nowrap;
@@ -149,14 +100,14 @@ $bar-animation-timing: ease-in-out;
   margin-right: 8px;
 }
 
-.close-cross {
-  display: inline-block;
-}
-
 .tab-content {
   width: 100%;
-  height: calc(100% - #{$tab-height});
+  height: calc(100% - #{$tab-height-large});
   background-color: $color-on-primary;
+
+  @include respond-to(sm-lower) {
+    height: calc(100% - #{$tab-height-small});
+  }
 }
 
 .tab-pane {
@@ -164,17 +115,6 @@ $bar-animation-timing: ease-in-out;
   height: 100%;
 }
 
-.new-tab-button {
-  padding: 3px 10px 3px 10px;
-  margin-bottom: 1px;
-  background-color: $color-gray-dark;
-  border: none;
-  height: $tab-height - 1px;
-
-  &:hover, &:active {
-    background-color: $color-gray-light;
-  }
-}
 
 .floatyEditor {
   position: absolute;

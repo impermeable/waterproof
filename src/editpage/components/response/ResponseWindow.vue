@@ -31,16 +31,16 @@ export default {
 
 <style lang="scss" scoped>
     .response-window {
-        /* applies to self */
-        flex: 1 1 50%;
+      /* applies to self */
+      flex: 1 1 50%;
 
-        /* applies to children */
-        display: flex;
-        flex-direction: column;
-        flex-wrap: wrap;
+      /* applies to children */
+      display: flex;
+      flex-direction: column;
+      flex-wrap: wrap;
 
-        @include respond-to(sm-lower) {
-          flex-direction: row;
-        }
+      @include respond-to(sm-lower) {
+        flex-direction: row;
+      }
     }
 </style>

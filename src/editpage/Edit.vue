@@ -1,6 +1,7 @@
 <template>
   <div class="container-fluid" id="app">
-    <topbar v-bind:shortKeys="shortKeys" :eventBus="mainBus" :recents="recents"/>
+    <topbar v-bind:shortKeys="shortKeys" :eventBus="mainBus" :recents="recents">
+    </topbar>
     <div class="content">
       <sidebar v-bind:shortKeys="shortKeys" :eventBus="mainBus">
       </sidebar>
@@ -481,10 +482,10 @@ export default {
 </script>
 
 <style lang="scss">
-    @import '../assets/stylesheets/edit.scss';
+  @import '../assets/sass/pages/edit';
 
-    .about-content {
-      font-size: 14px;
-    }
+  .about-content {
+    font-size: 14px;
+  }
 
 </style>

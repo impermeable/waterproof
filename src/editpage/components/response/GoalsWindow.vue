@@ -56,9 +56,15 @@ export default {
     color: $color-on-primary;
     padding-left: 5px;
 
-    // @include respond-to(sm-lower) {
-    //   height: 2px;
-    // }
+    @include respond-to(sm-lower) {
+      height: 20px;
+    }
+
+    h3 {
+      @include respond-to(sm-lower) {
+        font-size: 14px;
+      }
+    }
   }
 
   .goals-window {

@@ -45,3 +45,12 @@ $color-on-error: #ffffff !default;
 $color-gray-dark: #e6e6e6 !default;
 $color-gray-light: #f2f2f2 !default;
 $color-gray: #e6e6e6 !default;
+
+
+// Height settings of the tab (responsiveness)
+$tab-height-small: 15px !default;
+$tab-height-large: 35px !default;
+
+// Height settings of the topbar
+$topbar-height-large: 40px;
+$topbar-height-small: 30px;

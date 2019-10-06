@@ -9,8 +9,7 @@
       {{notebook.getName().trim()}}
     </div>
     <img @click.middle.prevent="close" @click.stop="close" alt="x"
-         class="close-cross" height="16"
-         src="../../assets/images/cross-blue.svg"/>
+         class="close-cross" src="../../assets/images/cross-blue.svg"/>
   </template>
   <div class="proof-window">
     <edit-window :blocks="notebook.blocks" :exercise="notebook.exerciseSheet"

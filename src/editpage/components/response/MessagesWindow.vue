@@ -145,6 +145,16 @@ export default {
       background: $color-primary-light;
       color: $color-on-primary;
       padding-left: 5px;
+
+      @include respond-to(sm-lower) {
+        height: 20px;
+      }
+
+      h3 {
+        @include respond-to(sm-lower) {
+          font-size: 14px;
+        }
+      }
     }
 
     .message {

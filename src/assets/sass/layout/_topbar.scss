@@ -11,15 +11,18 @@ $font-to-use: Century Gothic;
         - items
     - Search bar
       - Search bar
-
 */
 
 /** Contains the the button- and the search-container. */
 .topbar {
   display: flex;
   flex-direction: row;
-  height: 40px;
+  height: $topbar-height-large;
   background-color: $color-primary;
+
+  @include respond-to(sm-lower) {
+    height: $topbar-height-small;
+  }
 
   /** Contains the icon and all the dropdown menus. */
   .button-container {
@@ -45,7 +48,7 @@ $font-to-use: Century Gothic;
     align-items: center;
     margin-top: 40px;
 
-    @include respond-to(xs) {
+    @include respond-to(sm-lower) {
       margin-top: 0;
       height: 100%;
     }
@@ -73,8 +76,12 @@ $font-to-use: Century Gothic;
     }
 
     .search-container {
-      height: 45px;
+      height: $topbar-height-large;
       position: relative;
+
+      @include respond-to(sm-lower) {
+        height: $topbar-height-small;
+      }
 
       .input-field {
         height: 35px;
@@ -87,7 +94,7 @@ $font-to-use: Century Gothic;
         margin-right: 10px;
         overflow: hidden;
 
-        @include respond-to(sm) {
+        @include respond-to(sm-lower) {
           width: 100%;
           padding-left: 10px;
           margin-top: 5px;

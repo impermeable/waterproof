@@ -9,6 +9,10 @@
     height: 100%;
     background-color: $color-primary;
 
+    @include respond-to(sm-lower) {
+      font-size: 13px;
+    }
+
     &:hover {
       border: none;
       background-color: $color-primary-light;

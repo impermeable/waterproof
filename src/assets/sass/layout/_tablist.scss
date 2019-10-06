@@ -1,0 +1,99 @@
+$close-cross-height-large: 16px;
+$close-cross-height-small: 10px;
+
+/** The bar containing the 'tab'-buttons */
+.nav {
+  flex-wrap: nowrap;
+  max-width: 50%;
+  height: $tab-height-large;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background-color: $color-primary;
+  overflow-x: hidden;
+  overflow-y: hidden;
+
+  @include respond-to(sm-lower) {
+    height: $tab-height-small;
+  }
+
+  &:hover {
+    overflow-x: auto;
+  }
+
+  &::-webkit-scrollbar {
+    height: 4px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: $color-gray-dark;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: $color-primary;
+  }
+
+  /** Individual elements of the bar, so single 'tab'-buttons */
+  .nav-link {
+    display: flex;
+    align-items: center;
+    height: calc($tab-height-large - 1px);
+    margin-right: 1px;
+    padding: 3px 10px 4px 10px;
+    background-color: $color-gray-dark;
+    color: $color-on-background;
+
+    &:hover {
+      background-color: $color-gray-light;
+    }
+
+    @include respond-to(sm-lower) {
+      height: $tab-height-small;
+      font-size: 12px;
+    }
+
+    .close-cross {
+      display: inline-block;
+      height: $close-cross-height-large;
+
+      @include respond-to(sm-lower) {
+        height: $close-cross-height-small;
+      }
+    }
+  }
+
+  .tab-active {
+    background-color: $color-on-primary;
+    padding: 3px 10px 5px 10px;
+    height: $tab-height-large;
+
+
+    @include respond-to(sm-lower) {
+      height: $tab-height-small;
+    }
+
+    &:hover {
+      background-color: $color-on-primary;
+    }
+  }
+
+  .new-tab-button {
+    display: flex;
+    justify-content: center;
+    height: $tab-height-large - 1px;
+    width: $tab-height-large - 1px;
+    border: none;
+    background-color: $color-gray-dark;
+    font-size: 25px;
+
+    @include respond-to(sm-lower) {
+      width: $tab-height-small - 1px;
+      height: $tab-height-small - 1px;
+      font-size: 12px;
+    }
+
+    &:hover, &:active {
+      background-color: $color-gray-light;
+    }
+  }
+}
