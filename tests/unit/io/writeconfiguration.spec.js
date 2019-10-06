@@ -1,4 +1,5 @@
 const fs = require('fs');
+const path = require('path');
 const sinon = require('sinon');
 const chai = require('chai');
 const sandbox = sinon.createSandbox();
@@ -9,18 +10,24 @@ import {updateConfiguration}
 
 // example configuration file contents
 const configUserSertop =
-    JSON.stringify({'sertopPath': 'C:\\Users\\UserSertop\\sertop.exe'});
+    JSON.stringify({'sertopPath': 'C:\\Users\\Sertop\\sertop.exe'});
 const configUserEmptySertop = JSON.stringify({'sertopPath': ''});
 const configUserNoSertop = JSON.stringify({'irrelevantProps': ''});
 
+
+const configFileName = 'wpconfig.json';
+
 // dictionary to be used by the mock file system
 const mockFiles = {
-  'C:\\Users\\UserSertop\\AppData\\Roaming\\waterproof\\wpconfig.json':
-    configUserSertop,
-  'C:\\Users\\UserEmptySertop\\AppData\\Roaming\\waterproof\\wpconfig.json':
-    configUserEmptySertop,
-  'C:\\Users\\UserNoSertop\\AppData\\Roaming\\waterproof\\wpconfig.json':
-    configUserNoSertop,
+  [path.join('C:\\Users\\Sertop\\AppData\\Roaming\\waterproof\\',
+      configFileName)]:
+  configUserSertop,
+  [path.join('C:\\Users\\EmptySertop\\AppData\\Roaming\\waterproof\\',
+      configFileName)]:
+  configUserEmptySertop,
+  [path.join('C:\\Users\\NoSertop\\AppData\\Roaming\\waterproof\\',
+      configFileName)]:
+  configUserNoSertop,
 };
 
 // Replace the writeFile instance
@@ -78,10 +85,10 @@ describe('Updating the configuration file', () => {
   });
 
   it('should write correct data to config file', (done)=> {
-    const mySertopPath = 'C:\\Users\\UserSertop\\sertop.exe';
-    const userPath = 'C:\\Users\\UserSertop\\AppData\\Roaming\\waterproof\\';
+    const mySertopPath = 'C:\\Users\\Sertop\\sertop.exe';
+    const userPath = 'C:\\Users\\Sertop\\AppData\\Roaming\\waterproof\\';
     updateConfiguration(remoteGen(userPath), {sertopPath: mySertopPath}).then(
-        (result) => {
+        () => {
           expect(fileWriterStub.getCall(0).args[1]).to.deep.equal(
               JSON.stringify({sertopPath: mySertopPath}, null, 4));
           done();
@@ -93,13 +100,13 @@ describe('Updating the configuration file', () => {
 
   it('should add sertopPath to configuration file if it was not there',
       (done) => {
-        const mySertopPath = 'C:\\Users\\UserNoSertop\\sertop.exe';
+        const mySertopPath = 'C:\\Users\\NoSertop\\sertop.exe';
         const userPath =
-            'C:\\Users\\UserNoSertop\\AppData\\Roaming\\waterproof\\';
+            'C:\\Users\\NoSertop\\AppData\\Roaming\\waterproof\\';
         updateConfiguration(remoteGen(userPath),
             {
               sertopPath: mySertopPath}).then(
-            (result) => {
+            () => {
               expect(fileWriterStub.getCall(1).args[1]).to.deep.equal(
                   JSON.stringify({irrelevantProps: '',
                     sertopPath: mySertopPath}, null, 4));

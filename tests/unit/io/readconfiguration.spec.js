@@ -1,4 +1,5 @@
 const fs = require('fs');
+const path = require('path');
 const sinon = require('sinon');
 const chai = require('chai');
 const sandbox = sinon.createSandbox();
@@ -9,20 +10,27 @@ import {readConfiguration, defaultConfigData}
 
 // example configuration file contents
 const configUserSertop =
-    JSON.stringify({'sertopPath': 'C:\\Users\\UserSertop\\sertop.exe'});
+    JSON.stringify({'sertopPath': 'C:\\Users\\Sertop\\sertop.exe'});
 const configUserEmptySertop = JSON.stringify({'sertopPath': ''});
 const configUserNoSertop = JSON.stringify({'irrelevantProps': ''});
 const configUserBadJSON = '{ not : valid : json }';
 
+
+const configFileName = 'wpconfig.json';
+
 // dictionary to be used by the mock file system
 const mockFiles = {
-  'C:\\Users\\UserSertop\\AppData\\Roaming\\waterproof\\wpconfig.json':
+  [path.join('C:\\Users\\Sertop\\AppData\\Roaming\\waterproof\\',
+      configFileName)]:
     configUserSertop,
-  'C:\\Users\\UserEmptySertop\\AppData\\Roaming\\waterproof\\wpconfig.json':
+  [path.join('C:\\Users\\EmptySertop\\AppData\\Roaming\\waterproof\\',
+      configFileName)]:
     configUserEmptySertop,
-  'C:\\Users\\UserNoSertop\\AppData\\Roaming\\waterproof\\wpconfig.json':
+  [path.join('C:\\Users\\NoSertop\\AppData\\Roaming\\waterproof\\',
+      configFileName)]:
     configUserNoSertop,
-  'C:\\Users\\UserBadJSON\\AppData\\Roaming\\waterproof\\wpconfig.json':
+  [path.join('C:\\Users\\BadJSON\\AppData\\Roaming\\waterproof\\',
+      configFileName)]:
     configUserBadJSON,
 };
 
@@ -69,9 +77,9 @@ describe('Reading the configuration file', () => {
   beforeEach(() => {
     sandbox.replace(fs, 'readFile', readFileReplacement);
     sandbox.replace(fs, 'writeFile', stubForWriteFile);
-    sandbox.replace(console, 'log', sinon.fake());
-    sandbox.replace(console, 'warn', sinon.fake());
-    sandbox.replace(console, 'error', sinon.fake());
+    // sandbox.replace(console, 'log', sinon.fake());
+    // sandbox.replace(console, 'warn', sinon.fake());
+    // sandbox.replace(console, 'error', sinon.fake());
   });
 
   afterEach(() => {
@@ -79,8 +87,8 @@ describe('Reading the configuration file', () => {
   });
 
   it('should return correct sertopPath if it is in config file', (done)=> {
-    const sertopPath = 'C:\\Users\\UserSertop\\sertop.exe';
-    const userPath = 'C:\\Users\\UserSertop\\AppData\\Roaming\\waterproof\\';
+    const sertopPath = 'C:\\Users\\Sertop\\sertop.exe';
+    const userPath = 'C:\\Users\\Sertop\\AppData\\Roaming\\waterproof\\';
     readConfiguration(remoteGen(userPath)).then(
         (result) => {
           expect(result['sertopPath']).to.equal(sertopPath);
@@ -94,7 +102,7 @@ describe('Reading the configuration file', () => {
   it('should return empty path if sertopPath empty in config file', (done)=> {
     const sertopPath = '';
     const userPath =
-        'C:\\Users\\UserEmptySertop\\AppData\\Roaming\\waterproof\\';
+        'C:\\Users\\EmptySertop\\AppData\\Roaming\\waterproof\\';
     readConfiguration(remoteGen(userPath)).then(
         (result) => {
           expect(result['sertopPath']).to.equal(sertopPath);
@@ -108,7 +116,7 @@ describe('Reading the configuration file', () => {
   it('should return read configData if sertopPath not in config file',
       (done) => {
         const userPath =
-            'C:\\Users\\UserNoSertop\\AppData\\Roaming\\waterproof\\';
+            'C:\\Users\\NoSertop\\AppData\\Roaming\\waterproof\\';
         readConfiguration(remoteGen(userPath)).then(
             (result) => {
               expect(result).to.deep.equal({'irrelevantProps': ''});
@@ -121,7 +129,7 @@ describe('Reading the configuration file', () => {
 
   it('should return default configData if JSON cannot be parsed', (done)=> {
     const userPath =
-        'C:\\Users\\UserBadJSON\\AppData\\Roaming\\waterproof\\';
+        'C:\\Users\\BadJSON\\AppData\\Roaming\\waterproof\\';
     readConfiguration(remoteGen(userPath)).then(
         (result) => {
           expect(result).to.equal(defaultConfigData);
@@ -134,7 +142,7 @@ describe('Reading the configuration file', () => {
 
   it('should return empty path if not in config file', (done) => {
     const sertopPath = '';
-    const userPath = 'C:\\Users\\UserNoConfig\\AppData\\Roaming\\waterproof\\';
+    const userPath = 'C:\\Users\\NoConfig\\AppData\\Roaming\\waterproof\\';
     readConfiguration(remoteGen(userPath)).then(
         (result) => {
           expect(result['sertopPath']).to.equal(sertopPath);
