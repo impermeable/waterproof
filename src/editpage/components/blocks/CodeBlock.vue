@@ -23,16 +23,10 @@
 </template>
 
 <script>
-import {codemirror} from 'vue-codemirror';
-import 'codemirror/lib/codemirror.css';
-import 'codemirror/addon/display/placeholder';
 import WpBlock from './WpBlock';
 
 export default {
   name: 'CodeBlock',
-  components: {
-    codemirror,
-  },
   mixins: [WpBlock],
   computed: {
     formattedText: function() {

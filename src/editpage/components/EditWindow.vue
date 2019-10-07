@@ -70,6 +70,8 @@ import {codemirror} from 'vue-codemirror';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/addon/display/placeholder';
 import 'codemirror/addon/search/searchcursor';
+import 'codemirror/addon/hint/show-hint';
+import 'codemirror/addon/hint/show-hint.css';
 import debounce from 'lodash.debounce';
 
 import CodeBlock from './blocks/CodeBlock';
