@@ -17,6 +17,8 @@
 
 */
 
+import 'codemirror/addon/hint/show-hint';
+import 'codemirror/addon/hint/show-hint.css';
 import CodeMirror from 'codemirror/lib/codemirror';
 
 const Pos = CodeMirror.Pos;
@@ -63,6 +65,14 @@ const unicodePreTable = [
   {text: '\\Theta', symbol: 'Θ'},
 ];
 
+// examples:
+/*
+  { "symbol": "→", "name": "rightwards arrow", "code": "to" },
+  { "symbol": "⇒", "name": "rightwards double arrow", "code": "implies" },
+  { "symbol": "⇔", "name": "left right double arrow", "code": "iff" },
+  { "symbol": "↦", "name": "rightwards arrow from bar", "code": "mapsto"}
+*/
+
 /* How our TeX-style completion works:
 
      We always complete on a press of "\", then we scan back to read
@@ -70,7 +80,7 @@ const unicodePreTable = [
      reasonably well for now.
    */
 
-function TeXInputHint(editor, _options) {
+function TeXInputHint(editor) {
   const cur = editor.getCursor();
 
   // IMPORTANT: We want to be mode independent so we match backwards
@@ -147,7 +157,6 @@ function initTexInput(CodeMirror) {
 
   CodeMirror.registerGlobalHelper('hint', 'tex-input',
       (function() {
-        console.log('global helper?');
         return true;
       }), TeXInputHint);
 }
