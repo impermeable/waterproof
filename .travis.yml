@@ -11,7 +11,7 @@ stages:
   - test
   - win-test
   - name: deploy
-    if: branch = master
+    if: branch = travis-auto-build-release
 
 jobs:
   include:
