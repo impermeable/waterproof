@@ -228,8 +228,24 @@ export default {
             eventType: 'on-proof-window',
             shortkeyTag: 'executeAll',
             requires: ['notebook', 'coq-ready'],
+            line: process.env.NODE_ENV !== 'production',
           },
-        ],
+        ].concat(process.env.NODE_ENV !== 'production' ? [
+          {
+            text: 'Enable logging',
+            event: 'coqLog',
+            eventType: 'on-proof-window',
+            shortkeyTag: '',
+            requires: ['notebook', 'coq-ready'],
+          },
+          {
+            text: 'Enable timing',
+            event: 'coqTime',
+            eventType: 'on-proof-window',
+            shortkeyTag: '',
+            requires: ['notebook', 'coq-ready'],
+          },
+        ] : []),
         help: [
           // 0,1,2 are magical constants from store.js
           {
@@ -373,7 +389,7 @@ export default {
 
       a {
         color: white;
-        font-family: Century Gothic;
+        font-family: Century Gothic, sans-serif;
         display: flex;
         flex-flow: row nowrap;
         justify-content: space-between;

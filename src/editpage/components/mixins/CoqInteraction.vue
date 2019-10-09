@@ -29,6 +29,8 @@ export default {
     this.eventBus.$on('coqTo', this.coqTo);
     this.eventBus.$on('coqAll', this.coqAll);
     this.eventBus.$on('coqAST', this.coqAST);
+    this.eventBus.$on('coqLog', this.coqToggleLog);
+    this.eventBus.$on('coqTime', this.coqToggleTiming);
   },
   methods: {
     startCoq: function() {
@@ -155,6 +157,18 @@ export default {
 
     executeStarted: function(index) {
       this.startedExecutionIndex = index;
+    },
+
+    coqToggleLog: function() {
+      if (this.coq.tagger) {
+        this.coq.tagger.logging = !this.coq.tagger.logging;
+      }
+    },
+
+    coqToggleTiming: function() {
+      if (this.coq.tagger) {
+        this.coq.tagger.timing = !this.coq.tagger.timing;
+      }
     },
   },
   beforeDestroy() {
