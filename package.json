@@ -2,6 +2,7 @@
   "name": "waterproof",
   "version": "0.2.0",
   "private": true,
+  "publish": null,
   "description": "The Waterproof proof assistant.",
   "main": "background.js",
   "scripts": {
