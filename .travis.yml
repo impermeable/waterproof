@@ -29,7 +29,7 @@ script:
         /bin/bash -c "npm ci && npm run electron:generate-icons && npm run electron:build --linux --win && ls dist_electron/" \
       && ls dist_electron/
     else
-      npm run full-build
+      npm ci && npm run electron:generate-icons && npm run electron:build && ls dist_electron/
     fi
 before_cache:
   - rm -rf $HOME/.cache/electron-builder/wine
