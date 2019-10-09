@@ -1,17 +1,31 @@
 language: node_js
-
 os:
-  - linux
-  - osx
-
+- linux
+- osx
 node_js:
-  - node
-
+- node
 stages:
-  - lint
-  - test
-
+- lint
+- test
 jobs:
   include:
-    - stage: lint
-      script: 'npm run lint'
+  - stage: lint
+    script: npm run lint
+  - stage: deploy
+    script: npm run electron:build
+
+deploy:
+  provider: releases
+  skip_cleanup: true
+  api_key: "$GITHUB_TOKEN"
+  file_glob: true
+  file:
+  - dist_electron/*.AppImage
+  - dist_electron/*.dmg
+  on:
+    tags: false
+
+
+env:
+  global:
+    secure: cpyX4rAxApGy7c20ZInazQDKXpUgpmUcN6jWJGHxWxEbvYHEPrnBTjEapSHrYB/Q9Svwku045rV7HTxlGNSlt985ejJ+QHRd7qofc8EDmwTXGysAx/XVbWP9fBF96H27ErBlNq3Sd2ct26zubRmJd7Mpv73E3ndFl/BvO/d8BuUv8WET6a2/uRRrPuJVpCc9zOe3/5paPsG4bIcxQhzSzpLnrQG9IzCXi/5s3xCYr07/rp8BI6ojwTpQ/aUOtd5how7EzM3Ce0CREZxTjN33IH47j8DZLl1f4MhzPTtxtdeKUEEelqy67EErfb2Jcf0u098QtWSG/Sp+0dZOZm4IiiLBs+qqw1sXGgVGieq5AFmq70yZ3CyD1aIKukYVJxbDSK55kjMnheDmdCdass4+LRQ4VezdfrYXlQ2zM4/y3xympAn2ysfDb4XxbvcicvPEiPumtwVfr3WPbLGGqlb69rVJwna4MzefySDXzU15fbVs62iQyB6TLlA0aUNjPI3ocxTNkeR0Yu0WvQDsr6D9RZsHyq7SjtUiDHfJxE4KXSRTjsYUICueOCDQBDUxXIqPEDg9dZSEP0Nt6fa7940DryqJ93QZl8IwRgKPkB7A//XmCnKBE6yq9F1SWwxNuDEHzj5MF4y+XYWjT8+r3xXvo6G45LqFOwlhP4SvepNhZNo=
