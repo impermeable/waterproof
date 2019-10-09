@@ -27,6 +27,12 @@ jobs:
       - npm run electron:generate-icons
       - npm run electron:build
 
+matrix:
+  include:
+    - stage: deploy
+      os: osx
+
+
 deploy:
   provider: releases
   skip_cleanup: true
