@@ -1,7 +1,8 @@
 language: node_js
 
 os:
-  linux
+  - linux
+  - osx
 
 node_js:
   - node
@@ -9,7 +10,6 @@ node_js:
 stages:
   - lint
   - test
-  - win-test
   - name: deploy
     if: branch = travis-auto-build-release
 
@@ -17,11 +17,10 @@ jobs:
   include:
   - stage: lint
     script: npm run lint
-  - stage: win-test
-    script: 'echo Test if application start here...'
-    os:
-      - linux
-      - osx
+  - stage: unit
+    script: npm run test:unit
+  - stage: test
+    script: scripts/checked-timeout 60 xvfb-run npx --no-install vue-cli-service electron:serve
   - stage: deploy
     script:
       - npm run electron:generate-icons
@@ -36,7 +35,7 @@ deploy:
   - dist_electron/*.AppImage
   - dist_electron/*.dmg
   on:
-    tags: false
+    tags: true
     stage: deploy
     branch: travis-auto-build-release
 
