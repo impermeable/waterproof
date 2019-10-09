@@ -28,10 +28,9 @@ script:
         -v ~/.cache/electron-builder:/root/.cache/electron-builder \
         -v ~/dist/:/root/dist_electron \
         electronuserland/builder:wine \
-        /bin/bash -c "npm ci && npm run electron:generate-icons && npm run electron:build --linux --win && ls dist_electron/" \
-      && ls dist/
+        /bin/bash -c "npm ci && npm run electron:generate-icons && npm run electron:build --linux --win && ls dist_electron/"
     else
-      yarn release
+      npm run full-build
     fi
 before_cache:
   - rm -rf $HOME/.cache/electron-builder/wine
