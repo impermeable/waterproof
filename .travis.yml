@@ -42,6 +42,9 @@ matrix:
         - npm run electron:generate-icons
         - npm run electron:build
 
+    - os: linux
+      services: docker
+      language: generic
 
 deploy:
   provider: releases
