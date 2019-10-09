@@ -1,8 +1,7 @@
 language: node_js
 
 os:
-  - linux
-  - osx
+  linux
 
 node_js:
   - node
@@ -10,12 +9,18 @@ node_js:
 stages:
   - lint
   - test
+  - win-test
   - deploy
 
 jobs:
   include:
   - stage: lint
     script: npm run lint
+  - stage: win-test
+    script: 'echo Test if application start here...'
+    os:
+      - linux
+      - osx
   - stage: deploy
     script: npm run electron:build
 
@@ -29,6 +34,7 @@ deploy:
   - dist_electron/*.dmg
   on:
     tags: false
+    stage: deploy
 
 
 env:
