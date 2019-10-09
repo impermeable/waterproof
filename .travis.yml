@@ -9,6 +9,7 @@ node_js:
 
 stages:
   - lint
+  - unit
   - test
   - name: deploy
     if: branch = travis-auto-build-release
