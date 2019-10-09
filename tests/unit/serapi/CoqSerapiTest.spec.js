@@ -158,9 +158,18 @@ describe('coq serapi processor interface', () => {
     sinon.replace(editor, 'onReady', fake);
 
     expect(fake.callCount).to.equal(0);
-
     sendReady();
 
     expect(fake.callCount).to.equal(1);
+  });
+
+  it('should remove the ready callback when received', () => {
+    const fake = sinon.fake.returns(Promise.resolve());
+    sinon.replace(editor, 'onReady', fake);
+
+    expect(serapi.tagger.lastCallbacks).to.not.be.null;
+    sendReady();
+
+    expect(serapi.tagger.lastCallbacks).to.be.null;
   });
 });

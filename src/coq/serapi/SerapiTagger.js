@@ -29,6 +29,7 @@ class SerapiTagger {
       handleFeedback: (message, raw) => {
         if (raw && isReadyFeedback(message)) {
           readyCallback();
+          this._resetCurrentMessage();
         }
       },
     } : null;
