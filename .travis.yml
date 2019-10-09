@@ -10,7 +10,8 @@ stages:
   - lint
   - test
   - win-test
-  - deploy
+  - name: deploy
+    if: branch = master
 
 jobs:
   include:
@@ -22,7 +23,9 @@ jobs:
       - linux
       - osx
   - stage: deploy
-    script: npm run electron:build
+    script:
+      - npm run electron:generate-icons
+      - npm run electron:build
 
 deploy:
   provider: releases
@@ -35,6 +38,7 @@ deploy:
   on:
     tags: false
     stage: deploy
+    branch: travis-auto-build-release
 
 
 env:
