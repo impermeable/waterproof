@@ -27,10 +27,20 @@ jobs:
       - npm run electron:generate-icons
       - npm run electron:build
 
+script: skip
+
 matrix:
   include:
-    - stage: deploy
-      os: osx
+    - os: osx
+      osx_image: xcode10.2
+      language: node_js
+      node_js: "10"
+      env:
+        - ELECTRON_CACHE=$HOME/.cache/electron
+        - ELECTRON_BUILDER_CACHE=$HOME/.cache/electron-builder
+      script:
+        - npm run electron:generate-icons
+        - npm run electron:build
 
 
 deploy:
