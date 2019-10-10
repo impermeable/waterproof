@@ -1,5 +1,7 @@
 # Waterproof
 
+Develop build status: [![Build Status](https://travis-ci.org/impermeable/waterproof.svg?branch=develop)](https://travis-ci.org/impermeable/waterproof)
+
 ## How to get working
 
 To get working with Waterproof, the following steps are necessary:

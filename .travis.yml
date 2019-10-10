@@ -36,7 +36,7 @@ jobs:
         electronuserland/builder:wine \
         /bin/bash -c "npm ci && npm run electron:generate-icons && npx vue-cli-service electron:build --config electron-builder.json --publish never -lw"
 
-script: npm run test-start
+script: xvfb-run npm run test-start
 
 cache:
   npm: true
