@@ -7,10 +7,9 @@
   "scripts": {
     "doc": "jsdoc src -r -d doc",
     "lint": "vue-cli-service lint",
-    "test-unit": "vue-cli-service test:unit",
-    "test-e2e": "mocha \"tests/e2e/*.e2e.js\"",
-    "test": "npm run test-unit",
-    "electron:build": "vue-cli-service electron:build --config electron-builder.json",
+    "test:unit": "vue-cli-service test:unit",
+    "test-start": "mocha \"tests/e2e/*.e2e.js\" --timeout 100000 --bail",
+    "electron:build": "vue-cli-service electron:build --config electron-builder.json --publish never",
     "electron:serve": "vue-cli-service electron:serve",
     "postinstall": "electron-builder install-app-deps",
     "postuninstall": "electron-builder install-app-deps",
@@ -22,7 +21,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@gitlab.tue.nl:ChefCoq/waterproof.git"
+    "url": "git@github.com:impermeable/waterproof.git"
   },
   "keywords": [
     "coq",
