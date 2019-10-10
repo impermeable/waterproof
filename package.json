@@ -9,7 +9,7 @@
     "doc": "jsdoc src -r -d doc",
     "lint": "vue-cli-service lint",
     "test:unit": "vue-cli-service test:unit",
-    "test-start": "mocha \"tests/e2e/*.e2e.js\"",
+    "test-start": "mocha \"tests/e2e/*.e2e.js\" --timeout 100000 --bail",
     "test": "npm run test:unit",
     "electron:build": "vue-cli-service electron:build --config electron-builder.json --publish never",
     "electron:serve": "vue-cli-service electron:serve",
