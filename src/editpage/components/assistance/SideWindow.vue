@@ -136,7 +136,8 @@ export default {
 
 <style lang="scss">
     .side-window {
-        flex: 1 0 380px;
+        flex: 1 0 25%;
+        min-width: 250px;
         background-color: $color-gray;
 
         display: flex;

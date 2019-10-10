@@ -63,7 +63,7 @@ $header-height-small: 20px;
     }
 
     .goals {
-      width: calc(100% - 5px);
+      width: calc(100%);
       height: calc(100% - #{$header-height-large});
       margin-right: 5px;
       overflow-y: scroll;
@@ -73,6 +73,7 @@ $header-height-small: 20px;
 
       .goal {
         border: 1px transparent solid;
+        margin: 0 5px 0 5px;
         padding-top: 20px;
 
         &:hover {
@@ -88,7 +89,6 @@ $header-height-small: 20px;
 
     @include respond-to(sm-lower) {
       flex-basis: 35%;
-      border-left: 2px solid $color-primary-light;
     }
 
     .messages {
