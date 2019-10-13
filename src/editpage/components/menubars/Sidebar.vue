@@ -163,6 +163,7 @@ export default {
     position: relative;
 
     @include respond-to(sm-lower) {
+      min-width: 30px;
       padding-top: $tab-height-small;
     }
   }

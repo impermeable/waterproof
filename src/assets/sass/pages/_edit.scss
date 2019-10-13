@@ -67,20 +67,6 @@ $bar-animation-timing: ease-in-out;
   background-color: #c0c0c0;
 }
 
-.sidebar-button {
-  color: white;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  white-space: nowrap;
-  block-size: 35px;
-  user-select: none;
-  transition: 0.3s;
-
-  &:hover:not(.disabled) {
-    background: $color-primary-light;
-  }
-}
-
 .show {
   display: block;
 }

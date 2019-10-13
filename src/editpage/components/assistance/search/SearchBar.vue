@@ -25,24 +25,6 @@
         class="sidewindow-button" @click="toggleSearch" />
     </div>
   </div>
-    <!-- <div class="search-bar">
-        <img src="../../../../assets/images/commandButton.svg"
-          class="sidewindow-button" @click="showCommands" />
-        <img src="../../../../assets/images/symbolButton.svg"
-          class="sidewindow-button" @click="showSymbols" />
-        <img src="../../../../assets/images/tacticButton.svg"
-          class="sidewindow-button" @click="showTactics" />
-        <img src="../../../../assets/images/looking_glass_grey.svg"
-          class="sidewindow-button search-button" @click="showTactics" />
-        <div class="search-container">
-            <textarea class="input-field" id="search-query"
-                      v-model="searchText"
-                @keydown.enter.exact.prevent
-                @keyup.enter="showResults()">
-            </textarea>
-            <input type="button" class="corner" @click="showResults" />
-        </div>
-    </div> -->
 </template>
 
 <script>
@@ -91,5 +73,10 @@ export default {
     border-radius: 10px;
     border: none;
     background: url("../../../../assets/images/looking_glass_grey.svg");
+
+    @include respond-to(sm-lower) {
+      height: 22px;
+      width: 22px;
+    }
   }
 </style>
