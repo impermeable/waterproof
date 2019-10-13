@@ -58,6 +58,10 @@ $font-to-use: Century Gothic;
       margin-right: 8px;
       position: relative;
       cursor: pointer;
+
+      @include respond-to(sm-lower) {
+        margin-top: 5px;
+      }
     }
 
     .hide-assistance-buttons {
@@ -96,12 +100,8 @@ $font-to-use: Century Gothic;
 
         @include respond-to(sm-lower) {
           width: 100%;
-          padding-left: 10px;
-          margin-top: 5px;
-        }
-
-        @include respond-to(xs) {
-          width: 100%;
+          height: 25px;
+          padding: 0 0 0 40px;
           margin-top: 5px;
         }
       }
