@@ -66,7 +66,7 @@ $font-to-use: Century Gothic;
 
     .hide-assistance-buttons {
       @include respond-to(sm-lower) {
-        display: none;
+        display: none !important;
       }
     }
 
@@ -80,6 +80,9 @@ $font-to-use: Century Gothic;
     }
 
     .search-container {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
       height: $topbar-height-large;
       position: relative;
 
@@ -99,7 +102,7 @@ $font-to-use: Century Gothic;
         overflow: hidden;
 
         @include respond-to(sm-lower) {
-          width: 100%;
+          width: 90%;
           height: 25px;
           padding: 0 0 0 40px;
           margin-top: 5px;

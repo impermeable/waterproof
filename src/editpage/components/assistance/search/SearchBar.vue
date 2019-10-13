@@ -75,6 +75,7 @@ export default {
     background: url("../../../../assets/images/looking_glass_grey.svg");
 
     @include respond-to(sm-lower) {
+      left: 23px;
       height: 22px;
       width: 22px;
     }
