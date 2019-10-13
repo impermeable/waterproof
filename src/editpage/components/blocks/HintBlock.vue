@@ -128,7 +128,6 @@ export default {
     right: 0;
     top: 0;
     padding-top: 0.25em;
-    min-width: 2em;
     min-height: 1.5em;
   }
 

@@ -105,16 +105,18 @@ export default {
 <style lang="scss">
   .assistance-bar {
     width: 100%;
-    border: 1px solid black;
     border-top: 0;
     display: flex;
     flex-direction: row;
 
     .query-area {
       // border-right: 1px solid black;
-      flex-basis: 70%;
+      flex: 1 1 70%;
       display: flex;
       flex-direction: column;
+      @include respond-to(sm) {
+        flex-basis: 50%;
+      }
 
       #query-input {
         background-color: whitesmoke;
@@ -128,7 +130,7 @@ export default {
       .buttons-bottom {
         display: flex;
         flex-basis: 50%;
-        flex-direction: row;
+        flex-flow: row wrap;
       }
     }
 
@@ -136,6 +138,12 @@ export default {
       display: flex;
       flex-flow: row wrap;
       flex-basis: 30%;
+      @include respond-to(sm) {
+        flex-basis: 50%;
+      }
+      @include respond-to(xs) {
+        display: none;
+      }
     }
   }
 </style>

@@ -21,12 +21,18 @@ export default {
     color: $color-on-primary;
     cursor: pointer;
     // border: 0.5px solid black;
-    flex: 1 0 33%;
+    flex: 1 0 20%;
     padding: 2px;
     font-size: 18px;
     text-align: center;
     transition: 0.3s;
 
+    @include respond-to(sm-lower) {
+      min-width: 60px;
+      font-size: 14px;
+      overflow: hidden;
+      text-overflow: ellipsis
+    }
     &:hover {
       background-color: $color-primary;
     }

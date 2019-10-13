@@ -5,7 +5,8 @@
           :class="{'disabled': buttonInfo.disabled}"
           @click="sendEvent" href="javascript:void(0)">
             <div v-shortkey="shortcut" @shortkey="sendEvent"
-                      :class="{'disabled': buttonInfo.disabled}">
+                      :class="{'disabled': buttonInfo.disabled}"
+                      class="button-info">
               {{ buttonInfo.text }}
             </div>
             <div class="topbar-shortcut">
@@ -26,6 +27,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+    .button-info {
+        max-width: 250px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
     .topbar-shortcut {
         padding-top: 3px;
         font-family: monospace;

@@ -1,7 +1,7 @@
 <template>
   <div class="goals-window">
     <div class="response-header">
-      <h3>Progress of proof</h3>
+      <h3>Proof progress</h3>
     </div>
     <div v-if="ready" class="goals">
       <Goal v-for="(goal, index) in coqGoals"
