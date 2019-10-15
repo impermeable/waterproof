@@ -4,8 +4,7 @@ const remote = require('electron').remote;
 const path = require('path');
 
 import readFile from './io/readfile';
-import {readConfiguration} from './io/readconfiguration';
-import {updateConfiguration} from './io/writeconfiguration';
+import {readConfiguration, updateConfiguration} from './io/readconfiguration';
 import {findSertop, userHelpFindSertop} from './io/findsertop';
 
 Vue.use(Vuex);

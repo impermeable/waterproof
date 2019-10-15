@@ -6,7 +6,7 @@ const sandbox = sinon.createSandbox();
 const expect = chai.expect;
 
 import {updateConfiguration}
-  from '../../../src/io/writeconfiguration.js';
+  from '../../../src/io/readconfiguration.js';
 
 // example configuration file contents
 const configUserSertop =
