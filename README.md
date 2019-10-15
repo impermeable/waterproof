@@ -6,16 +6,14 @@ Develop build status: [![Build Status](https://travis-ci.org/impermeable/waterpr
 
 ![Screenshot of waterproof](WaterproofScreenshot.png)
 
+Develop build status: [![Build Status](https://travis-ci.org/impermeable/waterproof.svg?branch=develop)](https://travis-ci.org/impermeable/waterproof)
+
 ## How to get started
 
-To get started with Waterproof, the following steps are necessary:
+The easiest way to get started with Waterproof is to:
 
-* Install SerAPI
-* Install Node.js
-* Clone the repository
-* Build the app
-
-We now describe these steps in detail.
+* Install SerAPI following the steps below
+* Install Waterproof using the installer from the [release page](http://github.com/impermeable/waterproof/releases)
 
 ### Installation of SerAPI
 
@@ -122,13 +120,13 @@ Pwd.
 
 ## Project structure
 * `/app`:
-This folder is for all static assets, i.e. files that don't need any pre-processing before being used by electron.
+This folder is for all static assets, i.e. files that don't need any pre-processing before being used by Electron.
 
 * `/e2e`:
 This folder contains the project's end-to-end (integration) tests.
 
 * `/src`:
-This folder is for files that need to be transpiled or compiled before they can be used by Electorn.
+This folder is for files that need to be transpiled or compiled before they can be used by Electron.
 
 * `/test`:
 This folder contains the project's unit tests.

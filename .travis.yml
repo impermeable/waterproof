@@ -38,6 +38,18 @@ jobs:
         electronuserland/builder:wine \
         /bin/bash -c "npm ci && npm run electron:generate-icons && npx vue-cli-service electron:build --config electron-builder.json --publish never -lw"
 
+  - stage: deploy
+    if: tag IS present
+    os: osx
+    osx_image: xcode10.2
+    env:
+      - ELECTRON_CACHE=$HOME/.cache/electron
+      - ELECTRON_BUILDER_CACHE=$HOME/.cache/electron-builder
+
+    language: node_js
+    node_js: node
+    script: npm ci && npm run electron:generate-icons && npx vue-cli-service electron:build --config electron-builder.json --publish never -m
+
 cache:
   npm: true
   directories:
@@ -55,6 +67,7 @@ deploy:
   file:
   - dist_electron/*.AppImage
   - dist_electron/*.exe
+  - dist_electron/*.dmg
   on:
     tags: true
     stage: deploy
