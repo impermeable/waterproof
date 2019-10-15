@@ -120,13 +120,13 @@ Pwd.
 
 ## Project structure
 * `/app`:
-This folder is for all static assets, i.e. files that don't need any pre-processing before being used by electron.
+This folder is for all static assets, i.e. files that don't need any pre-processing before being used by Electron.
 
 * `/e2e`:
 This folder contains the project's end-to-end (integration) tests.
 
 * `/src`:
-This folder is for files that need to be transpiled or compiled before they can be used by Electorn.
+This folder is for files that need to be transpiled or compiled before they can be used by Electron.
 
 * `/test`:
 This folder contains the project's unit tests.
