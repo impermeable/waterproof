@@ -19,7 +19,8 @@
       <input type="button" class="corner" @click="showResults" />
     </div>
     <div class="toggle-search">
-      <img v-if="!isSearchOpen" src="../../../../assets/images/looking_glass_grey.svg"
+      <img v-if="!isSearchOpen"
+        src="../../../../assets/images/looking_glass_grey.svg"
         class="sidewindow-button" @click="toggleSearch" />
       <img v-else src="../../../../assets/images/tooltipExpand.svg"
         class="sidewindow-button" @click="toggleSearch" />
