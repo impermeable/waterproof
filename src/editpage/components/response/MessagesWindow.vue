@@ -109,6 +109,7 @@ export default {
         margin: 0 19px;
         border-bottom: 1px solid gray;
         position: relative;
+        word-break: break-word;
 
         .clear-message {
             position: absolute;

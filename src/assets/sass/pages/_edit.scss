@@ -7,6 +7,11 @@ html, body {
 
 .CodeMirror {
   height: 100%;
+  word-break: break-word;
+}
+
+.CodeMirror-wrap pre {
+  word-break: break-word;
 }
 
 /** Largest building block of Edit */
