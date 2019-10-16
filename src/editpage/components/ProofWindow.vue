@@ -375,6 +375,7 @@ export default {
     this.eventBus.$on('saveAsFile', this.saveAsFile);
     this.eventBus.$on('exportToCoq', this.exportToCoq);
     this.eventBus.$on('exportToExerciseSheet', this.exportToExerciseSheet);
+    this.eventBus.$on('compilewplib', this.compilewplib);
     this.eventBus.$on('close', this.close);
 
     // When the proofwindow is mounted, update to disable all the buttons that

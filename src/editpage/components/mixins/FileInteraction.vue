@@ -1,4 +1,5 @@
 <script>
+import {VOCompiler} from '../../../io/compileToVO';
 export default {
   name: 'FileInteraction',
   methods: {
@@ -128,6 +129,19 @@ export default {
       if (filename) {
         this.notebook.exportToExerciseSheet(filename);
       }
+    },
+
+    /**
+     * Compile the standard waterproof libraries
+     */
+    compilewplib: function() {
+      this.$store.dispatch('getSercompPath').then((sercompPath) => {
+        console.log(`using sercomppath: ${sercompPath}`);
+        const compiler = new VOCompiler(sercompPath);
+        compiler.compileFromListFile();
+      }).catch((err) => {
+        console.log(err);
+      });
     },
   },
 };

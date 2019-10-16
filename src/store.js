@@ -122,6 +122,22 @@ export default new Vuex.Store({
         }
       });
     },
+    getSercompPath: function({dispatch}) {
+      return new Promise((resolve, reject) => {
+        dispatch('getSertopPath').then((result)=>{
+          const sertopPath = result;
+          let sercompPath = '';
+          if (sertopPath.endsWith('sertop')) {
+            sercompPath = sertopPath.slice(0, -6) + 'sercomp';
+          } else if (sertopPath.endsWith('sertop.exe')) {
+            sercompPath = sertopPath.slice(0, -10) + 'sercomp.exe';
+          }
+          resolve(sercompPath);
+        }).catch((err) => {
+          reject(err);
+        });
+      });
+    },
   },
   getters: {},
 });

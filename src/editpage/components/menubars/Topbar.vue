@@ -139,6 +139,12 @@ export default {
             requires: ['notebook', 'no-exercise-sheet'],
           },
           {
+            text: 'Compile waterproof libraries',
+            event: 'compilewplib',
+            eventType: 'on-proof-window',
+            line: 'true',
+          },
+          {
             text: 'Close tab',
             event: 'close',
             eventType: 'on-proof-window',
