@@ -14,6 +14,6 @@
   },
   "rules": {
     "linebreak-style": 0,
-    "no-console": "warn"
+    "no-console": 0
   }
 }

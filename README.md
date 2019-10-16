@@ -1,15 +1,17 @@
 # Waterproof
 
-## How to get working
+Waterproof is an educational tool in which students can interactively prove mathematical statements. Here is an example of an exercise and part of its solution in Waterproof.
 
-To get working with Waterproof, the following steps are necessary:
+![Screenshot of waterproof](WaterproofScreenshot.png)
 
-* Install SerAPI
-* Install Node.js
-* Clone the repository
-* Build the app
+Develop build status: [![Build Status](https://travis-ci.org/impermeable/waterproof.svg?branch=develop)](https://travis-ci.org/impermeable/waterproof)
 
-We now describe these steps in detail.
+## How to get started
+
+The easiest way to get started with Waterproof is to:
+
+* Install SerAPI following the steps below
+* Install Waterproof using the installer from the [release page](http://github.com/impermeable/waterproof/releases)
 
 ### Installation of SerAPI
 
@@ -116,13 +118,13 @@ Pwd.
 
 ## Project structure
 * `/app`:
-This folder is for all static assets, i.e. files that don't need any pre-processing before being used by electron.
+This folder is for all static assets, i.e. files that don't need any pre-processing before being used by Electron.
 
 * `/e2e`:
 This folder contains the project's end-to-end (integration) tests.
 
 * `/src`:
-This folder is for files that need to be transpiled or compiled before they can be used by Electorn.
+This folder is for files that need to be transpiled or compiled before they can be used by Electron.
 
 * `/test`:
 This folder contains the project's unit tests.
