@@ -25,7 +25,7 @@ class SerapiWorkerTCP extends SerapiWorker {
         this.createWrapperMessage('create',
             JSON.stringify({path: sertopPath,
               args: ['--implicit',
-                `-Q ${wplibPath},wplib`,
+                `--load-path=${wplibPath},wplib`,
               ]}))
     );
   }
