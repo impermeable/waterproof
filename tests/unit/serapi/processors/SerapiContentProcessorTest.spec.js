@@ -52,6 +52,27 @@ describe('serapi content processor', () => {
     });
   });
 
+  it('should add the sentences in the right order', async () => {
+    const text = 'Proof. Proof.';
+    worker.addExpectedCall(`(Add () "${text}")`, [
+      'Ack',
+      '(Added 3((fname ToplevelInput)(line_nb 1)(bol_pos 0)' +
+      '(line_nb_last 1)(bol_pos_last 0)(bp 7)(ep 13))NewTip)',
+      '(Added 2((fname ToplevelInput)(line_nb 1)(bol_pos 0)' +
+      '(line_nb_last 1)(bol_pos_last 0)(bp 0)(ep 6))NewTip)',
+      'Completed',
+    ]);
+
+    await proc.setContent(text);
+
+    expect(editor.setContentSuccess.callCount).to.be.at.least(1);
+    expect(editor.setContentError.callCount).to.equal(0);
+
+    expect(proc.state.sentenceSize()).to.equal(2);
+    expect(proc.state.idOfSentence(0)).to.equal(2);
+    expect(proc.state.idOfSentence(1)).to.equal(3);
+  });
+
   it('should send cancel and add command on content modify', async () => {
     // Given 3 sentences
     proc.state.concatSentences([
@@ -488,5 +509,37 @@ describe('serapi content processor', () => {
     });
 
     expect(editor.setContentSuccess.callCount).to.be.equal(1);
+  });
+
+
+  it('should handle no content', async () => {
+    await proc.setContent('');
+    expect(worker.getCallAmount()).to.equal(0);
+
+    expect(editor.setContentSuccess.callCount).to.equal(0);
+    expect(editor.setContentError.callCount).to.equal(0);
+
+    expect(proc.state.sentenceSize()).to.equal(0);
+  });
+
+  it('should handle just whitespace content', async () => {
+    await proc.setContent(' ');
+    expect(worker.getCallAmount()).to.equal(0);
+
+    expect(editor.setContentSuccess.callCount).to.equal(1);
+    expect(editor.setContentError.callCount).to.equal(0);
+
+    expect(proc.state.sentenceSize()).to.equal(0);
+  });
+
+  it('should handle just whitespace content changes', async () => {
+    await proc.setContent(' ');
+    await proc.setContent('  ');
+    expect(worker.getCallAmount()).to.equal(0);
+
+    expect(editor.setContentSuccess.callCount).to.equal(2);
+    expect(editor.setContentError.callCount).to.equal(0);
+
+    expect(proc.state.sentenceSize()).to.equal(0);
   });
 });

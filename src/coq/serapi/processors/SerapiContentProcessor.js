@@ -153,9 +153,10 @@ class SerapiContentProcessor extends SerapiProcessor {
     const validatedContent = this._toValidContent(contentToAdd);
     if (validatedContent !== '') {
       return this.sendCommand(createAddCommand(validatedContent), 'a')
-          .then((result) => this._processSentences(result, validatedContent));
+          .then((result) => this._processSentences(result, contentToAdd));
     } else {
       this.editor.setContentSuccess(null, -1, true);
+      this.currentContent += contentToAdd;
       return Promise.resolve();
     }
   }
@@ -169,16 +170,22 @@ class SerapiContentProcessor extends SerapiProcessor {
   _processSentences(result, contentAdded) {
     const baseOffset = this.currentContent.length;
     let furthestIndex = -1;
+    const sentences = [];
     for (const [key, value] of Object.entries(result)) {
-      // TODO: need to check for order!!
       if (key !== 'error') {
         const bp = byteIndexToStringIndex(contentAdded, value.beginIndex);
         const ep = byteIndexToStringIndex(contentAdded, value.endIndex);
         const stringValue = contentAdded.slice(bp, ep);
-        this.state.addSentence(value.sentenceId,
-            bp + baseOffset, ep + baseOffset, stringValue);
+        sentences.push({sid: value.sentenceId, str: stringValue,
+          bp: bp + baseOffset, ep: ep + baseOffset,
+        });
         furthestIndex = Math.max(furthestIndex, ep);
       }
+    }
+
+    for (const sentence of sentences.sort((a, b) => a.sid - b.sid)) {
+      this.state.addSentence(sentence.sid,
+          sentence.bp, sentence.ep, sentence.str);
     }
 
     if (result.hasOwnProperty('error')) {

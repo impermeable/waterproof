@@ -106,7 +106,8 @@ class SerapiTagger {
     if (parsedData[0] !== 'Feedback') {
       const tag = parsedData[1];
       if (tag !== this.lastTag) {
-        console.log('Received message with non current tag');
+        console.log('Received message with non current tag', this.lastTag);
+        console.log(parsedData);
       } else if (this.timing && parsedData[2] === MESSAGE_ACK) {
         this.commandStartTime = +new Date();
       }
