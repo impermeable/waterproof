@@ -82,6 +82,11 @@ In a terminal, move to the Waterproof base directory. Then, to install the neces
 npm install
 ```
 
+It may be necessary to update the modules with
+```
+npm update
+```
+
 ### Build the electron app
 
 To build the Electron app run:
