@@ -1,1 +1,1 @@
-["Tactics/Tactics.v","Tactics/TacticsContra.v"]
+["Tactics/Tactics.v","Tactics/TacticsContra.v","Lib/sup_and_inf.v","Lib/sequences.v","Lib/subsequences.v","Lib/sequential_accumulation_points.v"]

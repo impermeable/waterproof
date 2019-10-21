@@ -246,6 +246,10 @@ Tactic Notation "Because" ident(s)
   "and"  ident(v) ":" constr(t_v):=
   destruct s as [u v].
 
+Tactic Notation "Because" ident(s)
+  "either" ident(u) "or" ident(v) :=
+  destruct s as [u | v].
+
 (* TODO: align syntax with "By ... it holds that" *)
 Tactic Notation "It" "holds" "that"
   constr(t) "(" ident(u) ")" :=
@@ -253,7 +257,14 @@ Tactic Notation "It" "holds" "that"
                           | progress info_eauto with *
                           | fail "Failed to find a proof"].
 
+Tactic Notation "It" "follows" "that"
+  constr(t) :=
+  match goal with
+  | [|-t] => wp_power
+  | _ => fail "The statement did not correspond to the current goal"
+  end.
 
+(* TODO: preferably deprecate this notation *)
 
 Tactic Notation "This" "follows" "immediately" :=
   wp_power.

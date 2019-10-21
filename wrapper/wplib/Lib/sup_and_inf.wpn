@@ -7,7 +7,7 @@
     },
     {
       "type": "code",
-      "text": "(*Add LoadPath \"./\".\nAdd LoadPath \"../../\".*)\n\nAdd LoadPath \"./wrapper/\".\n\nRequire Import Reals.\nRequire Import Lra.\nRequire Import Classical.\nRequire Import Classical_Pred_Type.\n\nRequire Import wplib.Tactics.Tactics.\nRequire Import wplib.Tactics.TacticsContra."
+      "text": "Require Import Reals.\nRequire Import Lra.\nRequire Import Classical.\nRequire Import Classical_Pred_Type.\n\nRequire Import wplib.Tactics.Tactics.\nRequire Import wplib.Tactics.TacticsContra."
     },
     {
       "type": "code",
@@ -19,11 +19,11 @@
     },
     {
       "type": "code",
-      "text": "Lemma sup_is_upp_bd :\n  forall A : R -> Prop,\n    forall M : R,\n      is_sup A M -> is_upper_bound A M."
+      "text": "Lemma sup_is_upp_bd :\n  ∀ A : ℝ → Prop,\n    ∀ M : ℝ,\n      is_sup A M ⇒ is_upper_bound A M."
     },
     {
       "type": "code",
-      "text": "Proof.\nTake A : (R -> Prop). Take M : R. Assume M_is_sup_A. \nBecause M_is_sup_A both M_is_upp_bd_A and any_upp_bd_A_le_M."
+      "text": "Proof.\nTake A : (ℝ → Prop). Take M : ℝ. Assume M_is_sup_A. \nBecause M_is_sup_A both M_is_upp_bd_A and any_upp_bd_A_le_M."
     },
     {
       "type": "text",
@@ -51,11 +51,11 @@
     },
     {
       "type": "code",
-      "text": "Lemma any_upp_bd_ge_sup :\n  forall A : R -> Prop,\n    forall M L : R,\n      is_sup A M -> (is_upper_bound A L -> M <= L)."
+      "text": "Lemma any_upp_bd_ge_sup :\n  ∀ A : ℝ → Prop,\n    ∀ M L : ℝ,\n      is_sup A M ⇒ (is_upper_bound A L ⇒ M ≤ L)."
     },
     {
       "type": "code",
-      "text": "Proof.\nTake A : (R -> Prop). Take M : R. Take L : R. \nAssume A_is_sup_M."
+      "text": "Proof.\nTake A : (ℝ → Prop). Take M : ℝ. Take L : ℝ. \nAssume A_is_sup_M : (is_sup A M)."
     },
     {
       "type": "code",
