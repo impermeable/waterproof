@@ -36,8 +36,8 @@ export default {
     startCoq: function() {
       // const worker = new SerapiWorkerJs('jscoq-builds/sertop_js.js');
       this.$store.dispatch('getSertopPath').then((sertopPath) => {
-        const worker = this.socket.createNewWorker(sertopPath);
-        this.coq = new CoqSerapiProcessors(worker, this);
+        this.coq = new CoqSerapiProcessors(
+            this.socket.createNewWorker(sertopPath), this);
         this.eventBus.$emit('clear-messages');
         this.goals = '';
       }, (reason) => {

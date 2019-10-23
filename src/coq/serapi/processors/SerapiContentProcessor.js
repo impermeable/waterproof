@@ -47,7 +47,6 @@ class SerapiContentProcessor extends SerapiProcessor {
 
     if (this.contentLock.isLocked()) {
       releaseNewContent();
-      // TODO: what is the best way to return promises?
       return Promise.resolve();
     }
 
