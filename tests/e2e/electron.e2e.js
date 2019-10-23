@@ -8,7 +8,7 @@ chai.use(chaiAsPromised);
 
 describe('Application launch', function() {
   // eslint-disable-next-line no-invalid-this
-  this.timeout(30000);
+  this.timeout(100000);
 
   let app;
   let stopServe;

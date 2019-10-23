@@ -154,13 +154,18 @@ export default {
 </script>
 
 <style lang="scss">
-@import "../../../assets/stylesheets/edit";
+@import "../../../assets/sass/pages/_edit";
 
   .sidebar {
     background-color: #2b3990;
-    padding-top: $tab-height;
+    padding-top: $tab-height-large;
     min-width: 40px;
     position: relative;
+
+    @include respond-to(sm-lower) {
+      min-width: 30px;
+      padding-top: $tab-height-small;
+    }
   }
 
   .sidebar-wide {

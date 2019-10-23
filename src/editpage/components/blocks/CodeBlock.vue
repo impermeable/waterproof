@@ -141,7 +141,7 @@ const tick = require('../../../assets/images/tick.svg');
   pre.code-block {
     margin: 5px 0;
     white-space: pre-wrap;
-    word-break: keep-all;
+    word-break: break-word;
     display: block;
   }
 
@@ -153,7 +153,7 @@ const tick = require('../../../assets/images/tick.svg');
     margin-right: 5px;
     font-family: monospace, monospace;
     white-space: pre-wrap;
-    word-break: keep-all;
+    word-break: break-word;
   }
 
   .exec-span {

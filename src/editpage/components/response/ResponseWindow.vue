@@ -29,14 +29,5 @@ export default {
 };
 </script>
 
-<style scoped>
-    .response-window {
-        /* applies to self */
-        flex: 1 1 50%;
-
-        /* applies to children */
-        display: flex;
-        flex-direction: column;
-        flex-wrap: wrap;
-    }
+<style lang="scss" scoped>
 </style>

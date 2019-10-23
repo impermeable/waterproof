@@ -19,7 +19,7 @@ module.exports = {
             options: {
               patterns: [
                 path.resolve(__dirname,
-                    'src/assets/stylesheets/abstracts/*.scss'),
+                    'src/assets/sass/abstracts/*.scss'),
               ],
             },
           },

@@ -297,7 +297,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import "../../assets/stylesheets/edit.scss";
+@import "../../assets/sass/pages/edit.scss";
 
 .find {
   margin-left: 10px;

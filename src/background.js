@@ -48,16 +48,19 @@ function createWindow() {
 
   const wrapperPath = path.join(basePath, 'wrapper/' + wrapperExecutable);
 
-  wrapper = execFile(wrapperPath, (error, stdout, stderr) => {
-    if (running && error) {
-      console.log('Could not start wrapper');
-      console.log(error);
-    }
-  });
+  wrapper = execFile(wrapperPath, {cwd: app.getPath('home')},
+      (error, stdout, stderr) => {
+        if (running && error) {
+          console.log('Could not start wrapper');
+          console.log(error);
+        }
+      });
 
   win = new BrowserWindow({
     width: 800,
     height: 600,
+    minHeight: 500,
+    minWidth: 500,
     title: 'Waterproof',
     webPreferences: {
       nodeIntegration: true,

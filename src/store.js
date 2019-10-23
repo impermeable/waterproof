@@ -1,8 +1,11 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+const remote = require('electron').remote;
 const path = require('path');
 
 import readFile from './io/readfile';
+import {readConfiguration, updateConfiguration} from './io/configurationio';
+import {findSertop, userHelpFindSertop} from './io/findsertop';
 import createTexInputHints from './codemirror/tex-input';
 
 Vue.use(Vuex);
@@ -39,7 +42,12 @@ export default new Vuex.Store({
       state.searchResults.push(result);
     },
     openSideWindow: function(state, index) {
-      state.sideWindowIndex = index;
+      if (state.sideWindowIndex === index) {
+        console.log('hi');
+        state.sideWindowIndex = -1;
+      } else {
+        state.sideWindowIndex = index;
+      }
     },
     closeSideWindow: function(state) {
       state.sideWindowIndex = -1;
@@ -80,17 +88,15 @@ export default new Vuex.Store({
         commit('setAssistanceItems', {index: 2, result: result});
       });
     },
-    readConfig: function({commit, state}) {
+    readConfig: function({commit}) {
       return new Promise((resolve, reject) => {
-        let basePath;
-        if (process.env.NODE_ENV === 'production') {
-          basePath = path.join(__dirname, '../../wrapper/configuration/');
-        } else {
-          basePath = './wrapper/configuration';
-        }
-        readFile(path.join(basePath, 'wpconfig.json'), (result) => {
-          commit('setConfig', result);
-          resolve();
+        readConfiguration(remote).then(
+            (data) => {
+              commit('setConfig', data);
+              resolve();
+            }).catch((err) => {
+          console.log(err);
+          reject(err);
         });
       });
     },
@@ -100,9 +106,27 @@ export default new Vuex.Store({
           resolve(state.sertopPath);
         } else {
           dispatch('readConfig').then((result) => {
-            resolve(state.sertopPath);
-          }, (reject) => {
-            console.err('could not read config file');
+            if (state.sertopPath === '') {
+              const result = userHelpFindSertop(remote,
+                  findSertop(process.platform));
+              console.log(`user selected sertop at: ${result}`);
+              if (result) {
+                updateConfiguration(remote,
+                    {sertopPath: result}).then((outcome) => {
+                  commit('setConfig', {sertopPath: result});
+                  resolve(result);
+                }).catch((err) => {
+                  console.log(err);
+                  reject(err);
+                });
+              } else {
+                resolve('');
+              }
+            } else {
+              resolve(state.sertopPath);
+            }
+          }, (reason) => {
+            reject( reason );
           } );
         }
       });

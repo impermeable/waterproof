@@ -4,16 +4,14 @@ Waterproof is an educational tool in which students can interactively prove math
 
 ![Screenshot of waterproof](WaterproofScreenshot.png)
 
+Develop build status: [![Build Status](https://travis-ci.org/impermeable/waterproof.svg?branch=develop)](https://travis-ci.org/impermeable/waterproof)
+
 ## How to get started
 
-To get started with Waterproof, the following steps are necessary:
+The easiest way to get started with Waterproof is to:
 
-* Install SerAPI
-* Install Node.js
-* Clone the repository
-* Build the app
-
-We now describe these steps in detail.
+* Install SerAPI following the steps below
+* Install Waterproof using the installer from the [release page](http://github.com/impermeable/waterproof/releases)
 
 ### Installation of SerAPI
 
@@ -21,15 +19,15 @@ Waterproof communicates with the interactive theorem prover CoQ through the SerA
 
 The following steps describe how to install SerAPI.
 
-#### Installation of SerAPI on Windows
+#### Install opam
 
-##### Install OCaml for Windows 
+* Windows: Install OCaml for Windows from https://fdopen.github.io/opam-repository-mingw/installation/. This also installs a cygwin terminal that you will need to use in the steps below.
+* macOS: Install opam, following instructions on https://opam.ocaml.org/doc/Install.html#OSX
+* Linux: Install opam, following instructions on https://opam.ocaml.org/doc/Install.html
 
-Install OCaml for Windows from https://fdopen.github.io/opam-repository-mingw/installation/
+##### Install OCaml
 
-##### Install opam
-
-OCaml for Windows installs a cygwin terminal. In the terminal, execute the following commands (corresponding to instructions on https://ocaml.org/docs/install.html).
+OCaml for Windows installs a cygwin terminal. In the terminal, execute the following commands (corresponding to instructions on https://ocaml.org/docs/install.html). **Note:** On Windows, use the cygwin terminal that installed in the previous step.
 
 First initialize the environment with
 ```
@@ -37,11 +35,18 @@ opam init
 eval `opam env`
 ```
 
-Then install OCaml with
+**On Windows:** install OCaml with
 ```
-opam switch create 4.07.1+mingw64c 
+opam switch create 4.07.1+mingw64c
 eval `opam env`
 ```
+
+**On Linux or macOS:** install OCaml with
+```
+opam switch create 4.07.1
+eval `opam env`
+```
+
 To see if you installed the correct version, execute
 ```
 which ocaml
@@ -50,9 +55,15 @@ ocaml -version
 
 #### Install SerAPI with opam
 
+After installing OCaml, run the following command in the terminal:
+
 ```
 opam install coq-serapi
 ```
+
+After installing SerAPI, you are ready to install Waterproof using your preferred installer from the [release page](http://github.com/impermeable/waterproof/releases).
+
+If you rather build the application yourself, you can follow the steps below.
 
 ### Clone this repository
 
@@ -69,6 +80,11 @@ Install Node.js, for instance from [Node.js](https://nodejs.org/en/download/)
 In a terminal, move to the Waterproof base directory. Then, to install the necessary Node.js modules, run:
 ```
 npm install
+```
+
+It may be necessary to update the modules with
+```
+npm update
 ```
 
 ### Build the electron app
@@ -120,13 +136,13 @@ Pwd.
 
 ## Project structure
 * `/app`:
-This folder is for all static assets, i.e. files that don't need any pre-processing before being used by electron.
+This folder is for all static assets, i.e. files that don't need any pre-processing before being used by Electron.
 
 * `/e2e`:
 This folder contains the project's end-to-end (integration) tests.
 
 * `/src`:
-This folder is for files that need to be transpiled or compiled before they can be used by Electorn.
+This folder is for files that need to be transpiled or compiled before they can be used by Electron.
 
 * `/test`:
 This folder contains the project's unit tests.

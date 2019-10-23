@@ -1,9 +1,8 @@
-//
-// Contains global variables used throughout the project. In the future, we may
-// want to override these values in theme-specific files.
-//
 
-// Fonts used in branding (logos, application title, etc.).
+/** Contains global variables used throughout the project In the future,
+we may want to override these values in theme-specific files. */
+
+/** Fonts used in branding (logos, application title, etc.) */
 $font-stack-brand: 'Century Gothic', sans-serif !default;
 
 // Fonts used in page headers (h1-h6). Separate to allow easy modification in
@@ -46,3 +45,12 @@ $color-on-error: #ffffff !default;
 $color-gray-dark: #e6e6e6 !default;
 $color-gray-light: #f2f2f2 !default;
 $color-gray: #e6e6e6 !default;
+
+
+// Height settings of the tab (responsiveness)
+$tab-height-small: 15px !default;
+$tab-height-large: 35px !default;
+
+// Height settings of the topbar
+$topbar-height-large: 40px;
+$topbar-height-small: 30px;

@@ -1,0 +1,18 @@
+.sidebar-button {
+  display: flex;
+  justify-content: center;
+  color: white;
+  padding: 5px 0 5px 0;
+  white-space: nowrap;
+  block-size: 35px;
+  user-select: none;
+  transition: 0.3s;
+
+  @include respond-to(sm-lower) {
+    block-size: 25px;
+  }
+
+  &:hover:not(.disabled) {
+    background: $color-primary-light;
+  }
+}
