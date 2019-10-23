@@ -5,7 +5,6 @@ import store from '../store';
 import BootstrapVue from 'bootstrap-vue';
 
 // add the coq mode to codemirror
-import '../codemirror/tex-input';
 import '../codemirror/CoqCodemirrorMode';
 
 // We import this here (instead of via style-resources-loader) to prevent
