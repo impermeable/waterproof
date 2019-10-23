@@ -95,5 +95,10 @@
             {"symbol": "ℝ", "name": "reals"},
             {"symbol": "ℂ", "name": "complex-numbers"}
         ]
+    },
+    {
+        "name": "Other",
+        "elements": [
+        ]
     }
 ]
