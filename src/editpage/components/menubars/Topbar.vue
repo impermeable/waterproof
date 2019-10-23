@@ -3,7 +3,7 @@
     <div class="button-container">
       <img src="../../../assets/images/WaterproofIconWhite.svg"
           @click='eventBus.$emit("goto-homescreen")'
-           alt="logo" class="topbar-button top-icon" />
+           alt="logo" class="top-icon" />
 
       <b-dropdown id="file-dropdown"
                   text="File"
@@ -338,70 +338,8 @@ export default {
 </script>
 
 <style lang="scss">
-
   .show > .btn-secondary.dropdown-toggle {
     background-color: $color-primary-dark!important;
     border: none;
   }
-
-
-  .topbar {
-    display: flex;
-    flex-direction: row;
-    background-color: $color-primary;
-    height: 40px;
-
-    .button-container {
-      display: flex;
-      flex: 1 1 auto;
-      justify-content: left;
-    }
-
-    .topbar-dropdown {
-      color: $color-on-primary;
-
-      button {
-        background-color: $color-primary;
-        border: none;
-        border-radius: 0;
-        height: 40px;
-        box-shadow: none !important;
-
-        &:hover {
-          background-color: $color-primary-light;
-          border: none;
-        }
-
-        &:active {
-          background-color: $color-primary-dark !important;
-          border: none;
-        }
-      }
-
-      ul {
-        background-color: $color-primary-dark;
-        color: $color-on-primary;
-        border: none;
-        border-radius: 0;
-        padding: 0;
-        margin: 0;
-      }
-
-      a {
-        color: white;
-        font-family: Century Gothic, sans-serif;
-        display: flex;
-        flex-flow: row nowrap;
-        justify-content: space-between;
-
-        &:hover {
-          background-color: $color-primary-light;
-        }
-        &:focus {
-          background-color: $color-primary-light;
-        }
-      }
-    }
-  }
-
 </style>

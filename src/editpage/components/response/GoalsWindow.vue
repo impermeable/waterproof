@@ -1,15 +1,15 @@
 <template>
   <div class="goals-window">
-    <div class="goals-header">
-      <h3>What is given / what you still need to show</h3>
+    <div class="response-header">
+      <h3>Proof progress</h3>
     </div>
     <div v-if="ready" class="goals">
-      <Goal v-for="(goal, index) in coqGoals" class="subgoal"
+      <Goal v-for="(goal, index) in coqGoals"
             :goal="goal" :index="index" :key="'goal' + index"
             :total="coqGoals.length">
       </Goal>
-      <span v-if="!coqGoals">
-        No goals active.
+      <span v-if="!coqGoals.length">
+        Done.
       </span>
     </div>
     <div style="text-align: center" v-else>
@@ -47,35 +47,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .goals-header {
-    display: flex;
-    flex-flow: row nowrap;
-    justify-content: space-between;
-    border-bottom: 1px black solid;
-    height: 40px;
-    background: $color-primary-light;
-    color: $color-on-primary;
-    padding-left: 5px;
-  }
-
-  .goals-window {
-    flex-grow: 1;
-    flex-basis: 50%;
-    min-height: 100px;
-    border-bottom: 1px solid $color-primary-light;
-  }
-
-  .goals {
-    width: calc(100% - 5px);
-    height: calc(100% - 40px);
-    margin-right: 5px;
-    margin-bottom: 10px;
-    overflow-y: auto;
-  }
-
-  .goals>:first-child {
-    padding-top: 1.2em;
-  }
 
   .load-dot {
       animation: 0.9s blink step-end infinite;

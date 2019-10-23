@@ -402,7 +402,7 @@ export default {
 </script>
 
 <style lang="scss">
-  @import "../../assets/stylesheets/edit.scss";
+@import "../../assets/sass/pages/edit.scss";
 
 #source-editor {
   width: 100%;
@@ -415,11 +415,12 @@ export default {
 }
 
 .edit-window {
+  display: flex;
   flex: 1 0 50%;
+  min-height: 60%;
   position: relative;
   padding: 5px;
   overflow-y: scroll;
-  min-height: 50%;
 }
 
 
@@ -431,10 +432,6 @@ export default {
   position: relative;
   margin: 4px 0;
   width: calc(100% - 16px);
-}
-
-.edit-window {
-  display: flex;
 }
 
 .edit-pane {

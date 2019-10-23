@@ -9,19 +9,19 @@
       {{notebook.getName().trim()}}
     </div>
     <img @click.middle.prevent="close" @click.stop="close" alt="x"
-         class="close-cross" height="16"
-         src="../../assets/images/cross-blue.svg"/>
+         class="close-cross" src="../../assets/images/cross-blue.svg"/>
   </template>
-  <div class="proof-window">
-    <edit-window :blocks="notebook.blocks" :exercise="notebook.exerciseSheet"
-                 :coq="coq" ref="editWindow" :debug="debug"
-                 :index="executedIndex" :targetIndex="targetIndex"
-                 :tabindex="index" :event-bus="eventBus"
-                 :showFind="showFind" :shortKeys="shortKeys" />
-    <response-window :event-bus="eventBus"
-                     :goals="goals" :addError="addError" :ready="ready">
-    </response-window>
-
+  <div class="proof-and-side-window">
+    <div class="proof-window">
+      <edit-window :blocks="notebook.blocks" :exercise="notebook.exerciseSheet"
+                  :coq="coq" ref="editWindow" :debug="debug"
+                  :index="executedIndex" :targetIndex="targetIndex"
+                  :tabindex="index" :event-bus="eventBus"
+                  :showFind="showFind" :shortKeys="shortKeys" />
+      <response-window :event-bus="eventBus"
+                      :goals="goals" :addError="addError" :ready="ready">
+      </response-window>
+    </div>
     <side-window :event-bus="eventBus">
     </side-window>
   </div>
@@ -396,27 +396,22 @@ export default {
 
 
 <style lang="scss">
-  .proof-window {
+  .proof-and-side-window {
     width: 100%;
     display: flex;
     height: inherit;
-  }
+    flex-direction: row;
 
-  @media screen and (min-width: 1200px) {
     .proof-window {
+      width: 100%;
+      display: flex;
+      height: inherit;
       flex-direction: row;
-    }
-  }
 
-  @media screen and (max-width: 1200px) {
-    .proof-window {
-      flex-direction: column-reverse;
+      @include respond-to(sm-lower) {
+        flex-direction: column;
+      }
     }
-  }
-
-  .divider {
-    background-color: #232D73;
-    flex-basis: 2px;
   }
 
   .executeError {
