@@ -25,44 +25,44 @@ const Pos = CodeMirror.Pos;
 
 // XXX: Generate automatically...
 const unicodePreTable = [
-  {text: '\\', symbol: '\\'},
-  {text: '\\_1', symbol: '₁'},
-  {text: '\\_2', symbol: '₂'},
-  {text: '\\alpha', symbol: 'α'},
-  {text: '\\beta', symbol: 'β'},
-  {text: '\\delta', symbol: 'δ'},
-  {text: '\\epsilon', symbol: 'ε'},
-  {text: '\\exists', symbol: '∃'},
-  {text: '\\forall', symbol: '∀'},
-  {text: '\\gamma', symbol: 'γ'},
-  {text: '\\lambda', symbol: 'λ'},
-  {text: '\\land', symbol: '∧'},
-  {text: '\\llbracket', symbol: '〚'},
-  {text: '\\lnot', symbol: '¬'},
-  {text: '\\lor', symbol: '∨'},
-  {text: '\\mid', symbol: '∣'},
-  {text: '\\models', symbol: '⊧'},
-  {text: '\\oplus', symbol: '⊕'},
-  {text: '\\otimes', symbol: '⊗'},
-  {text: '\\omega', symbol: 'ω'},
-  {text: '\\pi', symbol: 'π'},
-  {text: '\\phi', symbol: 'φ'},
-  {text: '\\psi', symbol: 'ψ'},
-  {text: '\\rrbracket', symbol: '〛'},
-  {text: '\\sigma', symbol: 'σ'},
-  {text: '\\times', symbol: '×'},
-  {text: '\\theta', symbol: 'θ'},
-  {text: '\\to', symbol: '→'},
-  {text: '\\vdash', symbol: '⊢'},
-  {text: '\\Delta', symbol: 'Δ'},
-  {text: '\\Gamma', symbol: 'Γ'},
-  {text: '\\Lambda', symbol: 'Λ'},
-  {text: '\\Omega', symbol: 'Ω'},
-  {text: '\\Pi', symbol: 'Π'},
-  {text: '\\Phi', symbol: 'Φ'},
-  {text: '\\Psi', symbol: 'Ψ'},
-  {text: '\\Sigma', symbol: 'Σ'},
-  {text: '\\Theta', symbol: 'Θ'},
+  // {text: '\\', symbol: '\\'},
+  // {text: '\\_1', symbol: '₁'},
+  // {text: '\\_2', symbol: '₂'},
+  // {text: '\\alpha', symbol: 'α'},
+  // {text: '\\beta', symbol: 'β'},
+  // {text: '\\delta', symbol: 'δ'},
+  // {text: '\\epsilon', symbol: 'ε'},
+  // {text: '\\exists', symbol: '∃'},
+  // {text: '\\forall', symbol: '∀'},
+  // {text: '\\gamma', symbol: 'γ'},
+  // {text: '\\lambda', symbol: 'λ'},
+  // {text: '\\land', symbol: '∧'},
+  // {text: '\\llbracket', symbol: '〚'},
+  // {text: '\\lnot', symbol: '¬'},
+  // {text: '\\lor', symbol: '∨'},
+  // {text: '\\mid', symbol: '∣'},
+  // {text: '\\models', symbol: '⊧'},
+  // {text: '\\oplus', symbol: '⊕'},
+  // {text: '\\otimes', symbol: '⊗'},
+  // {text: '\\omega', symbol: 'ω'},
+  // {text: '\\pi', symbol: 'π'},
+  // {text: '\\phi', symbol: 'φ'},
+  // {text: '\\psi', symbol: 'ψ'},
+  // {text: '\\rrbracket', symbol: '〛'},
+  // {text: '\\sigma', symbol: 'σ'},
+  // {text: '\\times', symbol: '×'},
+  // {text: '\\theta', symbol: 'θ'},
+  // {text: '\\to', symbol: '→'},
+  // {text: '\\vdash', symbol: '⊢'},
+  // {text: '\\Delta', symbol: 'Δ'},
+  // {text: '\\Gamma', symbol: 'Γ'},
+  // {text: '\\Lambda', symbol: 'Λ'},
+  // {text: '\\Omega', symbol: 'Ω'},
+  // {text: '\\Pi', symbol: 'Π'},
+  // {text: '\\Phi', symbol: 'Φ'},
+  // {text: '\\Psi', symbol: 'Ψ'},
+  // {text: '\\Sigma', symbol: 'Σ'},
+  // {text: '\\Theta', symbol: 'Θ'},
 ];
 
 // examples:
@@ -80,6 +80,18 @@ export default function createTexInputHints(symbols) {
        the token. More fancy things could happen but this works
        reasonably well for now.
      */
+
+  function createUnicodeTable(symbols) {
+    let newSymbol;
+
+    for (const category of symbols) {
+      for (const element of category.elements) {
+        newSymbol = {text: '\\' + element.name, symbol: element.symbol};
+        console.log(newSymbol);
+        unicodePreTable.push(newSymbol);
+      }
+    }
+  }
 
   function TeXInputHint(editor) {
     const cur = editor.getCursor();
@@ -167,6 +179,7 @@ export default function createTexInputHints(symbols) {
         }), TeXInputHint);
   }
 
+  createUnicodeTable(symbols);
   initTexInput(CodeMirror);
 }
 
