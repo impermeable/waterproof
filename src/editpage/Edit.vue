@@ -24,7 +24,7 @@
           ></proof-window>
 
           <!-- New Tab Button (Using tabs slot) -->
-          <template slot="tabs">
+          <template slot="tabs-end">
             <button class="new-tab-button" @click="openNewTab">+</button>
             <button style="display:none;"
               v-shortkey="closeTabShortKey"
