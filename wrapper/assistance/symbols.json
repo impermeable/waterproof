@@ -80,10 +80,10 @@
     {
         "name": "Arrows",
         "elements": [
-            { "symbol": "→", "name": "rightwards arrow" },
-            { "symbol": "⇒", "name": "rightwards double arrow" },
-            { "symbol": "⇔", "name": "left right double arrow" },
-            { "symbol": "↦", "name": "rightwards arrow from bar"}
+            { "symbol": "→", "name": "rightwards-arrow" },
+            { "symbol": "⇒", "name": "rightwards-double-arrow" },
+            { "symbol": "⇔", "name": "left-right-double-arrow" },
+            { "symbol": "↦", "name": "rightwards-arrow-from-bar"}
         ]
     },
     {
