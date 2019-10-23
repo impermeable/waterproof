@@ -4,7 +4,7 @@ import store from '../store';
 
 // We import this here (instead of via style-resources-loader) to prevent
 // duplication.
-import '../assets/stylesheets/_common.scss';
+import '../assets/sass/main.scss';
 
 Vue.config.productionTip = false;
 Vue.use(require('vue-shortkey'));

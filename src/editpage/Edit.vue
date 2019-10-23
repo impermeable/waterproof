@@ -482,10 +482,10 @@ export default {
 </script>
 
 <style lang="scss">
-    @import '../assets/stylesheets/edit.scss';
+  @import '../assets/sass/pages/edit';
 
-    .about-content {
-      font-size: 14px;
-    }
+  .about-content {
+    font-size: 14px;
+  }
 
 </style>

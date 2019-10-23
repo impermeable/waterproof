@@ -1,0 +1,113 @@
+$font-to-use: Century Gothic;
+
+/**
+  The topbar is build up as follows:
+  - Topbar
+    - Button container
+      - Icon
+      - Dropdown (in components/_topbar-dropdown.scss)
+        - buttons
+        - links
+        - items
+    - Search bar
+      - Search bar
+*/
+
+/** Contains the the button- and the search-container. */
+.topbar {
+  display: flex;
+  flex-direction: row;
+  height: $topbar-height-large;
+  background-color: $color-primary;
+
+  @include respond-to(sm-lower) {
+    height: $topbar-height-small;
+  }
+
+  /** Contains the icon and all the dropdown menus. */
+  .button-container {
+    display: flex;
+    flex: 1 2 auto;
+    height: 100%;
+    justify-content: left;
+    padding: 0;
+    margin: 0;
+
+    .top-icon {
+      float: left;
+      height: 100%;
+      padding: 9px 5px 9px 6px;
+      background-color: $color-primary !important;
+      cursor: pointer;
+    }
+  }
+
+  /** Contains the sidewindow buttons and the search bar. */
+  .search-bar {
+    display: flex;
+    align-items: center;
+    margin-top: 40px;
+
+    @include respond-to(sm-lower) {
+      margin-top: 0;
+      height: 100%;
+    }
+
+    .sidewindow-button {
+      height: 25px;
+      margin-right: 8px;
+      position: relative;
+      cursor: pointer;
+
+      @include respond-to(sm-lower) {
+        margin-top: 5px;
+      }
+    }
+
+    .hide-assistance-buttons {
+      @include respond-to(sm-lower) {
+        display: none !important;
+      }
+    }
+
+    .toggle-search {
+      display: none;
+      overflow: hidden;
+
+      @include respond-to(sm-lower) {
+        display: flex;
+      }
+    }
+
+    .search-container {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      height: $topbar-height-large;
+      position: relative;
+
+      @include respond-to(sm-lower) {
+        height: $topbar-height-small;
+      }
+
+      .input-field {
+        height: 35px;
+        outline: 0;
+        width: 350px;
+        resize: none;
+        border-radius: 20px;
+        border: 1px #000 solid;
+        padding: 5px 5px 5px 40px;
+        margin-right: 10px;
+        overflow: hidden;
+
+        @include respond-to(sm-lower) {
+          width: 90%;
+          height: 25px;
+          padding: 0 0 0 40px;
+          margin-top: 5px;
+        }
+      }
+    }
+  }
+}
