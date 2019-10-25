@@ -86,7 +86,10 @@ export default function createTexInputHints(symbols) {
 
     for (const category of symbols) {
       for (const element of category.elements) {
-        newSymbol = {text: '\\' + element.name, symbol: element.symbol};
+        newSymbol = {
+          text: '\\' + element.name,
+          symbol: element.symbol,
+        };
         console.log(newSymbol);
         unicodePreTable.push(newSymbol);
       }

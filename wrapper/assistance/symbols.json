@@ -71,19 +71,27 @@
             { "symbol": "∨", "name": "or" },
             { "symbol": "∩", "name": "intersection" },
             { "symbol": "∪", "name": "union" },
+            { "symbol": "∅", "name": "empty-set" },
             { "symbol": "≤", "name": "less-or-equal" },
             { "symbol": "≥", "name": "greater-or-equal" },
             { "symbol": "≠", "name": "not-equal" },
-            { "symbol": "¬", "name": "not" }
+            { "symbol": "¬", "name": "not" },
+            { "symbol": "⊕", "name": "circle-plus"},
+            { "symbol": "⊗", "name": "circle-times"}
         ]
     },
     {
         "name": "Arrows",
         "elements": [
-            { "symbol": "→", "name": "rightwards-arrow" },
-            { "symbol": "⇒", "name": "rightwards-double-arrow" },
-            { "symbol": "⇔", "name": "left-right-double-arrow" },
-            { "symbol": "↦", "name": "rightwards-arrow-from-bar"}
+            { "symbol": "←", "name": "arrow-left" },
+            { "symbol": "↑", "name": "arrow-up" },
+            { "symbol": "→", "name": "arrow-right" },
+            { "symbol": "↓", "name": "arrow-down" },
+            { "symbol": "↦", "name": "arrow-map"},
+            { "symbol": "↔", "name": "arrow-left-right" },
+            { "symbol": "⇐", "name": "implies-left" },
+            { "symbol": "⇒", "name": "implies-right" },
+            { "symbol": "⇔", "name": "implies-left-right" }
         ]
     },
     {
