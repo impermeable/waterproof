@@ -257,11 +257,18 @@ Tactic Notation "It" "holds" "that"
                           | progress info_eauto with *
                           | fail "Failed to find a proof"].
 
+Tactic Notation "It" "holds" "that"
+  constr(t) :=
+  match goal with
+  | [|-t] => wp_power
+  | _ => fail "No proof dound or provided statement does not correspond to current goal."
+  end.
+
 Tactic Notation "It" "follows" "that"
   constr(t) :=
   match goal with
   | [|-t] => wp_power
-  | _ => fail "The statement did not correspond to the current goal"
+  | _ => fail "No proof found or provided statement does not correspond to current goal"
   end.
 
 (* TODO: preferably deprecate this notation *)
@@ -393,5 +400,3 @@ We claim that (1 + 1 = 2)%nat (H1).
 simpl. reflexivity. rewrite using ((1+1)%nat = 2%nat).
 reflexivity.
 Qed.
-
-
