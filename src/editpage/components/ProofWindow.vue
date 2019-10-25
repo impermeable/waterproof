@@ -338,12 +338,14 @@ export default {
 
     /**
      * Inserts the specified text at the cursor position
+     * and gives the editor focus again.
      *
      * @param {string} toInsert  The text to insert
      */
     insertAtCursor: function(toInsert) {
       const cm = this.$refs.editWindow.$refs.codeMirrors[0].codemirror;
       cm.replaceRange(toInsert, cm.getCursor());
+      cm.focus();
     },
 
     updateButtons: function() {
