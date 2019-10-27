@@ -48,7 +48,8 @@ function createWindow() {
 
   const wrapperPath = path.join(basePath, 'wrapper/' + wrapperExecutable);
 
-  wrapper = execFile(wrapperPath, (error, stdout, stderr) => {
+  wrapper = execFile(wrapperPath, {cwd: app.getPath('home')},
+  (error, stdout, stderr) => {
     if (running && error) {
       console.log('Could not start wrapper');
       console.log(error);
