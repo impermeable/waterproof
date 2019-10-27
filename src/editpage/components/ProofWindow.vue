@@ -344,6 +344,7 @@ export default {
     insertAtCursor: function(toInsert) {
       const cm = this.$refs.editWindow.$refs.codeMirrors[0].codemirror;
       cm.replaceRange(toInsert, cm.getCursor());
+      cm.focus();
     },
 
     updateButtons: function() {

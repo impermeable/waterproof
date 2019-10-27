@@ -350,11 +350,11 @@ Tactic Notation "Unfold" constr(t) :=
 Tactic Notation "Unfold" constr(t) "in" ident(s):=
   unfold t in s.
 
-Tactic Notation "Expand" "the" "definition" "of" constr(t) :=
+Tactic Notation "Expand" "the" "definition" "of" reference(t) :=
   unfold t.
 
 Tactic Notation "Expand" "the" "definition" "of" 
-  constr(t) "in" ident(s) :=
+  reference(t) "in" ident(s) :=
   unfold t in s.
 
 (** ** Strings of (in)equalities.
