@@ -45,4 +45,4 @@ scripts/unit_tests.tex
 # compiled Coq libraries
 *.vo
 
-wrapper/wplib/**/*.v
+wrapper/**/*.v
