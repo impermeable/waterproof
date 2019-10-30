@@ -131,8 +131,6 @@ export default {
           .then(async (result) => {
             const versionString = result.stdout.trim();
             const isNewVersion = store.state.serapiVersion !== versionString;
-            console.log('version:', versionString);
-            console.log('had:', store.state.serapiVersion);
             if (isNewVersion) {
               await updateConfiguration(remote, {serapiVersion: versionString});
               store.commit('updateConfig', {serapiVersion: versionString});

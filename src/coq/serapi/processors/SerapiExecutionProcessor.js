@@ -245,6 +245,9 @@ class SerapiExecutionProcessor extends SerapiProcessor {
    * @param {String} extraTag the extra identifying tag
    */
   handleSerapiFeedback(feedback, extraTag) {
+    if (!feedback.errorFlag && extraTag === 'e') {
+      this.editor.message(feedback.string);
+    }
   }
 }
 
