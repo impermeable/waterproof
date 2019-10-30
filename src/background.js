@@ -49,12 +49,12 @@ function createWindow() {
   const wrapperPath = path.join(basePath, 'wrapper/' + wrapperExecutable);
 
   wrapper = execFile(wrapperPath, {cwd: app.getPath('home')},
-  (error, stdout, stderr) => {
-    if (running && error) {
-      console.log('Could not start wrapper');
-      console.log(error);
-    }
-  });
+      (error) => {
+        if (running && error) {
+          console.log('Could not start wrapper');
+          console.log(error);
+        }
+      });
 
   win = new BrowserWindow({
     width: 800,
@@ -101,7 +101,7 @@ function createWindow() {
     }
   });
 
-  ipcMain.on('confirmClosing', (event) => {
+  ipcMain.on('confirmClosing', () => {
     running = false;
     app.quit();
   });

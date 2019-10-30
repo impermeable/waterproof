@@ -15,7 +15,7 @@ class PathHelper {
     } else {
       resourcesPath = path.join('./wrapper/');
     }
-    return resourcesPath;
+    return path.resolve(resourcesPath);
   }
 }
 
