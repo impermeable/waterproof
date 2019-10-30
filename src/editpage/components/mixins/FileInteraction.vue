@@ -134,7 +134,7 @@ export default {
      * Compile the standard waterproof libraries
      */
     compilewplib: function() {
-      // TODO
+      this.$store.dispatch('compileLibraries', true);
     },
   },
 };
