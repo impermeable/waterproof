@@ -87,7 +87,6 @@ export default new Vuex.Store({
         commit('setAssistanceItems', {index: 1, result: result});
 
         // now the tex input is only loaded when symbols is loaded
-        console.log('result:' + result);
         createTexInputHints(result);
       });
       readFile(path.join(basePath, 'commands.json'), (result) => {
