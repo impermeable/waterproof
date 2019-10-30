@@ -1,6 +1,7 @@
 <template>
   <div class="edit-window" ref="domEl" :id="'edit-window-' + tabindex"
-      @contextmenu="openContextMenu($event)">
+      @contextmenu="openContextMenu($event)"
+      @click="insertTextBlock()">
     <Gutter :ani="ani" ref="execGutter" :height="gutterHeight"
             :exec-height="execHeight"
             :exec-height-ball="execHeightBall" :executed="executed"/>
@@ -356,6 +357,11 @@ export default {
         setTimeout(() => {
           this.ani = true;
         }, 50);
+      }
+    },
+    insertTextBlock: function() {
+      if (this.blocks.length === 0) {
+        this.eventBus.$emit('insertText');
       }
     },
     openContextMenu: function(event) {

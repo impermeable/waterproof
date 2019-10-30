@@ -6,6 +6,7 @@ const path = require('path');
 import readFile from './io/readfile';
 import {readConfiguration, updateConfiguration} from './io/configurationio';
 import {findSertop, userHelpFindSertop} from './io/findsertop';
+import createTexInputHints from './codemirror/tex-input';
 
 Vue.use(Vuex);
 
@@ -79,6 +80,10 @@ export default new Vuex.Store({
       });
       readFile(path.join(basePath, 'symbols.json'), (result) => {
         commit('setAssistanceItems', {index: 1, result: result});
+
+        // now the tex input is only loaded when symbols is loaded
+        console.log('result:' + result);
+        createTexInputHints(result);
       });
       readFile(path.join(basePath, 'commands.json'), (result) => {
         commit('setAssistanceItems', {index: 2, result: result});

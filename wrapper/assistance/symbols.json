@@ -17,7 +17,7 @@
             { "symbol": "ν", "name": "nu" },
             { "symbol": "ξ", "name": "ksi" },
             { "symbol": "π", "name": "pi" },
-            { "symbol": "ο", "name": "pi" },
+            { "symbol": "ο", "name": "omikron" },
             { "symbol": "ρ", "name": "rho" },
             { "symbol": "ς", "name": "sigma1" },
             { "symbol": "σ", "name": "sigma2" },
@@ -71,19 +71,27 @@
             { "symbol": "∨", "name": "or" },
             { "symbol": "∩", "name": "intersection" },
             { "symbol": "∪", "name": "union" },
+            { "symbol": "∅", "name": "empty-set" },
             { "symbol": "≤", "name": "less-or-equal" },
             { "symbol": "≥", "name": "greater-or-equal" },
             { "symbol": "≠", "name": "not-equal" },
-            { "symbol": "¬", "name": "not" }
+            { "symbol": "¬", "name": "not" },
+            { "symbol": "⊕", "name": "circle-plus"},
+            { "symbol": "⊗", "name": "circle-times"}
         ]
     },
     {
         "name": "Arrows",
         "elements": [
-            { "symbol": "→", "name": "rightwards arrow" },
-            { "symbol": "⇒", "name": "rightwards double arrow" },
-            { "symbol": "⇔", "name": "left right double arrow" },
-            { "symbol": "↦", "name": "rightwards arrow from bar"}
+            { "symbol": "←", "name": "arrow-left" },
+            { "symbol": "↑", "name": "arrow-up" },
+            { "symbol": "→", "name": "arrow-right" },
+            { "symbol": "↓", "name": "arrow-down" },
+            { "symbol": "↦", "name": "arrow-map"},
+            { "symbol": "↔", "name": "arrow-left-right" },
+            { "symbol": "⇐", "name": "implies-left" },
+            { "symbol": "⇒", "name": "implies-right" },
+            { "symbol": "⇔", "name": "implies-left-right" }
         ]
     },
     {
@@ -94,6 +102,11 @@
             {"symbol": "ℚ", "name": "rationals"},
             {"symbol": "ℝ", "name": "reals"},
             {"symbol": "ℂ", "name": "complex-numbers"}
+        ]
+    },
+    {
+        "name": "Other",
+        "elements": [
         ]
     }
 ]
