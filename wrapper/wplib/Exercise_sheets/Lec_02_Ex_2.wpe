@@ -1,0 +1,51 @@
+{
+  "exerciseSheet": true,
+  "blocks": [
+    {
+      "type": "text",
+      "text": "# Lecture 2 exercise 2"
+    },
+    {
+      "type": "code",
+      "text": "Require Import Reals.\nRequire Import Lra.\nRequire Import Classical.\nRequire Import Classical_Pred_Type.\n\nRequire Import wplib.Tactics.Tactics.\nRequire Import wplib.Tactics.TacticsContra.\nRequire Import wplib.Lib.sup_and_inf.\n\nHint Resolve Rabs_Rabsolu."
+    },
+    {
+      "type": "text",
+      "text": "## Exercise 2\n\nSuppose we are given a sequence $(a_n)$ and a real number $c$."
+    },
+    {
+      "type": "code",
+      "text": "Variable a : ℕ → ℝ.\nVariable c : ℝ."
+    },
+    {
+      "type": "text",
+      "text": "Consider also the sequence $(b_n)$, defined by $b_n := |a_n - 0 |$.\n\n"
+    },
+    {
+      "type": "code",
+      "text": "Definition b : (ℕ → ℝ) := fun n ↦ Rabs ( a n - c )."
+    },
+    {
+      "type": "text",
+      "text": "\n\nShow that $(a_n)$ converges to $c$ if and only if $(b_n)$ converges to $0$."
+    },
+    {
+      "type": "code",
+      "text": "Lemma ex_2 :\n  Un_cv a c ⇔ Un_cv b 0.\nProof."
+    },
+    {
+      "type": "input",
+      "start": true,
+      "id": "input-1"
+    },
+    {
+      "type": "text",
+      "text": "Write your solution here..."
+    },
+    {
+      "type": "input",
+      "start": false,
+      "id": "input-1"
+    }
+  ]
+}
