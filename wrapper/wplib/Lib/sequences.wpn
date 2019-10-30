@@ -112,6 +112,34 @@
     {
       "type": "code",
       "text": "Proof.\nTake a : (ℕ → ℝ).\nTake L : ℝ. Take M : ℝ. \nAssume a_bdd_by_M : (∀ n : ℕ, a n ≥ M).\nDefine b := (opp_seq a).\nAssume a_cv_to_L : (Un_cv a L).\nBy CV_opp it holds that (Un_cv b (-L)) (H).\nWe claim that (-L ≤ -M) (H1).\nApply (upp_bd_seq_is_upp_bd_lim b).\nWe need to show that (for all n : ℕ, b n ≤ - M).\n  Take n : ℕ. Rewrite using (b = opp_seq a). Expand the definition of opp_seq. This follows immediately.\nWe need to show that (Un_cv b (-L)). This follows immediately.\nIt follows that (L ≥ M).\nQed."
+    },
+    {
+      "type": "text",
+      "text": "## Order and limits"
+    },
+    {
+      "type": "code",
+      "text": "Lemma seq_ordered_lim_ordered :\n  ∀ (a b: ℕ → ℝ) (m l : ℝ),\n    Un_cv a m ⇒ Un_cv b l ⇒\n    (∀ n : ℕ, a n ≤ b n) ⇒ m ≤ l."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake a : (ℕ → ℝ). Take b : (ℕ → ℝ).\nTake m : ℝ. Take l : ℝ.\nAssume a_cv_to_m : (Un_cv a m).\nAssume b_cv_to_l : (Un_cv b l).\nAssume a_b_ordered : (∀ n : ℕ, a n ≤ b n).\nBy Rle_or_lt it holds that (m ≤ l ∨ l < m) (H1).\nBecause H1 either m_le_l or l_lt_m."
+    },
+    {
+      "type": "text",
+      "text": "We first consider the case $m \\leq l$."
+    },
+    {
+      "type": "code",
+      "text": "It holds that (m ≤ l)."
+    },
+    {
+      "type": "text",
+      "text": "Next, we consider the case $l < m$."
+    },
+    {
+      "type": "code",
+      "text": "Define ε := ((m - l)/2).\nExpand the definition of Un_cv in b_cv_to_l.\nExpand the definition of Un_cv in a_cv_to_m.\nIt holds that (m-l > 0) (H2).\nIt holds that ((m-l)/2 > 0) (H3).\nIt holds that (ε > 0) (H4).\nIt holds that (∃ N1 : ℕ, ∀ n : ℕ, (n ≥ N1)%nat ⇒ R_dist (b n) l < ε) (H5).\nIt holds that (∃ N2 : ℕ, ∀ n : ℕ, (n ≥ N2)%nat ⇒ R_dist (a n) m < ε) (H6).\nChoose N1 such that H7 according to H5.\nChoose N2 such that H8 according to H6.\nDefine N3 := (Nat.max N1 N2).\nIt holds that (Nat.max N1 N2 ≥ N1)%nat (H9).\nIt holds that (Nat.max N1 N2 ≥ N2)%nat (H10).\nIt holds that (N3 ≥ N1)%nat (H11).\nIt holds that (N3 ≥ N2)%nat (H12).\nIt holds that (R_dist (b N3) l < ε) (H13).\nIt holds that (R_dist (a N3) m < ε) (H14).\nExpand the definition of R_dist in H13.\nExpand the definition of R_dist in H14.\nBy Rabs_def2 it holds that (a N3 - m < ε ∧ - ε < a N3 - m) (H15).\nBy Rabs_def2 it holds that (b N3 - l < ε ∧ - ε < b N3 - l) (H16).\nIt holds that (a N3 - m < ε) (H17).\nIt holds that (- ε < b N3 - l) (H18).\nRewrite using (ε = (m - l)/2) in H17.\nRewrite using (ε = (m - l)/2) in H18.\nIt holds that (a N3 ≤ b N3) (H19).\nIt follows that (m ≤ l).\nQed."
     }
   ]
 }
