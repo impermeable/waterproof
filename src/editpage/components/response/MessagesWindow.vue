@@ -11,7 +11,7 @@
             <div class="message message-error"
                  v-if="addError.message && showingAddError">
                 <span class="messageText">
-                    {{addError.message}}
+                    {{addError.message.message}}
                 </span>
             </div>
             <div class="message"

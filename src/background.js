@@ -50,7 +50,7 @@ function createWindow() {
 
   wrapper = execFile(wrapperPath, {cwd: app.getPath('home')},
       (error) => {
-        if (running && error) {
+        if (running && error && error.signal !== 'SIGTERM') {
           console.log('Could not start wrapper');
           console.log(error);
         }
