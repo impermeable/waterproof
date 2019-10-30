@@ -1,1 +1,9 @@
-["Tactics/Tactics.v","Tactics/TacticsContra.v","Notations/Notations.v","Lib/sup_and_inf.v","Lib/sequences.v","Lib/subsequences.v","Lib/sequential_accumulation_points.v"]
+[
+  "Tactics/Tactics",
+  "Tactics/TacticsContra",
+  "Notations/Notations",
+  "Lib/sup_and_inf",
+  "Lib/sequences",
+  "Lib/subsequences",
+  "Lib/sequential_accumulation_points"
+]

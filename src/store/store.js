@@ -4,8 +4,7 @@ const remote = require('electron').remote;
 const path = require('path');
 
 import readFile from '../io/readfile';
-import {readConfiguration, updateConfiguration} from '../io/configurationio';
-import {findSertop, userHelpFindSertop} from '../io/findsertop';
+import {readConfiguration} from '../io/configurationio';
 import createTexInputHints from '../codemirror/tex-input';
 
 import libraries from './libraries';
@@ -25,7 +24,6 @@ export default new Vuex.Store({
 
     assistanceItems: [],
     configLoaded: false,
-    sertopPath: '',
   },
   mutations: {
     onSearchStarted: function(state) {
@@ -67,8 +65,7 @@ export default new Vuex.Store({
     setAssistanceItems: function(state, {index, result}) {
       state.assistanceItems[index] = result;
     },
-    setConfig: function(state, result) {
-      state.sertopPath = result['sertopPath'];
+    setConfig: function(state) {
       state.configLoaded = true;
     },
   },
@@ -93,65 +90,22 @@ export default new Vuex.Store({
         commit('setAssistanceItems', {index: 2, result: result});
       });
     },
-    readConfig: function({commit}) {
+    readConfig: function({commit, state}) {
       return new Promise((resolve, reject) => {
+        if (state.configLoaded) {
+          resolve();
+          return;
+        }
         readConfiguration(remote).then(
             (data) => {
               commit('setConfig', data);
               resolve();
-            }).catch((err) => {
-          console.log(err);
-          reject(err);
-        });
-      });
-    },
-    getSertopPath: function({commit, dispatch, state}) {
-      return new Promise((resolve, reject) => {
-        if (state.configLoaded) {
-          resolve(state.sertopPath);
-        } else {
-          dispatch('readConfig').then(() => {
-            if (state.sertopPath === '') {
-              const result = userHelpFindSertop(remote,
-                  findSertop(process.platform));
-              console.log(`user selected sertop at: ${result}`);
-              if (result) {
-                updateConfiguration(remote,
-                    {sertopPath: result}).then(() => {
-                  commit('setConfig', {sertopPath: result});
-                  resolve(result);
-                }).catch((err) => {
-                  console.log(err);
-                  reject(err);
-                });
-              } else {
-                resolve('');
-              }
-            } else {
-              resolve(state.sertopPath);
-            }
-          }, (reason) => {
-            reject( reason );
-          } );
-        }
-      });
-    },
-    getSercompPath: function({dispatch}) {
-      return new Promise((resolve, reject) => {
-        dispatch('getSertopPath').then((result)=>{
-          const sertopPath = result;
-          let sercompPath = '';
-          if (sertopPath.endsWith('sertop')) {
-            sercompPath = sertopPath.slice(0, -6) + 'sercomp';
-          } else if (sertopPath.endsWith('sertop.exe')) {
-            sercompPath = sertopPath.slice(0, -10) + 'sercomp.exe';
-          }
-          resolve(sercompPath);
-        }).catch((err) => {
-          reject(err);
-        });
+            }).catch(
+            (err) => {
+              console.log(err);
+              reject(err);
+            });
       });
     },
   },
-  getters: {},
 });

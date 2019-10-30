@@ -1,9 +1,13 @@
-const path = require('path');
+import fs from 'fs';
 
+const path = require('path');
 const util = require('util');
 const execFile = util.promisify(require('child_process').execFile);
-import PathHelper from './pathHelper';
-import read from './readfile';
+import {getResourcesPath} from './pathHelper';
+import read, {deleteFile, doesFileExist, readFile} from './readfile';
+import {blockToCoqText} from './notebook';
+
+const extensions = ['wpn', 'v', 'vo'];
 
 /**
  * Class that helps in building .vo files from .v files, using
@@ -14,18 +18,90 @@ class VOCompiler {
    * Create a new VOCompiler, using the sercomp compiler
    * at the provided path
    * @param {string} sercompPath the path to sercomp
+   * @param {Boolean} forceUpdates whether to re-compile forcibly
    */
-  constructor(sercompPath) {
-    const pathHelper = new PathHelper();
-    this.wrapperDirPath = pathHelper.getResourcesPath();
+  constructor(sercompPath, forceUpdates) {
+    this.wrapperDirPath = getResourcesPath();
+    this.wpLibPath = path.join(this.wrapperDirPath, './wplib');
     this.sercompPath = path.join(sercompPath);
+    this.forceUpdates = forceUpdates;
+  }
+
+  /**
+   * Check the library status and recompile if needed
+   * @param {String} library
+   * @return {Promise<void>}
+   */
+  async compileLibrary(library) {
+    console.log('compiling...', library);
+    const currentFiles =
+        await this.getFileExistance(path.join(this.wpLibPath, library));
+
+    if (this.forceUpdates) {
+      if (currentFiles.vo) {
+        await deleteFile(path.join(this.wpLibPath, library + '.vo'));
+        currentFiles.vo = false;
+      }
+      if (currentFiles.wpn && currentFiles.v) {
+        await deleteFile(path.join(this.wpLibPath, library + '.v'));
+        currentFiles.v = false;
+      }
+    }
+
+    if (currentFiles.wpn && !currentFiles.v) {
+      await this.notebookToCoq(path.join(this.wpLibPath, library + '.wpn'));
+      currentFiles.v = true;
+    }
+
+    if (currentFiles.v && !currentFiles.vo) {
+      await this.compileFile(path.join(this.wpLibPath, library + '.v'));
+      currentFiles.vo = true;
+    }
+  }
+
+  /**
+   * Check which files (based on extensions) exist
+   * @param {String} basePath the base path of the file
+   * @return {Promise<void>} the resulting map with extensions
+   */
+  async getFileExistance(basePath) {
+    const result = {};
+    for (const extension of extensions) {
+      result[extension] =
+          await doesFileExist(basePath + '.' + extension);
+    }
+    return result;
+  }
+
+  /**
+   * Convert notebook to v file for compilation
+   * @param {String} filepath the path of the file to convert
+   * @return {Promise<void>} promise which resolves when .v file is ready for
+   *   compilation
+   */
+  async notebookToCoq(filepath) {
+    if (!filepath.endsWith('.wpn')) {
+      console.log('non notebook cant convert');
+      return;
+    }
+    const notebook = await readFile(filepath);
+    const text = blockToCoqText(notebook.blocks);
+
+    return new Promise((resolve, reject) => {
+      fs.writeFile(filepath.substring(0, filepath.length - 3) + 'v', text,
+          (err) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve();
+            }
+          });
+    });
   }
 
   /**
    * Compile a single file.
    * @param {string} filePath the path to the file to compile
-   * @param {string} wrapperDirPath the path to the resources directory
-   * @param {string} sercompPath the path to sercomp
    * @return {Promise} A promise with stdout and stderr of the compilation
    * process.
    */
@@ -36,47 +112,25 @@ class VOCompiler {
           filePath],
         {cwd: this.wrapperDirPath});
   }
-
-  /**
-   * Compile a list of files.
-   * @param {Array} filePaths an array with the paths of the files to compile
-   */
-  async compileFiles(filePaths) {
-    for (let i = 0; i < filePaths.length; i++) {
-      const filePath = path.join('./wplib', filePaths[i]);
-      try {
-        await this.compileFile(filePath);
-      } catch (err) {
-        console.log(err);
-        throw err;
-      }
-    }
-  }
-
-  /**
-   * Compile a list of files from a file describing
-   * the order in which to compile.
-   * @param {string} listFilePath the path to the file with the list. If empty,
-   * a standard path is chosen.
-   * @return {Promise} a promise that resolves when the files are processed.
-   */
-  compileFromListFile(listFilePath='') {
-    return new Promise((resolve, reject) => {
-      let filePath = listFilePath;
-      if (filePath==='') {
-        filePath = path.join(this.wrapperDirPath, './wplib/compileList.json');
-      }
-      read(filePath, (fileList) => {
-        this.compileFiles(fileList).then((result) => {
-          resolve();
-        }).catch((err) => {
-          console('error when compiling files:');
-          console.log(err);
-          reject(err);
-        });
-      });
-    });
-  }
 }
 
-export {VOCompiler};
+/**
+ * Read the compile list file
+ * @param {String} filePath the location of the file
+ * @return {Promise<[]>} a promise which resolves into the list of files
+ */
+function getCompileList(filePath='') {
+  if (!filePath) {
+    filePath = path.join(getResourcesPath(), './wplib/compileList.json');
+  }
+  return new Promise((resolve, reject) => {
+    const error = read(filePath, (list) => {
+      resolve(list);
+    });
+    if (error != null) {
+      reject(error);
+    }
+  });
+}
+
+export {VOCompiler, getCompileList};

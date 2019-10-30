@@ -32,6 +32,7 @@ export default {
         width: 100%;
         background-color: purple;
         transition: max-height 0.5s;
+        transition-delay: 0.5s;
         overflow: hidden;
         padding: 0 25px;
     }
