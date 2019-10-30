@@ -29,12 +29,17 @@ export default {
 <style lang="scss">
 
   .image-masks {
+    display: flex;
+    align-items: center;
     mask-type: alpha;
     background-color: white;
     mask-repeat: no-repeat;
     -webkit-mask-repeat: no-repeat;
     -webkit-mask-position: center center;
     -webkit-mask-size: 40px 15px;
+    @include respond-to(sm-lower) {
+      -webkit-mask-size: 25px 13px;
+    }
   }
 
   .button-tooltip {
@@ -48,6 +53,10 @@ export default {
     width: 40px;
     height: 25px;
     transition: transform 0.25s ease-in-out;
+    @include respond-to(sm-lower) {
+      width: 25px;
+      height: 15px;
+    }
   }
 
   .disabled {

@@ -2,6 +2,8 @@
 
 Waterproof is an educational tool in which students can interactively prove mathematical statements. Here is an example of an exercise and part of its solution in Waterproof.
 
+Develop build status: [![Build Status](https://travis-ci.org/impermeable/waterproof.svg?branch=develop)](https://travis-ci.org/impermeable/waterproof)
+
 ![Screenshot of waterproof](WaterproofScreenshot.png)
 
 Develop build status: [![Build Status](https://travis-ci.org/impermeable/waterproof.svg?branch=develop)](https://travis-ci.org/impermeable/waterproof)
@@ -19,15 +21,15 @@ Waterproof communicates with the interactive theorem prover CoQ through the SerA
 
 The following steps describe how to install SerAPI.
 
-#### Installation of SerAPI on Windows
+#### Install opam
 
-##### Install OCaml for Windows 
+* Windows: Install OCaml for Windows from https://fdopen.github.io/opam-repository-mingw/installation/. This also installs a cygwin terminal that you will need to use in the steps below.
+* macOS: Install opam, following instructions on https://opam.ocaml.org/doc/Install.html#OSX
+* Linux: Install opam, following instructions on https://opam.ocaml.org/doc/Install.html
 
-Install OCaml for Windows from https://fdopen.github.io/opam-repository-mingw/installation/
+##### Install OCaml
 
-##### Install opam
-
-OCaml for Windows installs a cygwin terminal. In the terminal, execute the following commands (corresponding to instructions on https://ocaml.org/docs/install.html).
+OCaml for Windows installs a cygwin terminal. In the terminal, execute the following commands (corresponding to instructions on https://ocaml.org/docs/install.html). **Note:** On Windows, use the cygwin terminal that installed in the previous step.
 
 First initialize the environment with
 ```
@@ -35,11 +37,18 @@ opam init
 eval `opam env`
 ```
 
-Then install OCaml with
+**On Windows:** install OCaml with
 ```
-opam switch create 4.07.1+mingw64c 
+opam switch create 4.07.1+mingw64c
 eval `opam env`
 ```
+
+**On Linux or macOS:** install OCaml with
+```
+opam switch create 4.07.1
+eval `opam env`
+```
+
 To see if you installed the correct version, execute
 ```
 which ocaml
@@ -48,9 +57,15 @@ ocaml -version
 
 #### Install SerAPI with opam
 
+After installing OCaml, run the following command in the terminal:
+
 ```
 opam install coq-serapi
 ```
+
+After installing SerAPI, you are ready to install Waterproof using your preferred installer from the [release page](http://github.com/impermeable/waterproof/releases).
+
+If you rather build the application yourself, you can follow the steps below.
 
 ### Clone this repository
 
@@ -67,6 +82,11 @@ Install Node.js, for instance from [Node.js](https://nodejs.org/en/download/)
 In a terminal, move to the Waterproof base directory. Then, to install the necessary Node.js modules, run:
 ```
 npm install
+```
+
+It may be necessary to update the modules with
+```
+npm update
 ```
 
 ### Build the electron app

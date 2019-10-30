@@ -3,9 +3,10 @@ import Vuex from 'vuex';
 const remote = require('electron').remote;
 const path = require('path');
 
-import readFile from '../io/readfile';
-import {readConfiguration, updateConfiguration} from '../io/configurationio';
-import {findSertop, userHelpFindSertop} from '../io/findsertop';
+import readFile from './io/readfile';
+import {readConfiguration, updateConfiguration} from './io/configurationio';
+import {findSertop, userHelpFindSertop} from './io/findsertop';
+import createTexInputHints from './codemirror/tex-input';
 
 import libraries from './libraries';
 
@@ -46,7 +47,12 @@ export default new Vuex.Store({
       state.searchResults.push(result);
     },
     openSideWindow: function(state, index) {
-      state.sideWindowIndex = index;
+      if (state.sideWindowIndex === index) {
+        console.log('hi');
+        state.sideWindowIndex = -1;
+      } else {
+        state.sideWindowIndex = index;
+      }
     },
     closeSideWindow: function(state) {
       state.sideWindowIndex = -1;
@@ -79,6 +85,10 @@ export default new Vuex.Store({
       });
       readFile(path.join(basePath, 'symbols.json'), (result) => {
         commit('setAssistanceItems', {index: 1, result: result});
+
+        // now the tex input is only loaded when symbols is loaded
+        console.log('result:' + result);
+        createTexInputHints(result);
       });
       readFile(path.join(basePath, 'commands.json'), (result) => {
         commit('setAssistanceItems', {index: 2, result: result});

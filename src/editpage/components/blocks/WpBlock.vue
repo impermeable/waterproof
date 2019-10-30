@@ -84,5 +84,6 @@ export default {
 
   .wap-block {
     display: inline;
+    word-break: break-word;
   }
 </style>

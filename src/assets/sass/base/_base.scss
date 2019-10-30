@@ -1,0 +1,26 @@
+/** Standard styles for common HTML elements. */
+
+/**
+ * Easier to size elements
+ * See https://developer.mozilla.org/en-US/docs/Web/CSS/box-sizing
+ */
+ html {
+  box-sizing: border-box;
+}
+
+/**
+ * We let all other elements inherit (from html). This will make it easier to
+ * change this setting for e.g. plugins or components in the future.
+ */
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+/**
+ * Don't underline links.
+ */
+a {
+  text-decoration: none;
+}

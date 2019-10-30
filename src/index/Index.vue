@@ -81,46 +81,50 @@ export default {
 
 <style lang="scss">
 .app#home {
-  display: flex;
-  flex-direction: row;
+  @include flex-style(row);
   height: 100vh;
   overflow: hidden;
   /*position: relative;*/
 
   .sidebar {
-    background: $color-primary;
-    color: $color-on-primary;
     flex: 0 0 auto;
     padding: 1.5rem;
     width: 250px;
+
+    background: $color-primary;
+    color: $color-on-primary;
+
+    @include respond-to(xs) {
+      display: none;
+    }
 
     .recent-files {
       border-bottom: 1px solid $color-on-primary;
       border-top: 1px solid $color-on-primary;
       padding-inline-start: 0;
-    }
 
-    .recent-file {
-      overflow: hidden;
+      .recent-file {
+        text-overflow: ellipsis;
+        overflow: hidden;
+      }
     }
   }
 
   .container {
-    display: flex;
-    flex: 1 0 0;
-    flex-direction: column;
+    @include flex-style(column);
     align-items: stretch;
+    flex: 1 0 0;
 
     .logo-container {
-      display: flex;
       align-items: center;
-      justify-content: center;
+      display: flex;
       height: 40%;
+      justify-content: center;
 
       .logo {
         box-sizing: content-box;
         flex: 0 0 auto;
-        height: 50%;
+        height: 150px;
         width: auto;
         padding: 25px;
 
@@ -133,13 +137,17 @@ export default {
           padding: 50px;
           height: 75px;
         }
+
+        @include respond-to(lg) {
+          padding: 12.5px;
+          height: 175px;
+        }
       }
     }
 
     .buttons {
-      display: flex;
+      @include flex-style(row);
       flex: 1 0 0;
-      flex-direction: row;
       justify-content: space-evenly;
       align-items: center;
 

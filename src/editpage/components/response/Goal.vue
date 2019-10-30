@@ -102,15 +102,6 @@ export default {
 
   $fold-animate-time: 0.3s;
 
-  .goal {
-    border: 1px transparent solid;
-    padding-top: 1em;
-  }
-
-  .goal:hover {
-    border: 1px gray dashed;
-  }
-
   .openGoal {
     /*padding-top: 0;*/
   }
@@ -118,9 +109,6 @@ export default {
   .hrfake {
     border-bottom: 1px solid black;
     text-align: right;
-  }
-
-  .goal-id {
   }
 
   .opened-tick {

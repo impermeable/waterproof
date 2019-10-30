@@ -1,6 +1,7 @@
 <template>
   <div class="edit-window" ref="domEl" :id="'edit-window-' + tabindex"
-      @contextmenu="openContextMenu($event)">
+      @contextmenu="openContextMenu($event)"
+      @click="insertTextBlock()">
     <Gutter :ani="ani" ref="execGutter" :height="gutterHeight"
             :exec-height="execHeight"
             :exec-height-ball="execHeightBall" :executed="executed"/>
@@ -358,6 +359,11 @@ export default {
         }, 50);
       }
     },
+    insertTextBlock: function() {
+      if (this.blocks.length === 0) {
+        this.eventBus.$emit('insertText');
+      }
+    },
     openContextMenu: function(event) {
       this.$refs.menu.open(event);
     },
@@ -402,7 +408,7 @@ export default {
 </script>
 
 <style lang="scss">
-  @import "../../assets/stylesheets/edit.scss";
+@import "../../assets/sass/pages/edit.scss";
 
 #source-editor {
   width: 100%;
@@ -415,11 +421,12 @@ export default {
 }
 
 .edit-window {
+  display: flex;
   flex: 1 0 50%;
+  min-height: 60%;
   position: relative;
   padding: 5px;
   overflow-y: scroll;
-  min-height: 50%;
 }
 
 
@@ -431,10 +438,6 @@ export default {
   position: relative;
   margin: 4px 0;
   width: calc(100% - 16px);
-}
-
-.edit-window {
-  display: flex;
 }
 
 .edit-pane {

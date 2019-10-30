@@ -136,7 +136,8 @@ export default {
 
 <style lang="scss">
     .side-window {
-        flex: 1 0 380px;
+        flex: 1 0 25%;
+        min-width: 250px;
         background-color: $color-gray;
 
         display: flex;
@@ -154,6 +155,10 @@ export default {
 
     .common-list {
       padding: 0 8px 0 8px;
+
+      @include respond-to(sm-lower) {
+        padding: 0 4px 0 4px;
+      }
     }
 
     .search-results {
@@ -170,11 +175,22 @@ export default {
     .title-block {
       display: flex;
 
+      h3 {
+        @include respond-to(sm-lower) {
+          font-size: 25px;
+          margin-bottom: 0;
+        }
+      }
       .closing-icon {
         width: 22px;
         height: 22px;
         margin: 9px 18px 6px 6px;
         cursor: pointer;
+
+        @include respond-to(sm-lower) {
+          width: 18px;
+          height: 18px;
+        }
       }
 
       .filterbox {

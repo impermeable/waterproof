@@ -24,7 +24,7 @@
           ></proof-window>
 
           <!-- New Tab Button (Using tabs slot) -->
-          <template slot="tabs">
+          <template slot="tabs-end">
             <button class="new-tab-button" @click="openNewTab">+</button>
             <button style="display:none;"
               v-shortkey="closeTabShortKey"
@@ -421,7 +421,7 @@ export default {
       const ipcRenderer = require('electron').ipcRenderer;
       ipcRenderer.on('closing-application', () => {
         for (const tab of this.$refs.proofWindow) {
-          if (tab.notebook.unsavedChanges) {
+          if (tab.notebook && tab.notebook.unsavedChanges) {
             const {dialog} = require('electron').remote;
 
             const dialogOptions = {type: 'warning', title: 'Waterproof',
@@ -482,10 +482,10 @@ export default {
 </script>
 
 <style lang="scss">
-    @import '../assets/stylesheets/edit.scss';
+  @import '../assets/sass/pages/edit';
 
-    .about-content {
-      font-size: 14px;
-    }
+  .about-content {
+    font-size: 14px;
+  }
 
 </style>

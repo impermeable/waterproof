@@ -23,16 +23,10 @@
 </template>
 
 <script>
-import {codemirror} from 'vue-codemirror';
-import 'codemirror/lib/codemirror.css';
-import 'codemirror/addon/display/placeholder';
 import WpBlock from './WpBlock';
 
 export default {
   name: 'CodeBlock',
-  components: {
-    codemirror,
-  },
   mixins: [WpBlock],
   computed: {
     formattedText: function() {
@@ -147,7 +141,7 @@ const tick = require('../../../assets/images/tick.svg');
   pre.code-block {
     margin: 5px 0;
     white-space: pre-wrap;
-    word-break: keep-all;
+    word-break: break-word;
     display: block;
   }
 
@@ -159,7 +153,7 @@ const tick = require('../../../assets/images/tick.svg');
     margin-right: 5px;
     font-family: monospace, monospace;
     white-space: pre-wrap;
-    word-break: keep-all;
+    word-break: break-word;
   }
 
   .exec-span {

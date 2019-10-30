@@ -3,7 +3,8 @@ import App from './App.vue';
 import store from './store/store';
 import BootstrapVue from 'bootstrap-vue';
 
-import './coq/CoqCodemirrorMode';
+// add the coq mode to codemirror
+import '../codemirror/CoqCodemirrorMode';
 
 import VueRouter from 'vue-router';
 import routes from './router';
@@ -11,6 +12,7 @@ import routes from './router';
 
 Vue.config.productionTip = false;
 Vue.use(require('vue-shortkey'));
+Vue.use(Vuex);
 Vue.use(BootstrapVue);
 Vue.use(VueRouter);
 
@@ -18,6 +20,8 @@ Vue.use(VueRouter);
 // duplication.
 import './assets/stylesheets/_common.scss';
 
+
+import '../assets/sass/main.scss';
 
 new Vue({
   store,

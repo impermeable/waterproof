@@ -40,34 +40,41 @@ class CoqInterface {
   }
 
   /**
-     * Gets the goals at the given index,
-     * when no index supplied this is after the last executed sentence
-     *
-     * @param {Number} index  The index in the file
-     * @param {function} onSuccess The callback function on succes
-     * @param {function} onError The callback funcion on error
-     * @async
-     */
+   * Gets the goals at the given index,
+   * when no index supplied this is after the last executed sentence
+   *
+   * @param {Number} index  The index in the file
+   * @param {function} onSuccess The callback function on succes
+   * @param {function} onError The callback funcion on error
+   * @async
+   */
   getGoals(index, onSuccess, onError) {
   }
 
   /**
    * Gets the search results for a given searchquery.
-   * Might want to move this to a different serapi
    *
    * [TODO: Check search restrictions]
    *
    * @param {String} searchQuery Query to search for
-   * @param {Object} filters Boolean values specifying what to search for
-   * @param {Function} onSuccess on success callback
+   * @param {Function} onResult callback for when a search result has been found
+   * @param {Function} onDone callback for when searching is done
    */
-  getSearchResults(searchQuery, filters, onSuccess) {
+  getSearchResults(searchQuery, onResult, onDone) {
   }
 
   /**
    * Stop this instance of coq
    */
   stop() {
+  }
+
+  /**
+   * Get the current state
+   * @return {CoqState} the current coq state
+   */
+  getState() {
+    return undefined;
   }
 }
 
