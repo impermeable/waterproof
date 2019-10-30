@@ -2,7 +2,7 @@
 
 const path = require('path');
 import SerapiWorker from './SerapiWorker';
-import PathHelper from '../../../io/pathHelper';
+import {getResourcesPath} from '../../../io/pathHelper';
 
 /**
  * Class that connects to serapi
@@ -18,8 +18,7 @@ class SerapiWorkerTCP extends SerapiWorker {
     this.socket = socket;
     this.socketId = -1;
 
-    const pathHelper = new PathHelper();
-    const wplibPath = path.join(pathHelper.getResourcesPath(), './wplib');
+    const wplibPath = path.join(getResourcesPath(), './wplib');
 
     this.sendMessage(
         this.createWrapperMessage('create',
