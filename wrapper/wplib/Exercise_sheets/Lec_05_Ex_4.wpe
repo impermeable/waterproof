@@ -1,0 +1,27 @@
+{
+  "exerciseSheet": true,
+  "blocks": [
+    {
+      "type": "text",
+      "text": "# Lecture 5 Exercise 4 : infinite triangle inequality"
+    },
+    {
+      "type": "code",
+      "text": "Require Import Reals.\nRequire Import Rfunctions.\n\nRequire Import wplib.Tactics.Tactics.\nRequire Import wplib.Lib.sequences.\nRequire Import wplib.Lib.series."
+    },
+    {
+      "type": "code",
+      "text": "Lemma lec_05_ex_04 :\n  ∀ (a : ℕ → ℝ) (m l : ℝ),\n    series_cv_abs_to a l ⇒ \n      (series_cv_to a m ⇒ Rabs m ≤ l)."
+    },
+    {
+      "type": "input",
+      "start": true,
+      "id": "input-1"
+    },
+    {
+      "type": "input",
+      "start": false,
+      "id": "input-1"
+    }
+  ]
+}

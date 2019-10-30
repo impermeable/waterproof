@@ -1,0 +1,87 @@
+{
+  "exerciseSheet": true,
+  "blocks": [
+    {
+      "type": "text",
+      "text": "# Lecture 8 exercise 5"
+    },
+    {
+      "type": "text",
+      "text": "In this exercise, you will show that if $f$ is a continuous, periodic function with period $T > 0$, then there exists an $x \\in \\mathbb{R}$ such that \n$$f(x + T/2) = f(x)$$"
+    },
+    {
+      "type": "text",
+      "text": "### Imports\n\nWe first import some libraries."
+    },
+    {
+      "type": "code",
+      "text": "Require Import Reals.\nRequire Import Reals.Ranalysis5.\nRequire Import wplib.Tactics.Tactics."
+    },
+    {
+      "type": "text",
+      "text": "### Useful lemmas\n\nThe following lemmas express that the identity function $\\mathsf{id} : \\mathbb{R} \\to \\mathbb{R}$ and constant functions are continuous."
+    },
+    {
+      "type": "code",
+      "text": "Lemma id_is_continuous :\n  continuity id."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nApply derivable_continuous.\nApply derivable_id.\nQed."
+    },
+    {
+      "type": "code",
+      "text": "Lemma const_fun_is_continuous :\n  ∀ a : ℝ, continuity (fct_cte a)."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake a : ℝ.\nApply derivable_continuous.\nApply derivable_const.\nQed."
+    },
+    {
+      "type": "text",
+      "text": "## Variables and assumptions\n\nWe introduce the function $f$ and the assumption that it is periodic, with period $T > 0$."
+    },
+    {
+      "type": "code",
+      "text": "Variable f : ℝ → ℝ.\nVariable T : ℝ."
+    },
+    {
+      "type": "code",
+      "text": "Hypothesis T_pos : T > 0."
+    },
+    {
+      "type": "code",
+      "text": "Hypothesis f_is_periodic : \n  ∀ x : ℝ, f(x+T) = f(x)."
+    },
+    {
+      "type": "code",
+      "text": "Open Scope Rfun_scope."
+    },
+    {
+      "type": "code",
+      "text": "Hypothesis f_is_continuous :\n  continuity f."
+    },
+    {
+      "type": "text",
+      "text": "## Exercise\n\nWe are now ready for the exercise."
+    },
+    {
+      "type": "code",
+      "text": "Lemma lec_08_ex_05 :\n  ∃ x : ℝ, f(x + T/2) = f(x)."
+    },
+    {
+      "type": "input",
+      "start": true,
+      "id": "input-1"
+    },
+    {
+      "type": "text",
+      "text": "Write your solution here..."
+    },
+    {
+      "type": "input",
+      "start": false,
+      "id": "input-1"
+    }
+  ]
+}
