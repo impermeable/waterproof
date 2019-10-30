@@ -27,14 +27,6 @@ module.exports = {
       }],
     },
   },
-  pages: {
-    index: {
-      entry: 'src/index/main.js',
-    },
-    editpage: {
-      entry: 'src/editpage/main.js',
-    },
-  },
   pluginOptions: {
     electronBuilder: {
       // Sandboxing interferes with running the app on the GitLab runners.

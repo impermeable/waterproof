@@ -3,13 +3,18 @@ import Vuex from 'vuex';
 const remote = require('electron').remote;
 const path = require('path');
 
-import readFile from './io/readfile';
-import {readConfiguration, updateConfiguration} from './io/configurationio';
-import {findSertop, userHelpFindSertop} from './io/findsertop';
+import readFile from '../io/readfile';
+import {readConfiguration, updateConfiguration} from '../io/configurationio';
+import {findSertop, userHelpFindSertop} from '../io/findsertop';
+
+import libraries from './libraries';
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
+  modules: {
+    libraries,
+  },
   state: {
     searchResults: [],
     searchResultsLemma: [],

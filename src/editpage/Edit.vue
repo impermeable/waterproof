@@ -354,7 +354,7 @@ export default {
           return;
         }
       }
-      window.location.href = 'index.html';
+      this.$router.push({name: 'home'});
     },
 
     /**
@@ -458,10 +458,10 @@ export default {
 
     window.onresize = this.refreshExecGutters;
 
-    const url = window.location.href;
+    const query = this.$route.query;
 
-    if (url.includes('?')) {
-      const parameter = url.split('?').pop();
+    if (query.hasOwnProperty('location')) {
+      const parameter = query.location;
       const filePath = decodeURIComponent(parameter);
       this.tabs.push({
         id: this.tabIdCounter++,
