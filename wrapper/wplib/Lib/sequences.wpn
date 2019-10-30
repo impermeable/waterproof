@@ -111,7 +111,7 @@
     },
     {
       "type": "code",
-      "text": "Proof.\nTake a : (ℕ → ℝ).\nTake L : ℝ. Take M : ℝ. \nAssume a_bdd_by_M : (∀ n : ℕ, a n ≥ M).\nDefine b := (opp_seq a).\nAssume a_cv_to_L : (Un_cv a L).\nBy CV_opp it holds that (Un_cv b (-L)) (H).\nWe claim that (-L ≤ -M) (H1).\nApply (upp_bd_seq_is_upp_bd_lim b).\nWe need to show that (for all n : ℕ, b n ≤ - M).\n  Take n : ℕ. Expand the definition of b. Expand the definition of opp_seq. This follows immediately.\nWe need to show that (Un_cv b (-L)). This follows immediately.\nIt follows that (L ≥ M).\nQed."
+      "text": "Proof.\nTake a : (ℕ → ℝ).\nTake L : ℝ. Take M : ℝ. \nAssume a_bdd_by_M : (∀ n : ℕ, a n ≥ M).\nDefine b := (opp_seq a).\nAssume a_cv_to_L : (Un_cv a L).\nBy CV_opp it holds that (Un_cv b (-L)) (H).\nWe claim that (-L ≤ -M) (H1).\nApply (upp_bd_seq_is_upp_bd_lim b).\nWe need to show that (for all n : ℕ, b n ≤ - M).\n  Take n : ℕ. Rewrite using (b = opp_seq a). Expand the definition of opp_seq. This follows immediately.\nWe need to show that (Un_cv b (-L)). This follows immediately.\nIt follows that (L ≥ M).\nQed."
     }
   ]
 }
