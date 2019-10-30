@@ -1,0 +1,29 @@
+{
+  "exerciseSheet": false,
+  "blocks": [
+    {
+      "type": "text",
+      "text": "# Notations for Waterproof"
+    },
+    {
+      "type": "code",
+      "text": "Require Import Reals.\n\nRequire Import wplib.Tactics.Tactics."
+    },
+    {
+      "type": "text",
+      "text": "## Suprema and infima"
+    },
+    {
+      "type": "code",
+      "text": "Notation is_sup := is_lub."
+    },
+    {
+      "type": "text",
+      "text": "## Sets"
+    },
+    {
+      "type": "code",
+      "text": "Definition is_in {D : Set} := fun (A : (D → Prop)) ↦ (fun (x : D) ↦ A x).\nNotation \"x ∈ A\" := (@is_in _ A x) (at level 50)."
+    }
+  ]
+}

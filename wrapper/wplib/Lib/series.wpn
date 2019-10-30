@@ -1,0 +1,37 @@
+{
+  "exerciseSheet": false,
+  "blocks": [
+    {
+      "type": "text",
+      "text": "# Series"
+    },
+    {
+      "type": "code",
+      "text": "Add LoadPath \"./wrapper/\".\n\nRequire Import Reals.\nRequire Import Lra.\nRequire Import Classical.\nRequire Import Classical_Pred_Type.\nRequire Import ClassicalChoice.\n\nRequire Import wplib.Tactics.Tactics.\nRequire Import wplib.Tactics.TacticsContra.\nRequire Import wplib.Lib.sup_and_inf.\nRequire Import wplib.Lib.sequences.\n\nHint Resolve Rabs_Rabsolu.\nHint Resolve Rabs_minus_sym.\nHint Resolve Rmult_lt_0_compat : real.\nHint Resolve Rinv_lt_contravar : real."
+    },
+    {
+      "type": "code",
+      "text": "Lemma sigma_split_v2 :\n  ∀ (a : ℕ → ℝ) (k l N : ℕ),\n    (k < l)%nat ⇒ (l ≤ N)%nat \n      ⇒ sigma a k N = sigma a k (l - 1)%nat + sigma a l N."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake a : (ℕ → ℝ). Take k : ℕ.\nTake l : ℕ. Take N : ℕ.\nAssume k_lt_N. Assume l_le_N.\nIt holds that (l = S (l - 1)%nat ) (H1).\nrewrite H1 at 2.\napply sigma_split with (low := k) (k := (l-1)%nat) (high := N).\nThis follows immediately. This follows immediately.\nQed."
+    },
+    {
+      "type": "code",
+      "text": "Theorem mouse_tail :\n  ∀ (a : ℕ → ℝ) (k l : ℕ) (L : ℝ),\n    (k < l)%nat ⇒\n      ((Un_cv (fun N ↦ sigma a l N) L)\n        ⇔ \n      (Un_cv (fun N ↦ sigma a k N) ((sigma a k (l-1)) + L)))."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake a : (ℕ → ℝ). Take k : ℕ.\nTake l : ℕ. Take L : ℝ. Assume k_lt_l.\nsplit.\nAssume sigma_k_cv.\nBy lim_const_seq it holds that\n  (Un_cv (fun N ↦ sigma a k (l-1)%nat) (sigma a k (l-1)%nat)) (H1).\nBy CV_plus it holds that \n  (Un_cv (fun N ↦ sigma a k (l-1)%nat \n                  + \n                  sigma a l N)\n         (sigma a k (l-1)%nat + L) ) (H2).\nWe claim that\n  (∃ M : ℕ, \n    ∀ n : ℕ, (n ≥ M)%nat ⇒\n      sigma a k n = sigma a k (l - 1)%nat + sigma a l n) (H3).\nChoose M := l%nat.\nTake n : ℕ. Assume n_ge_l. Apply sigma_split_v2. assumption.\nThis follows immediately."
+    },
+    {
+      "type": "code",
+      "text": "apply evt_eq_seq_conv_to_same_lim\n  with (a := fun N ↦ sigma a k (l-1) + sigma a l N)\n       (b := fun N ↦ sigma a k N).\nChoose M such that H5 according to H3.\nChoose k0 := M."
+    },
+    {
+      "type": "code",
+      "text": " "
+    }
+  ]
+}
