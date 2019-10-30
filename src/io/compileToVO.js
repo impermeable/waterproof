@@ -33,7 +33,6 @@ class VOCompiler {
    * @return {Promise<void>}
    */
   async compileLibrary(library) {
-    console.log('compiling...', library);
     const currentFiles =
         await this.getFileExistance(path.join(this.wpLibPath, library));
 

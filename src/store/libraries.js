@@ -20,6 +20,7 @@ export default {
       state.message = 'Done.';
     },
     setLoadingMessage(state, message) {
+      state.done = false;
       state.message = message;
     },
     setConfig(state, result) {
@@ -118,22 +119,8 @@ export default {
         const newVersion = await store.dispatch('getSerapiVersion');
 
         store.commit('setLoadingMessage', 'Reading library list');
-        const libFiles = await getCompileList();
 
-        let libDone = 0;
-        const libTotal = libFiles.length;
-
-        const compiler = new VOCompiler(store.state.sercompPath, newVersion);
-
-        for (const library of libFiles) {
-          store.commit('setLoadingMessage',
-              `Updating/Compiling libraries (${libDone} / ${libTotal})`
-              + ` ${library}`);
-          await compiler.compileLibrary(library);
-          libDone++;
-        }
-
-        store.commit('loadingDone');
+        await store.dispatch('compileLibraries', newVersion);
       });
     },
     async getSerapiVersion(store) {
@@ -152,6 +139,27 @@ export default {
             }
             return isNewVersion;
           });
+    },
+    async compileLibraries(store, forced) {
+      store.commit('setLoadingMessage', 'compiling libraries');
+      const libFiles = await getCompileList();
+
+      let libDone = 0;
+      const libTotal = libFiles.length;
+
+      const compiler = new VOCompiler(store.state.sercompPath, forced);
+
+      for (const library of libFiles) {
+        if (!store.state.done) {
+          store.commit('setLoadingMessage',
+              `Updating/Compiling libraries (${libDone + 1} / ${libTotal})`
+              + ` ${library}`);
+        }
+        await compiler.compileLibrary(library);
+        libDone++;
+      }
+
+      store.commit('loadingDone');
     },
   },
 };
