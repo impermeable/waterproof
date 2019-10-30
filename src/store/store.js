@@ -70,7 +70,11 @@ export default new Vuex.Store({
     },
   },
   actions: {
-    readAssistanceItems: function({commit}) {
+    readAssistanceItems: function({commit, state}) {
+      if (state.assistanceItems.length > 0) {
+        // if already loaded skip
+        return;
+      }
       let basePath;
       if (process.env.NODE_ENV === 'production') {
         basePath = path.join(__dirname, '../../wrapper/assistance/');
