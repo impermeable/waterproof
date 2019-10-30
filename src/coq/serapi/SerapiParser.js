@@ -1,6 +1,9 @@
-
 const flatten = require('./flatten-expr').flatten;
-import * as Constants from './SerapiConstants';
+
+// constants
+const MESSAGE_COMPLETED = 'Completed';
+const MESSAGE_ACK = 'Ack';
+const COQ_EXCEPTION = 'CoqExn';
 
 /**
  * Function to handle feedback message received from SerAPI
@@ -32,6 +35,27 @@ function parseFeedback(data) {
       feedback.string = feedback.string.replace(/ \. /g, '.');
       return feedback;
     }
+  }
+  return feedback;
+}
+
+/**
+ * Parse feedback which could contain an error
+ * @param {*} data the feedback
+ * @return {{string: string, errorFlag: boolean}} the text in the feedback
+ *   with errorflag set if true
+ */
+function parseErrorableFeedback(data) {
+  const feedback = parseFeedback(data);
+  if (feedback.string === '') {
+    return feedback;
+  }
+  feedback.string = feedback.string
+      .replace(/ \)/g, ')')
+      .replace(/\( /g, '(')
+      .replace(/ ,/g, ',');
+  if (feedback.errorFlag === true) {
+    feedback.string = 'Error: ' + feedback.string;
   }
   return feedback;
 }
@@ -82,7 +106,7 @@ function parseErrorResponse(response) {
     };
   }
 
-  if (response[0] !== Constants.COQ_EXCEPTION) {
+  if (response[0] !== COQ_EXCEPTION) {
     console.log('Warning might not be an error');
   }
 
@@ -171,7 +195,95 @@ function getLastValidFullStop(text) {
   }
 }
 
-export {
-  parseFeedback, parseErrorResponse, sanitise, getLastValidFullStop,
-};
+/**
+ * Parse goals from serapi message
+ * @param {*} response the serapi message
+ * @return {string|*} the resulting goal
+ */
+function getGoalsFromResponse(response) {
+  if (response[0] === 'ObjList') {
+    if (!Array.isArray(response[1]) || response[1].length < 1) {
+      return '';
+    }
 
+    const objectives = response[1][0];
+
+    if (objectives === []) {
+      return '';
+    }
+
+    if (objectives[0] === 'CoqString') {
+      return objectives[1].toString();
+    }
+  }
+  return '';
+}
+
+/**
+ * Checks whether a given message is acknowledge or complete (a general message)
+ * @param {*} response the serapi message
+ * @return {boolean} whether it is a general message
+ */
+function isGeneralMessage(response) {
+  return response === MESSAGE_ACK ||
+      response === MESSAGE_COMPLETED;
+}
+
+/**
+ * Parse Add output to a sentence
+ * @param {*} response the serapi message
+ * @return {{endIndex: *, beginIndex: *, sentenceId: *}|null} the resulting
+ *   sentence
+ */
+function parseToSentence(response) {
+  if (response[0] !== 'Added') {
+    return null;
+  }
+  const sid = +response[1];
+  const options = flatten(response[2]);
+  return {
+    sentenceId: sid,
+    beginIndex: options.bp,
+    endIndex: options.ep,
+  };
+}
+
+/**
+ * Check if the response is (a general) ready feedback message
+ * @param {*} response the response to check
+ * @return {boolean} whether it is the ready responds
+ */
+function isReadyFeedback(response) {
+  // this is not great... but there is nothing really unique about so it will
+  // suffice
+  return response[0] === 'Feedback'
+      && response[1].length === 4
+      && response[1][3].length === 2
+      && response[1][3][0] === 'contents'
+      && response[1][3][1] === 'Processed';
+}
+
+/**
+ * For a given string, convert an index in terms of bytes (as often
+ * provided by serapi) to an index in terms of a string
+ * @param {String} str The string to perform the conversion for
+ * @param {Number} byteIndex The index in terms of bytes
+ * @return {Number} The index in the string corresponding to the
+ * given byte, or -1 if it cannot be found
+ */
+function byteIndexToStringIndex(str, byteIndex) {
+  for (let j = Math.floor(byteIndex / 2); j <= byteIndex; j++) {
+    if (Buffer.byteLength(str.slice(0, j)) === byteIndex) {
+      return j;
+    }
+  }
+  return -1;
+}
+
+export {
+  parseFeedback, parseErrorableFeedback, parseErrorResponse,
+  sanitise, getLastValidFullStop, isReadyFeedback,
+  getGoalsFromResponse, isGeneralMessage, parseToSentence,
+  byteIndexToStringIndex,
+  COQ_EXCEPTION, MESSAGE_ACK, MESSAGE_COMPLETED,
+};

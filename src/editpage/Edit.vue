@@ -421,7 +421,7 @@ export default {
       const ipcRenderer = require('electron').ipcRenderer;
       ipcRenderer.on('closing-application', () => {
         for (const tab of this.$refs.proofWindow) {
-          if (tab.notebook.unsavedChanges) {
+          if (tab.notebook && tab.notebook.unsavedChanges) {
             const {dialog} = require('electron').remote;
 
             const dialogOptions = {type: 'warning', title: 'Waterproof',

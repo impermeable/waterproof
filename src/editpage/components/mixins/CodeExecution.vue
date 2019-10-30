@@ -20,31 +20,29 @@ export default {
      * exclusive
      */
     getStatusIntervals: function(extendIntervals = true) {
-      const sentences = this.coq.sentences;
+      const state = this.coq.getState();
       // Edge case: if the document is empty,
       // nothing is executed/executing/pending
-      if (sentences.length() === 0
+
+      if (state.sentenceSize() === 0
         || !this.executedUpTo
         || this.executedUpTo < 0) {
         return {executed: null, executing: null, pending: null};
       }
-
       // Compute what interval of characters that is executed
       const executed = {
-        start: sentences.beginIndex(0),
+        start: state.beginIndexOfSentence(0),
         end: this.executedUpTo,
       };
-
       // Take the first unexecuted sentence. If it does not exist or starts
       // after what is still pending, then we are done so only executed is
       // non-null
-      const executingSentence = this.coq.sentences
-          .sentenceAfterIndex(this.executedUpTo);
-      if (executingSentence === null
-        || executingSentence.sentence.endIndex > this.pendingUpTo) {
+      const executingSentence =
+        (state.sentenceAfterIndex(this.executedUpTo) || {}).index;
+      if (executingSentence == null
+        || state.beginIndexOfSentence(executingSentence) > this.pendingUpTo) {
         return {executed, executing: null, pending: null};
       }
-
       const executing = {
         start: executingSentence.sentence.beginIndex,
         end: executingSentence.sentence.endIndex,
@@ -55,22 +53,18 @@ export default {
         executed.end = executing.start;
       }
 
-      const firstPendingSentence = this.coq.sentences
-          .sentenceAfterIndex(executing.end);
+      const firstPendingSentence = state.sentenceAfterIndex(executing.end);
       if (firstPendingSentence === null || this.pendingUpTo === null) {
         return {executed, executing, pending: null};
       }
 
       // Crop pendingUpTo to the last whole sentence
-      let lastPendingLine =
-        this.coq.sentences.sentenceBeforeIndex(this.pendingUpTo);
-      if (lastPendingLine === undefined
-        || lastPendingLine === null
-        || lastPendingLine === -1) {
+      let lastPendingLine = state.sentenceBeforeIndex(this.pendingUpTo);
+      if (lastPendingLine == null || lastPendingLine === -1) {
         return {executed, executing, pending: null};
       }
 
-      lastPendingLine = sentences.get(lastPendingLine);
+      lastPendingLine = state.getSentenceByIndex(lastPendingLine);
 
       const pending = {
         start: firstPendingSentence.sentence.beginIndex,

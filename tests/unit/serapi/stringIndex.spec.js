@@ -1,4 +1,4 @@
-import {byteIndexToStringIndex} from './../../../src/coq/serapi/StringIndices';
+import {byteIndexToStringIndex} from '../../../src/coq/serapi/SerapiParser';
 
 const chai = require('chai');
 const expect = chai.expect;

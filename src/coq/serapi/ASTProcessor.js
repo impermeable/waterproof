@@ -48,7 +48,7 @@ function printCRef( array, s ) {
  * @return {String} The pretty-printed segment
  */
 function printVernacEndProof( array, s ) {
-  if ( array[1][0] == 'Proved' && array[1][1] == 'Opaque' ) {
+  if ( array[1][0] === 'Proved' && array[1][1] === 'Opaque' ) {
     return 'Qed';
   }
   return '';
@@ -95,9 +95,8 @@ function printVernacProof( array, s ) {
  * @return {String} The pretty-printed segment
  */
 function printVernacStartTheoremProof( array, s ) {
-  const result = `${array[1]} ${array[2][0][0][0][0][1][1]}`
-                 + ` : ${prettyPrint(array[2][0][1][1][0][1])}`;
-  return result;
+  return `${array[1]} ${array[2][0][0][0][0][1][1]}`
+      + ` : ${prettyPrint(array[2][0][1][1][0][1])}`;
 }
 
 /**
@@ -131,10 +130,9 @@ function printCPrim( array, s) {
  * @return {String} The pretty-printed segment
  */
 function printTacAlias( array, s ) {
-  const result = array[1][1][0][3][1].slice(0, -8)
+  return array[1][1][0][3][1].slice(0, -8)
       .replace('#', prettyPrint(array[1][1][1][0], s))
       .replace('#', prettyPrint(array[1][1][1][1], s));
-  return result;
 }
 
 /**
@@ -164,7 +162,7 @@ function traverseArray( toTraverse ) {
     console.log(toTraverse);
     return;
   }
-  if ( toTraverse[0] != 'loc') {
+  if ( toTraverse[0] !== 'loc') {
     for (const el of toTraverse) {
       traverseArray(el);
     }
@@ -179,7 +177,7 @@ function traverseArray( toTraverse ) {
  */
 function extractCoqAST( nestedArrays ) {
   if ( Array.isArray(nestedArrays) ) {
-    if ( nestedArrays[0] == 'CoqAst' ) {
+    if ( nestedArrays[0] === 'CoqAst' ) {
       return new CoqAST(nestedArrays);
     }
     for ( const el of nestedArrays ) {
@@ -233,7 +231,7 @@ class VernacExpr {
    * @param {Array} array Array as parsed from SerAPI message
    */
   constructor( array ) {
-    console.log('In the constructor of VernacExpr...');
+    // console.log('In the constructor of VernacExpr...');
     this.data = array;
     this.data[2] = convertToASTComp(array[2]);
     this.content = this.data[2];
@@ -250,7 +248,7 @@ class VernacExtend {
    * @param {Array} array Array as parsed from SerAPI message
    */
   constructor( array ) {
-    console.log('In the constructor of VernacExtend...');
+    // console.log('In the constructor of VernacExtend...');
     this.data = array;
   }
 }
@@ -267,7 +265,7 @@ class LocInfo {
    */
   constructor( array ) {
     const result = flatten(array)[0];
-    console.log(result);
+    // console.log(result);
     this.fname = result.fname;
     this.line_nb = result.line_nb;
     this.bol_pos = result.bol_pos;
