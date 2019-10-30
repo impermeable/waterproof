@@ -1,0 +1,85 @@
+{
+  "exerciseSheet": true,
+  "blocks": [
+    {
+      "type": "text",
+      "text": "# Alternative characterization of supremum"
+    },
+    {
+      "type": "text",
+      "text": "We first need to import libraries. "
+    },
+    {
+      "type": "code",
+      "text": "Require Import Reals.\nRequire Import Classical.\nRequire Import Classical_Pred_Type.\n\nRequire Import wplib.Tactics.Tactics.\nRequire Import wplib.Tactics.TacticsContra.\nRequire Import wplib.Notations.Notations.\n\nHint Resolve Rnot_gt_le.\nHint Resolve Rnot_lt_ge.\nHint Resolve Rgt_not_le.\nHint Resolve tech_Rgt_minus.\nHint Resolve Rlt_Rminus.\nHint Resolve Rgt_irrefl."
+    },
+    {
+      "type": "text",
+      "text": "## Exercise 2a\n\nWe first introduce an arbitrary set $A \\subset \\mathbb{R}$. $\\\\$"
+    },
+    {
+      "type": "code",
+      "text": "Variable A : ℝ → Prop."
+    },
+    {
+      "type": "text",
+      "text": "\nIn this exercise, you need to show that \n\nfor all $M : \\mathbb{R}$, \n\nif $M$ is the supremum of $A$, \n  \nthen for all $\\varepsilon : ℝ$, \n\nif $\\varepsilon > 0$,\n\nthen there exists an $x : \\mathbb{R}$ such that $x \\in A$ and $x > M - \\varepsilon$."
+    },
+    {
+      "type": "hint",
+      "text": "Click to open hint.\n<hint>\nClick on the hammer button on the top right for suggestions on what to write."
+    },
+    {
+      "type": "code",
+      "text": "Lemma ex_2a : \n for all M : ℝ,\n  is_sup A M ⇒\n   for all ε : ℝ,\n    ε > 0 ⇒ there exists x : ℝ,(x ∈ A)∧(x > M-ε)."
+    },
+    {
+      "type": "input",
+      "start": true,
+      "id": "input-0"
+    },
+    {
+      "type": "code",
+      "text": "Admitted."
+    },
+    {
+      "type": "input",
+      "start": false,
+      "id": "input-0"
+    },
+    {
+      "type": "text",
+      "text": "## Preparation for Exercise 2b\n\nFor the next exercise we will need an auxiliary lemma that we state and prove first. "
+    },
+    {
+      "type": "code",
+      "text": "Lemma aux_2b_2 :\n  for all x z : ℝ,\n    (for all ε : ℝ, ε > 0 ⇒ x > z - ε) ⇒\n      x ≥ z."
+    },
+    {
+      "type": "code",
+      "text": "Proof. \nTake x : ℝ. Take z : ℝ. Assume H1 : \n\n  (for all ε : ℝ, ε > 0 ⇒ x > z - ε).\n  \nWe claim that (¬ (x < z)) (not_x_lt_z).\n  We need to show that (x < z ⇒ False).\n  Assume x_lt_z : (x < z).\n  It holds that (0 < z - x) (H2). \n  It holds that (x > z - (z - x)) (H3). \n  Rewrite using (z - (z-x) = x) in H3.\n  It holds that (¬ (x > x)) (H5).\n  contradiction."
+    },
+    {
+      "type": "code",
+      "text": "It follows that (x ≥ z).\nQed."
+    },
+    {
+      "type": "text",
+      "text": "## Exercise 2b\n\nWe are now ready for the exercise. Show that for all $M, z : \\mathbb{R}$, if $M$ is the supremum of $A$, and if $z : \\mathbb{R}$ is such that for all $\\varepsilon > 0$ there exists an $x : \\mathbb{R}$ such that $x > z - \\varepsilon$, then $M \\geq z$."
+    },
+    {
+      "type": "code",
+      "text": "Lemma ex_2b :\n  ∀ M z : ℝ,\n    is_lub A M ⇒\n      (∀ ε : ℝ, ε > 0 ⇒ ∃ x : R, (x ∈ A) ∧ x > z - ε) ⇒\n        M ≥ z.\nProof."
+    },
+    {
+      "type": "input",
+      "start": true,
+      "id": "input-1"
+    },
+    {
+      "type": "input",
+      "start": false,
+      "id": "input-1"
+    }
+  ]
+}
