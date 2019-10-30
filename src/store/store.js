@@ -3,10 +3,10 @@ import Vuex from 'vuex';
 const remote = require('electron').remote;
 const path = require('path');
 
-import readFile from './io/readfile';
-import {readConfiguration, updateConfiguration} from './io/configurationio';
-import {findSertop, userHelpFindSertop} from './io/findsertop';
-import createTexInputHints from './codemirror/tex-input';
+import readFile from '../io/readfile';
+import {readConfiguration, updateConfiguration} from '../io/configurationio';
+import {findSertop, userHelpFindSertop} from '../io/findsertop';
+import createTexInputHints from '../codemirror/tex-input';
 
 import libraries from './libraries';
 
@@ -73,7 +73,7 @@ export default new Vuex.Store({
     },
   },
   actions: {
-    readAssistanceItems: function({commit, state}) {
+    readAssistanceItems: function({commit}) {
       let basePath;
       if (process.env.NODE_ENV === 'production') {
         basePath = path.join(__dirname, '../../wrapper/assistance/');
@@ -111,14 +111,14 @@ export default new Vuex.Store({
         if (state.configLoaded) {
           resolve(state.sertopPath);
         } else {
-          dispatch('readConfig').then((result) => {
+          dispatch('readConfig').then(() => {
             if (state.sertopPath === '') {
               const result = userHelpFindSertop(remote,
                   findSertop(process.platform));
               console.log(`user selected sertop at: ${result}`);
               if (result) {
                 updateConfiguration(remote,
-                    {sertopPath: result}).then((outcome) => {
+                    {sertopPath: result}).then(() => {
                   commit('setConfig', {sertopPath: result});
                   resolve(result);
                 }).catch((err) => {

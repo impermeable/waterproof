@@ -1,10 +1,11 @@
 import Vue from 'vue';
+import Vuex from 'vuex';
 import App from './App.vue';
 import store from './store/store';
 import BootstrapVue from 'bootstrap-vue';
 
 // add the coq mode to codemirror
-import '../codemirror/CoqCodemirrorMode';
+import './codemirror/CoqCodemirrorMode';
 
 import VueRouter from 'vue-router';
 import routes from './router';
@@ -18,10 +19,7 @@ Vue.use(VueRouter);
 
 // We import this here (instead of via style-resources-loader) to prevent
 // duplication.
-import './assets/stylesheets/_common.scss';
-
-
-import '../assets/sass/main.scss';
+import './assets/sass/main.scss';
 
 new Vue({
   store,
