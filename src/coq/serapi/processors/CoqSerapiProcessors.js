@@ -121,6 +121,18 @@ class CoqSerapiProcessors extends CoqInterface {
   }
 
   /**
+   * Query a coq command
+   * @param {String} command the command to execute
+   * @return {Promise<void>}
+   */
+  query(command) {
+    if (!this.ready) {
+      return Promise.resolve();
+    }
+    return this.searchProcessor.query(command);
+  }
+
+  /**
    * Stop this instance of serapi
    */
   stop() {

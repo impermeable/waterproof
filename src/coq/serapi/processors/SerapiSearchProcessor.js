@@ -1,10 +1,10 @@
 import SerapiProcessor from '../util/SerapiProcessor';
 import {Mutex} from 'async-mutex';
 import {
-  createCheckCommand,
+  createCheckCommand, createQueryVernacCommand,
   createSearchCommand,
 } from '../util/SerapiCommandFactory';
-import {COQ_EXCEPTION} from '../SerapiParser';
+import {COQ_EXCEPTION, parseErrorResponse} from '../SerapiParser';
 
 /**
  * Process search results
@@ -93,6 +93,22 @@ class SerapiSearchProcessor extends SerapiProcessor {
   }
 
   /**
+   * Send a command via vernac
+   * @param {String} command the command
+   * @return {Promise<void>} resolved when the command is complete
+   */
+  async query(command) {
+    const noExecution = await this.state.executionLock.acquire();
+
+    const releaseContent = await this.state.stateLock.acquire();
+    noExecution();
+
+    await this._queryCommand(command);
+
+    releaseContent();
+  }
+
+  /**
    * Start a new search (increment current search)
    * @return {Promise<number>} the number of the new search
    * @private
@@ -160,6 +176,24 @@ class SerapiSearchProcessor extends SerapiProcessor {
   }
 
   /**
+   * Send a command with vernac
+   * @param {String} command the command
+   * @return {Promise<*|Promise<unknown>>}
+   * @private
+   */
+  async _queryCommand(command) {
+    return this.sendCommand(createQueryVernacCommand(command), 'raw')
+        .then((result) => {
+          if (result.hasOwnProperty('result')) {
+            this.editor.message(result.result);
+          }
+          if (result.error) {
+            this.editor.message(result.errorMessage);
+          }
+        });
+  }
+
+  /**
    * Handle a serapi message
    * @param {*} data the serapi message (parsed)
    * @param {String} extraTag the extra identifying tag
@@ -171,6 +205,7 @@ class SerapiSearchProcessor extends SerapiProcessor {
     if (data.length > 0 && data[0] === COQ_EXCEPTION) {
       return {
         error: true,
+        errorMessage: parseErrorResponse(data).message,
       };
     }
   }
@@ -183,6 +218,12 @@ class SerapiSearchProcessor extends SerapiProcessor {
    */
   handleSerapiFeedback(feedback, extraTag) {
     const feedbackText = feedback.string;
+
+    if (extraTag === 'raw') {
+      return {
+        result: feedbackText,
+      };
+    }
 
     let resultName = feedbackText.split(' ', 1)[0];
 
