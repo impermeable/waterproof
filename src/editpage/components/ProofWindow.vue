@@ -95,7 +95,13 @@ export default {
   },
   watch: {
     coqCode: function(newCode) {
+      console.log(newCode.length);
       this.coq.setContent(newCode);
+
+      // If something in an input block changes, remove any underlining error.
+      this.notebook.blocks
+          .filter((block) => block.type === 'code')
+          .forEach((block) => block.state.error = null);
     },
   },
   methods: {
