@@ -116,6 +116,7 @@ export default {
       nextCursorPos: -1,
       execHeight: 0,
       execHeightBall: 0,
+      execScroll: 0,
       gutterHeight: 100,
       timer: null,
       executedUpTo: null,
@@ -351,6 +352,28 @@ export default {
 
         this.execHeight = (rect.bottom + rect.top) / 2 - rect2.top - 10;
         this.execHeightBall = rect.top - rect2.top;
+
+        if (animation && this.execHeight !== this.execScroll) {
+          const top = this.$refs.domEl.scrollTop;
+          const height = this.$refs.domEl.getBoundingClientRect().height;
+
+          let newScroll = this.$refs.domEl.scrollTop;
+
+          if (this.execHeight > top + height - 20) {
+            newScroll = this.execHeight - height + 40;
+          }/* else if (this.execHeight < top) {
+            newScroll = this.execHeight - 20;
+          }*/
+
+          if (newScroll !== this.$refs.domEl.scrollTop) {
+            this.$refs.domEl.scrollTo({
+              top: newScroll,
+              behavior: 'smooth',
+            });
+          }
+
+          this.execScroll = this.execHeight;
+        }
       }
 
       if (!animation) {
