@@ -30,6 +30,7 @@ describe('serapi execution processor', () => {
     sinon.spy(editor, 'executeStarted');
     sinon.spy(editor, 'executeSuccess');
     sinon.spy(editor, 'executeError');
+    sinon.spy(editor, 'message');
 
     proc = new SerapiExecutionProcessor(
         new SerapiTagger(worker, null),
@@ -552,4 +553,51 @@ describe('serapi execution processor', () => {
         expect(editor.executeError.lastCall.callId).is.at.least(
             editor.executeSuccess.lastCall.callId);
       });
+
+  it('should output messages to the editor interface', async () => {
+    // content: Check plus.
+    proc.state.concatSentences([
+      {
+        beginIndex: 0,
+        endIndex: 11,
+        sentenceId: 2,
+      },
+    ]);
+
+    worker.addExpectedCall('Exec 2', [
+      'Ack',
+      '(Feedback((doc_id 0)(span_id 2)(route 0)(contents(' +
+      'ProcessingIn master))))',
+      '(Feedback((doc_id 0)(span_id 1)(route 0)(contents Processed)))',
+      '(Feedback((doc_id 0)(span_id 2)(route 0)(contents(Message Notice()' +
+      '(Pp_glue((Pp_tag constr.path(Pp_string Nat))(Pp_string .)' +
+      '(Pp_tag constr.reference(Pp_string add))Pp_force_newline' +
+      '(Pp_string"     : ")(Pp_box(Pp_hovbox 0)(Pp_glue((Pp_tag ' +
+      'constr.variable(Pp_string nat))(Pp_tag constr.notation' +
+      '(Pp_string" ->"))(Pp_print_break 1 0)(Pp_box(Pp_hovbox 0)' +
+      '(Pp_glue((Pp_tag constr.variable(Pp_string nat))' +
+      '(Pp_tag constr.notation(Pp_string" ->"))(Pp_print_break 1 0)' +
+      '(Pp_tag constr.variable(Pp_string nat))))))))))))))',
+      '(Feedback((doc_id 0)(span_id 2)(route 0)(contents Processed)))',
+      'Completed',
+    ]);
+
+    worker.addExpectedCall('Query ((sid 2', [
+      'Ack',
+      '(ObjList())',
+      'Completed',
+    ]);
+
+    await proc.executeNext();
+
+    expect(worker.getCallAmount()).to.equal(2);
+    expect(proc.state.target).to.equal(0);
+
+    expect(editor.executeStarted.callCount).to.equal(1);
+    expect(editor.executeError.callCount).to.equal(0);
+
+    expect(editor.message.callCount).to.be.at.least(1);
+    expect(editor.message.lastCall.args[0])
+        .to.include('Nat.add : nat -> nat -> nat');
+  });
 });

@@ -99,7 +99,9 @@ describe('Response messages', () => {
 
     wrapper.setProps({
       addError: {
-        message: errorMessage,
+        message: {
+          message: errorMessage,
+        },
       },
     });
 

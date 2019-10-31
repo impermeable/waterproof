@@ -5,9 +5,21 @@ import {shallowMount} from '@vue/test-utils';
 import Vue from 'vue';
 Vue.use(require('vue-shortkey'));
 
+const $route = {
+  query: {
+  },
+  params: {
+  },
+};
+
+
 describe('Tabs', () => {
   it('should open new tab when calling function openNewTab()', () => {
-    const wrapper = shallowMount(Edit);
+    const wrapper = shallowMount(Edit, {
+      mocks: {
+        $route,
+      },
+    });
     const numberOfTabs = wrapper.vm.tabs.length;
     wrapper.vm.openNewTab();
     const newNumberOfTabs = wrapper.vm.tabs.length;
@@ -15,7 +27,11 @@ describe('Tabs', () => {
   });
 
   it('should close tab when calling function closeTab()', () => {
-    const wrapper = shallowMount(Edit);
+    const wrapper = shallowMount(Edit, {
+      mocks: {
+        $route,
+      },
+    });
     wrapper.vm.openNewTab();
     wrapper.vm.openNewTab();
     const numberOfTabs = wrapper.vm.tabs.length;

@@ -1,7 +1,5 @@
 <script>
 import TCPManager from '../../../coq/serapi/workers/TCPManager';
-import CoqSerapiProcessors from
-  '../../../coq/serapi/processors/CoqSerapiProcessors';
 
 export default {
   name: 'CoqInteraction',
@@ -34,14 +32,12 @@ export default {
   },
   methods: {
     startCoq: function() {
-      // const worker = new SerapiWorkerJs('jscoq-builds/sertop_js.js');
-      this.$store.dispatch('getSertopPath').then((sertopPath) => {
-        this.coq = new CoqSerapiProcessors(
-            this.socket.createNewWorker(sertopPath), this);
+      this.$store.dispatch('createCoqInstance', this).then((coq) => {
+        this.coq = coq;
         this.eventBus.$emit('clear-messages');
         this.goals = '';
       }, (reason) => {
-        console.log(`error in reading config file with reason: ${reason}`);
+        console.log(`error in worker creation: ${reason}`);
       });
     },
 

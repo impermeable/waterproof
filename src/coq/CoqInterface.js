@@ -64,6 +64,13 @@ class CoqInterface {
   }
 
   /**
+   * Query a coq command
+   * @param {String} command the command to execute
+   */
+  query(command) {
+  }
+
+  /**
    * Stop this instance of coq
    */
   stop() {

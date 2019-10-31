@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import App from './App.vue';
-import store from './store/store';
 import BootstrapVue from 'bootstrap-vue';
 
 // add the coq mode to codemirror
@@ -17,12 +16,14 @@ Vue.use(Vuex);
 Vue.use(BootstrapVue);
 Vue.use(VueRouter);
 
+import store from './store/store';
+
 // We import this here (instead of via style-resources-loader) to prevent
 // duplication.
 import './assets/sass/main.scss';
 
 new Vue({
-  store,
+  store: new Vuex.Store(store),
   router: new VueRouter(routes),
   render: (h) => h(App),
 }).$mount('#app');

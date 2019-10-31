@@ -3,6 +3,9 @@ import {updateConfiguration} from '../io/configurationio';
 import {remote} from 'electron';
 import {getCompileList, VOCompiler} from '../io/compileToVO';
 import {doesFileExist} from '../io/readfile';
+import TCPManager from '../coq/serapi/workers/TCPManager';
+import {Mutex} from 'async-mutex';
+import CoqSerapiProcessors from '../coq/serapi/processors/CoqSerapiProcessors';
 const util = require('util');
 const execFile = util.promisify(require('child_process').execFile);
 
@@ -10,9 +13,11 @@ export default {
   state: {
     done: false,
     message: 'Loading configuration...',
+    lock: new Mutex,
     sertopPath: null,
     sercompPath: null,
     serapiVersion: null,
+    socket: new TCPManager(),
   },
   mutations: {
     loadingDone(state) {
@@ -90,6 +95,11 @@ export default {
       }));
     },
     async loadSerapi(store) {
+      const release = await store.state.lock.acquire();
+      if (store.state.done) {
+        release();
+        return;
+      }
       store.dispatch('readConfig').then(async () => {
         store.commit('setLoadingMessage', 'Reading serapi location');
         if (store.state.sertopPath === '' || store.state.sertopPath == null) {
@@ -108,7 +118,6 @@ export default {
         }
 
         await store.dispatch('resolveSercompPath');
-        console.log('should have valid sercomp path:', store.state.sercompPath);
 
         if (store.state.sertopPath === '' || store.state.sertopPath == null) {
           store.commit('setLoadingMessage', 'Could not find serapi');
@@ -121,6 +130,7 @@ export default {
         store.commit('setLoadingMessage', 'Reading library list');
 
         await store.dispatch('compileLibraries', newVersion);
+        release();
       });
     },
     async getSerapiVersion(store) {
@@ -131,8 +141,6 @@ export default {
           .then(async (result) => {
             const versionString = result.stdout.trim();
             const isNewVersion = store.state.serapiVersion !== versionString;
-            console.log('version:', versionString);
-            console.log('had:', store.state.serapiVersion);
             if (isNewVersion) {
               await updateConfiguration(remote, {serapiVersion: versionString});
               store.commit('updateConfig', {serapiVersion: versionString});
@@ -152,14 +160,19 @@ export default {
       for (const library of libFiles) {
         if (!store.state.done) {
           store.commit('setLoadingMessage',
-              `Updating/Compiling libraries (${libDone + 1} / ${libTotal})`
-              + ` ${library}`);
+              `Compiling libraries ${libDone + 1}/${libTotal}`
+              + ` (${library})`);
         }
         await compiler.compileLibrary(library);
         libDone++;
       }
 
       store.commit('loadingDone');
+    },
+    async createCoqInstance(store, editorInterface) {
+      await store.dispatch('loadSerapi');
+      const worker = store.state.socket.createNewWorker(store.state.sertopPath);
+      return new CoqSerapiProcessors(worker, editorInterface);
     },
   },
 };

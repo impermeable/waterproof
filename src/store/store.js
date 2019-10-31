@@ -1,5 +1,3 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
 const remote = require('electron').remote;
 const path = require('path');
 
@@ -9,9 +7,7 @@ import createTexInputHints from '../codemirror/tex-input';
 
 import libraries from './libraries';
 
-Vue.use(Vuex);
-
-export default new Vuex.Store({
+export default {
   modules: {
     libraries,
   },
@@ -46,7 +42,6 @@ export default new Vuex.Store({
     },
     openSideWindow: function(state, index) {
       if (state.sideWindowIndex === index) {
-        console.log('hi');
         state.sideWindowIndex = -1;
       } else {
         state.sideWindowIndex = index;
@@ -112,4 +107,4 @@ export default new Vuex.Store({
       });
     },
   },
-});
+};
