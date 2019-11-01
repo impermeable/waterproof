@@ -39,7 +39,7 @@
     },
     {
       "type": "code",
-      "text": "Definition is_bdd {D : Type} := \n  fun (f : D → ℝ)\n    ↦ ∃ (M : ℝ), ∀ x : D, Rabs (f x) ≤ M."
+      "text": "Definition is_bdd {D : Type} := \n  fun (f : D → ℝ)\n    ↦ ∃ (M : ℝ), ∀ x : D, ｜f x｜ ≤ M."
     },
     {
       "type": "text",
@@ -87,7 +87,7 @@
     },
     {
       "type": "code",
-      "text": "Lemma sum_bdd_func_bdd {D : Type} :\n  ∀ (f g: D → ℝ), is_bdd f ⇒ is_bdd g ⇒\n    is_bdd (f + g).\nProof.\nTake f : (D → ℝ). Take g : (D → ℝ). \nAssume f_bdd. Assume g_bdd.\nExpand the definition of is_bdd in f_bdd.\nExpand the definition of is_bdd in g_bdd. \nExpand the definition of is_bdd.\nChoose M_f such that f_le_M_f according to f_bdd.\nChoose M_g such that g_le_M_g according to g_bdd.\nWe need to show that\n  (there exists M : ℝ ,\n    for all x : D,\n      Rabs (f_plus f g x) ≤ M).\nChoose M := (M_f + M_g)%R.\nTake x : D.\nExpand the definition of f_plus.\nBy Rabs_triang it holds that (Rabs(f x + g x) ≤ Rabs(f x) + Rabs(g x))\n  (H1)."
+      "text": "Lemma sum_bdd_func_bdd {D : Type} :\n  ∀ (f g: D → ℝ), is_bdd f ⇒ is_bdd g ⇒\n    is_bdd (f + g).\nProof.\nTake f : (D → ℝ). Take g : (D → ℝ). \nAssume f_bdd. Assume g_bdd.\nExpand the definition of is_bdd in f_bdd.\nExpand the definition of is_bdd in g_bdd. \nExpand the definition of is_bdd.\nChoose M_f such that f_le_M_f according to f_bdd.\nChoose M_g such that g_le_M_g according to g_bdd.\nWe need to show that\n  (there exists M : ℝ ,\n    for all x : D,\n      ｜f_plus f g x｜ ≤ M).\nChoose M := (M_f + M_g)%R.\nTake x : D.\nExpand the definition of f_plus.\nBy Rabs_triang it holds that (｜f x + g x｜ ≤ ｜f x｜ + ｜g x｜)\n  (H1)."
     },
     {
       "type": "code",
