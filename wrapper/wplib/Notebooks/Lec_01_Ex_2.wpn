@@ -56,7 +56,7 @@
     },
     {
       "type": "code",
-      "text": "We claim that (∀ x : ℝ, x ∈ A ⇒ x ≤ M - ε) (H2). \n  Take x : ℝ. Assume x_in_A : (x ∈ A). \n  It holds that (¬ (x > M - ε)) (H4).\n  It follows that (x ≤ M - ε).\n\nBecause M_is_sup_A both \n  M_upp_bd : (is_upper_bound A M)\n    and \n  M_le_any_upp_bd : (∀ b : ℝ, is_upper_bound A b ⇒ M ≤ b).\nIt holds that (M ≤ M - ε) (H5)."
+      "text": "It holds that (∀ x : ℝ, x ∈ A ⇒ ¬ (x > M - ε)) (H2).\nIt holds that (∀ x : ℝ, x ∈ A ⇒ (x ≤ M - ε)) (H3).\nExpand the definition of is_sup in M_is_sup_A.\nIt holds that (M ≤ M - ε) (H4)."
     },
     {
       "type": "text",
