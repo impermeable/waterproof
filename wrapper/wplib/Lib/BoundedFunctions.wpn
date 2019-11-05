@@ -7,7 +7,7 @@
     },
     {
       "type": "code",
-      "text": "Require Import Reals.\nRequire Import Rcomplete.\n(*Require Import Rfunctions.\nRequire Import SeqSeries.\nRequire Import Rtrigo.\nRequire Import Ranalysis.\nRequire Import Integration.\nRequire Import micromega.Lra.\nRequire Import Omega.\nRequire Import Max.*)\nRequire Import wplib.Tactics.Tactics.\nRequire Import wplib.Notations.Notations.\nRequire Import wplib.Lib.sup_and_inf.\n\nHint Resolve Rabs_pos_eq."
+      "text": "Require Import Reals.\nRequire Import Rcomplete.\n(*Require Import Rfunctions.\nRequire Import SeqSeries.\nRequire Import Rtrigo.\nRequire Import Ranalysis.\nRequire Import Integration.\nRequire Import micromega.Lra.\nRequire Import Omega.\nRequire Import Max.*)\nRequire Import wplib.Tactics.Tactics.\nRequire Import wplib.Notations.Notations.\nRequire Import wplib.Lib.sup_and_inf.\nRequire Import wplib.Lib.series.\n\nHint Resolve Rabs_pos_eq."
     },
     {
       "type": "text",
@@ -39,7 +39,7 @@
     },
     {
       "type": "code",
-      "text": "Definition is_bdd {D : Type} := \n  fun (f : D → ℝ)\n    ↦ ∃ (M : ℝ), ∀ x : D, Rabs (f x) ≤ M."
+      "text": "Definition is_bdd {D : Type} := \n  fun (f : D → ℝ)\n    ↦ ∃ (M : ℝ), ∀ x : D, ｜f x｜ ≤ M."
     },
     {
       "type": "text",
@@ -87,7 +87,7 @@
     },
     {
       "type": "code",
-      "text": "Lemma sum_bdd_func_bdd {D : Type} :\n  ∀ (f g: D → ℝ), is_bdd f ⇒ is_bdd g ⇒\n    is_bdd (f + g).\nProof.\nTake f : (D → ℝ). Take g : (D → ℝ). \nAssume f_bdd. Assume g_bdd.\nExpand the definition of is_bdd in f_bdd.\nExpand the definition of is_bdd in g_bdd. \nExpand the definition of is_bdd.\nChoose M_f such that f_le_M_f according to f_bdd.\nChoose M_g such that g_le_M_g according to g_bdd.\nWe need to show that\n  (there exists M : ℝ ,\n    for all x : D,\n      Rabs (f_plus f g x) ≤ M).\nChoose M := (M_f + M_g)%R.\nTake x : D.\nExpand the definition of f_plus.\nBy Rabs_triang it holds that (Rabs(f x + g x) ≤ Rabs(f x) + Rabs(g x))\n  (H1)."
+      "text": "Lemma sum_bdd_func_bdd {D : Type} :\n  ∀ (f g: D → ℝ), is_bdd f ⇒ is_bdd g ⇒\n    is_bdd (f + g).\nProof.\nTake f : (D → ℝ). Take g : (D → ℝ). \nAssume f_bdd. Assume g_bdd.\nExpand the definition of is_bdd in f_bdd.\nExpand the definition of is_bdd in g_bdd. \nExpand the definition of is_bdd.\nChoose M_f such that f_le_M_f according to f_bdd.\nChoose M_g such that g_le_M_g according to g_bdd.\nWe need to show that\n  (there exists M : ℝ ,\n    for all x : D,\n      ｜f_plus f g x｜ ≤ M).\nChoose M := (M_f + M_g)%R.\nTake x : D.\nExpand the definition of f_plus.\nBy Rabs_triang it holds that (｜f x + g x｜ ≤ ｜f x｜ + ｜g x｜)\n  (H1)."
     },
     {
       "type": "code",
@@ -332,6 +332,18 @@
     {
       "type": "code",
       "text": "  By Rabs_triang it holds that \n    (Rabs\n        (proj1_sig (f n) x - proj1_sig (f N3) x +\n    (proj1_sig (f N3) x -\n   proj1_sig g_w_ev x)) ≤ \n  Rabs (proj1_sig (f n) x - proj1_sig (f N3) x)\n  +\n  Rabs (proj1_sig (f N3) x - proj1_sig g_w_ev x))%R (H34).\n  It holds that (R_dist (proj1_sig (f N3) x) (h x) < ε/4) (H35).\n  Expand the definition of R_dist in H35.\n  Rewrite using (h x = proj1_sig g_w_ev x)%R in H35.\n  It follows that (Rabs\n(proj1_sig (f n) x - proj1_sig (f N3) x +\n(proj1_sig (f N3) x -\nproj1_sig g_w_ev x)) ≤ \nε / 2)%R.\nWe claim that (norm_inf(bdd_func_minus (f n) g_w_ev) ≤ ε/2) (H36).\n  Apply bdd_func_norm_inf_le_upp_bound.\n    It holds that (ε /2 ≥ 0).\n    Apply H24.\n    It follows that (norm_inf(f n - g_w_ev) < ε).\nChoose g := g_w_ev.\n  Apply H21.\nQed."
+    },
+    {
+      "type": "text",
+      "text": "## From absolutely converging series to Cauchy sequence"
+    },
+    {
+      "type": "code",
+      "text": "Fixpoint bdd_func_partial_sums {D : Type} (f : ℕ → @bdd_func D) (n : ℕ) : @bdd_func D:=\n  match n with\n  | O => f O\n  | S m => (bdd_func_partial_sums f m) + (f (S m))\n  end."
+    },
+    {
+      "type": "code",
+      "text": "Definition bdd_func_series_cv_abs {D : Type} (f : ℕ → @bdd_func D) :=\n  series_cv (fun (n : ℕ) ↦ norm_inf (f n))."
     }
   ]
 }
