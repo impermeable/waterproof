@@ -1,6 +1,7 @@
 'use strict';
 
 const path = require('path');
+import {remote} from 'electron';
 import SerapiWorker from './SerapiWorker';
 import {getResourcesPath} from '../../../io/pathHelper';
 
@@ -18,7 +19,7 @@ class SerapiWorkerTCP extends SerapiWorker {
     this.socket = socket;
     this.socketId = -1;
 
-    const wplibPath = path.join(getResourcesPath(), './wplib');
+    const wplibPath = path.join(remote.app.getPath('userData'), './wplib');
 
     this.sendMessage(
         this.createWrapperMessage('create',
