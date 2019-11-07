@@ -159,7 +159,7 @@
     },
     {
       "type": "text",
-      "text": "## Rewriting\n\nTODO: add rewrite with at\nTODO: add support for rewriting in and at multiple places at once\nTODO: clear the proved equality?"
+      "text": "## Rewriting\n\nTODO: add rewrite with at\nTODO: add support for rewriting in and at multiple places at once"
     },
     {
       "type": "text",
@@ -167,7 +167,7 @@
     },
     {
       "type": "code",
-      "text": "Tactic Notation \"Rewrite\" \"using\" constr(t) :=\n  let u := fresh in\n    assert (u : t) by wp_power;\n  rewrite u.\n\nTactic Notation \"rewrite\" \"using\" constr(t) :=\n  let u := fresh in\n    assert (u : t) by wp_power;\n  rewrite u.\n\nTactic Notation \"Rewrite\" \"using\" constr(t) \"in\" ident(s):=\n  let u := fresh in\n    assert (u : t) by wp_power;\n  rewrite u in s.\n\nTactic Notation \"rewrite\" \"using\" constr(t) \"in\" ident(s):=\n  let u := fresh in\n    assert (u : t) by wp_power;\n  rewrite u in s.\n\nTactic Notation \"Rewrite\" \"<-\" \"using\" constr(t) :=\n  let u := fresh in \n    assert (u : t) by wp_power;\n  rewrite<-u."
+      "text": "Tactic Notation \"Rewrite\" \"using\" constr(t) :=\n  let u := fresh in\n    assert (u : t) by wp_power;\n  rewrite u;\n  clear u.\n\nTactic Notation \"rewrite\" \"using\" constr(t) :=\n  let u := fresh in\n    assert (u : t) by wp_power;\n  rewrite u;\n  clear u.\n\nTactic Notation \"Rewrite\" \"using\" constr(t) \"in\" ident(s):=\n  let u := fresh in\n    assert (u : t) by wp_power;\n  rewrite u in s;\n  clear u.\n\nTactic Notation \"rewrite\" \"using\" constr(t) \"in\" ident(s):=\n  let u := fresh in\n    assert (u : t) by wp_power;\n  rewrite u in s;\n  clear u.\n\nTactic Notation \"Rewrite\" \"<-\" \"using\" constr(t) :=\n  let u := fresh in \n    assert (u : t) by wp_power;\n  rewrite<-u;\n  clear u."
     },
     {
       "type": "text",
