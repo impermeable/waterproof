@@ -1,6 +1,11 @@
 <template>
   <div class="goal" @click="opened = !opened">
-    <div ref="hypoth" :class="{hypothesis: true}" v-html="hypothesis"></div>
+    <li v-for="hypo in  hypothesis" v-bind:key="hypo">
+     <b> {{hypo.terms}} </b>
+      {{hypo.type}}
+    </li>
+    <!-- <pre ref="hypoth" :class="{hypothesis: true}"
+    v-html="hypothesis"></pre> -->
     <div class="hrfake">
       <span class="goal-id">({{index + 1}}/{{total}})</span>
     </div>
@@ -34,8 +39,40 @@ export default {
       return this.goal.split(/={28}/);
     },
     hypothesis: function() {
+      // TODO: IMPROVE CODE
+      // TODO: fix line breaking
+      // (using Coq / implementing own line breaking rules)
+      let prevEndWithColon = false;
+      const hypotheses = [];
       if (this.parts.length > 0) {
-        return this.parts[0].trim().replace(/\n/g, '<br>');
+        const hypothesesParts = this.parts[0].split(/\n/g);
+
+        for (const hypothesesPart of hypothesesParts) {
+          // We do not want empty hypotheses
+          if (hypothesesPart === '') {
+            continue;
+          }
+
+          // Check if it is part of the previous hypothesis.
+          if (hypothesesPart.startsWith('   ') || prevEndWithColon) {
+            prevEndWithColon = false;
+            hypotheses[hypotheses.length - 1].type =
+              hypotheses[hypotheses.length - 1].type
+                  .concat(' ' + hypothesesPart.trim());
+            continue;
+          }
+
+          // If it is a new hypothesis, define the new hypothesis by
+          // a term and its type
+          const declarationIndex = hypothesesPart.indexOf(':');
+          prevEndWithColon = hypothesesPart.trim().endsWith(':');
+          hypotheses.push({
+            terms: hypothesesPart.substring(0, declarationIndex + 1).trim(),
+            type: hypothesesPart.substring(declarationIndex + 1).trim(),
+          });
+        }
+        return hypotheses;
+        // return this.parts[0].trim().replace(/\n/g, '<br>');
       }
     },
     subGoal: function() {
