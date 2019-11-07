@@ -1,6 +1,17 @@
 # Intructions on cloning the Waterproof repository
 
+Here we describe how you can clone the Waterproof repository, and build the application yourself.
+
 ## Clone this repository
+
+First clone the repository. For this, you would need [git](https://git-scm.com/downloads). Then, in a terminal (from a directory in which you want to install the folder with all Waterproof files) execute
+```
+git clone https://github.com/impermeable/waterproof.git
+```
+The move into the waterproof directory
+```
+cd waterproof
+```
 
 ## Install Node.js
 
