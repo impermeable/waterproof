@@ -48,17 +48,17 @@ class VOCompiler {
     }
 
     if (this.forceUpdates) {
-      if (currentFiles.wpn) {
-        await deleteFile(path.join(this.wpLibPath, library + '.wpn'));
-        currentFiles.wpn = false;
-      }
       if (currentFiles.vo) {
         await deleteFile(path.join(this.wpLibPath, library + '.vo'));
         currentFiles.vo = false;
       }
-      if (currentFiles.wpn && currentFiles.v) {
+      if (currentFiles.v) {
         await deleteFile(path.join(this.wpLibPath, library + '.v'));
         currentFiles.v = false;
+      }
+      if (currentFiles.wpn) {
+        await deleteFile(path.join(this.wpLibPath, library + '.wpn'));
+        currentFiles.wpn = false;
       }
     }
 
@@ -68,12 +68,12 @@ class VOCompiler {
       currentFiles.wpn = true;
     }
 
-    if (currentFiles.wpn && !currentFiles.v) {
+    if (!currentFiles.v) {
       await this.notebookToCoq(path.join(this.wpLibPath, library + '.wpn'));
       currentFiles.v = true;
     }
 
-    if (currentFiles.v && !currentFiles.vo) {
+    if (!currentFiles.vo) {
       await this.compileFile(path.join(this.wpLibPath, library + '.v'));
       currentFiles.vo = true;
     }
