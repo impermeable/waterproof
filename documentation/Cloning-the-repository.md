@@ -1,4 +1,4 @@
-# Intructions on cloning the Waterproof repository
+# Instructions on cloning the Waterproof repository
 
 Here we describe how you can clone the Waterproof repository, and build the application yourself.
 
