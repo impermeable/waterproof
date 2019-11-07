@@ -129,6 +129,13 @@ export default {
         this.notebook.exportToExerciseSheet(filename);
       }
     },
+
+    /**
+     * Compile the standard waterproof libraries
+     */
+    compilewplib: function() {
+      this.$store.dispatch('compileLibraries', true);
+    },
   },
 };
 </script>

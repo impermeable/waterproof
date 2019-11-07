@@ -62,12 +62,11 @@ export default {
         if (!filePath) {
           return;
         }
-
-        window.location = this.buttonInfo.target +
-            '?' +
-            encodeURIComponent(filePath);
+        this.$router.push(Object.assign(
+            {query: {location: filePath}}, this.buttonInfo.target));
       } else {
-        window.location = this.buttonInfo.target;
+        this.$router.push(this.buttonInfo.target);
+        // window.location = this.buttonInfo.target;
       }
     },
   },

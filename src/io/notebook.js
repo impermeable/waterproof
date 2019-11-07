@@ -276,29 +276,7 @@ class Notebook {
    * @return {String} text that will be displayed
    */
   parseToText(hints = true, textblocks = true, coqcode = true) {
-    let coqContent = '';
-    for (const block of this.blocks) {
-      if (block.type === 'code') {
-        coqContent += block.text;
-      } else if (block.type === 'input') {
-        if (block.start) {
-          coqContent += COQ_COMMENT_START + COQ_INPUT_START + COQ_COMMENT_END;
-        } else {
-          coqContent += COQ_COMMENT_START + COQ_INPUT_END + COQ_COMMENT_END;
-        }
-      } else {
-        let tempText = block.text;
-        tempText = tempText.replace(COQ_COMMENT_START, COQ_COMMENT_START_SPACE);
-        tempText = tempText.replace(COQ_COMMENT_END, COQ_COMMENT_END_SPACE);
-        coqContent += COQ_COMMENT_START + tempText + COQ_COMMENT_END;
-      }
-      if (block.type === 'hint') {
-        coqContent += '\n';
-      } else {
-        coqContent += ' ';
-      }
-    }
-    return coqContent;
+    return blockToCoqText(this.blocks);
   }
 
   /**
@@ -544,3 +522,36 @@ class Notebook {
 }
 
 export default Notebook;
+
+/**
+ * Convert blocks into a coq parsable text
+ * @param {[]} blocks the list of blocks
+ * @return {string} the coq valid text
+ */
+function blockToCoqText(blocks) {
+  let coqContent = '';
+  for (const block of blocks) {
+    if (block.type === 'code') {
+      coqContent += block.text;
+    } else if (block.type === 'input') {
+      if (block.start) {
+        coqContent += COQ_COMMENT_START + COQ_INPUT_START + COQ_COMMENT_END;
+      } else {
+        coqContent += COQ_COMMENT_START + COQ_INPUT_END + COQ_COMMENT_END;
+      }
+    } else {
+      let tempText = block.text;
+      tempText = tempText.replace(COQ_COMMENT_START, COQ_COMMENT_START_SPACE);
+      tempText = tempText.replace(COQ_COMMENT_END, COQ_COMMENT_END_SPACE);
+      coqContent += COQ_COMMENT_START + tempText + COQ_COMMENT_END;
+    }
+    if (block.type === 'hint') {
+      coqContent += '\n';
+    } else {
+      coqContent += ' ';
+    }
+  }
+  return coqContent;
+}
+
+export {blockToCoqText};

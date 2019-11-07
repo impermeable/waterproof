@@ -1,16 +1,16 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
 const remote = require('electron').remote;
 const path = require('path');
 
-import readFile from './io/readfile';
-import {readConfiguration, updateConfiguration} from './io/configurationio';
-import {findSertop, userHelpFindSertop} from './io/findsertop';
-import createTexInputHints from './codemirror/tex-input';
+import readFile from '../io/readfile';
+import {readConfiguration} from '../io/configurationio';
+import createTexInputHints from '../codemirror/tex-input';
 
-Vue.use(Vuex);
+import libraries from './libraries';
 
-export default new Vuex.Store({
+export default {
+  modules: {
+    libraries,
+  },
   state: {
     searchResults: [],
     searchResultsLemma: [],
@@ -20,7 +20,6 @@ export default new Vuex.Store({
 
     assistanceItems: [],
     configLoaded: false,
-    sertopPath: '',
   },
   mutations: {
     onSearchStarted: function(state) {
@@ -43,7 +42,6 @@ export default new Vuex.Store({
     },
     openSideWindow: function(state, index) {
       if (state.sideWindowIndex === index) {
-        console.log('hi');
         state.sideWindowIndex = -1;
       } else {
         state.sideWindowIndex = index;
@@ -62,13 +60,16 @@ export default new Vuex.Store({
     setAssistanceItems: function(state, {index, result}) {
       state.assistanceItems[index] = result;
     },
-    setConfig: function(state, result) {
-      state.sertopPath = result['sertopPath'];
+    setConfig: function(state) {
       state.configLoaded = true;
     },
   },
   actions: {
     readAssistanceItems: function({commit, state}) {
+      if (state.assistanceItems.length > 0) {
+        // if already loaded skip
+        return;
+      }
       let basePath;
       if (process.env.NODE_ENV === 'production') {
         basePath = path.join(__dirname, '../../wrapper/assistance/');
@@ -82,56 +83,28 @@ export default new Vuex.Store({
         commit('setAssistanceItems', {index: 1, result: result});
 
         // now the tex input is only loaded when symbols is loaded
-        console.log('result:' + result);
         createTexInputHints(result);
       });
       readFile(path.join(basePath, 'commands.json'), (result) => {
         commit('setAssistanceItems', {index: 2, result: result});
       });
     },
-    readConfig: function({commit}) {
+    readConfig: function({commit, state}) {
       return new Promise((resolve, reject) => {
+        if (state.configLoaded) {
+          resolve();
+          return;
+        }
         readConfiguration(remote).then(
             (data) => {
               commit('setConfig', data);
               resolve();
-            }).catch((err) => {
-          console.log(err);
-          reject(err);
-        });
-      });
-    },
-    getSertopPath: function({commit, dispatch, state}) {
-      return new Promise((resolve, reject) => {
-        if (state.configLoaded) {
-          resolve(state.sertopPath);
-        } else {
-          dispatch('readConfig').then((result) => {
-            if (state.sertopPath === '') {
-              const result = userHelpFindSertop(remote,
-                  findSertop(process.platform));
-              console.log(`user selected sertop at: ${result}`);
-              if (result) {
-                updateConfiguration(remote,
-                    {sertopPath: result}).then((outcome) => {
-                  commit('setConfig', {sertopPath: result});
-                  resolve(result);
-                }).catch((err) => {
-                  console.log(err);
-                  reject(err);
-                });
-              } else {
-                resolve('');
-              }
-            } else {
-              resolve(state.sertopPath);
-            }
-          }, (reason) => {
-            reject( reason );
-          } );
-        }
+            }).catch(
+            (err) => {
+              console.log(err);
+              reject(err);
+            });
       });
     },
   },
-  getters: {},
-});
+};

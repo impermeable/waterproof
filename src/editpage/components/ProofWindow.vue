@@ -95,7 +95,13 @@ export default {
   },
   watch: {
     coqCode: function(newCode) {
+      console.log(newCode.length);
       this.coq.setContent(newCode);
+
+      // If something in an input block changes, remove any underlining error.
+      this.notebook.blocks
+          .filter((block) => block.type === 'code')
+          .forEach((block) => block.state.error = null);
     },
   },
   methods: {
@@ -378,6 +384,7 @@ export default {
     this.eventBus.$on('saveAsFile', this.saveAsFile);
     this.eventBus.$on('exportToCoq', this.exportToCoq);
     this.eventBus.$on('exportToExerciseSheet', this.exportToExerciseSheet);
+    this.eventBus.$on('compilewplib', this.compilewplib);
     this.eventBus.$on('close', this.close);
 
     // When the proofwindow is mounted, update to disable all the buttons that

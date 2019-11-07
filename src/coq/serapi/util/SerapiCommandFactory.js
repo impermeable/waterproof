@@ -64,7 +64,7 @@ export function createASTCommand(sentenceId, format = 'PpSer') {
  * @param {String} command the vernac commmand to execute
  * @return {string} the command
  */
-function createQueryVernacCommand(command) {
+export function createQueryVernacCommand(command) {
   return `(Query () (Vernac "${sanitise(command)}"))`;
 }
 

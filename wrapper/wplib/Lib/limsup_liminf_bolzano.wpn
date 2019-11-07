@@ -1,0 +1,229 @@
+{
+  "exerciseSheet": false,
+  "blocks": [
+    {
+      "type": "text",
+      "text": "# Lim sup, lim inf and Bolzano-Weierstrass"
+    },
+    {
+      "type": "code",
+      "text": "Require Import Reals.\nRequire Import Lra.\nRequire Import Classical.\nRequire Import Classical_Pred_Type.\n\nRequire Import wplib.Tactics.Tactics.\nRequire Import wplib.Tactics.TacticsContra.\nRequire Import wplib.Lib.sup_and_inf.\nRequire Import wplib.Lib.sequences.\nRequire Import wplib.Lib.subsequences.\nRequire Import wplib.Lib.sequential_accumulation_points.\n\nHint Resolve Rabs_Rabsolu."
+    },
+    {
+      "type": "text",
+      "text": "## lim sup"
+    },
+    {
+      "type": "code",
+      "text": "Definition lim_sup_bdd (a : ℕ → ℝ) \n                       (pr1 : has_ub a) \n                       (pr2 : has_lb (sequence_ub a pr1)) :=\n  decreasing_cv (sequence_ub a pr1)\n                (Wn_decreasing a pr1)\n                (pr2)."
+    },
+    {
+      "type": "code",
+      "text": "Lemma lim_const_min_1_over_n_plus_1 :\n  ∀ x : ℝ, Un_cv (fun (n : ℕ) ↦ x - 1 / (INR n + 1)) x."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake x : ℝ.\nIt holds that (x = x - 0) (H1).\nrewrite H1 at 1.\napply CV_minus with\n  (An := fun (n : ℕ) ↦ x)\n  (Bn := fun (n : ℕ) ↦ 1 / (INR n + 1))\n  (l1 := x)\n  (l2 := 0).\nApply lim_const_seq.\nApply one_over_n_plus_1_to_0.\nQed."
+    },
+    {
+      "type": "code",
+      "text": "Lemma exists_almost_lim_sup : \n  ∀ (a : ℕ → ℝ) (pr1 : has_ub a) (pr2 : has_lb (sequence_ub a pr1)) (m : ℕ) (N : ℕ),\n    ∃ k : ℕ, (N ≤ k)%nat ∧ a k > proj1_sig (lim_sup_bdd a pr1 pr2) - 1 / (INR(m) + 1)."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake a : (ℕ → ℝ). Take pr1 : (has_ub a). Take pr2 : (has_lb (sequence_ub a pr1)). \nTake m : ℕ. Take N : ℕ.\nBy exists_almost_lim_sup_aux it holds that\n  (∃ k : ℕ, (k ≥ N)%nat ∧ a k > sequence_ub a pr1 N - 1 / (INR(m) + 1)) (H1).\nChoose n such that n_good according to H1.\nChoose k := n.\nsplit. This follows immediately. \nWe claim that (proj1_sig (lim_sup_bdd a pr1 pr2) ≤ sequence_ub a pr1 N) (H2).\nExpand the definition of lim_sup_bdd.\nDefine lim_with_proof := (decreasing_cv (sequence_ub a pr1)\n(Wn_decreasing a pr1) pr2).\nChoose l such that l_is_lim according to lim_with_proof.\nsimpl. We need to show that (l ≤ sequence_ub a pr1 N).\nBy Wn_decreasing it holds that (Un_decreasing (sequence_ub a pr1)) (H3).\napply decreasing_ineq with (Un := (sequence_ub a pr1)) (l := l) (n := N); assumption.\nThis follows immediately.\nQed."
+    },
+    {
+      "type": "code",
+      "text": "Lemma exists_subseq_to_limsup_bdd :\n   ∀ (a : ℕ → ℝ) (pr1 : has_ub a) (pr2 : has_lb (sequence_ub a pr1)),\n    ∃ n : ℕ → ℕ, is_index_seq n ∧ ∀ k : ℕ, a (n k) > proj1_sig (lim_sup_bdd a pr1 pr2) - 1 / (INR(k) + 1)."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake a : (ℕ → ℝ). Take pr1 : (has_ub a). Take pr2 : (has_lb (sequence_ub a pr1)).\napply exists_good_subseq with (P := fun (m : ℕ) (y :ℝ) ↦ y > proj1_sig (lim_sup_bdd a pr1 pr2) - 1 / (INR(m) + 1) ).\nApply exists_almost_lim_sup.\nQed."
+    },
+    {
+      "type": "code",
+      "text": "Lemma sequence_ub_bds :\n  ∀ (a : ℕ → ℝ) (pr : has_ub a) (N : ℕ) (n : ℕ),\n    (n ≥ N)%nat ⇒ a n ≤ sequence_ub a pr N."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake a : (ℕ → ℝ). Take pr : (has_ub a).\nTake N : ℕ. Take n : ℕ.\nAssume n_ge_N.\nExpand the definition of sequence_ub.\nExpand the definition of lub.\nDefine upp_bd_with_proof := (ub_to_lub (fun (k : ℕ) ↦ a (N +k)%nat)).\nChoose M such that M_is_sup according to upp_bd_with_proof.\nExpand the definition of is_lub in M_is_sup.\nBecause M_is_sup both M_is_upp_bd and any_upp_bd_ge_M.\nExpand the definition of is_upper_bound in M_is_upp_bd.\nIt holds that (N + (n-N) = n)%nat (H1).\nWe claim that (EUn (fun (k : ℕ) ↦ (a (N + k)%nat)) (a n)) (H2).\n  Expand the definition of EUn.\n  We need to show that (∃ i : ℕ, a n = a (N + i)%nat).\n  Choose i := (n - N)%nat.\n  Rewrite using (N + (n - N) = n)%nat.\n  reflexivity.\nWe need to show that (a n ≤ M).\nApply M_is_upp_bd.\nApply H2.\nQed."
+    },
+    {
+      "type": "text",
+      "text": "## A slightly upgraded version of the Bolzano-Weierstrass Theorem"
+    },
+    {
+      "type": "code",
+      "text": "Theorem Bolzano_Weierstrass_gen :\n  ∀ (a : ℕ → ℝ) (pr_ub : has_ub a) (pr_lb : has_lb (sequence_ub a pr_ub)),\n    ∃ (n : ℕ → ℕ), is_index_seq n ∧ Un_cv (fun (k : ℕ) ↦ a (n k)) (proj1_sig (lim_sup_bdd a pr_ub pr_lb))."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake a : (ℕ → ℝ).\nTake pr_ub : (has_ub a).\nTake pr_lb : (has_lb (sequence_ub a pr_ub)).\nDefine L_with_proof := (lim_sup_bdd a pr_ub pr_lb).\nDefine L := (proj1_sig L_with_proof).\nDefine sequence_ub_cv_to_L := (proj2_sig L_with_proof).\nBy exists_subseq_to_limsup_bdd it holds that \n  (∃ m : ℕ → ℕ, is_index_seq m \n                ∧ \n     ∀ k : ℕ, \n      a (m k) > L - 1 / (INR(k) + 1)) (H1).\nChoose m such that m_ind_seq_and_amk_large according to H1. \nBecause m_ind_seq_and_amk_large both m_ind_seq and amk_large.\nChoose n := m.\nWe need to show that (is_index_seq m ∧ Un_cv (k) ↦ (a (m k)) L)."
+    },
+    {
+      "type": "text",
+      "text": "We"
+    },
+    {
+      "type": "code",
+      "text": "split"
+    },
+    {
+      "type": "text",
+      "text": "this into two separate parts"
+    },
+    {
+      "type": "code",
+      "text": "."
+    },
+    {
+      "type": "text",
+      "text": "The first part "
+    },
+    {
+      "type": "code",
+      "text": "follows immediately. "
+    },
+    {
+      "type": "code",
+      "text": "apply"
+    },
+    {
+      "type": "text",
+      "text": "the"
+    },
+    {
+      "type": "code",
+      "text": "squeeze_theorem"
+    },
+    {
+      "type": "text",
+      "text": " for the second part"
+    },
+    {
+      "type": "code",
+      "text": "with (c := sequence_ub a pr_ub)\n     (a := fun (k : ℕ) ↦ L - 1 / (INR k + 1))."
+    },
+    {
+      "type": "code",
+      "text": "Take k : ℕ.\nsplit.\nThis follows immediately.\nBy index_seq_grows_0 it holds that (m k ≥ k)%nat (H1).\nApply sequence_ub_bds; assumption.\nApply lim_const_min_1_over_n_plus_1.\nApply sequence_ub_cv_to_L.\nQed."
+    },
+    {
+      "type": "text",
+      "text": "## The Bolzano-Weierstrass Theorem"
+    },
+    {
+      "type": "code",
+      "text": "Theorem Bolzano_Weierstrass :\n  ∀ (a : ℕ → ℝ), has_ub a ⇒ (has_lb a ⇒ \n    ∃ (n : ℕ → ℕ) (l : ℝ), is_index_seq n ∧\n      Un_cv (fun (k : ℕ) ↦ a (n k)) l )."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake a : (ℕ → ℝ). Take pr_ub : (has_ub a). Take pr_lb : (has_lb a).\nDefine pr2 := (maj_min a pr_ub pr_lb).\nWe claim that\n  (∃ (n : ℕ → ℕ), is_index_seq n ∧ Un_cv (fun (k : ℕ) ↦ a (n k)) (proj1_sig (lim_sup_bdd a pr_ub pr2))) (H).\n  Apply (Bolzano_Weierstrass_gen a pr_ub pr2).\nChoose n such that n_good_subseq according to H.\nChoose n := n.\nChoose l := (proj1_sig (lim_sup_bdd a pr_ub pr2)).\nIt follows that (is_index_seq n ∧ Un_cv (k) ↦ (a (n k)) (proj1_sig (lim_sup_bdd a pr_ub pr2))).\nQed."
+    },
+    {
+      "type": "code",
+      "text": "Lemma acc_pt_bds_seq_ub :\n  ∀ (a : ℕ → ℝ) (pr_ub : has_ub a) (x : ℝ),\n    is_seq_acc_pt a x ⇒ ∀ m : ℕ, x ≤ sequence_ub a pr_ub m."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake a : (ℕ → ℝ).\nTake pr_ub : (has_ub a).\nTake x : ℝ.\nAssume x_is_acc_pt : (is_seq_acc_pt a x).\nExpand the definition of is_seq_acc_pt in x_is_acc_pt.\nChoose n such that n_good_ind_seq according to x_is_acc_pt.\nBecause n_good_ind_seq both n_ind_seq and ank_cv_to_x.\nTake m : ℕ.\nDefine L := (sequence_ub a pr_ub m).\nBy Rle_or_lt it holds that (x ≤ L ∨ L < x) (H).\nBecause H either x_le_L or L_lt_x. trivial."
+    },
+    {
+      "type": "text",
+      "text": "We consider the case $L < x$."
+    },
+    {
+      "type": "code",
+      "text": "Define ε := (x - L).\nWe claim that (∃ K : ℕ, ∀ k : ℕ, (k ≥ K)%nat ⇒ R_dist (a (n k)) x < ε) (H1).\n  Apply ank_cv_to_x. It holds that (x - L > 0)(H2). It follows that (ε > 0).\nChoose K such that ank_close_to_x according to H1.\nDefine N := (Nat.max K m).\nWe claim that (R_dist (a (n N)) x < ε) (H6).\n  Apply ank_close_to_x. It holds that (Nat.max K m ≥ K)%nat (H7). It follows that (N ≥ K)%nat.\nExpand the definition of R_dist in H6.\nBy Rabs_def2 it holds that (a(n N) - x < ε ∧ - ε < a(n N) - x) (H8).\nBecause H8 both H9 and H10.\nBy index_seq_grows_0 it holds that (n N ≥ N)%nat (H14).\nWe claim that (a (n N) ≤ L) (H15).\n  Apply sequence_ub_bds. It holds that (Nat.max K m ≥ m)%nat (H16). It follows that (n N ≥ m)%nat.\nRewrite using (ε = x - L) in H10.\nIt follows that (x ≤ L).\nQed."
+    },
+    {
+      "type": "text",
+      "text": "## Comparing definitions of lim sup"
+    },
+    {
+      "type": "code",
+      "text": "Lemma lim_sup_bdd_is_sup_seq_acc_pts :\n  ∀ (a : ℕ → ℝ) (pr_ub : has_ub a) (pr_lb : has_lb (sequence_ub a pr_ub)),\n    is_sup (is_seq_acc_pt a) (proj1_sig (lim_sup_bdd a pr_ub pr_lb))."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake a : (ℕ → ℝ).\nTake pr_ub : (has_ub a).\nTake pr_lb : (has_lb (sequence_ub a pr_ub)).\nsplit.\nExpand the definition of is_upper_bound.\nTake x : ℝ.\nAssume x_is_acc_pt : (is_seq_acc_pt a x).\nBy acc_pt_bds_seq_ub it holds that (∀ m : ℕ, x ≤ sequence_ub a pr_ub m) (H0).\nDefine L_with_proof := (lim_sup_bdd a pr_ub pr_lb).\nChoose L such that sequence_ub_cv_to_L according to L_with_proof.\nsimpl.\nBy (low_bd_seq_is_low_bd_lim (sequence_ub a pr_ub))\n  it holds that (L ≥ x) (H1).\nIt follows that (x ≤ L)."
+    },
+    {
+      "type": "text",
+      "text": "We now need to show that if $b \\in \\mathbb{R}$ is an upper bound for the set of accumulation points, then the lim_sup_bdd is less than or equal to $b$."
+    },
+    {
+      "type": "code",
+      "text": "Take b : ℝ.\nAssume b_upp_bd : (is_upper_bound (is_seq_acc_pt a) b).\nExpand the definition of is_upper_bound in b_upp_bd.\nExpand the definition of is_seq_acc_pt in b_upp_bd.\nApply b_upp_bd.\nApply Bolzano_Weierstrass_gen.\nQed."
+    },
+    {
+      "type": "text",
+      "text": "## Some attempts to get nicer subsequences"
+    },
+    {
+      "type": "text",
+      "text": "In a sequence, either there are finitely many terms larger than or equal to a given number $L$, or for every $N$ there is an $n \\geq N$ such that $a_n \\geq L$."
+    },
+    {
+      "type": "code",
+      "text": "Lemma finite_or_find_one :\n  ∀ (a : ℕ → ℝ) (L : ℝ),\n    (∃ N : ℕ, ∀ k : ℕ, (k >= N)%nat ⇒ a k < L) \n       ∨ \n    (∀ m : ℕ, ∃ n : ℕ, (n >= m)%nat ∧ a n ≥ L)."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake a : (ℕ → ℝ). Take L : ℝ. \nDefine P := (∃ N : ℕ, ∀ k : ℕ, (k >= N)%nat ⇒ a k < L).\ndestruct (classic P). This follows immediately."
+    },
+    {
+      "type": "text",
+      "text": "It is enough to show the proposition of the "
+    },
+    {
+      "type": "code",
+      "text": "right"
+    },
+    {
+      "type": "text",
+      "text": "hand side of the or-sign"
+    },
+    {
+      "type": "code",
+      "text": "."
+    },
+    {
+      "type": "code",
+      "text": "\nTake m : ℕ. Expand the definition of P in H.\nIt holds that (¬(∀ k : ℕ, (k >= m)%nat ⇒ a k < L)) (H1).\nBy not_all_ex_not it holds that (∃ n : ℕ, ¬((n >= m)%nat ⇒ a n < L)) (H2).\nChoose n1 such that H3 according to H2.\nChoose n := n1.\nBy imply_to_and it holds that ((n1 >= m)%nat ∧ ¬(a n1 < L) ) (H4).\nBecause H4 both H5 and H6."
+    },
+    {
+      "type": "text",
+      "text": "We need to show that $n_1 \\geq m$ and $a_{n_1} >L$. We "
+    },
+    {
+      "type": "code",
+      "text": "split"
+    },
+    {
+      "type": "text",
+      "text": "this into two different goals"
+    },
+    {
+      "type": "code",
+      "text": "."
+    },
+    {
+      "type": "text",
+      "text": "The first one follows by "
+    },
+    {
+      "type": "code",
+      "text": "assumption."
+    },
+    {
+      "type": "text",
+      "text": "We now need to show that $a_{n_1} > L$."
+    },
+    {
+      "type": "code",
+      "text": "This follows immediately.\nQed."
+    }
+  ]
+}

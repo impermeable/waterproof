@@ -9,7 +9,7 @@
         </div>
         <div class="messages" v-if="ready">
             <div class="message message-error"
-                 v-if="addError.message && showingAddError">
+                 v-if="haveAddError && showingAddError">
                 <span class="messageText">
                     {{addError.message}}
                 </span>
@@ -26,7 +26,7 @@
         </div>
         <div style="text-align: center" v-else>
             <span>
-                Loading Coq
+                Loading
             </span>
             <span class="load-dot" style="animation-delay: 0s">
                 .
@@ -42,6 +42,11 @@
 </template>
 
 <script>
+const ignoredErrors = [
+  'Nested proofs are not allowed unless you ' +
+    'turn option Nested Proofs Allowed on',
+].map((s) => s.toLowerCase());
+
 export default {
   name: 'MessagesWindow',
   props: {
@@ -82,6 +87,21 @@ export default {
     forceAddError: function() {
       clearTimeout(this.showTimeout);
       this.showingAddError = true;
+    },
+  },
+  computed: {
+    haveAddError() {
+      const message = this.addError.message;
+      if (!message) {
+        return false;
+      }
+      const text = message.message.toLowerCase();
+      for (const err of ignoredErrors) {
+        if (text.includes(err)) {
+          return false;
+        }
+      }
+      return true;
     },
   },
   watch: {

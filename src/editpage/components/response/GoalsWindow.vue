@@ -14,7 +14,7 @@
     </div>
     <div style="text-align: center" v-else>
             <span>
-                Loading Coq
+                Loading
             </span>
             <span class="load-dot" style="animation-delay: 0s">
                 .

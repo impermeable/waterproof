@@ -1,0 +1,25 @@
+{
+  "exerciseSheet": false,
+  "blocks": [
+    {
+      "type": "text",
+      "text": "# Sequential accumulation points"
+    },
+    {
+      "type": "code",
+      "text": "Require Import Reals.\nRequire Import Lra.\nRequire Import Classical.\nRequire Import Classical_Pred_Type.\nRequire Import ClassicalChoice.\n\nRequire Import wplib.Tactics.Tactics.\nRequire Import wplib.Tactics.TacticsContra.\nRequire Import wplib.Lib.sup_and_inf.\nRequire Import wplib.Lib.sequences.\nRequire Import wplib.Lib.subsequences.\n\nHint Resolve Rabs_Rabsolu."
+    },
+    {
+      "type": "code",
+      "text": "Definition is_seq_acc_pt (a : ℕ → ℝ) (x : ℝ) : Prop :=\n  ∃ n : ℕ → ℕ, is_index_seq n ∧ Un_cv (fun (k : ℕ) ↦ a(n k)) x."
+    },
+    {
+      "type": "code",
+      "text": "Lemma seq_bdd_seq_acc_pts_bdd :\n  ∀ a : ℕ → ℝ, has_ub a ⇒ bound (is_seq_acc_pt a)."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake a : (ℕ → ℝ).\nAssume a_upp_bdd : (has_ub a).\nExpand the definition of bound.\nExpand the definition of is_upper_bound.\nChoose M such that a_bdd_by_M according to a_upp_bdd.\nChoose m := M.\nTake x : ℝ.\nAssume x_is_acc_pt : (is_seq_acc_pt a x).\nExpand the definition of is_seq_acc_pt.\nChoose n such that n_good_ind_seq according to x_is_acc_pt.\nBecause n_good_ind_seq both n_ind_seq and subseq_conv_to_x.\nWe need to show that (x ≤ M).\nApply (upp_bd_seq_is_upp_bd_lim (fun (k : ℕ)↦ a(n k))).\n  Expand the definition of is_upper_bound in a_bdd_by_M.\n  Expand the definition of EUn in a_bdd_by_M.\n  Take k : ℕ. It follows that (a(n k) ≤ M).\n  Apply subseq_conv_to_x.\nQed."
+    }
+  ]
+}

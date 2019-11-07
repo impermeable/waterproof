@@ -3,7 +3,9 @@
     <div class="sidebar">
       <h3>Recent files</h3>
       <ul class="recent-files">
-        <span v-if="this.recents.fileLoading">Loading...</span>
+        <li style="list-style: none;" v-if="this.recents.fileLoading">
+            Loading...
+        </li>
         <recent-file
           v-else=""
           v-for="file in this.recents.filelist"
@@ -34,10 +36,12 @@ import RecentFile from './components/RecentFile';
 import HomepageButton from './components/HomepageButton';
 import Recents from '../io/recents';
 import ShortKeys from '../io/shortKey';
+import Loader from '../pageless/Loader';
 
 export default {
   name: 'app',
   components: {
+    Loader,
     RecentFile,
     HomepageButton,
   },
@@ -48,14 +52,14 @@ export default {
           id: 0,
           text: 'Create a new notebook',
           image: require('../assets/images/newfile.svg'),
-          target: 'editpage.html',
+          target: {name: 'edit'},
           shortKeyTag: 'newFile',
         },
         {
           id: 1,
           text: 'Open notebook',
           image: require('../assets/images/openfile.svg'),
-          target: 'editpage.html',
+          target: {name: 'edit'},
           open: true,
           shortKeyTag: 'loadFile',
         },
@@ -63,7 +67,7 @@ export default {
           id: 2,
           text: 'Waterproof tutorial',
           image: require('../assets/images/tutorial.svg'),
-          target: 'editpage.html?Tutorial',
+          target: {name: 'edit', query: {location: 'Tutorial'}},
           shortKeyTag: 'tutorial',
         },
       ],
@@ -80,6 +84,7 @@ export default {
   @include flex-style(row);
   height: 100vh;
   overflow: hidden;
+  /*position: relative;*/
 
   .sidebar {
     flex: 0 0 auto;

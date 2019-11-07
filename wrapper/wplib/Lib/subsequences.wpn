@@ -1,0 +1,401 @@
+{
+  "exerciseSheet": false,
+  "blocks": [
+    {
+      "type": "text",
+      "text": "# Subsequences"
+    },
+    {
+      "type": "code",
+      "text": "Require Import Reals.\nRequire Import Lra.\nRequire Import Classical.\nRequire Import Classical_Pred_Type.\nRequire Import ClassicalChoice.\n\nRequire Import wplib.Tactics.Tactics.\nRequire Import wplib.Tactics.TacticsContra.\nRequire Import wplib.Lib.sup_and_inf.\n\nHint Resolve Rabs_Rabsolu."
+    },
+    {
+      "type": "text",
+      "text": "## Creating a subsequence of elements satisfying a certain property\n\nThe purpose of this section is to provide a somewhat general strategy to construct subsequences of elements satisfying a certain property. "
+    },
+    {
+      "type": "text",
+      "text": "### From existence of a next element to a function producing this element\n\nThe next lemma is quite technical, and is usually not so visible in classical analysis. We rely here on a version of the axiom of choice."
+    },
+    {
+      "type": "code",
+      "text": "Lemma existence_next_el_to_fun :\n    ∀ (a : ℕ → ℝ) (P : ℕ → ℝ → Prop),\n    (∀ (m : ℕ) (N : ℕ), ∃ k : ℕ, (N ≤ k)%nat ∧ (P m (a k))) ⇒\n      ∃ f : ℕ → ℕ → ℕ, ∀ (m : ℕ) (N : ℕ), (N ≤ f m N)%nat ∧ P m (a (f m N))."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake a : (ℕ → ℝ). Take P : (ℕ → ℝ → Prop).\nAssume ex_next.\nWe claim that (∀ (m : ℕ),  ∃ g : ℕ → ℕ, ∀ N : ℕ, (N ≤ g N)%nat ∧ (P m (a (g N)))) (H1).\n  Take m : ℕ.\n  apply choice with\n    (R := fun (k : ℕ) (l : ℕ) ↦ ((k ≤ l)%nat ∧ P m (a l))).\n    Apply ex_next.\napply choice with\n  (R := fun (m : ℕ) (h : ℕ → ℕ) ↦ ( ∀ N : ℕ, (N ≤ h N)%nat ∧ P m (a (h N)) )   ).\n  Apply H1.\nQed."
+    },
+    {
+      "type": "text",
+      "text": "The next definition captures what it means to be an index sequence."
+    },
+    {
+      "type": "code",
+      "text": "Definition is_index_seq (n : ℕ → ℕ) :=\n  ∀ k : ℕ, (n k < n (S k))%nat."
+    },
+    {
+      "type": "text",
+      "text": "Given the function that produces 'good' elements, we can use it to construct a subsequence by induction."
+    },
+    {
+      "type": "code",
+      "text": "Fixpoint create_seq \n  (f : ℕ → ℕ → ℕ) (l : ℕ) :=\n  match l with\n  | O => f O O\n  | S k => f l (S (create_seq f k))\n  end."
+    },
+    {
+      "type": "text",
+      "text": "If the function that produces 'good' elements is such that the produced elements are far enough in the sequence, it is certain that the produced sequence is an index sequence."
+    },
+    {
+      "type": "code",
+      "text": "Lemma created_seq_is_index_seq :\n  ∀ (f : ℕ → ℕ → ℕ),\n    (∀ (m N : ℕ), (f m N ≥ N)%nat ) ⇒\n      is_index_seq (create_seq f)."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake f : (ℕ → ℕ → ℕ).\nAssume f_large : (∀ (m N : ℕ), (f m N ≥ N)%nat ).\nExpand the definition of is_index_seq.\nTake k : ℕ.\nRewrite using (create_seq f (S k) = f (S k) (S (create_seq f k))).\nBy f_large it holds that (f (S k) (S (create_seq f k)) ≥ S(create_seq f k))%nat (H1)."
+    },
+    {
+      "type": "text",
+      "text": "The conclusion "
+    },
+    {
+      "type": "code",
+      "text": "follows immediately. Qed."
+    },
+    {
+      "type": "text",
+      "text": "\nThe next lemma records that indeed the elements in the subsequence satisfy the desired property."
+    },
+    {
+      "type": "code",
+      "text": "Lemma subseq_sat_rel :\n  ∀ (a : ℕ → ℝ) (f : ℕ → ℕ → ℕ) (P : ℕ → ℝ → Prop),\n    (∀ m N : ℕ, P m (a (f m N)) ) ⇒ \n      ∀ k : ℕ, P k (a (create_seq f k))."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake a : (ℕ → ℝ). Take f : (ℕ → ℕ → ℕ). Take P : (ℕ → ℝ → Prop).\nAssume relation_satisfied : (∀ m N : ℕ, P m (a (f m N)) ).\ninduction k as [|k IH].\nsimpl. "
+    },
+    {
+      "type": "text",
+      "text": "We need to show that $P(0, a (f(0,0)))$ holds. "
+    },
+    {
+      "type": "code",
+      "text": "Apply relation_satisfied."
+    },
+    {
+      "type": "text",
+      "text": "For the induction step, we "
+    },
+    {
+      "type": "code",
+      "text": "simpl "
+    },
+    {
+      "type": "text",
+      "text": "the expression"
+    },
+    {
+      "type": "code",
+      "text": "."
+    },
+    {
+      "type": "code",
+      "text": "We need to show that (P (S k) (a (f (S k) (S (create_seq f k))))). Apply relation_satisfied.\nQed."
+    },
+    {
+      "type": "code",
+      "text": "Lemma exists_good_subseq :\n  ∀ (a : ℕ → ℝ) (P : ℕ → ℝ → Prop),\n    (∀ (m : ℕ) (N : ℕ), ∃ k : ℕ, (N ≤ k)%nat ∧ (P m (a k))) ⇒\n      ∃ n : ℕ → ℕ, is_index_seq n ∧ ∀ k : ℕ, P k (a (n k))."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake a : (ℕ → ℝ). Take P : (ℕ → ℝ → Prop).\nAssume large_good_el_exist.\nBy existence_next_el_to_fun it holds that\n  (∃ f : ℕ → ℕ → ℕ, ∀ (m : ℕ) (N : ℕ), (N ≤ f m N)%nat ∧ P m (a (f m N))) (H1).\nChoose f such that f_choice_fun according to H1.\nChoose n := (create_seq f).\nWe claim that (∀ (m : ℕ) (N : ℕ), (N ≤ f m N)%nat) (H2).\n  Take m : ℕ. Take N : ℕ.\n  By f_choice_fun it holds that ((N ≤ f m N)%nat ∧ P m (a (f m N))) (H3).\n  This follows immediately.\nBy created_seq_is_index_seq it holds that (is_index_seq (create_seq f)) (H4).\nWe claim that (∀ (m : ℕ) (N : ℕ), P m (a (f m N))) (H5).\n  Take m : ℕ. Take N : ℕ.\n  By f_choice_fun it holds that ((N ≤ f m N)%nat ∧ P m (a (f m N))) (H3). \n  Because H3 both f_large and f_sat. trivial.\nWe claim that (∀ k : ℕ, P k (a (create_seq f k))) (H6).\n  Apply subseq_sat_rel; assumption.\nThis follows immediately.\nQed."
+    },
+    {
+      "type": "code",
+      "text": "Definition is_increasing (f : ℕ → ℕ) :=\n  ∀ k : ℕ, (f k ≤ f (S k))%nat."
+    },
+    {
+      "type": "code",
+      "text": "Lemma incr_loc_to_glob :\n  ∀ f : ℕ → ℕ,\n    is_increasing f\n      ⇒ (∀ k l : ℕ, (k ≤ l)%nat ⇒ (f k ≤ f l)%nat)."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake f : (ℕ → ℕ). Expand the definition of is_increasing. Assume incr_loc : (∀ k : ℕ, (f k ≤ f (S k))%nat).\n\nTake k : ℕ. induction l as [|l IH_l]. "
+    },
+    {
+      "type": "text",
+      "text": "We first need to show that if $k \\leq 0$ then $(f (k) \\leq f(0))$."
+    },
+    {
+      "type": "code",
+      "text": "Assume k_le_0. Rewrite using (k = 0)%nat. \nWe need to show that (f 0 ≤ f 0)%nat.\nThis follows immediately."
+    },
+    {
+      "type": "text",
+      "text": "Next, we need to show that if $k \\leq S (l)$ then $f(k) \\leq f(S (l))$."
+    },
+    {
+      "type": "code",
+      "text": "Assume Sk_le_Sl.\ndestruct (lt_eq_lt_dec k (S l)) as [temp | k_gt_Sl].\n  destruct temp as [k_lt_Sl | k_eq_Sl]."
+    },
+    {
+      "type": "text",
+      "text": "We first consider the case that $k < S(l)$."
+    },
+    {
+      "type": "code",
+      "text": "It holds that (k ≤ l)%nat (k_le_l).\nBy IH_l it holds that (f k ≤ f l)%nat (fk_le_fl).\nIt holds that (f l ≤ f (S l))%nat (fl_le_f_Sl)."
+    },
+    {
+      "type": "text",
+      "text": "It "
+    },
+    {
+      "type": "code",
+      "text": "follows immediately"
+    },
+    {
+      "type": "text",
+      "text": "that $f(k) \\leq f(S(l))$"
+    },
+    {
+      "type": "code",
+      "text": "."
+    },
+    {
+      "type": "text",
+      "text": "\nWe now consider the case $k = S(l)$. We need to show that $f(k) \\leq f(S(l))$. "
+    },
+    {
+      "type": "code",
+      "text": "Rewrite using (k = S l)."
+    },
+    {
+      "type": "text",
+      "text": "It"
+    },
+    {
+      "type": "code",
+      "text": "follows immediately"
+    },
+    {
+      "type": "text",
+      "text": "that $f(S(l))\\leq f(S(l))$"
+    },
+    {
+      "type": "code",
+      "text": "."
+    },
+    {
+      "type": "text",
+      "text": "\nFinally we consider the case $k > S(l)$. However, this case is in contradiction with $k \\leq S(l)$. "
+    },
+    {
+      "type": "code",
+      "text": "It holds that (¬(S l < k)%nat) (not_Sl_lt_k). contradiction.\nQed."
+    },
+    {
+      "type": "code",
+      "text": "Lemma index_seq_strictly_incr :\n  ∀ n : ℕ → ℕ, is_index_seq n ⇒ (is_increasing (fun (k : ℕ) ↦ (n k - k)%nat))."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake n : (ℕ → ℕ). Assume n_is_index_seq.\nExpand the definition of is_increasing.\nTake k : ℕ. \nExpand the definition of is_index_seq in n_is_index_seq.\nIt holds that (n k < n (S k))%nat (H1)."
+    },
+    {
+      "type": "text",
+      "text": "It "
+    },
+    {
+      "type": "code",
+      "text": "follows immediately"
+    },
+    {
+      "type": "text",
+      "text": "that $n_k - k \\leq n_{S(k)} - S(k)$"
+    },
+    {
+      "type": "code",
+      "text": ". Qed."
+    },
+    {
+      "type": "code",
+      "text": "Lemma index_seq_grows_0 :\n  ∀ n : ℕ → ℕ, is_index_seq n ⇒ ∀ k : ℕ, (n k ≥ k)%nat."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake n : (ℕ → ℕ). Assume n_is_index_seq.\ninduction k as [|k IH].\nThis follows immediately.\nExpand the definition of is_index_seq in n_is_index_seq.\nIt holds that (n k < n (S k))%nat (H1).\n"
+    },
+    {
+      "type": "text",
+      "text": "We need to show that $n_{S(k)} \\geq S(k)$. "
+    },
+    {
+      "type": "code",
+      "text": "This follows immediately. Qed."
+    },
+    {
+      "type": "code",
+      "text": "Lemma index_seq_grows :\n  ∀ n : ℕ → ℕ, is_index_seq n ⇒ (∀ k l : ℕ, (k ≤ l)%nat ⇒ (n k - k ≤ n l - l)%nat)."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake n : (ℕ → ℕ). Assume n_is_index_seq.\nDefine f := (fun (k : ℕ) ↦ (n k - k)%nat).\nBy index_seq_strictly_incr it holds that (is_increasing f) (H1).\nBy incr_loc_to_glob it holds that (∀ k l : ℕ, (k ≤ l)%nat ⇒ (f k ≤ f l)%nat) (H2).\nTake k : ℕ. Take l : ℕ. Assume k_le_l.\nBy H2 it holds that (f k ≤ f l)%nat (H3).\nExpand the definition of f in H3.\n"
+    },
+    {
+      "type": "text",
+      "text": "The result follows by "
+    },
+    {
+      "type": "code",
+      "text": "assumption. Qed."
+    },
+    {
+      "type": "code",
+      "text": "\n"
+    },
+    {
+      "type": "text",
+      "text": "## Constructing a subsequence with elements satisfying a particular property\n\nGiven a property $P : \\mathbb{N} → \\mathbb{R} → \\mathrm{Prop}$, and given that it holds for infinitely many elements in the sequence, we want to find a subsequence with all elements satisfying the property. "
+    },
+    {
+      "type": "text",
+      "text": "### Finding the smallest element satisfying the property\n\nThis seems to require some decidability on the property"
+    },
+    {
+      "type": "code",
+      "text": "Fixpoint first_satisfying_element_helper\n  (rel : ℕ → ℕ → bool)\n  (k : ℕ)\n  (N : ℕ) :=\n  match k with\n  | O => N\n  | S l => if (rel (N-k)%nat (N-k)%nat) \n                then k\n                else (first_satisfying_element_helper rel l N)\n  end.  "
+    },
+    {
+      "type": "code",
+      "text": "Definition first_satisfying_element\n  (rel : ℕ → ℕ → bool)\n  (l : ℕ)\n  (N : ℕ)\n  := first_satisfying_element_helper rel (N-l) N.  "
+    },
+    {
+      "type": "text",
+      "text": "### From infinitely many elements to a function producing those elements"
+    },
+    {
+      "type": "code",
+      "text": "Lemma inf_el_to_fun :\n  ∀ (a : ℕ → ℝ) (P : ℕ → ℝ → Prop),\n    (∀ N : ℕ, ∃ k : ℕ, (N ≤ k)%nat ∧ (P N (a k))) ⇒\n      ∃ f : ℕ → ℕ, ∀ l : ℕ, (l ≤ f l)%nat ∧ P l (a (f l))."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake a : (ℕ → ℝ). Take P : (ℕ → ℝ → Prop)."
+    },
+    {
+      "type": "code",
+      "text": "apply choice with \n  (R := fun (k : ℕ) (l : ℕ) ↦ ((k ≤ l)%nat ∧ P k (a l))).\nQed."
+    },
+    {
+      "type": "code",
+      "text": "Fixpoint seq_of_max (f : ℕ → ℕ) (l : ℕ) :=\n  match l with \n  | O => f O\n  | S k => Nat.max (f l) (seq_of_max f k)\n  end."
+    },
+    {
+      "type": "text",
+      "text": "### The sequence of maxima is increasing"
+    },
+    {
+      "type": "code",
+      "text": "Lemma seq_of_max_is_increasing :\n  ∀ f : ℕ → ℕ, is_increasing (seq_of_max f)."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake f : (ℕ → ℕ).\nExpand the definition of is_increasing.\nTake k : ℕ. simpl. This follows immediately.\nQed."
+    },
+    {
+      "type": "code",
+      "text": "Lemma elements_le_seq_of_max_pre :\n  ∀ (f : ℕ → ℕ) (n : ℕ),\n    (f n ≤ seq_of_max f n)%nat."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake f : (ℕ → ℕ). "
+    },
+    {
+      "type": "text",
+      "text": "We apply"
+    },
+    {
+      "type": "code",
+      "text": "induction "
+    },
+    {
+      "type": "text",
+      "text": "on"
+    },
+    {
+      "type": "code",
+      "text": " n as [|n IH_n]."
+    },
+    {
+      "type": "text",
+      "text": "We first consider the base case $n=0$."
+    },
+    {
+      "type": "code",
+      "text": "Expand the definition of seq_of_max."
+    },
+    {
+      "type": "text",
+      "text": "We need to show that $f( 0 ) \\leq f( 0)$."
+    },
+    {
+      "type": "code",
+      "text": "This follows immediately."
+    },
+    {
+      "type": "text",
+      "text": "\nNext we consider the general case. We need to show that $f(S(n))\\leq \\mathsf{seqofmax}(f, S(n))$. "
+    },
+    {
+      "type": "code",
+      "text": "Expand the definition of seq_of_max. "
+    },
+    {
+      "type": "text",
+      "text": "By the definition of $\\mathsf{seqofmax}(f,S(n))$ as the maximum of $f(S(n))$ and another number, this"
+    },
+    {
+      "type": "code",
+      "text": "follows immediately. \nQed."
+    },
+    {
+      "type": "code",
+      "text": "Lemma elements_le_seq_of_max :\n  ∀ (f : ℕ → ℕ) (n : ℕ) (k : ℕ),\n    (k ≤ n)%nat ⇒ (f k ≤ seq_of_max f n)%nat."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake f : (ℕ → ℕ). Take n : ℕ. Take k : ℕ.\nAssume k_le_n. By elements_le_seq_of_max_pre it holds that (f k ≤ seq_of_max f k)%nat (H1).\nWe claim that (seq_of_max f k ≤ seq_of_max f n)%nat (H2).\nApply incr_loc_to_glob. Apply seq_of_max_is_increasing. Apply k_le_n."
+    },
+    {
+      "type": "text",
+      "text": "By transitivity, the conclusion "
+    },
+    {
+      "type": "code",
+      "text": "follows immediately.\nQed."
+    },
+    {
+      "type": "text",
+      "text": "### From a function producing the correct elements to an index sequence"
+    },
+    {
+      "type": "code",
+      "text": "Fixpoint build_seq \n  (f : ℕ → ℕ) \n  (k : ℕ) :=\n  match k with \n  | O => f O\n  | S m => f (S (seq_of_max f (build_seq f m)))\n  end."
+    },
+    {
+      "type": "code",
+      "text": "Lemma built_seq_is_index_seq :\n  ∀ f : ℕ → ℕ,\n    (∀ k : ℕ, (f k ≥ k)%nat) ⇒\n      is_index_seq (build_seq f)."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake f : (ℕ → ℕ).\nAssume for_all_k_f_k_ge_k.\nExpand the definition of is_index_seq."
+    },
+    {
+      "type": "code",
+      "text": "Take l : ℕ.\nRewrite using (build_seq f (S l) = f( S(seq_of_max f (build_seq f l))))%nat.\nWe claim that (f( S(seq_of_max f (build_seq f l)))≥ S(seq_of_max f (build_seq f l)))%nat (H1).\n  Apply for_all_k_f_k_ge_k.\nIt holds that (f( S(seq_of_max f (build_seq f l)))> seq_of_max f (build_seq f l))%nat (H2).\nWe claim that (seq_of_max f (build_seq f l) ≥ f(build_seq f l))%nat (H3).\n  Apply elements_le_seq_of_max_pre.\nBy for_all_k_f_k_ge_k it holds that (f(build_seq f l) ≥ build_seq f l)%nat (H4).\nThis follows immediately.\nQed."
+    },
+    {
+      "type": "text",
+      "text": "### Subsequence satisfies relation"
+    }
+  ]
+}

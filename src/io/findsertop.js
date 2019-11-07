@@ -1,3 +1,5 @@
+import {getAppdataPath} from './pathHelper';
+
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
@@ -46,11 +48,13 @@ function findSertop(platform) {
  * gives back a string with the sertop Path
  */
 function userHelpFindSertop(remote, guess='') {
-  const userPath = remote.app.getPath('userData');
+  const userPath = getAppdataPath();
   const configPath = path.join(userPath, 'wpconfig.json');
   const result = remote.dialog.showOpenDialog({
-    title: 'Please select sertop',
+    title: 'Please select the program named sertop',
+    message: 'Please select the program named sertop',
     defaultPath: guess,
+    FileFilter: {name: 'sertop', extensions: ['exe', '']},
     properties: ['openFile']});
   if (result) {
     if (result[0].endsWith('sertop.exe') || result[0].endsWith('sertop')) {

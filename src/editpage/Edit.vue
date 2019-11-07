@@ -17,7 +17,6 @@
           :uri="tab.fileURI"
           :index="index"
           :debug="debug"
-          :socket="socket"
           :shortKeys="shortKeys"
           ref="proofWindow"
           @update-buttons="updateButtons"
@@ -61,7 +60,6 @@ import 'bootstrap-vue/dist/bootstrap-vue.css';
 import {TabsPlugin, ModalPlugin} from 'bootstrap-vue';
 
 import Recents from '../io/recents';
-import TCPManager from '../coq/serapi/workers/TCPManager';
 
 Vue.use(TabsPlugin);
 Vue.use(ModalPlugin);
@@ -81,7 +79,6 @@ export default {
       currentTab: 0,
       tabs: [],
       tabIdCounter: 0,
-      socket: null,
       shortKeys: new ShortKeys(),
       mainBus: new Vue,
     };
@@ -354,7 +351,7 @@ export default {
           return;
         }
       }
-      window.location.href = 'index.html';
+      this.$router.push({name: 'home'});
     },
 
     /**
@@ -447,8 +444,6 @@ export default {
 
         this.socket.stopAll(sendClose);
       });
-
-      this.socket = new TCPManager;
     }
   },
   mounted: function() {
@@ -458,10 +453,10 @@ export default {
 
     window.onresize = this.refreshExecGutters;
 
-    const url = window.location.href;
+    const query = this.$route.query;
 
-    if (url.includes('?')) {
-      const parameter = url.split('?').pop();
+    if (query.hasOwnProperty('location')) {
+      const parameter = query.location;
       const filePath = decodeURIComponent(parameter);
       this.tabs.push({
         id: this.tabIdCounter++,

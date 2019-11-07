@@ -2,7 +2,7 @@
   <li class="recent-file"
       :title="fileInfo.location"
       @click="openRecentFile(fileInfo)">
-      {{   fileInfo.name   }}
+      {{ fileInfo.name }}
   </li>
 </template>
 
@@ -30,7 +30,7 @@ export default {
       const notebook = new Notebook();
       notebook.setFilePath(location);
       notebook.read(() => {
-        window.location = 'editpage.html?' + encodeURIComponent(location);
+        this.$router.push({name: 'edit', query: {location}});
       }, (e) => {
         let dialogOptions;
         if (e instanceof SyntaxError) {

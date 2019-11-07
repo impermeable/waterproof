@@ -1,5 +1,5 @@
 {
-  "exerciseSheet": false,
+  "exerciseSheet": true,
   "blocks": [
     {
       "type": "text",
@@ -40,31 +40,7 @@
     },
     {
       "type": "code",
-      "text": "Take M : ℝ. Assume M_is_sup_A : (is_sup A M).\nTake ε : ℝ. Assume ε_gt_0 : (ε > 0)."
-    },
-    {
-      "type": "text",
-      "text": "We need to show that there exists an $x : \\mathbb{R}$ such that $x \\in A$ and $x > M - \\varepsilon$. "
-    },
-    {
-      "type": "code",
-      "text": "We argue by contradiction.\n"
-    },
-    {
-      "type": "text",
-      "text": "So suppose $\\neg (\\exists x \\in M, x \\in A \\text{ and } x > M - \\varepsilon)$."
-    },
-    {
-      "type": "code",
-      "text": "It holds that (∀ x : ℝ, x ∈ A ⇒ ¬ (x > M - ε)) (H2).\nIt holds that (∀ x : ℝ, x ∈ A ⇒ (x ≤ M - ε)) (H3).\nExpand the definition of is_sup in M_is_sup_A.\nIt holds that (M ≤ M - ε) (H4)."
-    },
-    {
-      "type": "text",
-      "text": "On the other hand..."
-    },
-    {
-      "type": "code",
-      "text": "It holds that (¬ M ≤ M - ε) (H6). \ncontradiction... Qed."
+      "text": "Admitted."
     },
     {
       "type": "input",
@@ -99,58 +75,6 @@
       "type": "input",
       "start": true,
       "id": "input-1"
-    },
-    {
-      "type": "code",
-      "text": "Take M : ℝ. Take z : ℝ. Assume M_is_sup_A"
-    },
-    {
-      "type": "text",
-      "text": ": $M = \\sup A$"
-    },
-    {
-      "type": "code",
-      "text": ". Assume H1"
-    },
-    {
-      "type": "text",
-      "text": ": for all $\\varepsilon : \\mathbb{R}$, if $\\varepsilon >0$ then there exists $x : \\mathbb{R}$ such that $x \\in A$ and $x > z - \\varepsilon$"
-    },
-    {
-      "type": "code",
-      "text": "."
-    },
-    {
-      "type": "text",
-      "text": "We will now "
-    },
-    {
-      "type": "code",
-      "text": "apply"
-    },
-    {
-      "type": "text",
-      "text": "the earlier lemma"
-    },
-    {
-      "type": "code",
-      "text": "aux_2b_2."
-    },
-    {
-      "type": "text",
-      "text": "Hence it suffices to show that for all $\\varepsilon : \\mathbb{R}$, if $\\varepsilon > 0$ then $M > z - \\varepsilon$."
-    },
-    {
-      "type": "code",
-      "text": "Take ε : ℝ. Assume ε_gt_0 : (ε > 0).\nIt holds that (∃ x : ℝ, (x ∈ A) ∧ x > z - ε) (H2).\n\nChoose x such that x_in_A_and_gt_z_min_ε according to H2."
-    },
-    {
-      "type": "code",
-      "text": "Because M_is_sup_A both\n  M_upp_bd : (is_upper_bound A M)\n    and\n  M_smallest_upp_bd : (∀ b : ℝ, is_upper_bound A b ⇒ M ≤ b).\nExpand the definition of is_upper_bound in M_upp_bd. "
-    },
-    {
-      "type": "code",
-      "text": "Because x_in_A_and_gt_z_min_ε both \n  x_in_A : (x ∈ A)\n    and \n  x_gt_z_min_ε : (x > z - ε). \nIt holds that (x ≤ M) (x_le_M).\nIt follows that (M > z - ε).\nQed."
     },
     {
       "type": "input",

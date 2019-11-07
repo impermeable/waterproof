@@ -1,0 +1,61 @@
+{
+  "exerciseSheet": false,
+  "blocks": [
+    {
+      "type": "text",
+      "text": "# Series"
+    },
+    {
+      "type": "code",
+      "text": "Require Import Reals.\nRequire Import Lra.\nRequire Import Classical.\nRequire Import Classical_Pred_Type.\nRequire Import ClassicalChoice.\n\nRequire Import wplib.Tactics.Tactics.\nRequire Import wplib.Tactics.TacticsContra.\nRequire Import wplib.Lib.sup_and_inf.\nRequire Import wplib.Lib.sequences.\n\nHint Resolve Rabs_Rabsolu.\nHint Resolve Rabs_minus_sym.\nHint Resolve Rmult_lt_0_compat : real.\nHint Resolve Rinv_lt_contravar : real."
+    },
+    {
+      "type": "code",
+      "text": "Lemma sigma_split_v2 :\n  ∀ (a : ℕ → ℝ) (k l N : ℕ),\n    (k < l)%nat ⇒ (l ≤ N)%nat \n      ⇒ sigma a k N = sigma a k (l - 1)%nat + sigma a l N."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake a : (ℕ → ℝ). Take k : ℕ.\nTake l : ℕ. Take N : ℕ.\nAssume k_lt_N. Assume l_le_N.\nIt holds that (l = S (l - 1)%nat ) (H1).\nrewrite H1 at 2.\napply sigma_split with (low := k) (k := (l-1)%nat) (high := N).\nThis follows immediately. This follows immediately.\nQed."
+    },
+    {
+      "type": "code",
+      "text": "Notation partial_sums := sum_f_R0."
+    },
+    {
+      "type": "code",
+      "text": "Definition series_cv_to (a : ℕ → ℝ) (l : ℝ) :=\n  Un_cv (partial_sums a) l."
+    },
+    {
+      "type": "code",
+      "text": "Definition series_cv (a : ℕ → ℝ) :=\n  ∃ l : ℝ, series_cv_to a l."
+    },
+    {
+      "type": "code",
+      "text": "Definition series_cv_abs (a : ℕ → ℝ) :=\n  series_cv (fun n ↦ Rabs( a n ))."
+    },
+    {
+      "type": "code",
+      "text": "Definition series_cv_abs_to (a : ℕ → ℝ) (l : ℝ) :=\n  series_cv_to (fun n ↦ Rabs(a n)) l."
+    },
+    {
+      "type": "code",
+      "text": "Theorem mouse_tail :\n  ∀ (a : ℕ → ℝ) (k l : ℕ) (L : ℝ),\n    (k < l)%nat ⇒\n      ((Un_cv (fun N ↦ sigma a l N) L)\n        ⇔ \n      (Un_cv (fun N ↦ sigma a k N) ((sigma a k (l-1)) + L)))."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake a : (ℕ → ℝ). Take k : ℕ.\nTake l : ℕ. Take L : ℝ. Assume k_lt_l.\nsplit.\nAssume sigma_l_cv.\nBy lim_const_seq it holds that\n  (Un_cv (fun N ↦ sigma a k (l-1)%nat) (sigma a k (l-1)%nat)) (H1).\nBy CV_plus it holds that \n  (Un_cv (fun N ↦ sigma a k (l-1)%nat \n                  + \n                  sigma a l N)\n         (sigma a k (l-1)%nat + L) ) (H2).\nWe claim that\n  (∃ M : ℕ, \n    ∀ n : ℕ, (n ≥ M)%nat ⇒\n      sigma a k n = sigma a k (l - 1)%nat + sigma a l n ) (H3).\nChoose M := l%nat.\nTake n : ℕ. Assume n_ge_l. Apply sigma_split_v2. assumption. assumption."
+    },
+    {
+      "type": "code",
+      "text": "apply evt_eq_seq_conv_to_same_lim\n  with (a := fun N ↦ sigma a k (l-1) + sigma a l N)\n       (b := fun N ↦ sigma a k N).\nChoose M such that H5 according to H3.\nChoose k0 := M.\nTake n : ℕ. Assume n_ge_M : (n ≥ M)%nat.\nIt holds that (sigma a k n = sigma a k (l-1) + sigma a l n) (H6).\nIt holds that (sigma a k (l-1) + sigma a l n = sigma a k n).\nApply H2."
+    },
+    {
+      "type": "code",
+      "text": "Assume sigma_k_cv.\nBy lim_const_seq it holds that\n  (Un_cv (fun N ↦ sigma a k (l-1)) (sigma a k (l-1))) (H7).\nBy CV_minus it holds that\n  (Un_cv (fun N ↦ sigma a k N - (sigma a k (l-1)))\n         (sigma a k (l-1) + L - (sigma a k (l-1)))) (H8).\nWe claim that\n  (∃ M : ℕ, \n    ∀ n : ℕ, (n ≥ M)%nat ⇒\n      sigma a k n - sigma a k (l - 1)%nat = sigma a l n ) (H9).\nChoose M := l.\nTake n : ℕ. Assume n_ge_l : (n ≥ l)%nat. \nBy sigma_split_v2 it holds that \n  (sigma a k n = sigma a k (l - 1)%nat + sigma a l n) (H10).\nIt follows that (sigma a k n - sigma a k (l - 1) =\nsigma a l n).\n\nRewrite using (L = sigma a k (l-1) + L - sigma a k (l-1)).\napply evt_eq_seq_conv_to_same_lim\n  with (a := fun n ↦ sigma a k n - sigma a k (l-1))\n       (b := fun n ↦ sigma a l n).\nChoose M such that H11 according to H9.\nChoose k0 := M.\nApply H11.\nApply H8.\nQed."
+    },
+    {
+      "type": "code",
+      "text": " "
+    }
+  ]
+}

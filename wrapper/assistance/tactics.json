@@ -6,7 +6,7 @@
     },
     {
         "name": "Assume (*name*) : ((*statement*)).",
-        "description": "If you need to show A ⇒ B, this allows you to assume that A holds, giving this assumption the name (*name*).",
+        "description": "If you need to show (*statement*) ⇒ B, this allows you to assume that A holds, giving this assumption the name (*name*).",
         "example": "Lemma A_impl_A : forall A : Prop, A ⇒ A.\nProof.\nTake A : Prop.\nAssume H_A.\nApply H_A.Qed."
     },
     {
@@ -15,14 +15,24 @@
         "example": "It holds that (3=3) (three_equals_itself)."
     },
     {
-        "name": "This follows immediately.",
+        "name": "It holds that ((*current goal*)).",
         "description": "Tries to automatically show the current goal.",
-        "example": "Lemma 2_is_2 : 2 = 2. \nProof.\nThis follows immediately.\nQed."
+        "example": "Lemma 2_is_2 : 2 = 2. \nProof.\nIt holds that (2 = 2).\nQed."
     },
     {
         "name": "We claim that ((*statement*)) ((*name*)).",
         "description": "Lets you first show (*statement*) before continuing with the rest of the proof. After you showed (*statement*), it will be available as a hypothesis with name (*name*).",
         "example": "We claim that (2 = 2) (two_is_two)."
+    },
+    {
+        "name": "We argue by contradiction.",
+        "description": "Assumes the opposite of what you need to show. Afterwards, you can try to derive a contradiction.",
+        "example": "We argue by contradiction."
+    },
+    {
+        "name": "Contradiction",
+        "description": "If you find two contradictory hypotheses in the proof context, you can write \"Contradiction\" to finish the proof of the current goal.",
+        "example": "Contradiction."
     },
     {
         "name": "Because (*name_combined_hyp*) both (*name_hyp_1*) and (*name_hyp_2*).",
@@ -70,8 +80,8 @@
         "example": "Lemma ex_split : forall A B: Prop, A ⇒ (B ⇒ A ∧ B).\nProof.\n Take A : Prop. Take B : Prop.\nAssume H_A. Assume H_B.\n(*We*) split (*the goal*).\nApply H_A. Apply H_B. Qed."
     },
     {
-        "name": "reflexivity",
-        "description": "Use this tactic to show that t=t. Sometimes you can even use it to show that u=t, if after some simplication the terms u and t reduce to the same expression.",
-        "example": "Lemma ex_refl : 1=1.\nProof.\n (*This follows by*) reflexivity.\nQed."
+        "name": "We need to show that ((*(alternative) formulation of current goal*))",
+        "description": "Generally makes a proof more readable. Has the additional functionality that you can write a slightly different but equivalent formulation of the goal: you can for instance change names of certain variables.",
+        "example": "Lemma example_reflexivity : 0 = 0.\nProof.\nWe need to show that (0=0)."
     }
 ]

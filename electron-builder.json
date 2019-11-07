@@ -1,7 +1,7 @@
 {
   "productName": "Waterproof",
   "remoteBuild": true,
-  "extraFiles": ["wrapper/assistance"],
+  "extraFiles": ["wrapper/assistance", "wrapper/wplib"],
   "win": {
     "extraFiles": ["wrapper/win"]
   },

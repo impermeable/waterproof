@@ -1,0 +1,245 @@
+{
+  "exerciseSheet": false,
+  "blocks": [
+    {
+      "type": "text",
+      "text": "# Tactics for Waterproof"
+    },
+    {
+      "type": "code",
+      "text": "Require Import Rbase.\nRequire Import Rfunctions.\nRequire Import SeqSeries.\nRequire Import Rtrigo.\nRequire Import Ranalysis.\nRequire Import Integration.\nRequire Import micromega.Lra.\nRequire Import Omega.\nRequire Import Max.\n(* Require Import Unicode.Utf8. *)\n"
+    },
+    {
+      "type": "text",
+      "text": ""
+    },
+    {
+      "type": "text",
+      "text": "## Custom notations"
+    },
+    {
+      "type": "code",
+      "text": "(** Guarantee indentation and introduce custom notation for forall *)\nNotation \"'for' 'all' x .. y , P\" := (forall x, .. (forall y, P) ..)\n  (at level 200, x binder, y binder, right associativity,\n  format \"'[ ' '[ ' for  all  x .. y ']' , '//'  P ']'\") : type_scope.\n\nNotation \"∀ x .. y , P\" := (forall x, .. (forall y, P) ..)\n  (at level 200, x binder, y binder, right associativity,\n  only parsing) : type_scope.\n\nNotation \"'there' 'exists' x .. y , P \" := (exists x, .. (exists y, P) ..)\n  (at level 200, x binder, y binder, right associativity,\n  format \"'[ ' '[ ' there  exists  x .. y  ']' , '//'  P ']'\") : type_scope.\n\nNotation \"∃ x .. y , P \" := (exists x, .. (exists y, P) ..)\n  (at level 200, x binder, y binder, right associativity,\n  only parsing) : type_scope.\n\nNotation \"'fun' x .. y '↦' t\" := (fun x => .. (fun y => t) ..)\n  (at level 200, x binder, y binder, right associativity,\n  format \"'[ ' '[ ' 'fun' x .. y ']' '↦' '/' t ']'\").\n\nNotation \"x ∨ y\" := (x \\/ y) (at level 85, right associativity) : type_scope.\nNotation \"x ∧ y\" := (x /\\ y) (at level 80, right associativity) : type_scope.\nNotation \"x → y\" := (x -> y)\n  (at level 99, y at level 200, right associativity,\n   only parsing): type_scope.\nNotation \"x ⇒ y\" := (x -> y)\n  (at level 99, y at level 200, right associativity,\n   only parsing): type_scope.\n(* the notation below is fun, but is no good for functions *)\n(* need to see if this can be adapted so it only uses \n   this notation for propositions *)\n(*Notation \"'if' x 'then' y\" := (x -> y)\n  (at level 99, y at level 200, right associativity): prop_scope.*)\nNotation \"x ⇨ y\" := (x -> y)\n  (at level 99, y at level 200, right associativity): type_scope.\n\nNotation \"x ↔ y\" := (x <-> y) (at level 95, no associativity): type_scope.\nNotation \"x ⇔ y\" := (x <-> y) (at level 95, no associativity): type_scope.\nNotation \"¬ x\" := (~x) (at level 75, right associativity) : type_scope.\nNotation \"x ≠ y\" := (x <> y) (at level 70) : type_scope.\n\nNotation \"x ≤ y\" := (le x y) (at level 70, no associativity) : nat_scope.\nNotation \"x ≥ y\" := (ge x y) (at level 70, no associativity) : nat_scope.\n\nNotation \"x ≤ y\" := (x <= y)%R (at level 70, no associativity) : R_scope.\nNotation \"x ≥ y\" := (x >= y)%R (at level 70, no associativity) : R_scope.\n\nOpen Scope R_scope.\n\n(* TODO: the below definition doesn't work very nicely *)\nNotation \"x ↦ y\" := (fun x => y) (at level 0).\n\nNotation \"'ℕ'\" := (nat).\nNotation \"'ℝ'\" := (R).\n\n(** Add field and lra to tactics to try automatically *)\n\nHint Extern 3 ( _ = _ ) => field : real.\nHint Extern 3 ( _ <= _ ) => lra : real.\nHint Extern 3 ( _ >= _ ) => lra : real.\nHint Extern 3 ( _ < _ ) => lra : real.\nHint Extern 3 ( _ > _ ) => lra : real.\n\n"
+    },
+    {
+      "type": "text",
+      "text": "## A powertool"
+    },
+    {
+      "type": "code",
+      "text": "(* TODO: in some cases, eauto has left some existentials.\n   this may be undesired, but eauto can be very powerful...\n   one option is to let waterproof check whether \n   existentials are created and block this behavior. *)\n\nLtac wp_power :=\n  first [ solve [auto with *]\n        | solve [eauto with *]\n        | solve [firstorder (auto with *)]\n        | solve [firstorder (eauto with *)]]."
+    },
+    {
+      "type": "text",
+      "text": ""
+    },
+    {
+      "type": "text",
+      "text": "## Introducing variables\n\nThe following is a strict version of `intro`, that checks the type of the variable to introduce."
+    },
+    {
+      "type": "code",
+      "text": "Ltac intro_strict s t :=\n  match goal with\n    | [ |- forall _ : t, _ ] => intro s\n  end.\n"
+    },
+    {
+      "type": "text",
+      "text": ""
+    },
+    {
+      "type": "text",
+      "text": "Take an arbitrary element of a certain type."
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"Take\" ident(s) \":\" constr(t):=\n  intro_strict s t.\n"
+    },
+    {
+      "type": "text",
+      "text": ""
+    },
+    {
+      "type": "text",
+      "text": "Variation of intro tactic that allows one to check that what you assume is really what you need to assume."
+    },
+    {
+      "type": "code",
+      "text": "Ltac assume_strict s t :=\n  match goal with\n    | [ |- t -> _ ] => intro s\n  end.\n"
+    },
+    {
+      "type": "text",
+      "text": ""
+    },
+    {
+      "type": "text",
+      "text": "Assuming hypotheses."
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"Assume\" ident(s) :=\n  intro s.\n\nTactic Notation \"Assume\" ident(s) \":\" constr(t) :=\n  assume_strict s t."
+    },
+    {
+      "type": "text",
+      "text": "## Checking the context\n\nThe following tactics let the user record in the proof script various aspects of the current context.\n\nThe tactic call `goal_check t` checks if the current goal can equivalently be written as `t`, otherwise it fails."
+    },
+    {
+      "type": "code",
+      "text": "Ltac goal_check t :=\n  tryif (change t) \n    then (idtac \"We indeed need to show that\" t)\n    else fail \"This is not the current goal\".\n\n(** Make it possible to verify the goal t by writing\n    \"We need to show that t\". *)\nTactic Notation \"We\" \"need\" \"to\" \"show\" \"that\" constr(t) :=\n  goal_check t.\n\n(** Make it possible to verify the goal t by writing\n    \"To show : t\". *)\nTactic Notation \"To\" \"show\" \":\" constr(t) :=\n  goal_check t.\n\n(** The tactic (hypo_check s t) checks if t is one of the \n    current hypothesis, and if so, it renames it into s *)\nLtac hypo_check s t:=\nmatch goal with \n| [H : t |- _] => rename H into s\n| _ => fail\nend."
+    },
+    {
+      "type": "text",
+      "text": ""
+    },
+    {
+      "type": "text",
+      "text": "## Choosing variables that exist"
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"Choose\" constr(t):=\n  exists t.\n\nTactic Notation \"Choose\" ident(s) \":=\" constr(t) :=\n  exists t.\n\nTactic Notation \"Choose\" ident(s) \n                \"such\" \"that\" ident(u)\n                \"according\" \"to\" constr(v) (*\":\" constr(t)*):=\n  destruct v as [s u].\n\n(*Tactic Notation \"Choose\" ident(s)\n                \"such\" \"that\" ident(u)\n                \"according\" \"to\" ident(v)\n                \"with\" constr(t) :=\n  destruct v with t as [s u]. *)\n\nTactic Notation \"Choose\" ident(s)\n                \"such\" \"that\" ident(u)\n                \"according\" \"to\" constr(v)\n                \"with\" constr(t) :=\n  destruct v with t as [s u]."
+    },
+    {
+      "type": "text",
+      "text": ""
+    },
+    {
+      "type": "text",
+      "text": "## Forward reasoning"
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"Because\" ident(s) \n  \"both\" ident(u) \"and\" ident(v) :=\n  destruct s as [u v].\n\nTactic Notation \"Because\" ident(s) \n  \"both\" ident(u) \":\" constr(t_u)\n  \"and\"  ident(v) \":\" constr(t_v):=\n  destruct s as [u v].\n\nTactic Notation \"Because\" ident(s)\n  \"either\" ident(u) \"or\" ident(v) :=\n  destruct s as [u | v].\n\n"
+    },
+    {
+      "type": "text",
+      "text": ""
+    },
+    {
+      "type": "text",
+      "text": "## Forward reasoning by automation"
+    },
+    {
+      "type": "code",
+      "text": "(** Apply with goal check\n    The next tactics verify whether certain steps have the desired effect. *)\nLtac new_goal_verified_apply s t :=\n  apply s;\n  match goal with \n  | [|- t] => idtac \"Expected goal was produced\"\n  | _ => fail \"Lemma did not produce expected outcome\"\n  end.\n\n(*Tactic Notation \"By\" constr(s) \n  \"it\" \"suffices\" \"to\" \"show\" \"that\"\n  constr(t) :=\n  new_goal_verified_apply s t.*)\n\n(** A powerful forward reasoning tactic. \n    The sequential trying of auto and eauto \n    is there because eauto can be much slower. \n    TODO: is this what we want? *)\nLtac new_hyp_verified_pose_proof s t u:=\n  assert (u : t) by first [ solve [auto using s with *]\n                          | solve [eauto using s with *]\n                          | solve [firstorder using s]\n                          | solve [firstorder (eauto with *) using s]\n                          | idtac \"Waterproof could not find a proof. If you believe the statement should hold, try making a smaller step\"].\n\nTactic Notation \"By\" constr(s)\n  \"it\" \"holds\" \"that\" constr(t) \"(\"ident(u)\")\"\n  := new_hyp_verified_pose_proof s t u.\n\n(*Tactic Notation \"By\" constr(s0) \",\" constr(s1)\n  \"it\" \"holds\" \"that\" constr(t) \"(\"ident(u)\")\"\n  :=*)\n\n(* TODO: align syntax with \"By ... it holds that\" *)\nTactic Notation \"It\" \"holds\" \"that\"\n  constr(t) \"(\" ident(u) \")\" :=\n  assert (u : t) by first [ wp_power\n                          | idtac \"Waterproof could not find a proof. If you believe the statement should hold, try making a smaller step\"].\n\nTactic Notation \"It\" \"holds\" \"that\"\n  constr(t) :=\n  match goal with\n  | [|-t] => wp_power\n  | _ => fail \"Either Waterproof could not find a proof, or the provided statement does not correspond to the current goal.\"\n  end.\n\nTactic Notation \"It\" \"follows\" \"that\"\n  constr(t) :=\n  match goal with\n  | [|-t] => wp_power\n  | _ => fail \"Either Waterproof could not find a proof, or the provided statement does not correspond to the current goal.\"\n  end."
+    },
+    {
+      "type": "text",
+      "text": ""
+    },
+    {
+      "type": "text",
+      "text": "TODO: preferably deprecate this notation."
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"This\" \"follows\" \"immediately\" :=\n  wp_power.\n\nTactic Notation \"follows\" \"immediately\" := \n  wp_power."
+    },
+    {
+      "type": "text",
+      "text": ""
+    },
+    {
+      "type": "text",
+      "text": "## Applying one of the assumptions"
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"This\" \"follows\" \"by\" \"assumption\" := \n  assumption."
+    },
+    {
+      "type": "text",
+      "text": ""
+    },
+    {
+      "type": "text",
+      "text": "## Claims"
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"We\" \"claim\" \"that\" \n  constr(t) \"(\" ident(u) \")\" :=\n  assert (u : t)."
+    },
+    {
+      "type": "text",
+      "text": "## Rewriting\n\nTODO: add rewrite with at\nTODO: add support for rewriting in and at multiple places at once\nTODO: clear the proved equality?"
+    },
+    {
+      "type": "text",
+      "text": ""
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"Rewrite\" \"using\" constr(t) :=\n  let u := fresh in\n    assert (u : t) by wp_power;\n  rewrite u.\n\nTactic Notation \"rewrite\" \"using\" constr(t) :=\n  let u := fresh in\n    assert (u : t) by wp_power;\n  rewrite u.\n\nTactic Notation \"Rewrite\" \"using\" constr(t) \"in\" ident(s):=\n  let u := fresh in\n    assert (u : t) by wp_power;\n  rewrite u in s.\n\nTactic Notation \"rewrite\" \"using\" constr(t) \"in\" ident(s):=\n  let u := fresh in\n    assert (u : t) by wp_power;\n  rewrite u in s.\n\nTactic Notation \"Rewrite\" \"<-\" \"using\" constr(t) :=\n  let u := fresh in \n    assert (u : t) by wp_power;\n  rewrite<-u."
+    },
+    {
+      "type": "text",
+      "text": ""
+    },
+    {
+      "type": "text",
+      "text": "## Applying lemmas and theorems"
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"Apply\" uconstr(t) :=\n  apply t."
+    },
+    {
+      "type": "text",
+      "text": ""
+    },
+    {
+      "type": "text",
+      "text": "Note: when using `constr(t)` instead of `uconstr(t)`, the use of wildcareds is no longer possible.\n\nTODO: add option to do an 'apply with'."
+    },
+    {
+      "type": "text",
+      "text": "## Expanding definitions\n\nTODO: add more options for these tactics."
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"Unfold\" constr(t) :=\n  unfold t.\n\nTactic Notation \"Unfold\" constr(t) \"in\" ident(s):=\n  unfold t in s.\n\nTactic Notation \"Expand\" \"the\" \"definition\" \"of\" reference(t) :=\n  unfold t.\n\nTactic Notation \"Expand\" \"the\" \"definition\" \"of\" \n  reference(t) \"in\" ident(s) :=\n  unfold t in s."
+    },
+    {
+      "type": "text",
+      "text": ""
+    },
+    {
+      "type": "text",
+      "text": "## Strings of (in)equalities\n\nThe following tactics should help in situations where in a pen-and-paper proof we would write a string equalities and inequalites.\n\n**Note:** As of now, forward reasoning by \"it holds that\" seems to be a better option.\n\nThe tactic `trans_ineq eq_or_ineq` reduces the inequality in the goal to a new one by using `eq_or_ineq`."
+    },
+    {
+      "type": "code",
+      "text": "Ltac trans_ineq eq_or_ineq := \n  match goal with \n  | [|-?x <= ?z] => \n    match (type of eq_or_ineq) with \n    | (x <= ?y) => apply (Rle_trans x y z eq_or_ineq)\n    | _ => idtac \"not a less-than-or-equal-to inequality\"\n    end\n  | _ => idtac \"Goal is not a less-than-or-equal-to inequality.\"\n  end."
+    },
+    {
+      "type": "text",
+      "text": ""
+    },
+    {
+      "type": "text",
+      "text": "## Defining new variables"
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"Define\" ident(u) \":=\" constr(t) :=\n  set (u := t)."
+    },
+    {
+      "type": "text",
+      "text": ""
+    },
+    {
+      "type": "text",
+      "text": "## Reflexivity"
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"This\" \"follows\" \"by\" \"reflexivity\" :=\n  reflexivity."
+    },
+    {
+      "type": "text",
+      "text": "## Simplification\n\nTODO: the following tactic notation may need to be improved."
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"Simplify\" \"what\" \"we\" \"need\" \"to\" \"show\" :=\n  simpl."
+    }
+  ]
+}

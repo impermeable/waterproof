@@ -1,0 +1,145 @@
+{
+  "exerciseSheet": false,
+  "blocks": [
+    {
+      "type": "text",
+      "text": "# Sequences"
+    },
+    {
+      "type": "code",
+      "text": "Require Import Reals.\nRequire Import Lra.\nRequire Import Classical.\nRequire Import Classical_Pred_Type.\nRequire Import ClassicalChoice.\n\nRequire Import wplib.Tactics.Tactics.\nRequire Import wplib.Tactics.TacticsContra.\nRequire Import wplib.Lib.sup_and_inf.\n\nHint Resolve Rabs_Rabsolu.\nHint Resolve Rabs_minus_sym.\nHint Resolve Rmult_lt_0_compat : real.\nHint Resolve Rinv_lt_contravar : real."
+    },
+    {
+      "type": "text",
+      "text": "## Preparation for a simple limit"
+    },
+    {
+      "type": "code",
+      "text": "Lemma archimed_mod :\n  ∀ x : ℝ, ∃ n : ℕ, INR(n) > x."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake x : ℝ.\ndestruct (Rle_lt_dec x 0).\nChoose n := 1%nat. \nIt holds that (INR 1 > INR 0) (H1).\nRewrite using (0 = INR(0)) in r.\nIt follows that (INR 1 > x).\nBy archimed it holds that (IZR(up x) > x ∧ IZR( up x ) - x ≤ 1) (H2).\nIt holds that (IZR( up x ) > x) (H3).\nIt holds that (0 < IZR( up x )) (H4).\nBy lt_0_IZR it holds that (0 < up x)%Z (H5).\nIt holds that (0 <= up x)%Z (H6).\nBy IZN it holds that (∃ k : ℕ, up x = Z.of_nat k) (H7).\nChoose k such that up_x_is_k according to H7.\nChoose n := k.\nBy INR_IZR_INZ it holds that (INR k = IZR (Z.of_nat k)) (H8).\nRewrite using (INR k = IZR (Z.of_nat k)).\nRewrite using (Z.of_nat k = up x).\nassumption.\nQed."
+    },
+    {
+      "type": "code",
+      "text": "Lemma evt_eq_seq_conv_to_same_lim :\n  ∀ (a : ℕ → ℝ) (b : ℕ → ℝ) (l : ℝ),\n    (∃ k : ℕ,\n      ∀ n : ℕ, (n ≥ k)%nat ⇒ a n = b n) ⇒ Un_cv a l ⇒ Un_cv b l."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake a : (ℕ → ℝ). Take b : (ℕ → ℝ). Take l : ℝ.\nAssume a_eq_b. Assume a_cv_to_l. Expand the definition of Un_cv.\nTake ε : ℝ. Assume ε_gt_0.\nChoose n1 such that a_close_to_l according to (a_cv_to_l ε ε_gt_0).\nChoose k such that an_is_bn_for_n_ge_k according to a_eq_b.\nChoose N:= (Nat.max n1 k). \nTake n : ℕ. Assume n_ge_N. \nIt holds that (a n = b n) (H3). \nRewrite using (b n = a n). Apply a_close_to_l. \nWe need to show that (n ≥ n1)%nat.\nThis follows immediately.\nQed."
+    },
+    {
+      "type": "code",
+      "text": "Lemma eq_seq_conv_to_same_lim :\n  ∀ (a : ℕ → ℝ) (b : ℕ → ℝ) (l : ℝ),\n    (∀ n : ℕ, a n = b n) ⇒ Un_cv a l ⇒ Un_cv b l."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake a : (ℕ → ℝ). Take b : (ℕ → ℝ). \nTake l : ℝ. Assume seq_eq: (∀ n : ℕ, a n = b n).\nApply evt_eq_seq_conv_to_same_lim.\nWe need to show that (∃ k : ℕ, ∀ n : ℕ, \n  (n ≥ k)%nat ⇒ a n = b n).\nChoose k := O.\nTake n : ℕ. Assume n_ge_0. Apply seq_eq.\nQed."
+    },
+    {
+      "type": "text",
+      "text": "## A simple limit"
+    },
+    {
+      "type": "code",
+      "text": "Lemma lim_const_seq :\n  ∀ (c : ℝ), Un_cv (fun (n : ℕ) ↦ c) c."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake c : ℝ. Expand the definition of Un_cv.\nTake ε : ℝ. Assume ε_gt_0.\nChoose N := O.\nTake n : ℕ. Assume n_ge_N.\nBy R_dist_eq it holds that (R_dist c c = 0) (H1).\nRewrite using (R_dist c c = 0).\nassumption.\nQed."
+    },
+    {
+      "type": "code",
+      "text": "Definition n_to_1_over_n_plus_1 :=\n  fun (n : ℕ) ↦ 1 / (INR(n) + 1)."
+    },
+    {
+      "type": "code",
+      "text": "Lemma one_over_n_plus_1_to_0 :\n  Un_cv n_to_1_over_n_plus_1 0."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nExpand the definition of Un_cv.\nTake ε : ℝ. Assume ε_gt_0 : (ε > 0).\n Choose n1 such that H_large according to \n   (archimed_mod (/ε)).\n Choose N := n1.\n   Take n : ℕ.\n   Assume n_ge_n1 : (n ≥ n1)%nat.\n   Expand the definition of R_dist.\n   Apply Rabs_def1.\n   Expand the definition of n_to_1_over_n_plus_1.\n   Rewrite using (1 / (INR n + 1) - 0 = 1 / (INR n + 1)).\n   We need to show that (1 / (INR n+1) < ε ).\n     Rewrite using (ε = / / ε).\n       We need to show that (1 / (INR n+1) < / / ε ).\n         Rewrite using (1/(INR n+1) = /(INR n+1)).\n       We need to show that (/ (INR n+1) < / / ε ).\n       Apply (Rinv_lt_contravar : \n         for all r1 r2 : R, 0 < r1 * r2 -> r1 < r2 -> / r2 < / r1).\n       We need to show that (0 < / ε * (INR n + 1)).\n         This follows immediately.\n       \n       It holds that (/ ε < INR n1) (H2).\n       By le_INR it holds that (INR n1 ≤ INR n ) (H3).\n       It holds that (INR n < INR n + 1) (H4).\n       We need to show that (/ ε < INR n + 1 ).\n       This follows immediately.\n     Expand the definition of n_to_1_over_n_plus_1.\n     Rewrite using (1/(INR n + 1) - 0 = / (INR n + 1)).\n     It holds that (INR n + 1 > 0) (H5).\n     It holds that (/(INR n + 1) > 0) (H6).\n     This follows immediately.\nQed."
+    },
+    {
+      "type": "code",
+      "text": "Lemma min_1_over_n_plus_1_to_0 :\n  Un_cv (fun (n : ℕ) ↦ - (1 / (INR(n) + 1))) 0."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nBy one_over_n_plus_1_to_0 it holds that (Un_cv n_to_1_over_n_plus_1 0) (H1).\nBy (CV_opp) it holds that (Un_cv (opp_seq n_to_1_over_n_plus_1) (-0)) (H2).\nRewrite using (-0 = 0) in H2.\nExpand the definition of opp_seq in H2.\nExpand the definition of n_to_1_over_n_plus_1 in H2.\nassumption.\nQed."
+    },
+    {
+      "type": "text",
+      "text": "## The squeeze theorem"
+    },
+    {
+      "type": "code",
+      "text": "Theorem squeeze_theorem :\n  ∀ (a : ℕ → ℝ) (b : ℕ → ℝ) (c : ℕ → ℝ) (l : ℝ),\n    (∀ n : ℕ, a n ≤ b n ∧ b n ≤ c n) ⇒\n      Un_cv a l ⇒ Un_cv c l ⇒ Un_cv b l."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake a : (ℕ → ℝ). Take b : (ℕ → ℝ).\nTake c : (ℕ → ℝ). Take l : ℝ.\nAssume b_squeezed : (∀ n : ℕ, a n ≤ b n ∧ b n ≤ c n).\nAssume a_cv_to_l. Assume c_cv_to_l.\nExpand the definition of Un_cv.\nTake ε : ℝ. Assume ε_gt_0. \nChoose Na such that a_close_to_l according to (a_cv_to_l ε ε_gt_0).\nChoose Nc such that c_close_to_l according to (c_cv_to_l ε ε_gt_0).\nChoose N := (Nat.max Na Nc).\nTake n : ℕ. Assume n_ge_N.\nIt holds that (n ≥ Na)%nat (n_ge_Na).\nIt holds that (R_dist (a n) l < ε) (d_an_l_lt_ε).\nExpand the definition of R_dist in d_an_l_lt_ε.\nRewrite using (Rabs( a n - l  ) = Rabs( l - a n)) in d_an_l_lt_ε.\nBy Rabs_def2 it holds that (l - a n < ε ∧- ε < l - a n) (H2).\nIt holds that (- ε < l - a n) (H3).\nIt holds that (n ≥ Nc)%nat (n_ge_Nc).\nIt holds that (R_dist (c n) l < ε) (d_cn_l_lt_ε).\nExpand the definition of R_dist in d_cn_l_lt_ε.\nBy Rabs_def2 it holds that (c n - l < ε ∧ - ε < c n - l) (H4).\nIt holds that (c n - l < ε) (H5).\nExpand the definition of R_dist.\nApply Rabs_def1. \nBy b_squeezed it holds that (a n ≤ b n ∧ b n ≤ c n) (H6).\nBy b_squeezed it holds that (a n ≤ b n) (H7). \nWe need to show that ( b n - l < ε).\nThis follows immediately.\nIt holds that (a n ≤ b n ∧ b n ≤ c n) (H6).\nBy b_squeezed it holds that (b n ≤ c n) (H8).\nWe need to show that (- ε < b n - l).\nThis follows immediately.\nQed."
+    },
+    {
+      "type": "code",
+      "text": "Lemma upp_bd_seq_is_upp_bd_lim :\n  ∀ (a : ℕ → ℝ) (L M: ℝ),\n    (∀ n : ℕ, a n ≤ M) ⇒ \n      (Un_cv a L) ⇒ L ≤ M."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake a : (ℕ → ℝ).\nTake L : ℝ. Take M : ℝ.\nAssume a_bdd_by_M : (∀ n : ℕ, a n ≤ M).\nAssume a_cv_to_L : (Un_cv a L).\nBy Rle_or_lt it holds that (L ≤ M ∨ M < L) (H).\nBecause H either L_le_M or M_lt_L."
+    },
+    {
+      "type": "text",
+      "text": "We first consider the case that $L \\leq M$. "
+    },
+    {
+      "type": "code",
+      "text": "It follows that (L ≤ M)."
+    },
+    {
+      "type": "text",
+      "text": "\nNext, we consider the case $M < L$."
+    },
+    {
+      "type": "code",
+      "text": "Define ε := (L-M).\nExpand the definition of Un_cv in a_cv_to_L.\nWe claim that (∃ N : ℕ, ∀n : ℕ, (n ≥ N)%nat ⇒ R_dist (a n) L < ε) (H2).\n  Apply a_cv_to_L. It holds that (L - M > 0) (H3). It follows that (ε > 0).\nChoose N such that a_close_to_L according to H2.\nIt holds that (R_dist (a N) L < ε) (H4).\nExpand the definition of R_dist in H4.\nBy Rabs_def2 it holds that (a N - L < ε ∧ (- ε < a N - L)) (H5).\nIt holds that (- ε < a N - L) (H6).\nIt holds that (a N ≤ M) (H7).\nRewrite using (ε = L - M) in H6.\nIt follows that (L ≤ M).\nQed."
+    },
+    {
+      "type": "code",
+      "text": "Lemma low_bd_seq_is_low_bd_lim :\n  ∀ (a : ℕ → ℝ) (L M: ℝ),\n    (∀ n : ℕ, a n ≥ M) ⇒ \n      (Un_cv a L) ⇒ L ≥ M."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake a : (ℕ → ℝ).\nTake L : ℝ. Take M : ℝ. \nAssume a_bdd_by_M : (∀ n : ℕ, a n ≥ M).\nDefine b := (opp_seq a).\nAssume a_cv_to_L : (Un_cv a L).\nBy CV_opp it holds that (Un_cv b (-L)) (H).\nWe claim that (-L ≤ -M) (H1).\nApply (upp_bd_seq_is_upp_bd_lim b).\nWe need to show that (for all n : ℕ, b n ≤ - M).\n  Take n : ℕ. Rewrite using (b = opp_seq a). Expand the definition of opp_seq. This follows immediately.\nWe need to show that (Un_cv b (-L)). This follows immediately.\nIt follows that (L ≥ M).\nQed."
+    },
+    {
+      "type": "text",
+      "text": "## Order and limits"
+    },
+    {
+      "type": "code",
+      "text": "Lemma seq_ordered_lim_ordered :\n  ∀ (a b: ℕ → ℝ) (m l : ℝ),\n    Un_cv a m ⇒ Un_cv b l ⇒\n    (∀ n : ℕ, a n ≤ b n) ⇒ m ≤ l."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake a : (ℕ → ℝ). Take b : (ℕ → ℝ).\nTake m : ℝ. Take l : ℝ.\nAssume a_cv_to_m : (Un_cv a m).\nAssume b_cv_to_l : (Un_cv b l).\nAssume a_b_ordered : (∀ n : ℕ, a n ≤ b n).\nBy Rle_or_lt it holds that (m ≤ l ∨ l < m) (H1).\nBecause H1 either m_le_l or l_lt_m."
+    },
+    {
+      "type": "text",
+      "text": "We first consider the case $m \\leq l$."
+    },
+    {
+      "type": "code",
+      "text": "It holds that (m ≤ l)."
+    },
+    {
+      "type": "text",
+      "text": "Next, we consider the case $l < m$."
+    },
+    {
+      "type": "code",
+      "text": "Define ε := ((m - l)/2).\nExpand the definition of Un_cv in b_cv_to_l.\nExpand the definition of Un_cv in a_cv_to_m.\nIt holds that (m-l > 0) (H2).\nIt holds that ((m-l)/2 > 0) (H3).\nIt holds that (ε > 0) (H4).\nIt holds that (∃ N1 : ℕ, ∀ n : ℕ, (n ≥ N1)%nat ⇒ R_dist (b n) l < ε) (H5).\nIt holds that (∃ N2 : ℕ, ∀ n : ℕ, (n ≥ N2)%nat ⇒ R_dist (a n) m < ε) (H6).\nChoose N1 such that H7 according to H5.\nChoose N2 such that H8 according to H6.\nDefine N3 := (Nat.max N1 N2).\nIt holds that (Nat.max N1 N2 ≥ N1)%nat (H9).\nIt holds that (Nat.max N1 N2 ≥ N2)%nat (H10).\nIt holds that (N3 ≥ N1)%nat (H11).\nIt holds that (N3 ≥ N2)%nat (H12).\nIt holds that (R_dist (b N3) l < ε) (H13).\nIt holds that (R_dist (a N3) m < ε) (H14).\nExpand the definition of R_dist in H13.\nExpand the definition of R_dist in H14.\nBy Rabs_def2 it holds that (a N3 - m < ε ∧ - ε < a N3 - m) (H15).\nBy Rabs_def2 it holds that (b N3 - l < ε ∧ - ε < b N3 - l) (H16).\nIt holds that (a N3 - m < ε) (H17).\nIt holds that (- ε < b N3 - l) (H18).\nRewrite using (ε = (m - l)/2) in H17.\nRewrite using (ε = (m - l)/2) in H18.\nIt holds that (a N3 ≤ b N3) (H19).\nIt follows that (m ≤ l).\nQed."
+    }
+  ]
+}

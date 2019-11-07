@@ -1,8 +1,11 @@
 const fs = require('fs');
 const path = require('path');
 
-const defaultConfigData = {sertopPath: ''};
-const possibleKeys = ['sertopPath'];
+const defaultConfigData = {
+  sertopPath: '',
+  serapiVersion: '',
+};
+const possibleKeys = ['sertopPath', 'serapiVersion'];
 
 /**
  * Read in the configuration file. The function looks for the file
@@ -12,7 +15,7 @@ const possibleKeys = ['sertopPath'];
  * @return {Promise<Object>} Promise with the configuration data
  */
 function readConfiguration(remote) {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     const userPath = remote.app.getPath('userData');
     const configPath = path.join(userPath, 'wpconfig.json');
     let configData = defaultConfigData;
@@ -25,7 +28,7 @@ function readConfiguration(remote) {
         // Write default configuration file
         fs.writeFile(configPath,
             JSON.stringify(configData, null, 4),
-            (error) => {
+            () => {
               console.error('Could not create new configuration file');
             });
       } else {

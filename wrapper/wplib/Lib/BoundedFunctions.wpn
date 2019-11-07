@@ -1,0 +1,349 @@
+{
+  "exerciseSheet": false,
+  "blocks": [
+    {
+      "type": "text",
+      "text": "# Bounded functions "
+    },
+    {
+      "type": "code",
+      "text": "Require Import Reals.\nRequire Import Rcomplete.\n(*Require Import Rfunctions.\nRequire Import SeqSeries.\nRequire Import Rtrigo.\nRequire Import Ranalysis.\nRequire Import Integration.\nRequire Import micromega.Lra.\nRequire Import Omega.\nRequire Import Max.*)\nRequire Import wplib.Tactics.Tactics.\nRequire Import wplib.Notations.Notations.\nRequire Import wplib.Lib.sup_and_inf.\nRequire Import wplib.Lib.series.\n\nHint Resolve Rabs_pos_eq."
+    },
+    {
+      "type": "text",
+      "text": "* TODO: See if we should wrap the contents of the file in a section. "
+    },
+    {
+      "type": "code",
+      "text": ""
+    },
+    {
+      "type": "text",
+      "text": "* We will consider functions defined on a domain D "
+    },
+    {
+      "type": "text",
+      "text": "* We assume that there is an element in D. "
+    },
+    {
+      "type": "text",
+      "text": "* TODO: Should we deal with bounded functions as \r\n    elements of a Coq subsets, making them essentially \r\n    pairs of a function evidence that it is bounded? \r\n    Or, for instance, define norm_inf as a function \r\n    that takes in functions AND evidence that the \r\n    function is bounded? "
+    },
+    {
+      "type": "code",
+      "text": ""
+    },
+    {
+      "type": "text",
+      "text": "* Given a function f : D -> R, the expression is_bdd f \r\n    encodes that f is bounded. "
+    },
+    {
+      "type": "code",
+      "text": "Definition is_bdd {D : Type} := \n  fun (f : D → ℝ)\n    ↦ ∃ (M : ℝ), ∀ x : D, ｜f x｜ ≤ M."
+    },
+    {
+      "type": "text",
+      "text": "* Define the set of bounded functions. "
+    },
+    {
+      "type": "code",
+      "text": "Definition bdd_func {D : Type} := {f : (D → ℝ)| is_bdd f}."
+    },
+    {
+      "type": "text",
+      "text": "* Define (pointwise) addition of two functions "
+    },
+    {
+      "type": "code",
+      "text": "Definition f_plus {D : Type} :=\n  fun (f g : D → R) ↦ (fun (x : D) ↦ f x + g x)."
+    },
+    {
+      "type": "text",
+      "text": "* Define multiplication of a function with a scalar "
+    },
+    {
+      "type": "code",
+      "text": "Definition f_scal_mult {D : Type}:=\n  fun (a : R) (f : D → ℝ) ↦ (fun (x : D) ↦ a * (f x))."
+    },
+    {
+      "type": "code",
+      "text": "Definition f_opp {D : Type} :=\n  fun (f : D → ℝ) ↦ f_scal_mult (-1) f."
+    },
+    {
+      "type": "code",
+      "text": "Definition f_min {D : Type} :=\n  fun (f g : D → ℝ) ↦ (f_plus f (f_opp g))."
+    },
+    {
+      "type": "text",
+      "text": "* Custom notation for sum of two functions.\r\n    TODO: May need to be optimized. "
+    },
+    {
+      "type": "code",
+      "text": "Notation \"f + g\" := (f_plus f g) : func_scope.\nOpen Scope func_scope."
+    },
+    {
+      "type": "text",
+      "text": "* The sum of two bounded functions is bounded. "
+    },
+    {
+      "type": "code",
+      "text": "Lemma sum_bdd_func_bdd {D : Type} :\n  ∀ (f g: D → ℝ), is_bdd f ⇒ is_bdd g ⇒\n    is_bdd (f + g).\nProof.\nTake f : (D → ℝ). Take g : (D → ℝ). \nAssume f_bdd. Assume g_bdd.\nExpand the definition of is_bdd in f_bdd.\nExpand the definition of is_bdd in g_bdd. \nExpand the definition of is_bdd.\nChoose M_f such that f_le_M_f according to f_bdd.\nChoose M_g such that g_le_M_g according to g_bdd.\nWe need to show that\n  (there exists M : ℝ ,\n    for all x : D,\n      ｜f_plus f g x｜ ≤ M).\nChoose M := (M_f + M_g)%R.\nTake x : D.\nExpand the definition of f_plus.\nBy Rabs_triang it holds that (｜f x + g x｜ ≤ ｜f x｜ + ｜g x｜)\n  (H1)."
+    },
+    {
+      "type": "code",
+      "text": "It holds that (Rabs (f x) + Rabs (g x) ≤ M_f + M_g) (H2).\nIt follows that (Rabs (f x + g x) ≤ M_f + M_g).\nQed."
+    },
+    {
+      "type": "code",
+      "text": "Lemma scal_mult_bdd {D : Type} :\n  ∀ (a : ℝ) (f : D → ℝ),\n    is_bdd f ⇒ is_bdd (f_scal_mult a f)."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake a : ℝ. Take f : (D → ℝ).\nAssume f_bdd : (is_bdd f).\nExpand the definition of is_bdd in f_bdd.\nExpand the definition of is_bdd.\nChoose K such that f_abs_bdd_by_K according to f_bdd.\nChoose M := (K * (Rabs a))%R.\nWe need to show that\n  (∀ x : D, Rabs (f_scal_mult a f x) ≤ K * Rabs a).\nTake x : D.\nExpand the definition of f_scal_mult.\nBy Rabs_mult it holds that\n  (Rabs (a * f x) = (Rabs a) * (Rabs (f x))) (H1).\nIt holds that (Rabs (f x) ≤ K) (H2).\nBy Rabs_pos it holds that (Rabs a ≥ 0) (H3).\nBy Rabs_pos it holds that (Rabs (f x) ≥ 0) (H4).\nIt holds that (Rabs a * Rabs (f x) ≤ Rabs a * K) (H5).\nIt follows that (Rabs (a * f x) ≤ K * Rabs a).\nQed."
+    },
+    {
+      "type": "code",
+      "text": "Lemma diff_bdd_func_bdd {D : Type}:\n  ∀ (f g : D → ℝ), is_bdd f \n    ⇒ is_bdd g ⇒ is_bdd (f_min f g)."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake f : (D → ℝ). Take g : (D → ℝ).\nAssume f_bdd : (is_bdd f). Assume g_bdd : (is_bdd g).\nExpand the definition of f_min.\nBy (@scal_mult_bdd D) it holds that (is_bdd (f_opp g)) (H1).\nBy (@sum_bdd_func_bdd D) it holds that (is_bdd (f + f_opp g)) (H2).\nassumption.\nQed."
+    },
+    {
+      "type": "text",
+      "text": "* Definition of addition of two bounded functions "
+    },
+    {
+      "type": "code",
+      "text": "Definition bdd_func_plus {D : Type}:\n  @bdd_func D → @bdd_func D → @bdd_func D\n  := \n    fun (f_w_ev : bdd_func) (g_w_ev : bdd_func) =>\n    (exist (is_bdd))\n       (f_plus (proj1_sig f_w_ev) (proj1_sig g_w_ev))\n       (sum_bdd_func_bdd\n         (proj1_sig f_w_ev)\n         (proj1_sig g_w_ev)\n         (proj2_sig f_w_ev)\n         (proj2_sig g_w_ev))."
+    },
+    {
+      "type": "code",
+      "text": "Definition bdd_func_scal_mult {D : Type}:\n  ℝ → (@bdd_func D → @bdd_func D) :=\n    fun (a : ℝ) ↦ (fun (f_w_ev : bdd_func) ↦ \n      (exist (is_bdd)) \n        (f_scal_mult a (proj1_sig f_w_ev))\n        (scal_mult_bdd a\n                       (proj1_sig f_w_ev)\n                       (proj2_sig f_w_ev)))."
+    },
+    {
+      "type": "code",
+      "text": "Definition bdd_func_opp {D : Type} :=\n  @bdd_func_scal_mult D (-1)."
+    },
+    {
+      "type": "code",
+      "text": "Definition bdd_func_minus {D : Type} \n  (f : @bdd_func D) (g : @bdd_func D) :=\n  bdd_func_plus f (bdd_func_opp g)."
+    },
+    {
+      "type": "code",
+      "text": "Notation \"f + g\" := (bdd_func_plus f g) : bdd_func_scope.\nNotation \"f - g\" := (bdd_func_minus f g) : bdd_func_scope.\nOpen Scope bdd_func_scope."
+    },
+    {
+      "type": "text",
+      "text": "* Definition of the range of a function, \r\n    in the form of a predicate "
+    },
+    {
+      "type": "code",
+      "text": "Definition func_range {D : Type} :=\n  fun (f : D → ℝ) ↦ \n    (fun (y : ℝ) ↦ ∃ x : D, y = f x)."
+    },
+    {
+      "type": "text",
+      "text": "* Definition of the function range of the \r\n    absolute value of a function "
+    },
+    {
+      "type": "code",
+      "text": "Definition func_range_abs {D : Type} :=\n  fun (f : D → ℝ) ↦ func_range (fun y ↦ Rabs (f y))."
+    },
+    {
+      "type": "code",
+      "text": "Definition func_range_abs_with_zero {D : Type} :=\n  fun (f : D → ℝ) \n    ↦ (fun y ↦ (func_range_abs f y) ∨ y = 0)."
+    },
+    {
+      "type": "text",
+      "text": "* If a function is bounded, the range of the absolute value \r\n    of the function is bounded from above. "
+    },
+    {
+      "type": "code",
+      "text": "Lemma func_bdd_implies_bdd_range_w_0 {D : Type}:\n  ∀ (f : D → ℝ),\n    is_bdd f ⇒ bound (func_range_abs_with_zero f)."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\n  Take f : (D → ℝ).\n  Assume f_bdd.\n  Expand the definition of is_bdd in f_bdd.\n  Choose M such that Rabs_f_le_M according to \n    f_bdd.\n  Expand the definition of bound.\n  We need to show that \n    (there exists m : ℝ,\n      is_upper_bound (func_range_abs_with_zero f) m).\n  Choose m := (Rmax M 0).\n  Expand the definition of is_upper_bound.\n  We need to show that\n    (for all y : ℝ,\n      (func_range_abs_with_zero f) y -> y ≤ Rmax M 0).\n  Take y : ℝ.\n  Expand the definition of func_range_abs_with_zero.\n  Expand the definition of func_range_abs.\n  Expand the definition of func_range.\n  Assume original_exists_or_y_zero.\n  Because original_exists_or_y_zero either original_exists or y_zero.\n  Choose x such that f_x_is_y \n    according to original_exists.\n  rewrite f_x_is_y.\n  By Rmax_l it holds that (M ≤ Rmax M 0) (H1).\n  It holds that (Rabs (f x) ≤ M) (H2).\n  It follows that (Rabs (f x) ≤ Rmax M 0).\n  "
+    },
+    {
+      "type": "text",
+      "text": "Now we consider the case $y = 0$."
+    },
+    {
+      "type": "code",
+      "text": "Rewrite using (y=0).\nApply Rmax_r.\nQed."
+    },
+    {
+      "type": "text",
+      "text": "* By assuming the existence of an element in D, \r\n    we can show that there is an element in the range. "
+    },
+    {
+      "type": "code",
+      "text": "Lemma exists_el_in_range_abs_with_zero :\n  ∀ (D : Type) (f : D → ℝ),\n    ∃ z, (func_range_abs_with_zero f) z.\nProof.\nTake D : Type.\nTake f : (D → ℝ).\nChoose z := 0.\nExpand the definition of func_range_abs_with_zero.\nIt follows that (func_range_abs f 0 ∨ 0 = 0).\nQed."
+    },
+    {
+      "type": "code",
+      "text": "Definition norm_inf_with_evidence {D : Type} :=\n  fun (f : bdd_func) ↦\n   (completeness \n     (func_range_abs_with_zero (proj1_sig f))\n     (func_bdd_implies_bdd_range_w_0 \n       (proj1_sig f) (proj2_sig f))\n     (exists_el_in_range_abs_with_zero D (proj1_sig f)))."
+    },
+    {
+      "type": "text",
+      "text": "* Define the infinity norm on the set of bounded functions "
+    },
+    {
+      "type": "code",
+      "text": "Definition norm_inf {D : Type}:=\n  fun (f : @bdd_func D) ↦ proj1_sig (norm_inf_with_evidence f)."
+    },
+    {
+      "type": "code",
+      "text": "Lemma norm_inf_spec :\n  ∀ (D : Type) (f_w_ev : @bdd_func D),\n    is_sup (func_range_abs_with_zero (proj1_sig f_w_ev)) (norm_inf f_w_ev)."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake D : Type.\nTake f_w_ev : (@bdd_func D).\nApply (proj2_sig (norm_inf_with_evidence f_w_ev)).\nQed."
+    },
+    {
+      "type": "text",
+      "text": "* This lemma expresses that the absolute value \r\n    of the function values of f are bounded by norm_inf f. \r\n    There is a subtle detail, that in fact, norm_inf \r\n    works on the type of bounded functions, which \r\n    are actually dependent pairs of a function and evidence \r\n    that the function is bounded. "
+    },
+    {
+      "type": "code",
+      "text": "Lemma norm_inf_nonneg :\n  ∀ (D : Type) (f : @bdd_func D),\n    norm_inf f ≥ 0."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake D : Type. Take f_w_ev : (@bdd_func D).\nBy norm_inf_spec it holds that\n  (is_sup (func_range_abs_with_zero (proj1_sig f_w_ev)) (norm_inf f_w_ev)) (H1).\nBy sup_is_upp_bd it holds that\n  (is_upper_bound (func_range_abs_with_zero (proj1_sig f_w_ev)) (norm_inf f_w_ev)) (H2).\nExpand the definition of is_upper_bound in H2.\nWe claim that (func_range_abs_with_zero (proj1_sig f_w_ev) 0) (H3).\n  Expand the definition of func_range_abs_with_zero.\n  It follows that (func_range_abs (proj1_sig f_w_ev) 0\n∨ 0 = 0).\nIt follows that (norm_inf f_w_ev ≥ 0).\nQed."
+    },
+    {
+      "type": "code",
+      "text": "Lemma func_val_bdd_by_norm_inf :\n  ∀ (D : Type) (f : D → ℝ) (H : is_bdd f),\n    ∀ (x : D),\n      Rabs (f x) ≤ norm_inf (exist is_bdd f H).\nProof.\nTake D : Type.\nTake f : (D → ℝ).\nAssume H : (is_bdd f).\nTake x : D.\nDefine f_w_ev := (exist is_bdd f H).\nBy (norm_inf_spec) it holds that \n  (is_sup (func_range_abs_with_zero (proj1_sig f_w_ev)) (norm_inf f_w_ev)) (H1).\nExpand the definition of is_sup in H1.\nBecause H1 both\n  H2 and H3.\nExpand the definition of is_upper_bound in H2.\nApply H2.\nExpand the definition of func_range_abs_with_zero.\nExpand the definition of func_range_abs.\nExpand the definition of func_range."
+    },
+    {
+      "type": "text",
+      "text": "TODO: find a better way to deal with this 'left'."
+    },
+    {
+      "type": "code",
+      "text": "\nleft.\nChoose x0 := x.\nWe need to show that \n  (Rabs(f x) = Rabs(f x)).\nThis follows by reflexivity.\nQed."
+    },
+    {
+      "type": "text",
+      "text": "* The following lemma states that every bound for \r\n    f is larger than or equal to the norm_inf of f. \r\n\r\n    TODO: improve and use wrapper for rewrite tactic.\r\n    TODO: improve hypothesis naming below."
+    },
+    {
+      "type": "code",
+      "text": "Lemma norm_inf_le_upp_bound :\n  ∀ (D : Type) (f: D → ℝ) (H : is_bdd f),\n    ∀ L : ℝ, L ≥ 0 ⇒\n      (∀ x : D, Rabs (f x) ≤ L)\n         → norm_inf (exist is_bdd f H) ≤ L."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake D : Type.\nTake f : (D -> R).\nAssume H : (is_bdd f).\nTake L : ℝ.\nAssume L_ge_0 : (L ≥ 0).\nAssume L_bd : (for all x : D, Rabs(f x) <= L).\nDefine f_w_ev := (exist is_bdd f H).\nBy (norm_inf_spec) it holds that \n  (is_sup (func_range_abs_with_zero (proj1_sig f_w_ev)) (norm_inf f_w_ev)) (H1).\nExpand the definition of is_lub in H1.\nBecause H1 both H2 and H3.\nExpand the definition of is_upper_bound in H3.\nApply H3.\nTake z : ℝ.\nExpand the definition of func_range_abs_with_zero.\nExpand the definition of func_range_abs.\nExpand the definition of func_range.\nAssume exists_original_or_z_zero.\nBecause exists_original_or_z_zero \n  either exists_original or z_zero.\nChoose x such that Rabs_f_x_is_z\n  according to exists_original.\nrewrite Rabs_f_x_is_z.\nApply L_bd."
+    },
+    {
+      "type": "text",
+      "text": "Now we consider the case in which $z=0$."
+    },
+    {
+      "type": "code",
+      "text": "It follows that (z ≤ L).\nQed."
+    },
+    {
+      "type": "text",
+      "text": "* The lemma proj_exist_id is a convenience lemma \r\n    that states an element in bdd_func can be constructed \r\n    back from its projections to the function itself and \r\n    the evidence that it is bounded. "
+    },
+    {
+      "type": "code",
+      "text": "Lemma proj_exist_id :\n  ∀ (D : Type) (f_w_ev : @bdd_func D),\n    f_w_ev = exist is_bdd (proj1_sig f_w_ev) (proj2_sig f_w_ev).\nProof.\nTake D : Type.\nTake f_w_ev : (@bdd_func D).\ndestruct f_w_ev.\nsimpl.\nreflexivity.\nQed."
+    },
+    {
+      "type": "code",
+      "text": "Lemma bdd_func_bdd_by_norm_inf :\n  ∀ (D : Type) (f : @bdd_func D),\n    ∀ (x : D), Rabs((proj1_sig f) x) ≤ norm_inf f."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake D : Type. Take f : (@bdd_func D).\nBy proj_exist_id it holds that\n  (f = exist is_bdd (proj1_sig f) (proj2_sig f)) (H1).\nRewrite using (f = exist is_bdd (proj1_sig f) (proj2_sig f)).\nApply func_val_bdd_by_norm_inf.\nQed."
+    },
+    {
+      "type": "code",
+      "text": "Lemma bdd_func_norm_inf_le_upp_bound :\n  ∀ (D : Type) (f: @bdd_func D),\n    ∀ L : ℝ, L ≥ 0 ⇒\n      (∀ x : D, Rabs (proj1_sig f x) ≤ L)\n         → norm_inf f ≤ L."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake D : Type. Take f : (@bdd_func D).\nTake L : ℝ. Assume L_ge_0 : (L ≥ 0).\nBy proj_exist_id it holds that\n  (f = exist is_bdd (proj1_sig f) (proj2_sig f)) (H1).\nRewrite using (f = exist is_bdd (proj1_sig f) (proj2_sig f)).\nApply norm_inf_le_upp_bound.\nApply L_ge_0.\nQed."
+    },
+    {
+      "type": "text",
+      "text": "* The lemma norm_inf_triang contains the triangle \r\n    inequality for norm_inf. "
+    },
+    {
+      "type": "code",
+      "text": "Lemma norm_inf_triang:\n  ∀ (D : Type) (f_w_ev : @bdd_func D) (g_w_ev : @bdd_func D),\n    norm_inf (bdd_func_plus f_w_ev g_w_ev)\n      <= norm_inf f_w_ev + norm_inf g_w_ev.\nProof.\nTake D : Type.\nTake f_w_ev : (@bdd_func D).\nTake g_w_ev : (@bdd_func D).\nDefine f := (proj1_sig f_w_ev).\nDefine g := (proj1_sig g_w_ev).\nDefine f_bdd := (proj2_sig f_w_ev).\nDefine g_bdd := (proj2_sig g_w_ev).\nWe claim that (for all x : D,\n  Rabs((f_plus f g) x)\n  <= norm_inf f_w_ev + norm_inf g_w_ev ) (H_triang).\nTake x : D.\nExpand the definition of f_plus.\nBy Rabs_triang it holds that \n  (Rabs (f x + g x) ≤ Rabs(f x) + Rabs(g x)) (H1).\n(*trans_ineq H1.*)\nBy (func_val_bdd_by_norm_inf D f f_bdd) it holds that \n  (Rabs (f x) ≤ norm_inf f_w_ev) (H2).\nBy (func_val_bdd_by_norm_inf D g g_bdd) it holds that \n  (Rabs (g x) ≤ norm_inf g_w_ev) (H3).\nIt follows that (Rabs (f x + g x)\n≤ norm_inf f_w_ev + norm_inf g_w_ev).\nApply norm_inf_le_upp_bound.\nBy norm_inf_nonneg it holds that (norm_inf f_w_ev ≥ 0) (H4).\nBy norm_inf_nonneg it holds that (norm_inf g_w_ev ≥ 0) (H5).\nIt follows that (norm_inf f_w_ev + norm_inf g_w_ev ≥ 0).\nApply H_triang.\nQed."
+    },
+    {
+      "type": "text",
+      "text": "## Cauchy sequences"
+    },
+    {
+      "type": "code",
+      "text": "Definition is_Cauchy {D : Type} (f : ℕ → @bdd_func D):=\n  ∀ ε : ℝ, ε > 0 ⇒ ∃ N : ℕ, \n    ∀ m n : ℕ, (m ≥ N)%nat ⇒ (n ≥ N)%nat ⇒ \n      norm_inf( f n - f m ) < ε."
+    },
+    {
+      "type": "code",
+      "text": "Definition cv_unif_to {D : Type} (f : ℕ → @bdd_func D) \n  (g : @bdd_func D) := \n  (Un_cv (fun n ↦ norm_inf( f n - g )) 0)."
+    },
+    {
+      "type": "code",
+      "text": "Lemma bdd_func_minus_to_func_eval :\n  ∀ (D : Type) (f g : @bdd_func D) (x : D),\n    (proj1_sig f x - proj1_sig g x = proj1_sig (bdd_func_minus f g) x)%R."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake D : Type. Take f : (@bdd_func D). Take g: (@bdd_func D).\nTake x : D. Expand the definition of bdd_func_minus. \nExpand the definition of bdd_func_opp.\nExpand the definition of bdd_func_scal_mult.\nExpand the definition of f_scal_mult.\nsimpl. Expand the definition of f_plus.\nIt follows that ((proj1_sig f x - proj1_sig g x)%R =\n(proj1_sig f x + -1 * proj1_sig g x)%R)%R.\nQed."
+    },
+    {
+      "type": "code",
+      "text": "Hint Resolve bdd_func_minus_to_func_eval : bdd_func_hints."
+    },
+    {
+      "type": "code",
+      "text": "Theorem bdd_func_complete :\n  ∀ (D : Type) (f : ℕ → @bdd_func D),\n    is_Cauchy f ⇒ \n      {g | cv_unif_to f g}."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake D : Type.\nTake f : (ℕ → @bdd_func D).\nAssume f_is_Cauchy : (is_Cauchy f).\nWe claim that\n  (∀ x : D, Cauchy_crit (fun (n : ℕ) ↦ (proj1_sig (f n)) x))(Cauchy_in_point).\n  Take x : D.\n  Expand the definition of Cauchy_crit.\n  Take ε : ℝ.\n  Assume ε_gt_0 : (ε > 0).\n  Choose N such that f_tail_small according to (f_is_Cauchy ε ε_gt_0).\n  Choose N := N.\n  Take m : ℕ. Take n : ℕ.\n  Assume m_ge_N : (m ≥ N)%nat.\n  Assume n_ge_N : (n ≥ N)%nat.\n  Expand the definition of R_dist.\n  We claim that (Rabs (proj1_sig (bdd_func_minus (f m) (f n)) x) ≤ norm_inf (bdd_func_minus (f m) (f n))) (H1).\n    Define g_w_ev := (bdd_func_minus (f m) (f n)).\n    By proj_exist_id it holds that (g_w_ev = exist is_bdd (proj1_sig g_w_ev) (proj2_sig g_w_ev)) (H2).\n    Rewrite using (g_w_ev = exist is_bdd (proj1_sig g_w_ev) (proj2_sig g_w_ev)).\n    Apply func_val_bdd_by_norm_inf.\n  We claim that (proj1_sig (bdd_func_minus (f m) (f n)) x = proj1_sig (f m) x - proj1_sig (f n) x)%R (H3).\n  Expand the definition of bdd_func_minus.\n  Expand the definition of bdd_func_opp.\n  simpl.\n  Expand the definition of f_scal_mult.\n  Expand the definition of f_plus.\n  It follows that (proj1_sig (f m) x +\n-1 * proj1_sig (f n) x =\nproj1_sig (f m) x - proj1_sig (f n) x)%R.\n  Rewrite <- using (proj1_sig (bdd_func_minus (f m) (f n)) x = proj1_sig (f m) x - proj1_sig (f n) x)%R.\n  It holds that (norm_inf (f m - f n) < ε) (H4).\n  It follows that (Rabs (proj1_sig (f m - f n) x) < ε).\n  Define h_w_ev := (fun x ↦  \n    (R_complete (fun n ↦ (proj1_sig (f n) x)) (Cauchy_in_point x))\n    ).\n  Define h := (fun x ↦ proj1_sig (h_w_ev x))."
+    },
+    {
+      "type": "code",
+      "text": "We claim that (∃ M : ℕ, ∀ (x : D), Rabs (proj1_sig (f M) x - h x) ≤ 2) (h_bdd_prep).\n  It holds that (1 > 0) (one_gt_zero).\n  Choose M_1 such that f_tail_small according to (f_is_Cauchy 1 one_gt_zero).\n  Choose M := M_1.\n  Take x : D.\n  We need to show that (Rabs (proj1_sig (f M_1) x - h x) ≤ 2).\n  We claim that (∃ M_2 : ℕ, ∀ k : ℕ, (k ≥ M_2)%nat ⇒\n    R_dist (proj1_sig (f k) x) (h x) < 1) (H5).\n    Apply (proj2_sig (h_w_ev x)).\n      It holds that (1 > 0).\n  Choose M_2 such that f_k_x_close_to_h_x according to H5.\n  Define M_3 := (Nat.max M_1 M_2).\n  By bdd_func_bdd_by_norm_inf it holds that\n    (Rabs (proj1_sig (bdd_func_minus (f M_1) (f M_3)) x) \n      ≤ norm_inf(bdd_func_minus (f M_1) (f M_3))) (H6).\n  It holds that \n    (proj1_sig (bdd_func_minus (f M_1) (f M_3)) x\n      = proj1_sig (f M_1) x - proj1_sig (f M_3) x)%R (H7).\n  rewrite H7 in H6.\n  It holds that (M_1 ≥ M_1)%nat (H8).\n  It holds that (Nat.max M_1 M_2 ≥ M_1)%nat (H9).\n  It holds that (M_3 ≥ M_1)%nat (H10).\n  It holds that (norm_inf (bdd_func_minus (f M_1) (f M_3)) < 1) (H11).\n  It holds that (Rabs (proj1_sig (f M_1) x - proj1_sig (f M_3) x) < 1) (H12)."
+    },
+    {
+      "type": "code",
+      "text": "  It holds that (Nat.max M_1 M_2 ≥ M_2)%nat (H13).\n  It holds that (M_3 ≥ M_2)%nat (H14).\n  Expand the definition of R_dist in f_k_x_close_to_h_x.\n  It holds that (Rabs(proj1_sig (f M_3) x - h x) ≤ 1) (H15).\n  By Rabs_triang it holds that\n    (Rabs((proj1_sig (f M_1) x - proj1_sig (f M_3) x) + \n          (proj1_sig (f M_3) x - h x))\n     ≤\n     Rabs(proj1_sig (f M_1) x - proj1_sig (f M_3) x) +\n     Rabs(proj1_sig (f M_3) x - h x)) (H16).\n  Rewrite using ((proj1_sig (f M_1) x - proj1_sig (f M_3) x) + \n          (proj1_sig (f M_3) x - h x)\n          =\n          proj1_sig (f M_1) x - h x)%R in H16.\n  It follows that (Rabs (proj1_sig (f M_1) x - h x) ≤ 2)."
+    },
+    {
+      "type": "code",
+      "text": "We claim that (is_bdd h) (h_bdd).\n  Expand the definition of is_bdd.\n  Choose M_4 such that f_M_4_close_to_h according to h_bdd_prep.\n  Choose bd such that M_bds_f_M_4 according to (proj2_sig (f M_4)).\n  Choose M := (bd + 2)%R.\n  Take x : D.\n  Rewrite using (h x = (h x - proj1_sig (f M_4) x) + proj1_sig (f M_4) x)%R.\n  By Rabs_triang it holds that \n    (Rabs ((h x - proj1_sig (f M_4) x) + proj1_sig (f M_4) x ) ≤ \n      Rabs (h x - proj1_sig (f M_4) x)\n      + Rabs( proj1_sig (f M_4) x ))%R (H17).\n  By Rabs_minus_sym it holds that \n    (Rabs (proj1_sig (f M_4) x - h x)\n     = Rabs(h x - proj1_sig (f M_4) x))%R (H18).\n  It holds that (Rabs(proj1_sig(f M_4) x - h x) ≤ 2)%R (H19).\n  Rewrite using (Rabs (proj1_sig (f M_4) x - h x)\n     = Rabs(h x - proj1_sig (f M_4) x))%R in H19.\n  It holds that (Rabs (proj1_sig (f M_4) x) ≤ bd)%R (H20).\n  It follows that (Rabs\n(h x - proj1_sig (f M_4) x +\nproj1_sig (f M_4) x) ≤ \nbd + 2)%R."
+    },
+    {
+      "type": "code",
+      "text": "Define g_w_ev := (exist is_bdd h h_bdd).\nWe claim that (cv_unif_to f g_w_ev) (H21).\nExpand the definition of cv_unif_to.\nExpand the definition of Un_cv.\nTake ε : ℝ. Assume ε_gt_0 : (ε > 0).\nIt holds that (ε / 4 > 0) (H22).\nChoose N1 such that f_tail_small according to (f_is_Cauchy (ε/4) (H22)).\nChoose N := N1.\nTake n : ℕ. Assume n_ge_N1 : (n ≥ N1)%nat.\nExpand the definition of R_dist.\nRewrite using (norm_inf(bdd_func_minus (f n) g_w_ev) - 0 = norm_inf(bdd_func_minus (f n) g_w_ev))%R.\nBy norm_inf_nonneg it holds that (0 ≤ norm_inf(bdd_func_minus (f n) g_w_ev)) (H23).\nRewrite using (Rabs (norm_inf(bdd_func_minus (f n) g_w_ev)) = norm_inf(bdd_func_minus (f n) g_w_ev))%R."
+    },
+    {
+      "type": "code",
+      "text": "We claim that \n  (∀ x : D, Rabs (proj1_sig (bdd_func_minus (f n) g_w_ev) x) ≤ ε / 2)%R (H24).\n  Take x : D. \n  By (proj2_sig (h_w_ev x)) it holds that (∃ N2 : ℕ, ∀ k : ℕ, (k ≥ N2)%nat ⇒ (R_dist (proj1_sig (f k) x) (h x) < ε/4)%R) (H25).\n  Choose N2 such that f_close_to_h according to H25.\n  Define N3 := (Nat.max N1 N2).\n  It holds that (Nat.max N1 N2 ≥ N1)%nat (H26).\n  It holds that (Nat.max N1 N2 ≥ N2)%nat (H27).\n  It holds that (N3 ≥ N1)%nat (H28).\n  It holds that (N3 ≥ N2)%nat (H29).\n  It holds that (norm_inf (f n - f N3) < ε/4) (H30).\n  By bdd_func_bdd_by_norm_inf it holds that\n    (Rabs (proj1_sig (bdd_func_minus (f n) (f N3)) x) \n      ≤ norm_inf(bdd_func_minus (f n) (f N3))) (H31).\n  It holds that (proj1_sig (bdd_func_minus (f n) (f N3)) x = \n    proj1_sig (f n) x - proj1_sig (f N3) x)%R (H32).\n  Rewrite using (proj1_sig (bdd_func_minus (f n) (f N3)) x = \n    proj1_sig (f n) x - proj1_sig (f N3) x)%R in H31.\n  It holds that (proj1_sig (bdd_func_minus (f n) g_w_ev) x = \n    proj1_sig (f n) x - proj1_sig (g_w_ev) x)%R (H33).\n  Rewrite using (proj1_sig (bdd_func_minus (f n) g_w_ev) x = \n    proj1_sig (f n) x - proj1_sig g_w_ev x)%R.\n  Rewrite using (proj1_sig (f n) x - proj1_sig g_w_ev x \n    = (proj1_sig (f n) x - proj1_sig (f N3) x) \n    + (proj1_sig (f N3) x - proj1_sig g_w_ev x))%R."
+    },
+    {
+      "type": "code",
+      "text": "  By Rabs_triang it holds that \n    (Rabs\n        (proj1_sig (f n) x - proj1_sig (f N3) x +\n    (proj1_sig (f N3) x -\n   proj1_sig g_w_ev x)) ≤ \n  Rabs (proj1_sig (f n) x - proj1_sig (f N3) x)\n  +\n  Rabs (proj1_sig (f N3) x - proj1_sig g_w_ev x))%R (H34).\n  It holds that (R_dist (proj1_sig (f N3) x) (h x) < ε/4) (H35).\n  Expand the definition of R_dist in H35.\n  Rewrite using (h x = proj1_sig g_w_ev x)%R in H35.\n  It follows that (Rabs\n(proj1_sig (f n) x - proj1_sig (f N3) x +\n(proj1_sig (f N3) x -\nproj1_sig g_w_ev x)) ≤ \nε / 2)%R.\nWe claim that (norm_inf(bdd_func_minus (f n) g_w_ev) ≤ ε/2) (H36).\n  Apply bdd_func_norm_inf_le_upp_bound.\n    It holds that (ε /2 ≥ 0).\n    Apply H24.\n    It follows that (norm_inf(f n - g_w_ev) < ε).\nChoose g := g_w_ev.\n  Apply H21.\nQed."
+    },
+    {
+      "type": "text",
+      "text": "## From absolutely converging series to Cauchy sequence"
+    },
+    {
+      "type": "code",
+      "text": "Fixpoint bdd_func_partial_sums {D : Type} (f : ℕ → @bdd_func D) (n : ℕ) : @bdd_func D:=\n  match n with\n  | O => f O\n  | S m => (bdd_func_partial_sums f m) + (f (S m))\n  end."
+    },
+    {
+      "type": "code",
+      "text": "Definition bdd_func_series_cv_abs {D : Type} (f : ℕ → @bdd_func D) :=\n  series_cv (fun (n : ℕ) ↦ norm_inf (f n))."
+    }
+  ]
+}

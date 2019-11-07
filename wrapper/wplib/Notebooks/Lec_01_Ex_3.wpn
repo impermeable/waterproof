@@ -11,19 +11,19 @@
     },
     {
       "type": "code",
-      "text": "Add LoadPath \"./wrapper/\".\n\nRequire Import Reals.\nRequire Import Lra.\nRequire Import Classical.\nRequire Import Classical_Pred_Type.\n\nRequire Import wplib.Tactics.Tactics.\nRequire Import wplib.Tactics.TacticsContra.\nRequire Import wplib.Lib.sup_and_inf."
+      "text": "Require Import Reals.\nRequire Import Lra.\nRequire Import Classical.\nRequire Import Classical_Pred_Type.\n\nRequire Import wplib.Tactics.Tactics.\nRequire Import wplib.Tactics.TacticsContra.\nRequire Import wplib.Notations.Notations.\nRequire Import wplib.Lib.sup_and_inf."
     },
     {
       "type": "code",
-      "text": "Definition set_sum :=\n  fun (A B: ℝ → Prop) \n    => (fun (x : ℝ) ↦ exists a b : ℝ,\n      A a ∧ B b ∧ x = a + b)."
+      "text": "Definition set_sum :=\n  fun (A B: ℝ → Prop) \n    => (fun (x : ℝ) ↦ exists a b : ℝ,\n      (a ∈ A) ∧ (b ∈ B) ∧ x = a + b)."
     },
     {
       "type": "code",
-      "text": "Lemma sum_in_set_sum :\n  for all (A B : ℝ → Prop),\n    for all (a b : ℝ),\n      A a ⇒ B b ⇒ (set_sum A B) (a + b)."
+      "text": "Lemma sum_in_set_sum :\n  for all (A B : ℝ → Prop),\n    for all (a b : ℝ),\n      (a ∈ A) ⇒ ((b ∈ B) ⇒ (set_sum A B) (a + b))."
     },
     {
       "type": "code",
-      "text": "Proof.\nTake A : (ℝ → Prop). Take B : (ℝ → Prop). Take a : ℝ. Take b : ℝ.\nAssume a_in_A. Assume b_in_B. \nExpand the definition of set_sum."
+      "text": "Proof.\nTake A : (ℝ → Prop). Take B : (ℝ → Prop). Take a : ℝ. Take b : ℝ.\nAssume a_in_A : (a ∈ A).\nAssume b_in_B : (b ∈ B). \nExpand the definition of set_sum."
     },
     {
       "type": "text",
@@ -31,7 +31,7 @@
     },
     {
       "type": "code",
-      "text": "Choose a0 := a. Choose b0 := b. This follows immediately.\nQed."
+      "text": "Choose a0 := a. Choose b0 := b. \nIt follows that (a ∈ A ∧ b ∈ B ∧ a + b = a + b).\nQed."
     },
     {
       "type": "text",
@@ -98,7 +98,7 @@
     },
     {
       "type": "code",
-      "text": "Assume M_A_is_sup_A.\nAssume M_B_is_sup_B.\nAssume M_is_sup_A_plus_B.\nHint Resolve sup_is_upp_bd."
+      "text": "Assume M_A_is_sup_A : (is_sup A M_A).\nAssume M_B_is_sup_B : (is_sup B M_B).\nAssume M_is_sup_A_plus_B : (is_sup (set_sum A B) M).\nHint Resolve sup_is_upp_bd."
     },
     {
       "type": "text",
@@ -106,7 +106,7 @@
     },
     {
       "type": "code",
-      "text": "By ex_3a_0 it holds that (is_upper_bound (set_sum A B) (M_A + M_B)) (M_A_plus_M_B_upp_bd).\n\nBy any_upp_bd_le_sup it holds that (M ≤ M_A + M_B) (M_le_M_A_plus_M_B)."
+      "text": "By ex_3a_0 it holds that (is_upper_bound (set_sum A B) (M_A + M_B)) (M_A_plus_M_B_upp_bd).\n\nBy any_upp_bd_ge_sup it holds that (M ≤ M_A + M_B) (M_le_M_A_plus_M_B)."
     },
     {
       "type": "text",
@@ -114,11 +114,11 @@
     },
     {
       "type": "code",
-      "text": "We claim that (∀ b : ℝ, B b ⇒ is_upper_bound A (M-b))\n  (M_min_b_upp_bd)."
+      "text": "We claim that (∀ b : ℝ, (b ∈ B) ⇒ is_upper_bound A (M-b))\n  (M_min_b_upp_bd)."
     },
     {
       "type": "code",
-      "text": "Take b : ℝ. Assume b_in_B. \nExpand the definition of is_upper_bound. Take a : ℝ. Assume a_in_A. \nBecause M_is_sup_A_plus_B both M_upp_bd_A_plus_B and every_upp_bd_A_plus_B_ge_M.\nBy sum_in_set_sum it holds that (a + b ≤ M) (a_plus_b_le_M).\nWe need to show that (a ≤ M - b).\nThis follows immediately. "
+      "text": "Take b : ℝ. Assume b_in_B : (b ∈ B). \nExpand the definition of is_upper_bound.\nTake a : ℝ. Assume a_in_A : (A a). \nBecause M_is_sup_A_plus_B both M_upp_bd_A_plus_B and every_upp_bd_A_plus_B_ge_M.\nBy sum_in_set_sum it holds that (a + b ≤ M) (a_plus_b_le_M).\nIt follows that (a ≤ M - b)."
     },
     {
       "type": "text",
@@ -126,31 +126,15 @@
     },
     {
       "type": "code",
-      "text": "We claim that (is_upper_bound (B) (M-M_A)) (M_min_M_A_upp_bd_B).\nExpand the definition of is_upper_bound. \nTake b : ℝ. Assume b_in_B.\nIt holds that (is_upper_bound A (M-b)) (H4). \nBecause M_A_is_sup_A both M_A_upp_bd and any_upp_bd_le_M_A. It holds that (M_A ≤ M-b) (M_A_le_M_min_b)."
-    },
-    {
-      "type": "text",
-      "text": "We need to show that $b \\leq M - M_A$."
+      "text": "We claim that (is_upper_bound (B) (M-M_A)) (M_min_M_A_upp_bd_B).\nExpand the definition of is_upper_bound. \nTake b : ℝ. Assume b_in_B : (B b).\nIt holds that (is_upper_bound A (M-b)) (H4). \nBecause M_A_is_sup_A both M_A_upp_bd and any_upp_bd_le_M_A. It holds that (M_A ≤ M-b) (M_A_le_M_min_b).\nIt follows that (b ≤ M - M_A)."
     },
     {
       "type": "code",
-      "text": " This follows immediately. "
-    },
-    {
-      "type": "code",
-      "text": "Because M_B_is_sup_B both M_B_upp_bd and any_upp_bd_le_M_B. \nIt holds that (M_B ≤ M - M_A) (M_B_le_M_min_M_A). "
-    },
-    {
-      "type": "text",
-      "text": "We need to show that $M = M_A + M_B$."
+      "text": "Because M_B_is_sup_B both M_B_upp_bd and any_upp_bd_le_M_B. \nIt holds that (M_B ≤ M - M_A) (M_B_le_M_min_M_A).\nIt follows that (M = M_A + M_B).\nQed."
     },
     {
       "type": "text",
       "text": ""
-    },
-    {
-      "type": "code",
-      "text": "This follows immediately.\nQed."
     },
     {
       "type": "code",
