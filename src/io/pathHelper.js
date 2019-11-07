@@ -22,7 +22,7 @@ function getAppdataPath() {
   if (process.env.NODE_ENV === 'test') {
     return 'C:\\Users\\Sertop\\AppData\\Roaming\\waterproof\\';
   }
-  const getPath = require('electron').app.getPath;
+  const getPath = require('electron').remote.app.getPath;
   // userdata just gives the appdata with a folder with waterproof
   return getPath('userData');
 }
