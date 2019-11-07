@@ -18,6 +18,7 @@
         </p>
         <ul>
           <li>Coq 8.9.0</li>
+          <li><a href="#" @click="openPage('https://github.com/ejgallego/coq-serapi')">Coq-serapi</a></li>
           <li>Markdown</li>
           <li>KaTeX</li>
         </ul>
@@ -43,6 +44,11 @@
 
 export default {
   name: 'About',
+  methods: {
+    openPage: function(link) {
+      require('electron').shell.openExternal(link);
+    },
+  },
 };
 </script>
 
