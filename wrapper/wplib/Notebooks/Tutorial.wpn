@@ -189,19 +189,27 @@
     },
     {
       "type": "text",
-      "text": "## Intermezzo about sets\n\nIn Waterproof, we think of subsets of the real line as functions from the real line to the type of propositions, i.e. the type of mathematical statements. Examples of sets are"
+      "text": "## Intermezzo about sets\n\nIn Waterproof, we think of subsets of the real line as functions from the real line to the type of propositions, i.e. the type of mathematical statements. An example of a subset is"
     },
     {
       "type": "code",
-      "text": "Definition A := fun (x : ℝ) ↦ x < 1.\n\nDefinition B := fun (x : ℝ) ↦ (0 ≤ x) ∧ (x ≤ 2)."
+      "text": "\nDefinition A := fun (x : ℝ) ↦ x < 1."
     },
     {
       "type": "text",
-      "text": "Then $A$ corresponds to those $x : ℝ$ such that $x < 1$, i.e. it corresponds to the interval $(-\\infty, 1)$. Similarly, $B$ corresponds to those $x : ℝ$ such that $(0 \\leq x)$ and $(x \\leq 2)$, so it corresponds to the closed interval $[0,2]$.\n\nWe will now use simple sets and statements about them to illustrate more proof tactics in Waterproof."
+      "text": "\nThis notation defines $A$ as a function that sends $x : ℝ$ to the proposition $x < 1$.\nTherefore, $A$ corresponds to those $x : ℝ$ such that $x < 1$, i.e. it corresponds to the interval $(-\\infty, 1)$. \n\nSimilarly, we can define the subset $B$ by"
+    },
+    {
+      "type": "code",
+      "text": "\n\nDefinition B := fun (x : ℝ) ↦ (0 ≤ x) ∧ (x ≤ 2)."
     },
     {
       "type": "text",
-      "text": "## Expanding definitions: example on upper bounds.\n\nRemember that we have defined $A$ in the last section as the interval $(-\\infty, 1)$. The following lemma expressees that $2$ is an upper bound for $A$. In Waterproof, the statement is encoded as `is_upper_bound A 2`."
+      "text": "\nThen, $B$ corresponds to those $x : ℝ$ such that $(0 \\leq x)$ and $(x \\leq 2)$, so it corresponds to the closed interval $[0,2]$.\n\nWe will now use simple sets and statements about them to illustrate more proof tactics in Waterproof."
+    },
+    {
+      "type": "text",
+      "text": "## Expanding definitions: example on upper bounds.\n\nRemember that we have defined $A$ in the last section as the interval $(-\\infty, 1)$. The following lemma expresses that $1$ is an upper bound for $A$. In Waterproof, the statement is encoded as `is_upper_bound A 1`."
     },
     {
       "type": "code",
@@ -225,7 +233,7 @@
     },
     {
       "type": "text",
-      "text": "\nSince we need to show a \"for-all\" statement, it is clear how to continue the proof."
+      "text": "\nA good way to read `A x ⇒ x ≤ 1` is \"if $x$ is in $A$, then $x \\leq 1$\". Although this may be a bit confusing at first, note that we **do not and cannot** write $x : A$ for \"$x$ is in $A$\". You could, however, write `x ∈ A`, which is just alternative notation for `A x`.\n \nSince we need to show a \"for-all\" statement, it is clear how to continue the proof."
     },
     {
       "type": "code",
