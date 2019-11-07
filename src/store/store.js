@@ -6,10 +6,13 @@ import {readConfiguration} from '../io/configurationio';
 import createTexInputHints from '../codemirror/tex-input';
 
 import libraries from './libraries';
+import settings from './settings';
+
 
 export default {
   modules: {
     libraries,
+    settings,
   },
   state: {
     searchResults: [],

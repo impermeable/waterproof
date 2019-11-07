@@ -86,6 +86,7 @@ import Find from './Find';
 import Gutter from './Gutter';
 import CodeExecution from './mixins/CodeExecution';
 import CodeMirrorHandler from './mixins/CodeMirrorHandler';
+import {mapState} from 'vuex';
 
 export default {
   name: 'EditWindow',
@@ -353,7 +354,8 @@ export default {
         this.execHeight = (rect.bottom + rect.top) / 2 - rect2.top - 10;
         this.execHeightBall = rect.top - rect2.top;
 
-        if (animation && this.execHeight !== this.execScroll) {
+        if (this.scrollOnExec &&
+                animation && this.execHeight !== this.execScroll) {
           const top = this.$refs.domEl.scrollTop;
           const height = this.$refs.domEl.getBoundingClientRect().height;
 
@@ -418,7 +420,11 @@ export default {
       this.pendingUpTo = newIndex || 0;
       this.refreshExecStatus(true);
     },
-
+  },
+  computed: {
+    ...mapState({
+      scrollOnExec: (state) => state.settings.settings.scrollOnExec,
+    }),
   },
   /**
    * Checks if DOM elements are changed and if so,
