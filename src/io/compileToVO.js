@@ -3,7 +3,7 @@ import fs from 'fs';
 const path = require('path');
 const util = require('util');
 const execFile = util.promisify(require('child_process').execFile);
-import {getResourcesPath} from './pathHelper';
+import {getAppdataPath, getResourcesPath} from './pathHelper';
 import read, {deleteFile, doesFileExist, readFile} from './readfile';
 import {blockToCoqText} from './notebook';
 
@@ -22,7 +22,8 @@ class VOCompiler {
    */
   constructor(sercompPath, forceUpdates) {
     this.wrapperDirPath = getResourcesPath();
-    this.wpLibPath = path.join(this.wrapperDirPath, './wplib');
+    this.sourcePath = path.join(this.wrapperDirPath, './wplib');
+    this.wpLibPath = path.join(getAppdataPath(), './wplib');
     this.sercompPath = path.join(sercompPath);
     this.forceUpdates = forceUpdates;
   }
@@ -36,7 +37,21 @@ class VOCompiler {
     const currentFiles =
         await this.getFileExistance(path.join(this.wpLibPath, library));
 
+    const libDirName = path.dirname(path.join(this.wpLibPath, library));
+
+    if (!fs.existsSync(this.wpLibPath)) {
+      fs.mkdirSync(this.wpLibPath);
+    }
+
+    if (!fs.existsSync(libDirName)) {
+      fs.mkdirSync(libDirName);
+    }
+
     if (this.forceUpdates) {
+      if (currentFiles.wpn) {
+        await deleteFile(path.join(this.wpLibPath, library + '.wpn'));
+        currentFiles.wpn = false;
+      }
       if (currentFiles.vo) {
         await deleteFile(path.join(this.wpLibPath, library + '.vo'));
         currentFiles.vo = false;
@@ -45,6 +60,12 @@ class VOCompiler {
         await deleteFile(path.join(this.wpLibPath, library + '.v'));
         currentFiles.v = false;
       }
+    }
+
+    if (!currentFiles.wpn) {
+      fs.copyFileSync(path.join(this.sourcePath, library + '.wpn'),
+          path.join(this.wpLibPath, library + '.wpn'));
+      currentFiles.wpn = true;
     }
 
     if (currentFiles.wpn && !currentFiles.v) {
@@ -109,7 +130,7 @@ class VOCompiler {
         ['--load-path=wplib,wplib',
           '--mode=vo',
           filePath],
-        {cwd: this.wrapperDirPath});
+        {cwd: getAppdataPath()});
   }
 }
 

@@ -25,6 +25,16 @@
         "example": "We claim that (2 = 2) (two_is_two)."
     },
     {
+        "name": "We argue by contradiction.",
+        "description": "Assumes the opposite of what you need to show. Afterwards, you can try to derive a contradiction.",
+        "example": "We argue by contradiction."
+    },
+    {
+        "name": "Contradiction",
+        "description": "If you find two contradictory hypotheses in the proof context, you can write \"Contradiction\" to finish the proof of the current goal.",
+        "example": "Contradiction."
+    },
+    {
         "name": "Because (*name_combined_hyp*) both (*name_hyp_1*) and (*name_hyp_2*).",
         "description": "If you currently have a hypothesis with name (*name_combined_hyp*) which is in fact of the form H1 ∧ H2, then this tactic splits it up in two separate hypotheses with names (*name_hyp_1*) and (*name_hyp_2*).",
         "example": "Lemma and_example : for all A B : Prop, A ∧ B ⇒ A.\nTake A : Prop. Take B : Prop.\nAssume A_and_B : A ."
@@ -70,8 +80,8 @@
         "example": "Lemma ex_split : forall A B: Prop, A ⇒ (B ⇒ A ∧ B).\nProof.\n Take A : Prop. Take B : Prop.\nAssume H_A. Assume H_B.\n(*We*) split (*the goal*).\nApply H_A. Apply H_B. Qed."
     },
     {
-        "name": "reflexivity",
-        "description": "Use this tactic to show that t=t. Sometimes you can even use it to show that u=t, if after some simplication the terms u and t reduce to the same expression.",
-        "example": "Lemma ex_refl : 1=1.\nProof.\n (*This follows by*) reflexivity.\nQed."
+        "name": "We need to show that ((*(alternative) formulation of current goal*))",
+        "description": "Generally makes a proof more readable. Has the additional functionality that you can write a slightly different but equivalent formulation of the goal: you can for instance change names of certain variables.",
+        "example": "Lemma example_reflexivity : 0 = 0.\nProof.\nWe need to show that (0=0)."
     }
 ]
