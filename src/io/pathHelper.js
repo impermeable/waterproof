@@ -14,4 +14,17 @@ function getResourcesPath() {
   return path.resolve(resourcesPath);
 }
 
-export {getResourcesPath};
+/**
+ * Get a path where we can (should be able to) store files
+ * @return {string} the path
+ */
+function getAppdataPath() {
+  if (process.env.NODE_ENV === 'test') {
+    return 'C:\\Users\\Sertop\\AppData\\Roaming\\waterproof\\';
+  }
+  const getPath = require('electron').app.getPath;
+  // userdata just gives the appdata with a folder with waterproof
+  return getPath('userData');
+}
+
+export {getResourcesPath, getAppdataPath};

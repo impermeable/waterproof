@@ -3,8 +3,7 @@ import fs from 'fs';
 const path = require('path');
 const util = require('util');
 const execFile = util.promisify(require('child_process').execFile);
-import {remote} from 'electron';
-import {getResourcesPath} from './pathHelper';
+import {getAppdataPath, getResourcesPath} from './pathHelper';
 import read, {deleteFile, doesFileExist, readFile} from './readfile';
 import {blockToCoqText} from './notebook';
 
@@ -24,7 +23,7 @@ class VOCompiler {
   constructor(sercompPath, forceUpdates) {
     this.wrapperDirPath = getResourcesPath();
     this.sourcePath = path.join(this.wrapperDirPath, './wplib');
-    this.wpLibPath = path.join(remote.app.getPath('userData'), './wplib');
+    this.wpLibPath = path.join(getAppdataPath(), './wplib');
     this.sercompPath = path.join(sercompPath);
     this.forceUpdates = forceUpdates;
   }
@@ -131,7 +130,7 @@ class VOCompiler {
         ['--load-path=wplib,wplib',
           '--mode=vo',
           filePath],
-        {cwd: remote.app.getPath('userData')});
+        {cwd: getAppdataPath()});
   }
 }
 
