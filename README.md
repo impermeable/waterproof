@@ -6,8 +6,6 @@ Develop build status: [![Build Status](https://travis-ci.org/impermeable/waterpr
 
 ![Screenshot of waterproof](WaterproofScreenshot.png)
 
-Develop build status: [![Build Status](https://travis-ci.org/impermeable/waterproof.svg?branch=develop)](https://travis-ci.org/impermeable/waterproof)
-
 ## How to get started
 
 The easiest way to get started with Waterproof is to:
@@ -21,13 +19,27 @@ Waterproof communicates with the interactive theorem prover CoQ through the SerA
 
 The following steps describe how to install SerAPI.
 
-#### Install opam
+#### Step 1. Install opam
 
-* Windows: Install OCaml for Windows from https://fdopen.github.io/opam-repository-mingw/installation/. This also installs a cygwin terminal that you will need to use in the steps below.
-* macOS: Install opam, following instructions on https://opam.ocaml.org/doc/Install.html#OSX
-* Linux: Install opam, following instructions on https://opam.ocaml.org/doc/Install.html
+##### On Windows:
+Install OCaml for Windows from https://fdopen.github.io/opam-repository-mingw/installation/. This also installs a cygwin terminal that you will need to use in the steps below.
 
-##### Install OCaml
+##### On MacOS: 
+Install opam by running the following commands in the terminal (taken from https://opam.ocaml.org/doc/Install.html#OSX)
+```
+brew install gpatch
+brew install opam
+```
+
+##### On Linux:
+Install opam, following instructions on https://opam.ocaml.org/doc/Install.html. For instance, for **Ubuntu**:
+```
+add-apt-repository ppa:avsm/ppa
+apt update
+apt install opam
+```
+
+#### Step 2. Install OCaml
 
 OCaml for Windows installs a cygwin terminal. In the terminal, execute the following commands (corresponding to instructions on https://ocaml.org/docs/install.html). **Note:** On Windows, use the cygwin terminal that installed in the previous step.
 
@@ -37,14 +49,16 @@ opam init
 eval `opam env`
 ```
 
-**On Windows:** install OCaml with
+##### On Windows:
+Install OCaml with
 ```
 opam switch create 4.07.1+mingw64c
 eval `opam env`
 opam add repo ocaml_opam_repository https://github.com/ocaml/opam-repository.git
 ```
 
-**On Linux or macOS:** install OCaml with
+##### On Linux or macOS:
+Install OCaml with
 ```
 opam switch create 4.07.1
 eval `opam env`
@@ -56,7 +70,7 @@ which ocaml
 ocaml -version
 ```
 
-#### Install SerAPI with opam
+#### Step 3. Install SerAPI with opam
 
 After installing OCaml, run the following command in the terminal:
 
@@ -64,7 +78,11 @@ After installing OCaml, run the following command in the terminal:
 opam install coq-serapi
 ```
 
+### Install Waterproof with the installer from the release page
+
 After installing SerAPI, you are ready to install Waterproof using your preferred installer from the [release page](http://github.com/impermeable/waterproof/releases).
+
+---
 
 If you rather build the application yourself, you can follow the steps below.
 
