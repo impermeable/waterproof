@@ -198,6 +198,14 @@
       "text": "Tactic Notation \"Unfold\" constr(t) :=\n  unfold t.\n\nTactic Notation \"Unfold\" constr(t) \"in\" ident(s):=\n  unfold t in s.\n\nTactic Notation \"Expand\" \"the\" \"definition\" \"of\" reference(t) :=\n  unfold t.\n\nTactic Notation \"Expand\" \"the\" \"definition\" \"of\" \n  reference(t) \"in\" ident(s) :=\n  unfold t in s."
     },
     {
+      "type": "code",
+      "text": "\nTactic Notation \"Write\" ident(s) \"as\" constr(t) :=\n  change t in s."
+    },
+    {
+      "type": "code",
+      "text": ""
+    },
+    {
       "type": "text",
       "text": ""
     },

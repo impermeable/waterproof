@@ -64,7 +64,7 @@
     },
     {
       "type": "text",
-      "text": "The blue brackets mean that this is an input cell. You can freely work here. You can add a code cell by pressing **Alt + c**, and add a text cell by pressing **Alt + t**.\n\nBelow we already added one code cell, which says `Admitted.`. Executing that code cell (**Alt + ↓**), will also make the proof progress turn to `Done.` **However,** in that case it is not proven but assumed as an axiom. We do this so you can continue executing the notebook even if you cannot solve the exercise.\n\nAfter you have found a proof, replace the `Admitted.` by `Qed.`"
+      "text": "The blue brackets mean that this is an input cell. You can freely work here. You can add a code cell by pressing **Alt + c** (On MacOS: **⌘ + c**), and add a text cell by pressing **Alt + t** (On MacOS: **⌘ + t**).\n\nBelow we already added one code cell, which says `Admitted.`. Executing that code cell (**Alt + ↓**), will also make the proof progress turn to `Done.` **However,** in that case it is not proven but assumed as an axiom. We do this so you can continue executing the notebook even if you cannot solve the exercise.\n\nAfter you have found a proof, replace the `Admitted.` by `Qed.`"
     },
     {
       "type": "code",
@@ -85,7 +85,7 @@
     },
     {
       "type": "text",
-      "text": "> **NOTE:** the notation $x : ℝ$ means $x$ is in $\\mathbb{R}$ (or more accurately, $x$ is of type $\\mathbb{R}$) may be unfamiliar to you, and you may be more familiar with the notation $x ∈ \\reals$. This difference is due to the fact that Waterproof is built on **type theory** and not on set theory. "
+      "text": "> **NOTE:** the notation $x : ℝ$ means $x$ is in $\\mathbb{R}$ (or more accurately, $x$ is of type $\\mathbb{R}$) may be unfamiliar to you, and you may be more familiar with the notation $x ∈ \\reals$. This difference is due to the fact that Waterproof is built on **type theory** and not on set theory. \n\n**HINT:** You can insert characters such as ℝ either from the symbol menu that opens when clicking on 'Σ' in the top right corner, or you can write '\\reals'. For (most) other unicode characters you can use a backslash command as well."
     },
     {
       "type": "code",
@@ -237,11 +237,15 @@
     },
     {
       "type": "code",
-      "text": "\nTake x : ℝ. Assume x_in_A : (A x)."
+      "text": "\nTake x : ℝ. Assume x_in_A : (x ∈ A)."
     },
     {
       "type": "text",
       "text": "\nA this stage, we may want to use the definition of $A$ itself. We can expand the definition of $A$ in the hypothesis `x_in_A` by writing"
+    },
+    {
+      "type": "code",
+      "text": "\nWrite x_in_A as (x < 1)."
     },
     {
       "type": "code",
@@ -254,6 +258,50 @@
     {
       "type": "code",
       "text": "\nIt holds that (x ≤ 1).\nQed."
+    },
+    {
+      "type": "text",
+      "text": "## An alternative way of expanding definitions\n\nThe disadvantage of the above way of expanding definitions is that the written proof above does not contain the result of expanding the definitions. We now present an alternative way of expanding definitions, which instead just states what the result of the expanding should be."
+    },
+    {
+      "type": "code",
+      "text": "Lemma example_upper_bound_2 :\n  is_upper_bound A 1.\n  \nProof."
+    },
+    {
+      "type": "text",
+      "text": "First, instead of writing `Expand the definition of is_upper_bound.`, we just write"
+    },
+    {
+      "type": "code",
+      "text": "\nWe need to show that (∀ x : ℝ, (x ∈ A) ⇒ x ≤ 1)."
+    },
+    {
+      "type": "text",
+      "text": "\nWaterproof checks automatically that this comes down to the same thing. We continue the proof."
+    },
+    {
+      "type": "code",
+      "text": "\nTake x : ℝ. Assume x_in_A : (x ∈ A)."
+    },
+    {
+      "type": "text",
+      "text": "\nWe now would like to expand the definition of $A$ in `x_in_A`. We can just use that the result should come down to `(x < 1)` and write"
+    },
+    {
+      "type": "code",
+      "text": "\nWrite x_in_A as (x < 1). "
+    },
+    {
+      "type": "text",
+      "text": "\nWe can now finish the proof."
+    },
+    {
+      "type": "code",
+      "text": "It follows that (x ≤ 1).\nQed."
+    },
+    {
+      "type": "text",
+      "text": "**Remark:** the disadvantage of expanding definitions in this way, is that you need to know beforehand what is the result of expanding the definition. In practice, you can then peek at the result by first writing `Expand the definition` to see what is the result and then add a sentence of `We need to show that ...` or `Write ... as ...`. Afterwards, you can delete the sentence with `Expand the definition`."
     },
     {
       "type": "text",
@@ -283,7 +331,7 @@
     },
     {
       "type": "code",
-      "text": "Lemma example_any_upp_bd_ge_1 :\n  for all b : ℝ, is_upper_bound A b ⇒ (1 ≤ b).\n  \nProof.\nTake b : ℝ. Assume b_upp_bd : (is_upper_bound A b).\nExpand the definition of is_upper_bound in b_upp_bd.\nExpand the definition of A in b_upp_bd."
+      "text": "Lemma example_any_upp_bd_ge_1 :\n  for all b : ℝ, is_upper_bound A b ⇒ (1 ≤ b).\n  \nProof.\nTake b : ℝ. Assume b_upp_bd : (is_upper_bound A b).\nWrite b_upp_bd as (for all x : ℝ, x ∈ A ⇒ x ≤ b).\nWrite b_upp_bd as (for all x : ℝ, x < 1 ⇒ x ≤ b)."
     },
     {
       "type": "text",
@@ -347,11 +395,15 @@
     },
     {
       "type": "code",
-      "text": "Proof.\nExpand the definition of is_sup.\nWe need to show that\n  (is_upper_bound A 1\n     ∧ \n   (for all b : ℝ,\n     is_upper_bound A b ⇨ 1 ≤ b))."
+      "text": "Proof.\nExpand the definition of is_sup.\nWe need to show that\n  (is_upper_bound A 1\n     ∧ \n   (for all b : ℝ,\n     is_upper_bound A b ⇒ 1 ≤ b))."
     },
     {
       "type": "text",
-      "text": "Sometimes it can be useful to make intermediate claims. You then first focus on proving that claim, before you continue the rest of the proof. Below we claim that $1$ is an upper bound of $A$ (by writing `(is_upper_bound A 1)` and call the statement `one_upp_bd`."
+      "text": "\n(Note that the first sentence of the proof is not necessary and we could delete it)."
+    },
+    {
+      "type": "text",
+      "text": "\nSometimes it can be useful to make intermediate claims. You then first focus on proving that claim, before you continue the rest of the proof. Below we claim that $1$ is an upper bound of $A$ (by writing `(is_upper_bound A 1)` and call the statement `one_upp_bd`."
     },
     {
       "type": "code",

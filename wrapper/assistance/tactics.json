@@ -80,8 +80,13 @@
         "example": "Lemma ex_split : forall A B: Prop, A ⇒ (B ⇒ A ∧ B).\nProof.\n Take A : Prop. Take B : Prop.\nAssume H_A. Assume H_B.\n(*We*) split (*the goal*).\nApply H_A. Apply H_B. Qed."
     },
     {
-        "name": "We need to show that ((*(alternative) formulation of current goal*))",
+        "name": "We need to show that ((*(alternative) formulation of current goal*)).",
         "description": "Generally makes a proof more readable. Has the additional functionality that you can write a slightly different but equivalent formulation of the goal: you can for instance change names of certain variables.",
         "example": "Lemma example_reflexivity : 0 = 0.\nProof.\nWe need to show that (0=0)."
+    },
+    {
+        "name": "Write (*name_hyp*) as (*expression*).",
+        "description": "Checks that the hypothesis with name (*name_hyp*) can be converted to (*expression*), and then replaces it by (*expression*). This is in general a more readable alternative to \"Expand the definition\"",
+        "example": "Write x_in_A as (x ∈ A)."
     }
 ]

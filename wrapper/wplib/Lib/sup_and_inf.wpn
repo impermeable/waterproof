@@ -7,11 +7,7 @@
     },
     {
       "type": "code",
-      "text": "Require Import Reals.\nRequire Import Lra.\nRequire Import Classical.\nRequire Import Classical_Pred_Type.\n\nRequire Import wplib.Tactics.Tactics.\nRequire Import wplib.Tactics.TacticsContra."
-    },
-    {
-      "type": "code",
-      "text": "Definition is_sup := is_lub."
+      "text": "Require Import Reals.\nRequire Import Lra.\nRequire Import Classical.\nRequire Import Classical_Pred_Type.\n\nRequire Import wplib.Tactics.Tactics.\nRequire Import wplib.Notations.Notations.\nRequire Import wplib.Tactics.TacticsContra."
     },
     {
       "type": "text",
@@ -23,27 +19,7 @@
     },
     {
       "type": "code",
-      "text": "Proof.\nTake A : (ℝ → Prop). Take M : ℝ. Assume M_is_sup_A. \nBecause M_is_sup_A both M_is_upp_bd_A and any_upp_bd_A_le_M."
-    },
-    {
-      "type": "text",
-      "text": "We now just"
-    },
-    {
-      "type": "code",
-      "text": "apply M_is_upp_bd_A"
-    },
-    {
-      "type": "text",
-      "text": "to show that $M$ is an upper bound for A"
-    },
-    {
-      "type": "code",
-      "text": "."
-    },
-    {
-      "type": "code",
-      "text": "Qed."
+      "text": "Proof.\nTake A : (ℝ → Prop). Take M : ℝ. Assume M_is_sup_A : (is_sup A M).\nWrite M_is_sup_A as (is_upper_bound A M ∧ (∀ b: ℝ, is_upper_bound A b ⇒ M ≤ b) ).\nIt follows that (is_upper_bound A M). Qed."
     },
     {
       "type": "text",
