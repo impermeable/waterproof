@@ -19,7 +19,7 @@
     },
     {
       "type": "code",
-      "text": "Proof.\nTake x : ℝ.\ndestruct (Rle_lt_dec x 0).\nChoose n := 1%nat. \nIt holds that (INR 1 > INR 0) (H1).\nRewrite using (0 = INR(0)) in r.\nIt follows that (INR 1 > x).\nBy archimed it holds that (IZR(up x) > x ∧ IZR( up x ) - x ≤ 1) (H2).\nIt holds that (IZR( up x ) > x) (H3).\nIt holds that (0 < IZR( up x )) (H4).\nBy lt_0_IZR it holds that (0 < up x)%Z (H5).\nIt holds that (0 <= up x)%Z (H6).\nBy IZN it holds that (∃ k : ℕ, up x = Z.of_nat k) (H7).\nChoose k such that up_x_is_k according to H7.\nChoose n := k.\nBy INR_IZR_INZ it holds that (INR k = IZR (Z.of_nat k)) (H8).\nRewrite using (INR k = IZR (Z.of_nat k)).\nRewrite using (Z.of_nat k = up x).\nassumption.\nQed."
+      "text": "Proof.\nTake x : ℝ.\ndestruct (Rle_lt_dec x 0).\nChoose n := 1%nat. \nIt holds that (INR 1 > INR 0) (H1).\nRewrite using (0 = INR(0)) in r.\nIt follows that (INR 1 > x).\nBy archimed it holds that (IZR(up x) > x ∧ IZR( up x ) - x ≤ 1) (H2).\nIt holds that (IZR( up x ) > x) (H3).\nIt holds that (0 < IZR( up x )) (H4).\nBy lt_0_IZR it holds that (0 < up x)%Z (H5).\nIt holds that (0 <= up x)%Z (H6).\nBy IZN it holds that (∃ k : ℕ, up x = Z.of_nat k) (H7).\nChoose k such that up_x_is_k according to H7.\nChoose n := k.\nWe need to show that (INR k > x).\nBy INR_IZR_INZ it holds that (INR k = IZR (Z.of_nat k)) (H8).\nRewrite using (INR k = IZR (Z.of_nat k)).\nRewrite using (Z.of_nat k = up x).\nassumption.\nQed."
     },
     {
       "type": "code",

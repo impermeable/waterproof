@@ -195,7 +195,7 @@
     },
     {
       "type": "code",
-      "text": "Proof.\nTake a : (ℕ → ℝ). Take pr : (has_ub a). \nExpand the definition of lub.\nDefine sup_with_proof := (ub_to_lub a pr).\nChoose l such that l_is_sup according to sup_with_proof.\nTake ε : ℝ. Assume ε_gt_0.\nBy exists_almost_maximizer_ε it holds that (∃ y : ℝ, (EUn a) y ∧ y > l - ε) (H1).\nChoose y such that H2 according to H1.\nBecause H2 both y_in_range and y_gt_l_min_ε.\nExpand the definition of EUn in y_in_range.\nChoose i such that ai_is_y according to y_in_range.\nChoose k := i.\nRewrite using (a i = y).\nApply y_gt_l_min_ε.\nQed."
+      "text": "Proof.\nTake a : (ℕ → ℝ). Take pr : (has_ub a). \nExpand the definition of lub.\nDefine sup_with_proof := (ub_to_lub a pr).\nChoose l such that l_is_sup according to sup_with_proof.\nTake ε : ℝ. Assume ε_gt_0.\nBy exists_almost_maximizer_ε it holds that (∃ y : ℝ, (EUn a) y ∧ y > l - ε) (H1).\nChoose y such that H2 according to H1.\nBecause H2 both y_in_range and y_gt_l_min_ε.\nExpand the definition of EUn in y_in_range.\nChoose i such that ai_is_y according to y_in_range.\nChoose k := i.\nWe need to show that (a i > l - ε).\nRewrite using (a i = y).\nApply y_gt_l_min_ε.\nQed."
     },
     {
       "type": "code",
