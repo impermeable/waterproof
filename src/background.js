@@ -93,7 +93,7 @@ function createWindow() {
   });
 
   win.on('close', function(e) {
-    if (win.webContents.getURL().includes('editpage') && running) {
+    if (running) {
       win.webContents.send('closing-application');
       e.preventDefault();
     } else {
