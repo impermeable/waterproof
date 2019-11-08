@@ -95,7 +95,7 @@
     },
     {
       "type": "code",
-      "text": "Tactic Notation \"Choose\" constr(t):=\n  exists t.\n\nTactic Notation \"Choose\" ident(s) \":=\" constr(t) :=\n  exists t.\n\nTactic Notation \"Choose\" ident(s) \n                \"such\" \"that\" ident(u)\n                \"according\" \"to\" constr(v) (*\":\" constr(t)*):=\n  destruct v as [s u].\n\n(*Tactic Notation \"Choose\" ident(s)\n                \"such\" \"that\" ident(u)\n                \"according\" \"to\" ident(v)\n                \"with\" constr(t) :=\n  destruct v with t as [s u]. *)\n\nTactic Notation \"Choose\" ident(s)\n                \"such\" \"that\" ident(u)\n                \"according\" \"to\" constr(v)\n                \"with\" constr(t) :=\n  destruct v with t as [s u]."
+      "text": "Tactic Notation \"Choose\" constr(t):=\n  exists t.\n\nTactic Notation \"Choose\" ident(s) \":=\" constr(t) :=\n  pose (s := t);\n  exists t.\n\nTactic Notation \"Choose\" ident(s) \n                \"such\" \"that\" ident(u)\n                \"according\" \"to\" constr(v) (*\":\" constr(t)*):=\n  destruct v as [s u].\n\n(*Tactic Notation \"Choose\" ident(s)\n                \"such\" \"that\" ident(u)\n                \"according\" \"to\" ident(v)\n                \"with\" constr(t) :=\n  destruct v with t as [s u]. *)\n\nTactic Notation \"Choose\" ident(s)\n                \"such\" \"that\" ident(u)\n                \"according\" \"to\" constr(v)\n                \"with\" constr(t) :=\n  destruct v with t as [s u]."
     },
     {
       "type": "text",
