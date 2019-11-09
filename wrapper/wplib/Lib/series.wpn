@@ -23,6 +23,14 @@
     },
     {
       "type": "code",
+      "text": "\nLemma partial_sums_pos_incr :\n  ∀ (a : ℕ → ℝ), (∀ n : ℕ, a n ≥ 0)⇒\n    Un_growing (partial_sums a)."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake a : (ℕ → ℝ).\nAssume terms_pos : (∀ n : ℕ, a n ≥ 0).\nExpand the definition of Un_growing.\nWe need to show that\n  (for all n : ℕ,\n   partial_sums a n ≤ partial_sums a (S n)).\nTake n : ℕ.\nRewrite using (partial_sums a (S n) = partial_sums a n + a (S n)).\nIt holds that (a (S n) ≥ 0) (H1).\nIt follows that (partial_sums a n\n≤ partial_sums a n + a (S n)).\nQed."
+    },
+    {
+      "type": "code",
       "text": "Definition series_cv_to (a : ℕ → ℝ) (l : ℝ) :=\n  Un_cv (partial_sums a) l."
     },
     {

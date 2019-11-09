@@ -3,7 +3,7 @@
   "blocks": [
     {
       "type": "text",
-      "text": "# Getting used to Waterproof\n\nYou can move through the notebook by pressing **Alt + ↓**. Alternatively, you can use the buttons on the left, but it is typically much faster to work with keyboard shortcuts."
+      "text": "# Tutorial: Getting used to Waterproof\n\nThis tutorial explains how to get started with Waterproof. The tutorial is in the form of a *notebook*. You can move through this notebook by pressing **Alt + ↓**. Alternatively, you can use the buttons on the left, but it is typically much faster to work with keyboard shortcuts."
     },
     {
       "type": "text",
@@ -31,11 +31,11 @@
     },
     {
       "type": "text",
-      "text": "\nExecute the code line by line (press **Alt + ↓**), until a blue checkmark appears in place of the period after `Proof.`. This means that Waterproof has checked every line before the checkmark. Note how in the part of the screen under \"Proof progress\" (either on the right of the screen, or down below) appeared what we need to show, namely `(0=0)`. We will often refer to this as the current **goal**."
+      "text": "\nExecute the code line by line (press **Alt + ↓**), until a blue checkmark appears in place of the period after `Proof.`. This means that Waterproof has checked every line before the checkmark. Note how in the part of the screen under **Proof progress** (either on the right of the screen, or down below) appeared what we need to show, namely `(0=0)`. We will often refer to this as the current **goal**."
     },
     {
       "type": "text",
-      "text": "\nNext, we tell Waterproof what to do to prove the lemma. For such a simple statement, we can just write `\"It holds that (0=0).\"` and Waterproof will check automatically that this holds."
+      "text": "\nNext, we tell Waterproof what to do to prove the lemma. For such a simple statement, we can just write and execute the sentence `\"It holds that (0=0).\"` and Waterproof will check automatically that this holds. We will often refer to executing such a sentence as **applying a tactic.**"
     },
     {
       "type": "code",
@@ -48,6 +48,10 @@
     {
       "type": "code",
       "text": "\nQed."
+    },
+    {
+      "type": "text",
+      "text": "\n**HINT:** When writing `It holds that (...)`, it is important that at the place of the dots you write the current goal (which you can see under **Proof progress**), and not another statement.\n\n**HINT:** If you click on the hammer symbol on the top right, a list of tactics will open. You can click on any of the tactics, and the tactic will be inserted in the text, usually with some placeholders that you need to fill in."
     },
     {
       "type": "text",
@@ -85,7 +89,7 @@
     },
     {
       "type": "text",
-      "text": "> **NOTE:** the notation $x : ℝ$ means $x$ is in $\\mathbb{R}$ (or more accurately, $x$ is of type $\\mathbb{R}$) may be unfamiliar to you, and you may be more familiar with the notation $x ∈ \\reals$. This difference is due to the fact that Waterproof is built on **type theory** and not on set theory. \n\n**HINT:** You can insert characters such as ℝ either from the symbol menu that opens when clicking on 'Σ' in the top right corner, or you can write '\\reals'. For (most) other unicode characters you can use a backslash command as well."
+      "text": "> **NOTE:** the notation $x : ℝ$ means $x$ is in $\\mathbb{R}$ (or more accurately, $x$ is of type $\\mathbb{R}$) may be unfamiliar to you, and you may be more familiar with the notation $x ∈ \\reals$. This difference is due to the fact that Waterproof is built on **type theory** and not on set theory. \n\n**HINT:** You can insert characters such as ℝ either from the symbol menu that opens when clicking on 'Σ' in the top right corner, or you can write '\\reals'. For many other unicode characters you can use a backslash command as well."
     },
     {
       "type": "code",
@@ -93,7 +97,7 @@
     },
     {
       "type": "text",
-      "text": "\nTo show a statement like \"for all $x : \\mathbb{R}$, ...\", you first need to take an arbitrary $x : \\mathbb{R}$. We do this by writing and executing the following sentence. We sometimes also referring to executing such a sentence as **applying a tactic**."
+      "text": "\nTo show a statement like \"for all $x : \\mathbb{R}$, ...\", you first need to take an arbitrary $x : \\mathbb{R}$. We do this by writing and executing the following sentence, i.e. by applying the following **tactic**."
     },
     {
       "type": "code",
@@ -147,15 +151,27 @@
     },
     {
       "type": "text",
-      "text": "\nWe first choose $y=3$ by using the tactic `Choose y := (* value *).`."
+      "text": "\nWe first choose $y=3$ by using the tactic `Choose y := ((* value *)).`."
     },
     {
       "type": "code",
-      "text": "\nChoose y := 3."
+      "text": "\nChoose y := (3)."
     },
     {
       "type": "text",
-      "text": "\nWe now need to show that (3=3)."
+      "text": "\n(In this particular case we could also have written `Choose y := 3`, but in general the brackets are important.)\n\nWe now need to show that (y=3) (see **Proof progress** after executing the previous sentence). We can record this for our own convenience."
+    },
+    {
+      "type": "code",
+      "text": "\nWe need to show that (y = 3)."
+    },
+    {
+      "type": "text",
+      "text": "\nWe can also use the `We need to show that ` tactic to slightly reformulate the goal."
+    },
+    {
+      "type": "code",
+      "text": "\nWe need to show that (3 = 3)."
     },
     {
       "type": "code",
@@ -225,7 +241,7 @@
     },
     {
       "type": "text",
-      "text": "\nIf you execute the proof to the previous line, you will observe that in the 'Proof progress' window, `is_upper_bound` in the goal has been replaced by its definition. It is good practice to repeat the goal also in the proof itself, to increase the readability."
+      "text": "\nIf you execute the proof to the previous sentence, you will observe that in the **Proof progress** window, `is_upper_bound` in the goal has been replaced by its definition. It is good practice to repeat the goal also in the proof itself, to increase the readability."
     },
     {
       "type": "code",
@@ -242,10 +258,6 @@
     {
       "type": "text",
       "text": "\nA this stage, we may want to use the definition of $A$ itself. We can expand the definition of $A$ in the hypothesis `x_in_A` by writing"
-    },
-    {
-      "type": "code",
-      "text": "\nWrite x_in_A as (x < 1)."
     },
     {
       "type": "code",
@@ -301,7 +313,7 @@
     },
     {
       "type": "text",
-      "text": "**Remark:** the disadvantage of expanding definitions in this way, is that you need to know beforehand what is the result of expanding the definition. In practice, you can then peek at the result by first writing `Expand the definition` to see what is the result and then add a sentence of `We need to show that ...` or `Write ... as ...`. Afterwards, you can delete the sentence with `Expand the definition`."
+      "text": "\n**HINT:** the disadvantage of expanding definitions in this way, is that you need to know beforehand what is the result of expanding the definition. In practice, you can then peek at the result by first writing `Expand the definition` to see what is the result and then add a sentence of `We need to show that ...` or `Write ... as ...`. Afterwards, you can delete the sentence with `Expand the definition`."
     },
     {
       "type": "text",

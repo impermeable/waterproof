@@ -131,7 +131,7 @@
     },
     {
       "type": "code",
-      "text": "Notation \"f + g\" := (bdd_func_plus f g) : bdd_func_scope.\nNotation \"f - g\" := (bdd_func_minus f g) : bdd_func_scope.\nOpen Scope bdd_func_scope."
+      "text": "Notation \"f + g\" := (bdd_func_plus f g) : bdd_func_scope.\nNotation \"f - g\" := (bdd_func_minus f g) : bdd_func_scope.\nDelimit Scope bdd_func_scope with bf.\nOpen Scope bdd_func_scope."
     },
     {
       "type": "text",
@@ -195,7 +195,11 @@
     },
     {
       "type": "code",
-      "text": "Lemma norm_inf_spec :\n  ∀ (D : Type) (f_w_ev : @bdd_func D),\n    is_sup (func_range_abs_with_zero (proj1_sig f_w_ev)) (norm_inf f_w_ev)."
+      "text": "Notation \"‖ f ‖\" := (norm_inf f) (at level 20)."
+    },
+    {
+      "type": "code",
+      "text": "Lemma norm_inf_spec :\n  ∀ (D : Type) (f_w_ev : @bdd_func D),\n    is_sup (func_range_abs_with_zero (proj1_sig f_w_ev)) (‖ f_w_ev ‖)."
     },
     {
       "type": "code",
@@ -271,7 +275,7 @@
     },
     {
       "type": "text",
-      "text": "* The lemma norm_inf_triang contains the triangle \r\n    inequality for norm_inf. "
+      "text": "* The lemma norm_inf_triang contains the triangle \n    inequality for norm_inf. "
     },
     {
       "type": "code",
@@ -331,7 +335,7 @@
     },
     {
       "type": "code",
-      "text": "  By Rabs_triang it holds that \n    (Rabs\n        (proj1_sig (f n) x - proj1_sig (f N3) x +\n    (proj1_sig (f N3) x -\n   proj1_sig g_w_ev x)) ≤ \n  Rabs (proj1_sig (f n) x - proj1_sig (f N3) x)\n  +\n  Rabs (proj1_sig (f N3) x - proj1_sig g_w_ev x))%R (H34).\n  It holds that (R_dist (proj1_sig (f N3) x) (h x) < ε/4) (H35).\n  Expand the definition of R_dist in H35.\n  Rewrite using (h x = proj1_sig g_w_ev x)%R in H35.\n  It follows that (Rabs\n(proj1_sig (f n) x - proj1_sig (f N3) x +\n(proj1_sig (f N3) x -\nproj1_sig g_w_ev x)) ≤ \nε / 2)%R.\nWe claim that (norm_inf(bdd_func_minus (f n) g_w_ev) ≤ ε/2) (H36).\n  Apply bdd_func_norm_inf_le_upp_bound.\n    It holds that (ε /2 ≥ 0).\n    Apply H24.\n    It follows that (norm_inf(f n - g_w_ev) < ε).\nChoose g := g_w_ev.\n  Apply H21.\nQed."
+      "text": "  By Rabs_triang it holds that \n    (Rabs\n        (proj1_sig (f n) x - proj1_sig (f N3) x +\n    (proj1_sig (f N3) x -\n   proj1_sig g_w_ev x)) ≤ \n  Rabs (proj1_sig (f n) x - proj1_sig (f N3) x)\n  +\n  Rabs (proj1_sig (f N3) x - proj1_sig g_w_ev x))%R (H34).\n  It holds that (R_dist (proj1_sig (f N3) x) (h x) < ε/4) (H35).\n  Expand the definition of R_dist in H35.\n  Rewrite using (h x = proj1_sig g_w_ev x)%R in H35.\n  It follows that (Rabs\n(proj1_sig (f n) x - proj1_sig (f N3) x +\n(proj1_sig (f N3) x -\nproj1_sig g_w_ev x)) ≤ \nε / 2)%R.\nWe claim that (‖f n - g_w_ev‖%bf ≤ ε/2) (H36).\n  Apply bdd_func_norm_inf_le_upp_bound.\n    It holds that (ε /2 ≥ 0).\n    Apply H24.\n    It follows that (‖f n - g_w_ev‖ < ε).\nChoose g := g_w_ev.\n  Apply H21.\nQed."
     },
     {
       "type": "text",
@@ -339,11 +343,95 @@
     },
     {
       "type": "code",
-      "text": "Fixpoint bdd_func_partial_sums {D : Type} (f : ℕ → @bdd_func D) (n : ℕ) : @bdd_func D:=\n  match n with\n  | O => f O\n  | S m => (bdd_func_partial_sums f m) + (f (S m))\n  end."
+      "text": "Fixpoint bf_part_sum {D : Type} (f : ℕ → @bdd_func D) (n : ℕ) : @bdd_func D:=\n  match n with\n  | O => f O\n  | S m => (bf_part_sum f m) + (f (S m))\n  end."
     },
     {
       "type": "code",
-      "text": "Definition bdd_func_series_cv_abs {D : Type} (f : ℕ → @bdd_func D) :=\n  series_cv (fun (n : ℕ) ↦ norm_inf (f n))."
+      "text": "Definition bf_sigma {D : Type} (f: ℕ → @bdd_func D) (low high : nat):=\n  bf_part_sum (fun (k : nat) ↦ f (low + k)%nat) (high-low)%nat."
+    },
+    {
+      "type": "code",
+      "text": "Check sum_f_R0."
+    },
+    {
+      "type": "code",
+      "text": "\nLemma bf_part_sum_triang : \n  ∀ (D : Type) (f : ℕ → @bdd_func D) (n : ℕ),\n    ‖ bf_part_sum f n ‖%bf ≤ \n    sum_f_R0 (fun (k : ℕ) ↦ ‖ f k ‖) n."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake D : Type. Take f : (ℕ → @bdd_func D).\ninduction n as [|n IH].\nWe need to show that (‖ f 0%nat ‖ ≤ ‖ f 0%nat ‖).\nIt holds that (‖ f 0%nat ‖ ≤ ‖ f 0%nat ‖).\n\nWe need to show that (‖ bf_part_sum f (S n) ‖\n≤ partial_sums (k) ↦ (‖ f k ‖) (S n)).\nWe need to show that (‖ (bf_part_sum f n + f (S n))%bf ‖\n≤ partial_sums (k) ↦ (‖ f k ‖) n +\n‖ f (S n) ‖).\nBy norm_inf_triang it holds that \n  (‖ (bf_part_sum f n + f (S n))%bf ‖ \n   ≤\n   ‖ bf_part_sum f n ‖\n   +\n   ‖ f (S n) ‖) (H1).\nIt follows that (‖ (bf_part_sum f n + f (S n))%bf ‖\n≤ partial_sums (k) ↦ (‖ f k ‖) n +\n‖ f (S n) ‖).\nQed."
+    },
+    {
+      "type": "code",
+      "text": "Lemma bf_sigma_triang :\n  ∀ (D : Type) (f : ℕ → @bdd_func D) (m n : ℕ),\n    ‖ bf_sigma f m n ‖ ≤ \n    sigma (fun (k : ℕ) ↦ ‖ f k ‖) m n."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake D : Type. Take f : (ℕ → @bdd_func D).\nTake m : ℕ. Take n : ℕ.\nWe need to show that (‖ bf_part_sum (k) ↦ (f (m + k)%nat)\n(n - m) ‖\n≤ partial_sums (k) ↦ (‖ f (m + k)%nat ‖)\n(n - m)).\nApply bf_part_sum_triang.\nQed."
+    },
+    {
+      "type": "code",
+      "text": "Definition bf_series_cv_abs {D : Type} (f : ℕ → @bdd_func D) :=\n  series_cv (fun (n : ℕ) ↦ norm_inf (f n))."
+    },
+    {
+      "type": "code",
+      "text": "Definition bf_series_cv_abs_to \n  {D : Type} (f : ℕ → @bdd_func D) (L : ℝ) :=\n  series_cv_to (fun (n : ℕ) ↦ ‖f n‖) L."
+    },
+    {
+      "type": "code",
+      "text": "Lemma norm_inf_minus_sym_aux :\n  ∀ (D : Type) (f g: @bdd_func D),\n    ‖ f - g ‖%bf ≤ ‖ g - f ‖%bf."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake D : Type. Take f : (@bdd_func D).\nTake g : (@bdd_func D).\nBy norm_inf_nonneg it holds that (‖ g - f ‖%bf ≥ 0) (H1).\nWe claim that (∀ x : D, ｜proj1_sig (f - g)%bf x ｜%R ≤ ‖ g - f ‖%bf) (H2).\n  Take x : D. simpl. Expand the definition of f_plus. Expand the definition of f_scal_mult. We need to show that (｜ proj1_sig f x + -1 * proj1_sig g x ｜\n≤ ‖ (g - f)%bf ‖). Rewrite using (｜ proj1_sig f x + -1 * proj1_sig g x ｜=｜ proj1_sig f x - proj1_sig g x ｜). \nBy Rabs_minus_sym it holds that (｜ proj1_sig f x - proj1_sig g x ｜ = ｜ proj1_sig g x - proj1_sig f x ｜)%R (H3).\nRewrite using (｜ proj1_sig f x - proj1_sig g x ｜ = ｜ proj1_sig g x - proj1_sig f x ｜)%R.\nBy bdd_func_minus_to_func_eval it holds that (proj1_sig g x - proj1_sig f x = proj1_sig (bdd_func_minus g f) x)%R (H4).\nRewrite using (proj1_sig g x - proj1_sig f x = proj1_sig (bdd_func_minus g f) x)%R.\nApply bdd_func_bdd_by_norm_inf.\nBy bdd_func_norm_inf_le_upp_bound it holds that (‖ (f - g)%bf ‖ ≤ ‖ (g - f)%bf ‖) (H5).\nIt follows that (‖ (f - g)%bf ‖ ≤ ‖ (g - f)%bf ‖).\nQed."
+    },
+    {
+      "type": "code",
+      "text": "Lemma norm_inf_minus_sym :\n  ∀ (D : Type) (f g: @bdd_func D),\n    ‖ f - g ‖ = ‖ g - f ‖."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake D : Type. Take f : (@bdd_func D).\nTake g : (@bdd_func D). \nBy norm_inf_minus_sym_aux it holds that (‖ f - g ‖%bf ≤ ‖ g - f ‖%bf) (H1).\nBy norm_inf_minus_sym_aux it holds that (‖ g - f ‖%bf ≤ ‖ f - g ‖%bf) (H2).\nIt follows that (‖ f - g ‖ = ‖ g - f ‖).\nQed."
+    },
+    {
+      "type": "code",
+      "text": "Lemma bf_sigma_part_sum_compare :\n  ∀ (D : Type) (f : ℕ → @bdd_func D) (n : ℕ),\n    bf_sigma f 0%nat n = bf_part_sum f n."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\n  Take D : Type.\n  Take f : (ℕ → @bdd_func D).\n  Take n : ℕ.\n  Expand the definition of bf_sigma.\n  Rewrite using ((k) ↦ (f (0 + k)%nat)\n                 = (k) ↦ (f (k)%nat))%nat.\n  Rewrite using (n - 0 = n)%nat.\n  It holds that (bf_part_sum (k) ↦ (f k) n =\nbf_part_sum f n).\nQed."
+    },
+    {
+      "type": "code",
+      "text": "Lemma bf_tail_triang_est :\n  ∀ (D : Type) (f : ℕ → @bdd_func D) (m n : ℕ) (L : ℝ),\n   (m < n)%nat ⇒ bf_series_cv_abs_to f L ⇒\n     ‖ bf_sigma f (S m) n ‖ ≤ \n     L - partial_sums (fun (l : ℕ) ↦ ‖ f l ‖) m."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake D : Type. Take f : (ℕ → @bdd_func D).\nDefine F := (fun (k : ℕ) ↦ ‖ f k ‖).\nTake m : ℕ. Take n : ℕ. Take L : ℝ.\nAssume m_lt_n : (m < n)%nat.\nAssume f_cv_abs_to_L : (bf_series_cv_abs_to f L).\nBy bf_sigma_triang it holds that\n  (‖ bf_sigma f (S m) n ‖ \n    ≤ sigma F (S m) n) (H1).\nIt holds that\n  ( sigma F 0 m + ‖ bf_sigma f (S m) n ‖\n    ≤ sigma F 0 m \n    + sigma F (S m) n) (H2).\nBy sigma_split it holds that (sigma F 0 n\n    = sigma F 0 m \n    + sigma F (S m) n)%R (H3).\nRewrite using (sigma F 0 m \n    + sigma F (S m) n = sigma F 0 n )%R in H2.\nWe claim that (∀ M : ℕ, sigma F 0 M = partial_sums F M) (H4).\n  Take M : ℕ.\n  Expand the definition of sigma.\n  Rewrite using ((k) ↦ (F (0 + k)%nat)\n                 = (k) ↦ (F (k)%nat))%nat.\n  Rewrite using (M - 0 = M)%nat.\n  It holds that (partial_sums (k) ↦ (F k) M =\npartial_sums F M).\nRewrite using (sigma F 0 m = partial_sums F m) in H2.\nRewrite using (sigma F 0 n = partial_sums F n) in H2.\nBy norm_inf_nonneg it holds that \n  (∀ k : ℕ, F k ≥ 0) (H5).\nBy partial_sums_pos_incr it holds that\n  (Un_growing (partial_sums F)) (H6).\nBy growing_ineq it holds that (partial_sums F n ≤ L) (H7).\nIt follows that (‖ bf_sigma f (S m) n ‖\n≤ L - partial_sums F m).\nQed."
+    },
+    {
+      "type": "code",
+      "text": "Lemma bf_cv_abs_to_cauchy :\n  ∀ (D : Type) (f : ℕ → @bdd_func D),\n    bf_series_cv_abs f ⇒ is_Cauchy (bf_part_sum f)."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake D : Type. Take f : (ℕ → @bdd_func D).\nAssume f_cv_abs : (bf_series_cv_abs f).\nExpand the definition of is_Cauchy.\nWe need to show that (for all ε : ℝ,\nε > 0\n⇒ there exists N : ℕ ,\nfor all m n : ℕ,\n(m ≥ N)%nat\n⇒ (n ≥ N)%nat ⇨ ‖  bf_part_sum f n -\nbf_part_sum f m ‖ < ε).\nTake ε : ℝ. Assume ε_gt_0 : (ε > 0).\nExpand the definition of bf_series_cv_abs in f_cv_abs.\nExpand the definition of series_cv in f_cv_abs.\nWrite f_cv_abs as (∃ L : ℝ, series_cv_to (n) ↦ (‖ f n ‖) L).\nChoose L such that ser_cv_to_L according to f_cv_abs.\nExpand the definition of series_cv_to in ser_cv_to_L.\nExpand the definition of Un_cv in ser_cv_to_L.\nBy ser_cv_to_L it holds that \n  (∃ N : ℕ, ∀ n : ℕ, (n ≥ N)%nat \n     ⇒ R_dist \n         (partial_sums (n0) ↦ (‖ f n0 ‖) n)\n         L < ε) (H1).\nChoose N1 such that psums_close_to_L according to H1.\nChoose N := (N1 + 1)%nat."
+    },
+    {
+      "type": "code",
+      "text": "Take m : ℕ. Take n : ℕ.\nBy lt_eq_lt_dec it holds that ({n < m} + {n = m} + {m < n})%nat (H2).\nBecause H2 either n_eq_m_or_m_lt_n or n_lt_m.\nBecause n_eq_m_or_m_lt_n either n_lt_m or n_eq_m."
+    },
+    {
+      "type": "text",
+      "text": "We are in the case that $(n < m)$."
+    },
+    {
+      "type": "code",
+      "text": "By bf_tail_triang_est it holds that\n  (‖ bf_sigma f (S n) m ‖ ≤ \n     L - partial_sums (fun (l : ℕ) ↦ ‖ f l ‖) n) (H1).\nAssume m_ge_N : (m ≥ N)%nat.\nAssume n_ge_N : (n ≥ N)%nat.\nBy norm_inf_minus_sym it holds that\n  (‖ bf_part_sum f n - bf_part_sum f m ‖ = \n   ‖ bf_part_sum f m - bf_part_sum f n ‖) (H2).\nRewrite using\n  (‖ bf_part_sum f n - bf_part_sum f m ‖ = \n   ‖ bf_part_sum f m - bf_part_sum f n ‖).\nBy bf_sigma_part_sum_compare it holds that\n  (bf_part_sum f m = bf_sigma f 0 m) (H3).\nBy bf_sigma_part_sum_compare it holds that\n  (bf_part_sum f n = bf_sigma f 0 n) (H4).\nRewrite using (bf_part_sum f m = bf_sigma f 0 m).\nRewrite using (bf_part_sum f n = bf_sigma f 0 n)."
+    },
+    {
+      "type": "code",
+      "text": "\n"
     }
   ]
 }
