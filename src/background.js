@@ -82,7 +82,7 @@ function createWindow() {
 
     if (process.argv.length > 1) {
       // TODO check on different platforms
-      win.loadURL('app://./editpage.html?' + encodeURIComponent(process.argv[1]));
+      win.loadURL('app://./index.html?location=' + encodeURIComponent(process.argv[1]));
     } else {
       win.loadURL('app://./index.html');
     }
