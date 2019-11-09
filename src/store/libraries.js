@@ -174,5 +174,11 @@ export default {
       const worker = store.state.socket.createNewWorker(store.state.sertopPath);
       return new CoqSerapiProcessors(worker, editorInterface);
     },
+    async shutdownSerapi(store) {
+      await store.dispatch('loadSerapi');
+      return new Promise((resolve) => {
+        store.state.socket.stopAll(resolve);
+      });
+    },
   },
 };

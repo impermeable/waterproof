@@ -440,9 +440,12 @@ export default {
           ipcRenderer.send('confirmClosing');
         };
 
-        setTimeout(sendClose, 1000);
+        setTimeout(() => {
+          console.log('timeout stop!!!');
+          sendClose();
+        }, 750);
 
-        this.socket.stopAll(sendClose);
+        this.$store.dispatch('shutdownSerapi').then(sendClose);
       });
     }
   },
@@ -471,7 +474,7 @@ export default {
     }
   },
   beforeDestroy() {
-    this.socket.stopAll(() => {}, false);
+    require('electron').ipcRenderer.removeAllListeners('closing-application');
   },
 };
 </script>
