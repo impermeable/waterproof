@@ -74,20 +74,23 @@ export default {
       fileLoading: true,
       recents: new Recents(),
       shortKeys: new ShortKeys(),
+      shutdownHook: null,
     };
   },
   created: function() {
     if (process.env.NODE_ENV !== 'test' &&
             process.env.NODE_ENV !== 'coverage') {
+      this.shutdownHook = () => {
+        ipcRenderer.send('confirmClosing');
+      };
       // cant import this in tests, :/ very ugly solution
       const ipcRenderer = require('electron').ipcRenderer;
-      ipcRenderer.on('closing-application', () => {
-        ipcRenderer.send('confirmClosing');
-      });
+      ipcRenderer.on('closing-application', this.shutdownHook);
     }
   },
   beforeDestroy() {
-    require('electron').ipcRenderer.removeAllListeners('closing-application');
+    require('electron').ipcRenderer
+        .removeListener('closing-application', this.shutdownHook);
   },
 };
 </script>
