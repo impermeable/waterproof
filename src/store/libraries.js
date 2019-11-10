@@ -40,7 +40,7 @@ export default {
         state.sertopPath = partial['sertopPath'];
       }
       if (partial.hasOwnProperty('serapiVersion')) {
-        state.sertopPath = partial['serapiVersion'];
+        state.serapiVersion = partial['serapiVersion'];
       }
     },
   },
