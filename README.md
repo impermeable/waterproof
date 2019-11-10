@@ -41,13 +41,13 @@ apt install opam
 
 #### Step 1.b Install OCaml
 
-OCaml for Windows installs a cygwin terminal. In the terminal, execute the following commands (corresponding to instructions on https://ocaml.org/docs/install.html). **Note:** On Windows, use the cygwin terminal that installed in the previous step.
+In the terminal, execute the following commands (corresponding to instructions on https://ocaml.org/docs/install.html). **Note:** On Windows, use the cygwin terminal that installed in the previous step.
 
 The first steps are common to all operating systems. First initialize the environment with
 ```
 opam init
 ```
-This may take a few minutes. In the meantime, opam will likely ask to questions. We recommend choosing 'y' to both, i.e. to opam modifying the `.bash_profile` and to opam adding a hook to the init scripts. Now execute the following line
+This may take a few minutes. In the meantime, opam will likely ask two questions. We recommend choosing 'y' to both, i.e. to opam modifying the `.bash_profile` and to opam adding a hook to the init scripts. Now execute the following line
 ```
 eval `opam env`
 ```
