@@ -27,14 +27,25 @@ function findSertop(platform) {
         ['default',
           'ocaml-variants.4.07.1+mingw64c',
           '4.07.1+mingw64c'];
-    for (let i=0; i < ocamlVariants.length; i++ ) {
-      const guess = `C:\\OCaml64\\home\\${userName}\\.opam` +
-            `\\${ocamlVariants[i]}\\bin\\sertop.exe`;
-      if (fs.existsSync(guess)) {
-        return guess;
+
+    const baseFolderVariants =
+        [`C:\\OCaml64\\home\\${userName}\\.opam\\`,
+          path.join(require('electron').remote.app.getPath('home'), '.opam/')];
+    for (const base of baseFolderVariants) {
+      console.log('checking ', base);
+      if (fs.existsSync(base)) {
+        for (const variant of ocamlVariants) {
+          const guess = base + `${variant}\\bin\\sertop.exe`;
+          console.log('checking ', guess);
+          if (fs.existsSync(guess)) {
+            console.log('wooo!');
+            return guess;
+          }
+        }
       }
     }
   }
+  console.log('could not find any');
   return '';
 }
 
