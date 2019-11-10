@@ -134,6 +134,38 @@
       "text": "Tactic Notation \"This\" \"follows\" \"immediately\" :=\n  wp_power.\n\nTactic Notation \"follows\" \"immediately\" := \n  wp_power."
     },
     {
+      "type": "code",
+      "text": "Tactic Notation \"It\" \"sufficies\" \"to\" \"show\" \"that\"\n  constr(t) :=\n  enough t by ( wp_power || fail \"Waterproof could confirm that proving the statement would be enough.\")."
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"It\" \"suffices\" \"to\" \"show\" \"that\"\n  constr(t) \"by\" tactic(tac) :=\n  enough t by tac."
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"Write\" \"goal\" \"using\" constr(t) \"as\" \n  constr(s) :=\n  let u := fresh in\n    assert (u : t) by wp_power;\n  rewrite u;\n  enough s by wp_power;\n  clear u."
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"Write\" ident(H) \"using\" constr(t) \"as\"\n  constr(s) :=\n  let u := fresh in\n    assert (u : t) by wp_power;\n  rewrite u in H;\n  clear u."
+    },
+    {
+      "type": "code",
+      "text": ""
+    },
+    {
+      "type": "code",
+      "text": ""
+    },
+    {
+      "type": "code",
+      "text": ""
+    },
+    {
+      "type": "code",
+      "text": ""
+    },
+    {
       "type": "text",
       "text": ""
     },
@@ -172,6 +204,10 @@
     {
       "type": "text",
       "text": ""
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"replacing\" constr(s) \"with\" constr(t) :=\n  replace s with t by wp_power."
     },
     {
       "type": "text",
@@ -248,6 +284,14 @@
     {
       "type": "code",
       "text": "Tactic Notation \"Simplify\" \"what\" \"we\" \"need\" \"to\" \"show\" :=\n  simpl."
+    },
+    {
+      "type": "text",
+      "text": "## Hints"
+    },
+    {
+      "type": "code",
+      "text": "Hint Resolve Rmult_gt_0_compat : real.\nHint Resolve Rmult_lt_0_compat : real."
     }
   ]
 }

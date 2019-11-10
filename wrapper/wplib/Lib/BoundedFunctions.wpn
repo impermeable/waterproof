@@ -87,11 +87,11 @@
     },
     {
       "type": "code",
-      "text": "Lemma sum_bdd_func_bdd {D : Type} :\n  ∀ (f g: D → ℝ), is_bdd f ⇒ is_bdd g ⇒\n    is_bdd (f + g).\nProof.\nTake f : (D → ℝ). Take g : (D → ℝ). \nAssume f_bdd. Assume g_bdd.\nExpand the definition of is_bdd in f_bdd.\nExpand the definition of is_bdd in g_bdd. \nExpand the definition of is_bdd.\nChoose M_f such that f_le_M_f according to f_bdd.\nChoose M_g such that g_le_M_g according to g_bdd.\nWe need to show that\n  (there exists M : ℝ ,\n    for all x : D,\n      ｜f_plus f g x｜ ≤ M).\nChoose M := (M_f + M_g)%R.\nTake x : D.\nExpand the definition of f_plus.\nBy Rabs_triang it holds that (｜f x + g x｜ ≤ ｜f x｜ + ｜g x｜)\n  (H1)."
+      "text": "Lemma sum_bdd_func_bdd {D : Type} :\n  ∀ (f g: D → ℝ), is_bdd f ⇒ is_bdd g ⇒\n    is_bdd (f + g).\nProof.\nTake f : (D → ℝ). Take g : (D → ℝ). \nAssume f_bdd. Assume g_bdd.\nExpand the definition of is_bdd in f_bdd.\nExpand the definition of is_bdd in g_bdd. \nExpand the definition of is_bdd.\nChoose M_f such that f_le_M_f according to f_bdd.\nChoose M_g such that g_le_M_g according to g_bdd.\nWe need to show that\n  (there exists M : ℝ ,\n    for all x : D,\n      ｜f_plus f g x｜ ≤ M).\nChoose M := (M_f + M_g)%R.\nTake x : D.\nExpand the definition of f_plus.\nBy Rabs_triang it holds that (｜f x + g x｜ ≤ ｜f x｜ + ｜g x｜)\n  (H1).\n  "
     },
     {
       "type": "code",
-      "text": "It holds that (Rabs (f x) + Rabs (g x) ≤ M_f + M_g) (H2).\nIt follows that (Rabs (f x + g x) ≤ M_f + M_g).\nQed."
+      "text": "It holds that (Rabs (f x) + Rabs (g x) ≤ M_f + M_g) (H2).\nIt follows that (Rabs (f x + g x) ≤ M_f + M_g).\nDefined."
     },
     {
       "type": "code",
@@ -351,7 +351,11 @@
     },
     {
       "type": "code",
-      "text": "Check sum_f_R0."
+      "text": "Lemma bf_sigma_split :\n  ∀ (D : Type) (f : ℕ → @bdd_func D) (low high k:ℕ),\n      (low ≤ k)%nat ⇒\n      (k < high)%nat ⇒ \n      bf_sigma f low high \n        = bf_sigma f low k + bf_sigma f (S k) high."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake D : Type. Take f : (ℕ → @bdd_func D).\nTake low : ℕ. induction high as [|high Ihigh]. \nTake k : ℕ.\nAssume low_le_O : (low ≤ k)%nat.\nAssume O_lt_high : (k < 0)%nat.\nIt holds that (¬ (k < 0))%nat (H1).\ncontradiction.\nTake k : ℕ.\nAdmitted."
     },
     {
       "type": "code",

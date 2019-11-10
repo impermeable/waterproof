@@ -55,14 +55,14 @@
         "example": "Lemma a: forall A B: Prop, (A -> B) -> A -> B.\nProof.\n  intros.\n  apply H.\n  apply H0.\nQed."
     },
     {
-        "name": "Rewrite using (*equality*).",
+        "name": "Write goal using ((*equality*)) as ((*new goal*)).",
         "description": "First attempts to automatically find a proof of the provided equality, and if it succeeds it uses it to replace in the goal the lhs of the equality by the rhs.",
-        "example": "Rewrite using (2 + 3 = 5)."
+        "example": "Write goal using (2 + 3 = 5) as (5 = 5)."
     },
     {
-        "name": "Rewrite using (*equality*) in (*name_hyp*).",
+        "name": "Write (*name_hyp*) using ((*equality*)) as ((*new_hyp*)).",
         "description": "First attempts to automatically find a proof of the provided equality, and if it succeeds it uses it to replace in the hypothesis with name (*name_hyp*) the lhs of the equality by the rhs.",
-        "example": "Rewrite using (2 + 3 = 5) in H0."
+        "example": "Rewrite H0 using (2 + 3 = 5) as (5 = 5)."
     },
     {
         "name": "Expand the definition of (*name_kw*).",
@@ -85,7 +85,7 @@
         "example": "Lemma example_reflexivity : 0 = 0.\nProof.\nWe need to show that (0=0)."
     },
     {
-        "name": "Write (*name_hyp*) as (*expression*).",
+        "name": "Write (*name_hyp*) as ((*expression*)).",
         "description": "Checks that the hypothesis with name (*name_hyp*) can be converted to (*expression*), and then replaces it by (*expression*). This is in general a more readable alternative to \"Expand the definition\"",
         "example": "Write x_in_A as (x ∈ A)."
     }

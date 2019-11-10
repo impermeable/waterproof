@@ -3,11 +3,7 @@
   "blocks": [
     {
       "type": "text",
-      "text": "# Tutorial: Getting used to Waterproof\n\nThis tutorial explains how to get started with Waterproof. The tutorial is in the form of a *notebook*. You can move through this notebook by pressing **Alt + ↓**. Alternatively, you can use the buttons on the left, but it is typically much faster to work with keyboard shortcuts."
-    },
-    {
-      "type": "text",
-      "text": "## Library imports\n\nA typical Waterproof notebook starts with importing libraries."
+      "text": "# Tutorial: Getting used to Waterproof\n\nThis tutorial explains how to get started with Waterproof. The aim of Waterproof is to help learning how to prove mathematical statements.\n\nThis tutorial is in the form of an **exercise sheet** (sometimes we will call it a **notebook**). It is a mix of explanations and exercises in which you can try proving mathematical statements yourself. \n\nThe exercise sheet contains **text cells** (white background) and **code cells** (gray background). So far, we have been writing text, in text cells. But now we will introduce the first code cell.\n"
     },
     {
       "type": "code",
@@ -15,7 +11,15 @@
     },
     {
       "type": "text",
-      "text": "## A first example\n\nIn the following code cell, we introduce a lemma. We called the lemma **example_reflexivity**."
+      "text": "The code consists of four sentences. Every sentence finishes with a period. In these four sentences, libraries are imported that are necessary to make the rest of the notebook work."
+    },
+    {
+      "type": "text",
+      "text": "\nWe recommend that while you read this notebook, you execute the code sentence-by-sentence by pressing **Alt + ↓**. (Alternatively, you can use the buttons on the left, but it is typically much faster to work with keyboard shortcuts.)"
+    },
+    {
+      "type": "text",
+      "text": "## A first example of a lemma\n\nIn the following code cell, we introduce a **lemma**. We called the lemma **example_reflexivity**."
     },
     {
       "type": "code",
@@ -23,7 +27,7 @@
     },
     {
       "type": "text",
-      "text": "We will now prove the lemma. We start the proof by writing `\"Proof.\"` in a code cell."
+      "text": "\nWe will now prove the lemma. We start the proof by writing the sentence `\"Proof.\"` in a code cell."
     },
     {
       "type": "code",
@@ -31,7 +35,7 @@
     },
     {
       "type": "text",
-      "text": "\nExecute the code line by line (press **Alt + ↓**), until a blue checkmark appears in place of the period after `Proof.`. This means that Waterproof has checked every line before the checkmark. Note how in the part of the screen under **Proof progress** (either on the right of the screen, or down below) appeared what we need to show, namely `(0=0)`. We will often refer to this as the current **goal**."
+      "text": "\nExecute the code sentence after sentence (press **Alt + ↓**), until a blue checkmark appears in place of the period after `Proof.`. The checkmark means that Waterproof has checked every sentence before the checkmark. Note how in the part of the screen under **Proof progress** (either on the right of the screen, or down below) appeared what we need to show, namely `(0=0)`. We will often refer to this as the current **goal**."
     },
     {
       "type": "text",
@@ -43,7 +47,7 @@
     },
     {
       "type": "text",
-      "text": "\nExecute the above code line, with **Alt + ↓**, until the checkmark appears after the line. Note how under proof progress it says `Done.`. The statement is proved! We close the proof by writing `Qed.`."
+      "text": "\nExecute the above sentence, with **Alt + ↓**, until the checkmark appears after the sentence. Note how under proof progress it says `Done.`. The lemma is proved! We close the proof by writing `Qed.`."
     },
     {
       "type": "code",
@@ -68,7 +72,7 @@
     },
     {
       "type": "text",
-      "text": "The blue brackets mean that this is an input cell. You can freely work here. You can add a code cell by pressing **Alt + c** (On MacOS: **⌘ + c**), and add a text cell by pressing **Alt + t** (On MacOS: **⌘ + t**).\n\nBelow we already added one code cell, which says `Admitted.`. Executing that code cell (**Alt + ↓**), will also make the proof progress turn to `Done.` **However,** in that case it is not proven but assumed as an axiom. We do this so you can continue executing the notebook even if you cannot solve the exercise.\n\nAfter you have found a proof, replace the `Admitted.` by `Qed.`"
+      "text": "The blue brackets mean that this is an input cell. You can freely work here. Move the mouse just below the blue bracket until a blue, horizontal line appears and click on it. Then, you can add a code cell by pressing **Alt + c** (On MacOS: **Ctrl + c**), and add a text cell by pressing **Alt + t** (On MacOS: **Ctrl + t**).\n\nYou can also change the text in this text cell by clicking on it.\n\nBelow we already added one code cell, which says `Admitted.`. Executing that code cell (**Alt + ↓**), will also make the proof progress turn to `Done.` **However,** in that case it is not proven but assumed as an axiom. We do this so you can continue executing the notebook even if you cannot solve the exercise.\n\nAfter you have found a proof, replace the `Admitted.` by `Qed.` (click on the code cell and change the sentence)."
     },
     {
       "type": "code",
@@ -202,6 +206,84 @@
       "type": "input",
       "start": false,
       "id": "input-3"
+    },
+    {
+      "type": "text",
+      "text": "## Making assumptions\n\nThe following lemma expresses that for all $a : \\mathbb{R}$, if $a < 0$ then ($-a > 0$)."
+    },
+    {
+      "type": "code",
+      "text": "\nLemma example_assumptions :\n  ∀ a : ℝ, a < 0 ⇒ - a > 0."
+    },
+    {
+      "type": "text",
+      "text": "Before we prove the lemma, let us first add some brackets that indicate how to read such an expression:\n\n$∀ a : ℝ, \\Big( (a < 0) ⇒ (- a > 0)\\Big).$"
+    },
+    {
+      "type": "text",
+      "text": "In particular, after the comma after a for-all quantifier, after the comma after a there-exists statement, and after an implication arrow, there are implicit brackets around everything that follows after. \n\nLet us now start to prove the lemma."
+    },
+    {
+      "type": "code",
+      "text": "\nProof."
+    },
+    {
+      "type": "text",
+      "text": "\nBecause we need to show a for-all statement, we know how to start the proof."
+    },
+    {
+      "type": "code",
+      "text": "\nTake a : ℝ."
+    },
+    {
+      "type": "text",
+      "text": "\nIf you now execute the code up to previous sentence, you can see in the **Proof progress** that we need to show `a < 0 ⇒ -a > 0.` Remembering the rules for brackets, this means:"
+    },
+    {
+      "type": "code",
+      "text": "We need to show that \n  ((a < 0) ⇒ (-a > 0))."
+    },
+    {
+      "type": "text",
+      "text": "\nIn words, if $a < 0$ then ($- a > 0$). To show this we need to assume that $a < 0$, and then continue proving that $(-a > 0)$. We can make such an assumption with the following sentence."
+    },
+    {
+      "type": "code",
+      "text": "\nAssume a_lt_0 : (a < 0)."
+    },
+    {
+      "type": "text",
+      "text": "\nThe **name** of this assumption is in this case **a_lt_0**. What you are actually assumping is written after the colon, namely **a < 0**. Note how after executing the sentence, the assumption $a < 0$ is added under **Proof progress** with the name **a_lt_0**.\n\nWe finish the proof."
+    },
+    {
+      "type": "code",
+      "text": "We need to show that (-a > 0).\nIt holds that (-a > 0).\nQed."
+    },
+    {
+      "type": "text",
+      "text": "## Try it yourself\n\nYou can practice making assumptions by proving the lemma below. We have added brackets in the statement to help in reading it, but we didn't have to: the lemma would have exactly the same meaning if we would have left out the brackets."
+    },
+    {
+      "type": "code",
+      "text": "Lemma exercise_assumptions :\n  ∀ a : ℝ, (∀ b : ℝ, ( a > 0 ⇒ (b > 0 ⇒ a + b > 0))).\n  \nProof."
+    },
+    {
+      "type": "input",
+      "start": true,
+      "id": "input-6"
+    },
+    {
+      "type": "text",
+      "text": "Write your solution here..."
+    },
+    {
+      "type": "code",
+      "text": "\nAdmitted."
+    },
+    {
+      "type": "input",
+      "start": false,
+      "id": "input-6"
     },
     {
       "type": "text",
@@ -520,16 +602,20 @@
       "text": "We need to show that (a < d)."
     },
     {
+      "type": "code",
+      "text": "Write a_lt_b using (b = b + 0) as\n  (a < (b + 0))."
+    },
+    {
       "type": "text",
       "text": "\nWaterproof can not find a proof immediately. We have to help a bit, by saying that it should rewrite $d$ to $(a+b)/2$."
     },
     {
       "type": "code",
-      "text": "\n  Rewrite using (d = (a + b)/2).\n  It holds that (a < (a + b)/2)."
+      "text": "\nWrite goal using (d = (a + b)/2) as\n  (a < (a + b)/2).\n  It holds that (a < (a + b)/2)."
     },
     {
       "type": "code",
-      "text": "We need to show that (d < b).\n  Rewrite using (d = (a + b)/2).\n  It holds that ((a+b)/2 < b).\nQed."
+      "text": "We need to show that (d < b).\n  Write goal using (d = (a + b)/2) as\n  ((a + b)/2 < b).\n  It holds that ((a+b)/2 < b).\nQed."
     },
     {
       "type": "text",
@@ -553,7 +639,7 @@
     },
     {
       "type": "code",
-      "text": "\nChoose y such that y_gt_10_and_x_gt_y according to ex_y."
+      "text": "Choose y such that \n  y_gt_10_and_x_gt_y according to ex_y."
     },
     {
       "type": "text",
