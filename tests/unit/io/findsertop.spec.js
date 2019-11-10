@@ -16,10 +16,8 @@ const sertopFinder = require('../../../src/io/findsertop');
  */
 function existsSyncReplacement( specialPath ) {
   return function(userPath) {
-    if (userPath === specialPath) {
-      return true;
-    }
-    return false;
+    return (userPath === specialPath
+      || specialPath.startsWith(userPath));
   };
 }
 
@@ -29,20 +27,27 @@ function existsSyncReplacement( specialPath ) {
  * .app.getPath('userData');
  * @param {string} userPath the mock user path
  * @param {array} chosenSertopPaths array of paths a user has chosen
+ * @param {boolean} acceptMessage whether to accept message boxes
  * @return {Object} mock electron remote instance
  */
-function remoteGen( userPath, chosenSertopPaths ) {
+function remoteGen( userPath, chosenSertopPaths, acceptMessage=true ) {
   return {
     app: {getPath: (query) => {
       if (query === 'userData') {
         return userPath;
+      } else if (query === 'home') {
+        return 'C:\\Users\\SomeUser\\';
       } else {
         throw new Error('getPath not provided with correct argument');
       }
     }},
-    dialog: {showOpenDialog: function() {
-      return chosenSertopPaths;
-    },
+    dialog: {
+      showOpenDialog: function() {
+        return chosenSertopPaths;
+      },
+      showMessageBox: function() {
+        return acceptMessage ? 0 : 1;
+      },
     },
   };
 }
@@ -70,7 +75,18 @@ describe('Finding sertop', () => {
     });
 
     it('should give back correct path on Windows', (done) => {
-      expect(sertopFinder.findSertop('win32')).to.equal(sertopPath);
+      const userPath = 'C:\\Users\\SomeUser\\AppData\\Roaming\\waterproof\\';
+      const path = sertopFinder.findSertop('win32',
+          remoteGen(userPath, [], true));
+      expect(path).to.equal(sertopPath);
+      done();
+    });
+
+    it('should not use that version if user rejects', (done) => {
+      const userPath = 'C:\\Users\\SomeUser\\AppData\\Roaming\\waterproof\\';
+      const path = sertopFinder.findSertop('win32',
+          remoteGen(userPath, [], false));
+      expect(path).to.equal('');
       done();
     });
   });

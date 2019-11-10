@@ -14,13 +14,18 @@ function getPlatform() {
 }
 
 /**
-    * Attempts to find the location of sertop.
-    *
-    * @param {string} platform the platform of the user
-    * @return {string} The path of sertop if it is found,
-    * and otherwise an empty string.
-    */
-function findSertop(platform) {
+  * Attempts to find the location of sertop.
+  *
+  * @param {string} platform the platform of the user
+  * @param {Object} remote electron remote instance
+  * @return {string} The path of sertop if it is found,
+  * and otherwise an empty string.
+  */
+function findSertop(platform, remote=undefined) {
+  if (remote == null) {
+    // TODO: ugly for testing... can be done better
+    remote = require('electron').remote;
+  }
   const userName = os.userInfo()['username'];
   if (platform === 'win32') {
     const ocamlVariants =
@@ -30,13 +35,13 @@ function findSertop(platform) {
 
     const baseFolderVariants =
         [`C:\\OCaml64\\home\\${userName}\\.opam\\`,
-          path.join(require('electron').remote.app.getPath('home'), '.opam/')];
+          path.join(remote.app.getPath('home'), '.opam/')];
     for (const base of baseFolderVariants) {
       if (fs.existsSync(base)) {
         for (const variant of ocamlVariants) {
           const guess = base + `${variant}\\bin\\sertop.exe`;
           if (fs.existsSync(guess)) {
-            const dialog = require('electron').remote.dialog;
+            const dialog = remote.dialog;
 
             const useThisVersion =dialog.showMessageBox({
               type: 'question',
