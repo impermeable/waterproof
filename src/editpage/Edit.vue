@@ -449,6 +449,9 @@ export default {
       });
     }
   },
+  beforeDestroy() {
+    require('electron').ipcRenderer.removeAllListeners('closing-application');
+  },
   mounted: function() {
     this.mainBus.$on('on-edit', this.doOnEdit);
     this.mainBus.$on('on-proof-window', this.doOnActiveProofWindow);
@@ -472,9 +475,6 @@ export default {
         fileURI: null,
       });
     }
-  },
-  beforeDestroy() {
-    require('electron').ipcRenderer.removeAllListeners('closing-application');
   },
 };
 </script>

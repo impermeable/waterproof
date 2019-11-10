@@ -76,6 +76,19 @@ export default {
       shortKeys: new ShortKeys(),
     };
   },
+  created: function() {
+    if (process.env.NODE_ENV !== 'test' &&
+            process.env.NODE_ENV !== 'coverage') {
+      // cant import this in tests, :/ very ugly solution
+      const ipcRenderer = require('electron').ipcRenderer;
+      ipcRenderer.on('closing-application', () => {
+        ipcRenderer.send('confirmClosing');
+      });
+    }
+  },
+  beforeDestroy() {
+    require('electron').ipcRenderer.removeAllListeners('closing-application');
+  },
 };
 </script>
 
