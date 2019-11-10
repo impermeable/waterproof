@@ -16,10 +16,11 @@ stages:
 jobs:
   include:
   - stage: lint/unit
-    script: npm run lint && npm run test:unit
+    script:
+    - npm run lint
+    - npm run test:unit
   - stage: test
     script:
-#      - apt-get install -y xvfb
       ## If the application does not start within one minute, this job will fail.
       - scripts/checked-timeout 60 xvfb-run npx --no-install vue-cli-service electron:serve
   - stage: deploy
