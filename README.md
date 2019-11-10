@@ -57,7 +57,6 @@ Install OCaml with
 ```
 opam switch create 4.07.1+mingw64c
 eval `opam env`
-opam repo add ocaml_opam_repository https://github.com/ocaml/opam-repository.git
 ```
 
 ##### On Linux or macOS:
@@ -75,7 +74,7 @@ After installing OCaml, run the following command in the terminal:
 opam install coq-serapi
 ```
 
-Opam will ask to install several packages. Choose 'y' to install them. This step will at least take several minutes.
+Opam will ask to install several packages. Choose 'y' to install them. This step will at least take several minutes, but may take up to an hour.
 
 Finally, execute again
 
@@ -88,8 +87,6 @@ eval `opam env`
 After installing SerAPI, you are ready to install Waterproof using your preferred installer from the [release page](http://github.com/impermeable/waterproof/releases).
 
 > **Known issue**: Because Waterproof is relatively unknown software, it is possible that it will initially be blocked by a virus scanner. To run Waterproof anyway: **on Windows:** Choose 'run anyway', **on Mac:** right-click and choose 'open software'; you may need to go to security settings to allow for running the app.
-
-> **Known issue**: Waterproof may not fully work the first time you start it up. Closing and starting the program again may solve the issue.
 
 ---
 
