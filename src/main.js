@@ -22,8 +22,27 @@ import store from './store/store';
 // duplication.
 import './assets/sass/main.scss';
 
+const router = new VueRouter(routes);
+
+let url = window.location.href;
+
+if (url.endsWith('#/')) {
+  url = url.substr(0, url.length - 2);
+}
+
+if (url.indexOf('?') >= 0) {
+  const parts = url.split('?', 2)[1].split('&');
+
+  for (const part of parts) {
+    if (part.startsWith('location=')) {
+      const location = part.replace('location=', '');
+      router.replace({name: 'edit', query: {location}});
+    }
+  }
+}
+
 new Vue({
   store: new Vuex.Store(store),
-  router: new VueRouter(routes),
+  router,
   render: (h) => h(App),
 }).$mount('#app');

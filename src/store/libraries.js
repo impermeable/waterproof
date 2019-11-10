@@ -40,7 +40,7 @@ export default {
         state.sertopPath = partial['sertopPath'];
       }
       if (partial.hasOwnProperty('serapiVersion')) {
-        state.sertopPath = partial['serapiVersion'];
+        state.serapiVersion = partial['serapiVersion'];
       }
     },
   },
@@ -103,8 +103,11 @@ export default {
       store.dispatch('readConfig').then(async () => {
         store.commit('setLoadingMessage', 'Reading serapi location');
         if (store.state.sertopPath === '' || store.state.sertopPath == null) {
-          const result = await userHelpFindSertop(remote,
-              findSertop(process.platform));
+          let result = findSertop(process.platform);
+          if (result === '') {
+            result = await userHelpFindSertop(remote,
+                result);
+          }
           console.log(`user selected sertop at: ${result}`);
 
           if (result) {
@@ -173,6 +176,12 @@ export default {
       await store.dispatch('loadSerapi');
       const worker = store.state.socket.createNewWorker(store.state.sertopPath);
       return new CoqSerapiProcessors(worker, editorInterface);
+    },
+    async shutdownSerapi(store) {
+      await store.dispatch('loadSerapi');
+      return new Promise((resolve) => {
+        store.state.socket.stopAll(resolve);
+      });
     },
   },
 };

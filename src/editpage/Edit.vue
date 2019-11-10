@@ -81,6 +81,7 @@ export default {
       tabIdCounter: 0,
       shortKeys: new ShortKeys(),
       mainBus: new Vue,
+      shutdownHook: null,
     };
   },
   computed: {
@@ -414,9 +415,7 @@ export default {
   created: function() {
     if (process.env.NODE_ENV !== 'test' &&
         process.env.NODE_ENV !== 'coverage') {
-      // cant import this in tests, :/ very ugly solution
-      const ipcRenderer = require('electron').ipcRenderer;
-      ipcRenderer.on('closing-application', () => {
+      this.shutdownHook = () => {
         for (const tab of this.$refs.proofWindow) {
           if (tab.notebook && tab.notebook.unsavedChanges) {
             const {dialog} = require('electron').remote;
@@ -424,7 +423,7 @@ export default {
             const dialogOptions = {type: 'warning', title: 'Waterproof',
               buttons: ['Yes', 'Cancel'],
               message: 'There are unsaved changes. ' +
-              'Are you sure you want to close Waterproof?',
+                'Are you sure you want to close Waterproof?',
             };
 
             // index of button
@@ -440,11 +439,22 @@ export default {
           ipcRenderer.send('confirmClosing');
         };
 
-        setTimeout(sendClose, 1000);
+        setTimeout(() => {
+          console.log('timeout stop!!!');
+          sendClose();
+        }, 750);
 
-        this.socket.stopAll(sendClose);
-      });
+        this.$store.dispatch('shutdownSerapi').then(sendClose);
+      };
+
+      // cant import this in tests, :/ very ugly solution
+      const ipcRenderer = require('electron').ipcRenderer;
+      ipcRenderer.on('closing-application', this.shutdownHook);
     }
+  },
+  beforeDestroy() {
+    require('electron').ipcRenderer
+        .removeListener('closing-application', this.shutdownHook);
   },
   mounted: function() {
     this.mainBus.$on('on-edit', this.doOnEdit);
@@ -469,9 +479,6 @@ export default {
         fileURI: null,
       });
     }
-  },
-  beforeDestroy() {
-    this.socket.stopAll(() => {}, false);
   },
 };
 </script>

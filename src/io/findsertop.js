@@ -27,11 +27,35 @@ function findSertop(platform) {
         ['default',
           'ocaml-variants.4.07.1+mingw64c',
           '4.07.1+mingw64c'];
-    for (let i=0; i < ocamlVariants.length; i++ ) {
-      const guess = `C:\\OCaml64\\home\\${userName}\\.opam` +
-            `\\${ocamlVariants[i]}\\bin\\sertop.exe`;
-      if (fs.existsSync(guess)) {
-        return guess;
+
+    const baseFolderVariants =
+        [`C:\\OCaml64\\home\\${userName}\\.opam\\`,
+          path.join(require('electron').remote.app.getPath('home'), '.opam/')];
+    for (const base of baseFolderVariants) {
+      if (fs.existsSync(base)) {
+        for (const variant of ocamlVariants) {
+          const guess = base + `${variant}\\bin\\sertop.exe`;
+          if (fs.existsSync(guess)) {
+            const dialog = require('electron').remote.dialog;
+
+            const useThisVersion =dialog.showMessageBox({
+              type: 'question',
+              title: 'Found serapi version',
+              message: `Waterproof makes use of a program called sertop.` +
+                  ` Waterproof found a version of sertop at:\n${guess}\n` +
+                  `Should waterproof use this version?\n` +
+                  `(This can be changed later in the configuration file)`,
+              buttons: [
+                'Yes',
+                'No',
+              ],
+            });
+
+            if (useThisVersion === 0) {
+              return guess;
+            }
+          }
+        }
       }
     }
   }
