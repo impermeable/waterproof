@@ -9,17 +9,14 @@ node_js:
   - node
 
 stages:
-  - lint
-  - unit
+  - lint/unit
   - test
   - deploy
 
 jobs:
   include:
-  - stage: lint
-    script: npm run lint
-  - stage: unit
-    script: npm run test:unit
+  - stage: lint/unit
+    script: npm run lint && npm run test:uni
   - stage: test
     script:
 #      - apt-get install -y xvfb
