@@ -59,6 +59,11 @@ opam switch create 4.07.1+mingw64c
 eval `opam env`
 ```
 
+In some cases, you may also need to add an extra repository:
+```
+opam repo add https://github.com/ocaml/opam-repository.git
+```
+
 ##### On Linux or macOS:
 Install OCaml with
 ```
