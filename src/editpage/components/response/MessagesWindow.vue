@@ -11,7 +11,7 @@
             <div class="message message-error"
                  v-if="haveAddError && showingAddError">
                 <span class="messageText">
-                    {{addError.message}}
+                    {{addError.message.message}}
                 </span>
             </div>
             <div class="message"
@@ -43,8 +43,8 @@
 
 <script>
 const ignoredErrors = [
-  'Nested proofs are not allowed unless you ' +
-    'turn option Nested Proofs Allowed on',
+  // 'Nested proofs are not allowed unless you ' +
+  //   'turn option Nested Proofs Allowed on',
 ].map((s) => s.toLowerCase());
 
 export default {

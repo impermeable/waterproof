@@ -37,11 +37,11 @@
         />
       </b-dropdown>
       <b-dropdown id="coq-dropdown"
-                  text="Coq"
+                  text="Run"
                   class="topbar-dropdown"
                   no-caret>
         <topbar-button
-                       v-for="button in topbarButtons['coq']"
+                       v-for="button in topbarButtons['run']"
                        v-bind:buttonInfo="button"
                        v-bind:shortKeys="shortKeys"
                        v-bind:key="button.text"
@@ -206,7 +206,7 @@ export default {
             requires: ['notebook', 'no-exercise-sheet'],
           },
         ],
-        coq: [
+        run: [
           {
             text: 'Execute next',
             event: 'coqNext',

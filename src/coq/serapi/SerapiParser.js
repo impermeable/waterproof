@@ -90,6 +90,7 @@ function parseRecursiveMessage(response) {
  *  failureAtSentence: the sentence id at which the error occurred (can be 0)
  */
 function parseErrorResponse(response) {
+  // TODO: fix that it sometimes gives: ' , bla bla'
   let bp = -1;
   let ep = -1;
   let lastSentenceIdCorrect = -1;
