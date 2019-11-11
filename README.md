@@ -61,7 +61,7 @@ eval `opam env`
 
 In some cases, you may also need to add an extra repository:
 ```
-opam repo add https://github.com/ocaml/opam-repository.git
+opam repo add opam_ocaml_repository https://github.com/ocaml/opam-repository.git
 ```
 
 ##### On Linux or macOS:
