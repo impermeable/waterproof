@@ -11,7 +11,7 @@
             <div class="message message-error"
                  v-if="haveAddError && showingAddError">
                 <span class="messageText">
-                    {{addError.message.message}}
+                    {{addErrorText}}
                 </span>
             </div>
             <div class="message"
@@ -102,6 +102,21 @@ export default {
         }
       }
       return true;
+    },
+    addErrorText() {
+      if (!this.haveAddError) {
+        return '';
+      }
+      let message = this.addError.message.message.trim();
+      if (message.startsWith(',')) {
+        message = message.substring(1);
+      }
+      console.log('base message:', message);
+      if (message.includes('Nested proofs are not allowed unless you ' +
+        'turn option Nested Proofs Allowed on')) {
+        message += ` (Did you forget a 'Qed.' ?)`;
+      }
+      return message;
     },
   },
   watch: {

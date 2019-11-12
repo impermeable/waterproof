@@ -9,7 +9,7 @@
           Bootstrap frameworks.
         </p>
         <p>
-          Waterproof is created and developed by Team ChefCoq as a
+          Waterproof was originally created and developed by Team ChefCoq as a
           Software Engineering Project at Eindhoven University of Technology.
           The project was created for Dr. J.W. Portegies.
         </p>
@@ -36,6 +36,9 @@
           R.F.A. Verhaegh<br>
           G.C. van Wordragen<br>
         </p>
+        <p>
+          Version: {{versionNumber}}
+        </p>
       </div>
     </div>
 </template>
@@ -47,6 +50,11 @@ export default {
   methods: {
     openPage: function(link) {
       require('electron').shell.openExternal(link);
+    },
+  },
+  computed: {
+    versionNumber: function() {
+      return require('electron').remote.app.getVersion();
     },
   },
 };

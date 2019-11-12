@@ -71,6 +71,7 @@ import {codemirror} from 'vue-codemirror';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/addon/display/placeholder';
 import 'codemirror/addon/search/searchcursor';
+import 'codemirror/addon/edit/matchbrackets';
 import debounce from 'lodash.debounce';
 
 import CodeBlock from './blocks/CodeBlock';

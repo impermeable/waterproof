@@ -12,6 +12,7 @@ export default {
         // codemirror options
         mode: type === 'code' ? 'text/x-coq' : 'text',
         tabSize: 2,
+        matchBrackets: true,
         lineNumbers: true,
         lineWrapping: true,
         line: true,
