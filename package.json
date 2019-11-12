@@ -28,7 +28,7 @@
     "electron",
     "proof"
   ],
-  "author": "SEP group 8",
+  "author": "Waterproof dev team",
   "license": "AGPL-3.0-or-later",
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.12.1",

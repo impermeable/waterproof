@@ -95,7 +95,6 @@ export default {
   },
   watch: {
     coqCode: function(newCode) {
-      console.log(newCode.length);
       this.coq.setContent(newCode);
 
       // If something in an input block changes, remove any underlining error.
