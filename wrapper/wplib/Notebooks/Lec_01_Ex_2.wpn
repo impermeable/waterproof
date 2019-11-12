@@ -15,7 +15,7 @@
     },
     {
       "type": "text",
-      "text": "## Exercise 2a\n\nWe first introduce an arbitrary set $A \\subset \\mathbb{R}$. $\\\\$"
+      "text": "## Exercise 2a\n\nWe first introduce an arbitrary subset $A \\subset \\mathbb{R}$. $\\\\$"
     },
     {
       "type": "code",
@@ -56,7 +56,7 @@
     },
     {
       "type": "code",
-      "text": "It holds that (∀ x : ℝ, x ∈ A ⇒ ¬ (x > M - ε)) (H2).\nIt holds that (∀ x : ℝ, x ∈ A ⇒ (x ≤ M - ε)) (H3).\nExpand the definition of is_sup in M_is_sup_A.\nIt holds that (M ≤ M - ε) (H4)."
+      "text": "It holds that (∀ x : ℝ, x ∈ A ⇒ ¬ (x > M - ε)) (H2).\nIt holds that (∀ x : ℝ, x ∈ A ⇒ (x ≤ M - ε)) (H3).\n(*Expand the definition of is_sup in M_is_sup_A.*)\nIt holds that (M ≤ M - ε) (H4)."
     },
     {
       "type": "text",
@@ -81,7 +81,7 @@
     },
     {
       "type": "code",
-      "text": "Proof. \nTake x : ℝ. Take z : ℝ. Assume H1 : \n\n  (for all ε : ℝ, ε > 0 ⇒ x > z - ε).\n  \nWe claim that (¬ (x < z)) (not_x_lt_z).\n  We need to show that (x < z ⇒ False).\n  Assume x_lt_z : (x < z).\n  It holds that (0 < z - x) (H2). \n  It holds that (x > z - (z - x)) (H3). \n  Rewrite using (z - (z-x) = x) in H3.\n  It holds that (¬ (x > x)) (H5).\n  contradiction."
+      "text": "Proof. \nTake x : ℝ. Take z : ℝ. Assume H1 : \n\n  (for all ε : ℝ, ε > 0 ⇒ x > z - ε).\n  \nWe claim that (¬ (x < z)) (not_x_lt_z).\n  We need to show that (x < z ⇒ False).\n  Assume x_lt_z : (x < z).\n  It holds that (0 < z - x) (H2). \n  It holds that (x > z - (z - x)) (H3). \n  Write H3 using (z - (z-x) = x) as (x > x).\n  It holds that (¬ (x > x)) (H5).\n  contradiction."
     },
     {
       "type": "code",
@@ -93,7 +93,7 @@
     },
     {
       "type": "code",
-      "text": "Lemma ex_2b :\n  ∀ M z : ℝ,\n    is_lub A M ⇒\n      (∀ ε : ℝ, ε > 0 ⇒ ∃ x : R, (x ∈ A) ∧ x > z - ε) ⇒\n        M ≥ z.\nProof."
+      "text": "Lemma ex_2b :\n  ∀ M z : ℝ,\n    is_sup A M ⇒\n      (∀ ε : ℝ, ε > 0 ⇒ ∃ x : R, (x ∈ A) ∧ x > z - ε) ⇒\n        M ≥ z.\nProof."
     },
     {
       "type": "input",
