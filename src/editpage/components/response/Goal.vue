@@ -1,15 +1,15 @@
 <template>
   <div class="goal" @click="opened = !opened">
-    <li v-for="hypo in  hypothesis" v-bind:key="hypo">
-     <b> {{hypo.terms}} </b>
-      {{hypo.type}}
-    </li>
-    <!-- <pre ref="hypoth" :class="{hypothesis: true}"
-    v-html="hypothesis"></pre> -->
+    <ul class="hypothesis" ref="hypoth">
+      <li v-for="hypo in  hypothesis" v-bind:key="hypo">
+        <b> {{hypo.terms}} </b>
+        {{hypo.type}}
+      </li>
+    </ul>
     <div class="hrfake">
       <span class="goal-id">({{index + 1}}/{{total}})</span>
     </div>
-    <div :class="{opened: opened, 'opened-tick': true}" ref="opentick">▶</div>
+    <div :class="{opened: opened, 'opened-tick': true}">▶</div>
     <span class="goal-target" v-html="subGoal"></span>
   </div>
 </template>
@@ -135,7 +135,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 
   $fold-animate-time: 0.3s;
 
@@ -169,10 +169,6 @@ export default {
   .goal-target {
     margin-top: 0.3em;
     margin-left: 1em;
-  }
-
-  .instant {
-    transition: none !important;
   }
 
 </style>
