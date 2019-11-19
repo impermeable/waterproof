@@ -1,0 +1,81 @@
+{
+  "exerciseSheet": true,
+  "blocks": [
+    {
+      "type": "text",
+      "text": "# Lecture 3 Exercise 1\n\nFirst we import the necessary libraries..."
+    },
+    {
+      "type": "code",
+      "text": "Require Import Reals.\nRequire Import Classical.\nRequire Import Classical_Pred_Type.\n\nRequire Import wplib.Tactics.Tactics.\nRequire Import wplib.Tactics.TacticsContra.\nRequire Import wplib.Lib.sup_and_inf.\nRequire Import wplib.Notations.Notations.\n\nNotation cv_to := Un_cv.\nHint Resolve Rabs_pos.\nHint Resolve Rabs_mult."
+    },
+    {
+      "type": "text",
+      "text": "## Preparation\n\nFor this exercise, we introduce two sequences, called $(a_n)$ and $(b_n)$. Recall that a sequences is really a function from the natural numbers $ℕ$ to the real line $ℝ$."
+    },
+    {
+      "type": "code",
+      "text": "Variable a : ℕ → ℝ.\nVariable b : ℕ → ℝ."
+    },
+    {
+      "type": "text",
+      "text": "\nWe also need a constant $c : \\mathbb{R}$ and two real numbers $x$ and $y$."
+    },
+    {
+      "type": "code",
+      "text": "Variable c : ℝ.\nVariable x : ℝ.\nVariable y : ℝ."
+    },
+    {
+      "type": "text",
+      "text": "## Exercise 1a\n\nIn the first part of the exercise you need to prove that if $(a_n)$ converges to $x$, then $(c \\cdot a_n)$ converges to $c \\cdot x$.\n\n**Hint:** Although a nice, and maybe easier, solution exists without it, the Lemma `Rtotal_order` can be useful. It is defined in the standard library and says\n\n```Lemma Rtotal_order : for all (p q : ℝ), p < q ∨ (p = q ∨ p > q).```"
+    },
+    {
+      "type": "code",
+      "text": "Lemma ex_1a :\n  cv_to a x ⇒ cv_to (fun (n : ℕ) ↦ c * (a n)) (c * x).\nProof."
+    },
+    {
+      "type": "input",
+      "start": true,
+      "id": "input-1"
+    },
+    {
+      "type": "text",
+      "text": "Write your solution here..."
+    },
+    {
+      "type": "code",
+      "text": "\nAdmitted."
+    },
+    {
+      "type": "input",
+      "start": false,
+      "id": "input-1"
+    },
+    {
+      "type": "text",
+      "text": "## Exercise 1b\n\nIn this second part of the exercise you need to show that if $(a_n)$ converges to $x$ and $(b_n)$ converges to $y$, then the sequences $(a_n + b_n)$ converges to $(x + y)$.\n\n**Hint:** the triangle inequality for the absolute value is available in the form of the following lemma\n\n```Lemma Rabs_triang : for all (p q: ℝ), ｜p + q｜ ≤ ｜p｜ + ｜q｜.```"
+    },
+    {
+      "type": "code",
+      "text": "Lemma ex_1b :\n  cv_to a x ⇒ (cv_to b y ⇒ \n    cv_to (fun (n : ℕ) ↦ (a n + b n)) (x + y)).\nProof."
+    },
+    {
+      "type": "input",
+      "start": true,
+      "id": "input-2"
+    },
+    {
+      "type": "text",
+      "text": "Write your solution here..."
+    },
+    {
+      "type": "code",
+      "text": "\nAdmitted."
+    },
+    {
+      "type": "input",
+      "start": false,
+      "id": "input-2"
+    }
+  ]
+}
