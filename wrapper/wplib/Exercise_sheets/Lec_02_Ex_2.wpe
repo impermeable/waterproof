@@ -3,11 +3,11 @@
   "blocks": [
     {
       "type": "text",
-      "text": "# Lecture 2 exercise 2"
+      "text": "# Lecture 2 exercise 2\n\nFirst we need to import libraries."
     },
     {
       "type": "code",
-      "text": "Require Import Reals.\nRequire Import Lra.\nRequire Import Classical.\nRequire Import Classical_Pred_Type.\n\nRequire Import wplib.Tactics.Tactics.\nRequire Import wplib.Tactics.TacticsContra.\nRequire Import wplib.Lib.sup_and_inf.\n\nHint Resolve Rabs_Rabsolu."
+      "text": "Require Import Reals.\nRequire Import Lra.\nRequire Import Classical.\nRequire Import Classical_Pred_Type.\n\nRequire Import wplib.Tactics.Tactics.\nRequire Import wplib.Tactics.TacticsContra.\nRequire Import wplib.Lib.sup_and_inf.\nRequire Import wplib.Notations.Notations.\n\nNotation cv_to := Un_cv.\n\nHint Resolve Rabs_Rabsolu."
     },
     {
       "type": "text",
@@ -23,15 +23,15 @@
     },
     {
       "type": "code",
-      "text": "Definition b : (ℕ → ℝ) := fun n ↦ Rabs ( a n - c )."
+      "text": "Definition b : (ℕ → ℝ) := fun n ↦ ｜ a n - c ｜."
     },
     {
       "type": "text",
-      "text": "\n\nShow that $(a_n)$ converges to $c$ if and only if $(b_n)$ converges to $0$."
+      "text": "\n**Note:** the vertical line `｜` is not the same as the bar | that you find on the keyboard. Instead of `｜ a n - c ｜` you could also write `Rabs (a n - c)`.\n\nWe are going to show that $(a_n)$ converges to $c$ if and only if $(b_n)$ converges to $0$. We split this statement into two separate lemmas: (i) If $(a_n)$ converges to $c$ then $(b_n)$ converges to $0$; (ii) if $(b_n)$ converges to $0$ then $(a_n)$ converges to $c$."
     },
     {
       "type": "code",
-      "text": "Lemma ex_2 :\n  Un_cv a c ⇔ Un_cv b 0.\nProof."
+      "text": "Lemma ex_2i :\n  cv_to a c ⇒ cv_to b 0.\nProof."
     },
     {
       "type": "input",
@@ -43,9 +43,35 @@
       "text": "Write your solution here..."
     },
     {
+      "type": "code",
+      "text": "\nAdmitted."
+    },
+    {
       "type": "input",
       "start": false,
       "id": "input-1"
+    },
+    {
+      "type": "code",
+      "text": "Lemma ex_2ii :\n  cv_to b 0 ⇒ cv_to a c.\nProof."
+    },
+    {
+      "type": "input",
+      "start": true,
+      "id": "input-2"
+    },
+    {
+      "type": "text",
+      "text": "Write your solution here..."
+    },
+    {
+      "type": "code",
+      "text": "\nAdmitted."
+    },
+    {
+      "type": "input",
+      "start": false,
+      "id": "input-2"
     }
   ]
 }

@@ -18,13 +18,16 @@ class SerapiWorkerTCP extends SerapiWorker {
     this.socket = socket;
     this.socketId = -1;
 
-    const wplibPath = path.join(getAppdataPath(), './wplib');
+    let wplibPath = path.join(getAppdataPath(), './wplib');
+    if ( process.platform === 'win32' ) {
+      wplibPath = `"${wplibPath}"`;
+    }
 
     this.sendMessage(
         this.createWrapperMessage('create',
             JSON.stringify({path: sertopPath,
               args: ['--implicit',
-                `--load-path="${wplibPath}",wplib`,
+                `--load-path=${wplibPath},wplib`,
               ]}))
     );
   }
