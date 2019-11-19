@@ -131,6 +131,13 @@ class SerapiExecutionProcessor extends SerapiProcessor {
       if (targetValue < this.state.lastExecuted) {
         this.state.lastExecuted = this.state.target;
 
+        if (this.state.target < 0) {
+          this.editor.executeStarted(-1);
+        } else {
+          this.editor.executeStarted(
+              this.state.endIndexOfSentence(this.state.target));
+        }
+
         releaseExecutionLock();
         return this._getGoal(this.state.target);
       }/* else if (this.state.target > this.state.sentenceSize() - 1) {
@@ -138,10 +145,9 @@ class SerapiExecutionProcessor extends SerapiProcessor {
         this.state.target = this.state.sentenceSize() - 1;
       }*/
 
-      this.editor.executeStarted(
-          this.state.endIndexOfSentence(this.state.target));
-
       while (targetValue > this.state.lastExecuted) {
+        this.editor.executeStarted(
+            this.state.endIndexOfSentence(this.state.target));
         const nextSentence = this.state.lastExecuted + 1;
         const executionFailed =
             await this._executeSentence(this.state.idOfSentence(nextSentence));
