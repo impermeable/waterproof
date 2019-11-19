@@ -20,6 +20,8 @@
         <component v-show="!block.state.foldStatus.isFolded"
                   :is="toComponent(block.type)" :block="block"
                   :key="block.type + index" :index="index"
+                  :sentences="sentenceIndices"
+                  :executedIndex="executeIndex" :runningIndex="runningIndex"
                   :exercise="exercise" :event-bus="eventBus">
         </component>
         <fold-block v-if="block.state.foldStatus.startFold"
@@ -98,9 +100,10 @@ export default {
     BlockContextMenu, AssistanceBar,
   },
   props: {
-    index: Number,
+    executeIndex: Number,
     coq: CoqInterface,
     targetIndex: Number,
+    pendingIndex: Number,
     blocks: Array,
     exercise: Boolean,
     debug: Boolean,
@@ -379,8 +382,24 @@ export default {
       this.blurSource();
     },
   },
+  computed: {
+    sentenceIndices() {
+      const sentences = [];
+      for (let i = 0; i < this.coq.getState().sentenceSize(); i++) {
+        sentences.push(this.coq.getState().endIndexOfSentence(i));
+      }
+      return sentences;
+    },
+    runningIndex() {
+      if (this.pendingIndex <= this.executeIndex) {
+        return this.executeIndex;
+      }
+      const index = this.sentenceIndices.indexOf(this.executeIndex) + 1;
+      return this.sentenceIndices[index];
+    },
+  },
   watch: {
-    'index': function(newIndex) {
+    'executeIndex': function(newIndex) {
       if (!newIndex) {
         newIndex = 0;
         this.pendingUpTo = 0;

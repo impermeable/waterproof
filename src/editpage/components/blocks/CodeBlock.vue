@@ -33,7 +33,9 @@ export default {
       const text = this.block.text.trim();
 
       // Determine where to insert error, tick, or both
-      const splitAt = [];
+      const splitAt = this.foundSentences.map((i) => {
+        return {at: i, what: 'sentence-end'};
+      });
       if (this.hasError) {
         splitAt.push({
           at: this.block.state.error.from,
@@ -42,12 +44,6 @@ export default {
         splitAt.push({
           at: this.block.state.error.to,
           what: 'error-end',
-        });
-      }
-      if (this.isExecutionBoundary) {
-        splitAt.push({
-          at: this.block.state.executedUpTo,
-          what: 'tick',
         });
       }
 
@@ -71,6 +67,26 @@ export default {
           newText = newText.slice(0, insertAt)
            + this.makeTick() + ' '
            + newText.slice(insertAt + 1);
+        } else if (obj.what === 'sentence-end') {
+          const realIndex = newIndex + this.block.state.textIndex;
+          let type = '';
+          if (realIndex === this.executedIndex) {
+            type = 'done';
+          } else if (realIndex === this.runningIndex) {
+            type = 'doing';
+          }
+
+          const insertAt = newText.lastIndexOf('.');
+
+          if (type === '') {
+            newText = newText.slice(0, insertAt)
+              + this.makeSentenceEnd(realIndex, type)
+              + newText.slice(insertAt);
+          } else {
+            newText = newText.slice(0, insertAt)
+              + this.makeSentenceEnd(realIndex, type) + ' '
+              + newText.slice(insertAt + 1);
+          }
         }
       }
       newText = newText + this.highlight(this.escapeHtml(text.slice(index)));
@@ -82,16 +98,6 @@ export default {
     },
     hasErrorBlock: function() {
       return this.hasError && this.block.state.error.message;
-    },
-    isExecutionBoundary: function() {
-      const pos = this.block.state.executedUpTo;
-      if (pos === null || pos === undefined) {
-        return false;
-      }
-      if (pos <= 0 || pos > this.block.text.length) {
-        return false;
-      }
-      return true;
     },
     inline: function() {
       return !this.block.text.trim().includes('\n');
@@ -105,13 +111,29 @@ export default {
         'edit-block': this.isEditable,
       };
     },
+    foundSentences() {
+      return this.sentences.map((s) => s - this.block.state.textIndex)
+          .filter((i) => i >= 0)
+          .filter((i) => i <= this.block.text.length);
+    },
   },
   methods: {
     makeTick: function() {
       // The tick replaces the . at the end of a sentence, and also the
       // space after it if it exists (so not if the sentence ens in a \n)
-      return `<span class="exec-span"><img class="exec-inline-tick "`
-        + `src=${tick}></img></span>`;
+      return `<span class="exec-span"><img class="exec-inline-tick" `
+        + `src="${tick}"/></span>`;
+    },
+    makeSentenceEnd: function(index, type='') {
+      let img = '';
+      if (type === 'done') {
+        img = `<img class="exec-inline-tick" src="${tick}"/>`;
+      } else if (type === 'doing') {
+        img = `<img class="exec-inline-spinner" src="${spinner}"/>`;
+      }
+      return `<span class="sentence-end-tag sentence-end-${index}">`
+           + img
+           + '</span>';
     },
     highlight: function(text) {
       return text
@@ -134,6 +156,7 @@ export default {
 };
 
 const tick = require('../../../assets/images/tick.svg');
+const spinner = require('../../../assets/images/druppel.png');
 </script>
 
 
@@ -169,10 +192,26 @@ const tick = require('../../../assets/images/tick.svg');
   }
 
   .exec-inline-tick {
+    float: left;
     height: 1em;
     width: 1em;
     align-self: center;
     vertical-align: text-top;
+  }
+
+  .exec-inline-spinner {
+      float: left;
+      height: 1em;
+      width: 1em;
+      align-self: center;
+      vertical-align: text-top;
+      animation: spin 4s linear infinite;
+  }
+
+  @keyframes spin {
+      100% {
+          transform: rotate(360deg);
+      }
   }
 
   .exec-error {
@@ -183,5 +222,27 @@ const tick = require('../../../assets/images/tick.svg');
 
   .exec-inline-error {
     text-decoration: underline red wavy;
+  }
+
+  /*.sentence-end-tag:before {*/
+  /*    content: "";*/
+  /*    float: left;*/
+  /*    position: relative;*/
+  /*    top: 5px;*/
+  /*    left: -10px;*/
+  /*    min-width: 5px;*/
+  /*    min-height: 5px;*/
+  /*    background-color: red;*/
+  /*    display: inline-block;*/
+  /*}*/
+
+  .sentence-end-tag {
+      height: 1em;
+      width: 0em;
+      align-self: center;
+      text-align: center;
+      background-position-x: center;
+      background-position-y: center;
+      display: inline-block;
   }
 </style>

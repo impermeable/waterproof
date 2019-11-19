@@ -96,7 +96,7 @@ class Notebook {
         done: false,
         error: null,
         inInputField: inInputField,
-        executedUpTo: -1,
+        textIndex: -1,
         foldStatus: {
           isFolded: false,
           startFold: false,
@@ -400,7 +400,6 @@ class Notebook {
     if (block.type === 'code') {
       block.state.done = false;
       block.state.error = null;
-      block.state.executedUpTo = -1;
     }
   }
 
