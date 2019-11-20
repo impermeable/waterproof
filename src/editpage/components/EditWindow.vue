@@ -3,8 +3,10 @@
       @contextmenu="openContextMenu($event)"
       @click="insertTextBlock()">
     <Gutter :ani="ani" ref="execGutter" :height="gutterHeight"
-            :exec-height="execHeight"
-            :exec-height-ball="execHeightBall" :executed="executed"/>
+            :exec-height="execHeight" :exec-height-ball="execHeightBall"
+            :pending-height="pendingHeight"
+            :pending-height-ball="pendingHeightBall"
+            :executed="executed"/>
     <div ref="editPane"
         class="edit-pane"
         @click.self="onClick"
@@ -334,16 +336,27 @@ export default {
       // Set the gutter height to equal content height
       this.setGutterHeight();
 
-      const tick = this.$refs.editPane
+      const execTick = this.$refs.editPane
           .querySelector('.sentence-end-' + this.executeIndex);
 
-      if (tick != null) {
-        const rect = tick.getBoundingClientRect();
-        const editPane = this.$refs.editPane;
-        const rect2 = editPane.getBoundingClientRect();
+      const editPane = this.$refs.editPane;
+      const rect2 = editPane.getBoundingClientRect();
+
+      if (execTick != null) {
+        const rect = execTick.getBoundingClientRect();
 
         this.execHeight = (rect.bottom + rect.top) / 2 - rect2.top - 10;
         this.execHeightBall = rect.top - rect2.top;
+      }
+
+      const pendingTick = this.$refs.editPane
+          .querySelector('.sentence-end-' + this.pendingIndex);
+
+      if (pendingTick != null) {
+        const rect = pendingTick.getBoundingClientRect();
+
+        this.pendingHeight = (rect.bottom + rect.top) / 2 - rect2.top - 10;
+        this.pendingHeightBall = rect.top - rect2.top;
       }
 
       if (!animation) {

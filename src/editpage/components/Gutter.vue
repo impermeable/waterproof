@@ -7,6 +7,10 @@
            :style="{height: execHeight + 'px'}"></div>
       <div :class="['exec-ball', {'no-transition': !ani}]"
            :style="{top: execHeightBall  + 'px'}"></div>
+      <div :class="['pending-bar', {'no-transition': !ani}]"
+           :style="{height: (pendingHeight - 7) + 'px'}"></div>
+      <div :class="['pending-ball', {'no-transition': !ani}]"
+           :style="{top: (pendingHeightBall)  + 'px'}"></div>
     </template>
   </div>
 </template>
@@ -19,6 +23,8 @@ export default {
     execHeightBall: {},
     executed: {},
     height: {},
+    pendingHeight: {},
+    pendingHeightBall: {},
   },
 };
 </script>
