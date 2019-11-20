@@ -75,6 +75,7 @@ function remoteGen( userPath ) {
 
 describe('Reading the configuration file', () => {
   beforeEach(() => {
+    sandbox.replace(console, 'log', sandbox.fake());
     sandbox.replace(fs, 'readFile', readFileReplacement);
     sandbox.replace(fs, 'writeFile', stubForWriteFile);
     // sandbox.replace(console, 'log', sinon.fake());

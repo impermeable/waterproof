@@ -183,7 +183,7 @@ const spinner = require('../../../assets/images/druppel.png');
     content: "";
     font-family: monospace;
     height: 1em;
-    width: 0em;
+    width: 0;
     align-self: center;
     text-align: center;
     background-position-x: center;
@@ -238,7 +238,7 @@ const spinner = require('../../../assets/images/druppel.png');
 
   .sentence-end-tag {
       height: 1em;
-      width: 0em;
+      width: 0;
       align-self: center;
       text-align: center;
       background-position-x: center;

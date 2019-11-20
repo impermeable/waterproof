@@ -20,6 +20,7 @@ describe('serapi content processor', () => {
 
     sinon.spy(editor, 'setContentSuccess');
     sinon.spy(editor, 'setContentError');
+    sinon.spy(editor, 'executeStarted');
 
     proc = new SerapiContentProcessor(
         new SerapiTagger(worker, null),
@@ -254,6 +255,8 @@ describe('serapi content processor', () => {
 
           expect(editor.setContentSuccess.callCount).to.be.at.least(1);
           expect(editor.setContentError.callCount).to.equal(0);
+          expect(editor.executeStarted.callCount).to.be.at.least(1);
+          expect(editor.executeStarted.lastCall.args[0]).to.equal(13);
 
           // no response from add so should just have two sentences
           expect(proc.state.sentences).to.have.lengthOf(3);

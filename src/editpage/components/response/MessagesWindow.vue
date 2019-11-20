@@ -111,7 +111,6 @@ export default {
       if (message.startsWith(',')) {
         message = message.substring(1);
       }
-      console.log('base message:', message);
       if (message.includes('Nested proofs are not allowed unless you ' +
         'turn option Nested Proofs Allowed on')) {
         message += ` (Did you forget a 'Qed.' ?)`;

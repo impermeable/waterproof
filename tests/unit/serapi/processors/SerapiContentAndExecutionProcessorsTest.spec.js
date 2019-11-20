@@ -160,6 +160,7 @@ describe('serapi combined content & execution processor', () => {
         expect(contentProc.state.sentenceSize()).to.equal(1);
 
         expect(editor.executeStarted.callCount).to.be.at.least(1);
+        expect(editor.executeStarted.lastCall.args[0]).to.equal(16);
         expect(editor.executeSuccess.callCount).to.equal(2);
         expect(editor.executeError.callCount).to.equal(0);
 
@@ -227,6 +228,7 @@ describe('serapi combined content & execution processor', () => {
         expect(contentProc.state.sentenceSize()).to.equal(2);
 
         expect(editor.executeStarted.callCount).to.be.at.least(1);
+        expect(editor.executeStarted.lastCall.args[0]).to.equal(6);
         expect(editor.executeSuccess.callCount).to.equal(1);
         expect(editor.executeError.callCount).to.equal(0);
         // TODO: check params of success
@@ -278,6 +280,7 @@ describe('serapi combined content & execution processor', () => {
     expect(contentProc.state.sentenceSize()).to.equal(1);
 
     expect(editor.executeStarted.callCount).to.be.at.least(1);
+    expect(editor.executeStarted.lastCall.args[0]).to.equal(6);
     expect(editor.executeSuccess.callCount).to.equal(1);
     expect(editor.executeError.callCount).to.equal(0);
     // TODO: check params of success

@@ -122,9 +122,12 @@ class SerapiContentProcessor extends SerapiProcessor {
   async _getRerolledGoal(lastUnchangedSentence, editIndex) {
     if (lastUnchangedSentence < 0) {
       // reroll everything
+      this.editor.executeStarted(-1);
       this.editor.setContentSuccess('', editIndex, true);
       return Promise.resolve();
     }
+    this.editor.executeStarted(
+        this.state.endIndexOfSentence(lastUnchangedSentence));
     const sentenceId = this.state.idOfSentence(lastUnchangedSentence);
     return this.sendCommand(createGoalCommand(sentenceId), 'g')
         .then((result) => {
