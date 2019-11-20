@@ -122,8 +122,6 @@ export default {
       execHeightBall: 0,
       gutterHeight: 100,
       timer: null,
-      executedUpTo: null,
-      pendingUpTo: null,
       cursorPos: null,
       isShowingAssistance: true,
       ani: true,
@@ -322,16 +320,6 @@ export default {
         return null;
       }
     },
-    clearCodeDecorations() {
-      for (const block of this.blocks) {
-        if (block.type !== 'code') {
-          continue;
-        }
-
-        // Clear the execution but not the error state
-        block.state.executedUpTo = -1;
-      }
-    },
     /**
      * Changes height of gutter to the height of the editpane,
      * adds 100 px as well for 'overleaf-scrolling'
@@ -346,7 +334,8 @@ export default {
       // Set the gutter height to equal content height
       this.setGutterHeight();
 
-      const tick = this.$refs.editPane.querySelector('.exec-inline-tick');
+      const tick = this.$refs.editPane
+          .querySelector('.sentence-end-' + this.executeIndex);
 
       if (tick != null) {
         const rect = tick.getBoundingClientRect();
@@ -399,23 +388,13 @@ export default {
     },
   },
   watch: {
-    'executeIndex': function(newIndex) {
-      if (!newIndex) {
-        newIndex = 0;
-        this.pendingUpTo = 0;
-      }
-      this.executedUpTo = newIndex;
-
-      this.pendingUpTo = this.pendingUpTo
-          && Math.max(this.pendingUpTo, newIndex);
+    'executeIndex': function() {
       this.refreshExecStatus(true);
     },
 
-    'targetIndex': function(newIndex) {
-      this.pendingUpTo = newIndex || 0;
+    'targetIndex': function() {
       this.refreshExecStatus(true);
     },
-
   },
   /**
    * Checks if DOM elements are changed and if so,
