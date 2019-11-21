@@ -12,7 +12,6 @@ export default {
       goals: '',
       coq: null,
       executedIndex: -1,
-      targetIndex: -1,
       startedExecutionIndex: -1,
       addError: {
         message: '',
@@ -64,7 +63,6 @@ export default {
      */
     coqPrev: function() {
       // When reverting, make sure nothing is marked as pending
-      this.targetIndex = null;
       this.coq.executePrevious().then();
     },
 
@@ -74,7 +72,6 @@ export default {
     coqTo: function() {
       const targetIndex = this.findCodeIndex();
       this.coq.executeTo(targetIndex).then();
-      this.targetIndex = targetIndex;
     },
 
     /**
@@ -83,7 +80,6 @@ export default {
     coqAll: function() {
       const targetIndex = this.coqCode.length;
       this.coq.executeTo(targetIndex).then();
-      this.targetIndex = targetIndex;
     },
 
     /**

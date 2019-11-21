@@ -17,7 +17,6 @@
                   :coq="coq" ref="editWindow" :debug="debug"
                   :executeIndex="executedIndex"
                   :pendingIndex="startedExecutionIndex"
-                  :targetIndex="targetIndex"
                   :tabindex="index" :event-bus="eventBus"
                   :showFind="showFind" :shortKeys="shortKeys" />
       <response-window :event-bus="eventBus"

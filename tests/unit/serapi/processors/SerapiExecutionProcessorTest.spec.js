@@ -69,9 +69,11 @@ describe('serapi execution processor', () => {
     return proc.executeNext().then(() => {
       expect(worker.getCallAmount()).to.equal(2);
 
-      expect(editor.executeStarted.callCount).to.be.at.least(1);
       expect(editor.executeSuccess.callCount).to.equal(1);
       // TODO: check params of success
+
+      expect(editor.executeStarted.callCount).to.be.at.least(1);
+      expect(editor.executeStarted.lastCall.args[0]).to.equal(6);
 
       expect(proc.state.lastExecuted).to.equal(0);
     });
@@ -117,6 +119,8 @@ describe('serapi execution processor', () => {
 
       expect(editor.executeSuccess.callCount).to.equal(1);
       // TODO: check params of success
+
+      expect(editor.executeStarted.callCount).to.be.at.least(1);
       expect(editor.executeStarted.lastCall.args[0]).to.equal(-1);
 
       expect(proc.state.lastExecuted).to.equal(-1);
@@ -150,6 +154,8 @@ describe('serapi execution processor', () => {
 
       expect(editor.executeSuccess.callCount).to.equal(1);
       // TODO: check params of success
+
+      expect(editor.executeStarted.callCount).to.be.at.least(1);
       expect(editor.executeStarted.lastCall.args[0]).to.equal(6);
 
       expect(proc.state.lastExecuted).to.equal(0);
@@ -207,6 +213,7 @@ describe('serapi execution processor', () => {
         expect(editor.executeSuccess.callCount).to.equal(2);
         // TODO: check params of success
 
+        expect(editor.executeStarted.callCount).to.be.at.least(1);
         expect(editor.executeStarted.lastCall.args[0]).to.equal(6);
 
         expect(proc.state.lastExecuted).to.equal(0);
@@ -264,6 +271,8 @@ describe('serapi execution processor', () => {
 
     expect(editor.executeSuccess.callCount).to.equal(3);
     // TODO: check params of success
+
+    expect(editor.executeStarted.callCount).to.be.at.least(1);
     expect(editor.executeStarted.lastCall.args[0]).to.equal(6);
 
     expect(proc.state.lastExecuted).to.equal(0);
@@ -319,6 +328,7 @@ describe('serapi execution processor', () => {
         expect(editor.executeSuccess.callCount).to.be.at.least(2);
         expect(editor.executeSuccess.lastCall.args[1]).to.equal(12);
 
+        expect(editor.executeStarted.callCount).to.be.at.least(1);
         expect(editor.executeStarted.lastCall.args[0]).to.equal(12);
 
         // only one goal call
@@ -385,6 +395,7 @@ describe('serapi execution processor', () => {
         expect(editor.executeSuccess.callCount).to.be.at.least(2);
         expect(editor.executeSuccess.lastCall.args[0]).to.equal(finalGoal);
 
+        expect(editor.executeStarted.callCount).to.be.at.least(1);
         expect(editor.executeStarted.lastCall.args[0]).to.equal(12);
       });
 
@@ -427,7 +438,8 @@ describe('serapi execution processor', () => {
     expect(editor.executeStarted.callCount).to.be.at.least(1);
     expect(editor.executeSuccess.callCount).to.equal(0);
 
-    expect(editor.executeStarted.lastCall.args[0]).to.equal(8);
+    expect(editor.executeStarted.callCount).to.be.at.least(1);
+    expect(editor.executeStarted.lastCall.args[0]).to.equal(-1);
 
     expect(editor.executeError.callCount).to.equal(1);
     expect(editor.executeError.lastCall.args[0]).to.equal(errorString);
@@ -484,6 +496,10 @@ describe('serapi execution processor', () => {
 
         expect(editor.executeStarted.callCount).to.be.at.least(1);
         expect(editor.executeSuccess.callCount).to.equal(0);
+
+        expect(editor.executeStarted.callCount).to.be.at.least(1);
+        expect(editor.executeStarted.lastCall.args[0]).to.equal(-1);
+
         expect(editor.executeError.callCount).to.equal(1);
         expect(editor.executeError.lastCall.args[0]).to.equal(errorString);
         expect(editor.executeError.lastCall.args[1]).to.include({
@@ -559,11 +575,16 @@ describe('serapi execution processor', () => {
         expect(editor.executeSuccess.callCount).to.equal(1);
         expect(editor.executeSuccess.lastCall.args[0]).to.equal(previousGoal);
 
-        // TODO: this might not even be right and certainly is not supported!
-        // So maybe use custom callbacks?
-        // this checks whether the error is called after success
-        expect(editor.executeError.lastCall.callId).is.at.least(
-            editor.executeSuccess.lastCall.callId);
+        expect(editor.executeStarted.callCount).to.be.at.least(1);
+        expect(editor.executeStarted.lastCall.args[0]).to.equal(8);
+
+        // If more than one call the time comparison is not correct!
+        expect(editor.executeError.callCount).to.equal(1);
+        expect(editor.executeSuccess.callCount).to.equal(1);
+
+        expect(
+            editor.executeError.calledAfter(editor.executeSuccess)
+        ).to.equal(true);
       });
 
   it('should output messages to the editor interface', async () => {
@@ -607,6 +628,9 @@ describe('serapi execution processor', () => {
 
     expect(editor.executeStarted.callCount).to.equal(1);
     expect(editor.executeError.callCount).to.equal(0);
+
+    expect(editor.executeStarted.callCount).to.be.at.least(1);
+    expect(editor.executeStarted.lastCall.args[0]).to.equal(11);
 
     expect(editor.message.callCount).to.be.at.least(1);
     expect(editor.message.lastCall.args[0])

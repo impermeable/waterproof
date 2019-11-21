@@ -104,7 +104,6 @@ export default {
   props: {
     executeIndex: Number,
     coq: CoqInterface,
-    targetIndex: Number,
     pendingIndex: Number,
     blocks: Array,
     exercise: Boolean,
@@ -401,11 +400,10 @@ export default {
     },
   },
   watch: {
-    'executeIndex': function() {
+    executeIndex: function() {
       this.refreshExecStatus(true);
     },
-
-    'targetIndex': function() {
+    pendingIndex: function() {
       this.refreshExecStatus(true);
     },
   },
