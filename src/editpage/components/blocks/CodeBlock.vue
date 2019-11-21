@@ -160,7 +160,7 @@ const spinner = require('../../../assets/images/druppel.png');
 </script>
 
 
-<style>
+<style lang="scss">
   pre.code-block {
     margin: 5px 0;
     white-space: pre-wrap;
@@ -224,19 +224,29 @@ const spinner = require('../../../assets/images/druppel.png');
     text-decoration: underline red wavy;
   }
 
-  /*.sentence-end-tag:before {*/
-  /*    content: "";*/
-  /*    float: left;*/
-  /*    position: relative;*/
-  /*    top: 5px;*/
-  /*    left: -10px;*/
-  /*    min-width: 5px;*/
-  /*    min-height: 5px;*/
-  /*    background-color: red;*/
-  /*    display: inline-block;*/
-  /*}*/
+  .sentence-end-tag:after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 1em;
+      height: 1em;
+      display: inline-block;
+  }
+
+  .sentence-end-tag:hover:after {
+      background-color: $color-primary;
+      cursor: pointer;
+      mask-type: alpha;
+      mask-repeat: no-repeat;
+      -webkit-mask-repeat: no-repeat;
+      -webkit-mask-position: center center;
+      -webkit-mask-size: 40px 15px;
+      -webkit-mask-image: url("../../../assets/images/arrowToCursor.svg");
+  }
 
   .sentence-end-tag {
+      position: relative;
       height: 1em;
       width: 0;
       align-self: center;
