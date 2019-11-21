@@ -78,7 +78,7 @@ import 'codemirror/addon/search/searchcursor';
 import 'codemirror/addon/edit/matchbrackets';
 import debounce from 'lodash.debounce';
 
-import CodeBlock from './blocks/CodeBlock';
+import CodeBlock from './blocks/code/CodeBlock';
 import TextBlock from './blocks/TextBlock';
 import HintBlock from './blocks/HintBlock';
 import InputBlock from './blocks/InputBlock';

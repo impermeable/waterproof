@@ -1,20 +1,22 @@
 <template>
   <div style="display: inline" >
-      <p v-if="startWithBreak"></p>
-      <span v-if="inline"
-            @click="handleClick($event)"
-            @contextmenu="handleRightClick($event)"
-            :class="[{'selected-block': isSelected}, codeStyle]"
-            tabindex="-1"
-            v-html="formattedText" contenteditable="false">
-      </span>
-      <pre v-else
-            @click="handleClick($event)"
-            @contextmenu="handleRightClick($event)"
-            :class="[{'selected-block': isSelected}, codeStyle]"
-            tabindex="-1"
-            v-html="formattedText" contenteditable="false">
-      </pre>
+<!--      <p v-if="startWithBreak"></p>-->
+      <inlineable :inline="inline" @click="handleClick($event)"
+                  @contextmenu="handleRightClick($event)"
+                  :class="[{'selected-block': isSelected}, codeStyle]"
+                  tabindex="-1"
+                  contenteditable="false">
+          <template v-for="(part, index2) of parts">
+              <span v-if="part.type === 'code'"
+                    :key="'code-' + index + '-part-' + index2"
+                    :class="{'exec-inline-error': part.error}"
+                    v-html="codeToHtml(part.text)">
+              </span>
+              <SentenceEnd v-else-if="part.type === 'end'"
+                           :key="'code-' + index + '-end-' + index2"
+                           :index="part.index" :special="part.special"/>
+          </template>
+      </inlineable>
       <div v-if="hasErrorBlock" class="exec-error">
           {{block.state.error.message}}
       </div>
@@ -23,12 +25,50 @@
 </template>
 
 <script>
-import WpBlock from './WpBlock';
+import WpBlock from '../WpBlock';
+import Inlineable from './Inlineable';
+import SentenceEnd from './SentenceEnd';
 
 export default {
   name: 'CodeBlock',
+  components: {SentenceEnd, Inlineable},
   mixins: [WpBlock],
   computed: {
+    parts: function() {
+      return [
+        {
+          type: 'code',
+          text: 'Check plus',
+        },
+        {
+          type: 'end',
+          index: 15,
+          special: 'done',
+        },
+        {
+          type: 'code',
+          text: '.\n',
+        },
+        {
+          type: 'code',
+          text: 'Check ',
+        },
+        {
+          type: 'code',
+          error: true,
+          text: 'plus',
+        },
+        {
+          type: 'end',
+          index: 32,
+          special: '',
+        },
+        {
+          type: 'code',
+          text: '.',
+        },
+      ];
+    },
     formattedText: function() {
       const text = this.block.text.trim();
 
@@ -118,22 +158,8 @@ export default {
     },
   },
   methods: {
-    makeTick: function() {
-      // The tick replaces the . at the end of a sentence, and also the
-      // space after it if it exists (so not if the sentence ens in a \n)
-      return `<span class="exec-span"><img class="exec-inline-tick" `
-        + `src="${tick}"/></span>`;
-    },
     makeSentenceEnd: function(index, type='') {
-      let img = '';
-      if (type === 'done') {
-        img = `<img class="exec-inline-tick" src="${tick}"/>`;
-      } else if (type === 'doing') {
-        img = `<img class="exec-inline-spinner" src="${spinner}"/>`;
-      }
-      return `<span class="sentence-end-tag sentence-end-${index}">`
-           + img
-           + '</span>';
+      return `<span class="sentence-end-tag sentence-end-${index}"></span>`;
     },
     highlight: function(text) {
       return text
@@ -152,20 +178,21 @@ export default {
           .replace(/"/g, '&quot;')
           .replace(/'/g, '&#039;');
     },
+    codeToHtml: function(code) {
+      return this.highlight(this.escapeHtml(code));
+    },
   },
 };
 
-const tick = require('../../../assets/images/tick.svg');
-const spinner = require('../../../assets/images/druppel.png');
 </script>
 
 
 <style lang="scss">
   pre.code-block {
     margin: 5px 0;
-    white-space: pre-wrap;
-    word-break: break-word;
     display: block;
+    white-space: pre-line;
+    overflow: visible;
   }
 
   .code-block-not-selected {
@@ -191,29 +218,6 @@ const spinner = require('../../../assets/images/druppel.png');
     display: inline-block;
   }
 
-  .exec-inline-tick {
-    float: left;
-    height: 1em;
-    width: 1em;
-    align-self: center;
-    vertical-align: text-top;
-  }
-
-  .exec-inline-spinner {
-      float: left;
-      height: 1em;
-      width: 1em;
-      align-self: center;
-      vertical-align: text-top;
-      animation: spin 4s linear infinite;
-  }
-
-  @keyframes spin {
-      100% {
-          transform: rotate(360deg);
-      }
-  }
-
   .exec-error {
     color: white;
     background: red;
@@ -221,38 +225,16 @@ const spinner = require('../../../assets/images/druppel.png');
   }
 
   .exec-inline-error {
-    text-decoration: underline red wavy;
+    position: relative;
+    text-decoration: underline red dotted;
   }
 
-  .sentence-end-tag:after {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
+  .exec-inline-error:after {
+    position: absolute;
       width: 1em;
-      height: 1em;
-      display: inline-block;
-  }
-
-  .sentence-end-tag:hover:after {
-      background-color: $color-primary;
-      cursor: pointer;
-      mask-type: alpha;
-      mask-repeat: no-repeat;
-      -webkit-mask-repeat: no-repeat;
-      -webkit-mask-position: center center;
-      -webkit-mask-size: 40px 15px;
-      -webkit-mask-image: url("../../../assets/images/arrowToCursor.svg");
-  }
-
-  .sentence-end-tag {
-      position: relative;
-      height: 1em;
-      width: 0;
-      align-self: center;
-      text-align: center;
-      background-position-x: center;
-      background-position-y: center;
-      display: inline-block;
+      height: 200%;
+      content: ".";
+      text-indent: -100em;
+      margin-left: -1em;
   }
 </style>
