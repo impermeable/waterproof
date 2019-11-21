@@ -69,6 +69,7 @@
             { "symbol": "∞", "name": "infty" },
             { "symbol": "∧", "name": "and" },
             { "symbol": "∨", "name": "or" },
+            { "symbol": "｜", "name": "abs"},
             { "symbol": "∩", "name": "intersection" },
             { "symbol": "∪", "name": "union" },
             { "symbol": "∅", "name": "empty-set" },
