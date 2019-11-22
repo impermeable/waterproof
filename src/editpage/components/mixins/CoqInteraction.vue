@@ -23,6 +23,7 @@ export default {
     this.eventBus.$on('coqSearch', this.coqSearch);
     this.eventBus.$on('coqNext', this.coqNext);
     this.eventBus.$on('coqPrev', this.coqPrev);
+    this.eventBus.$on('coqToCursor', this.coqToCursor);
     this.eventBus.$on('coqTo', this.coqTo);
     this.eventBus.$on('coqAll', this.coqAll);
     this.eventBus.$on('coqAST', this.coqAST);
@@ -69,9 +70,17 @@ export default {
     /**
      * Executes all coq sentences up to the current cursor position
      */
-    coqTo: function() {
+    coqToCursor: function() {
       const targetIndex = this.findCodeIndex();
       this.coq.executeTo(targetIndex).then();
+    },
+
+    /**
+     * Execute to a index in the code
+     * @param {Number} index the index in the code to execute to
+     */
+    coqTo: function(index) {
+      this.coq.executeTo(index);
     },
 
     /**

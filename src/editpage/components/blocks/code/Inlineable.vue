@@ -1,9 +1,9 @@
 <template>
     <span v-if="inline">
-        <slot></slot>
+        <slot />
     </span>
     <pre v-else>
-        <slot></slot>
+        <slot />
     </pre>
 </template>
 

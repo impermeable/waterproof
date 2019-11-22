@@ -1,10 +1,10 @@
 <template>
     <span :class="['sentence-end-tag', 'sentence-end-' + index]"
-          @click="executeTo" :data-special="special">
+          :data-special="special" @click.stop="executeTo">
         <img v-if="special === 'done'" class="exec-inline-tick"
              alt="Done" src="../../../../assets/images/tick.svg">
-        <img v-if="special === 'doing'" class="exec-inline-spinner"
-             alt="Processing" src="../../../../assets/images/druppel.png">
+        <img v-else-if="special === 'doing'" class="exec-inline-spinner"
+             alt="Processing" src="../../../../assets/images/spinner.svg">
     </span>
 </template>
 
@@ -25,7 +25,7 @@ export default {
       if (!this.clickable) {
         return;
       }
-      console.log('exec to', this.index);
+      this.$emit('execTo', this.index);
     },
   },
 };
@@ -33,7 +33,6 @@ export default {
 
 <style lang="scss">
     .exec-inline-tick {
-        float: left;
         height: 1em;
         width: 1em;
         align-self: center;
@@ -41,12 +40,11 @@ export default {
     }
 
     .exec-inline-spinner {
-        float: left;
         height: 1em;
         width: 1em;
         align-self: center;
         vertical-align: text-top;
-        animation: spin 4s linear infinite;
+        animation: spin 2s linear infinite;
     }
 
     @keyframes spin {
@@ -55,25 +53,29 @@ export default {
         }
     }
 
-    .sentence-end-tag:after {
+    .sentence-end-tag::after, .sentence-end-tag::before{
         content: "";
         position: absolute;
-        top: 0;
+        top: 4px;
         left: 0;
         width: 1em;
         height: 1em;
         display: inline-block;
     }
 
-    .sentence-end-tag[data-special=""]:hover:after {
-        background-color: $color-primary;
+    .sentence-end-tag[data-special=""]:hover::after {
         cursor: pointer;
+        background-color: $color-primary;
         mask-type: alpha;
         mask-repeat: no-repeat;
         -webkit-mask-repeat: no-repeat;
         -webkit-mask-position: center center;
         -webkit-mask-size: 40px 15px;
         -webkit-mask-image: url("../../../../assets/images/arrowToCursor.svg");
+    }
+
+    .sentence-end-tag[data-special=""]:hover::before {
+        background-color: $color-gray-light;
     }
 
     .sentence-end-tag {

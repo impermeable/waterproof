@@ -1,20 +1,21 @@
 <template>
-  <div style="display: inline" >
-<!--      <p v-if="startWithBreak"></p>-->
-      <inlineable :inline="inline" @click="handleClick($event)"
+  <div style="display: inline" @click="handleClick($event)">
+      <p v-if="startWithBreak"></p>
+      <inlineable :inline="inline"
                   @contextmenu="handleRightClick($event)"
                   :class="[{'selected-block': isSelected}, codeStyle]"
                   tabindex="-1"
                   contenteditable="false">
-          <template v-for="(part, index2) of parts">
-              <span v-if="part.type === 'code'"
+          <template v-for="(part, index2) of formattedText">
+              <SentenceEnd v-if="part.end"
+                           :key="'code-' + index + '-end-' + index2"
+                           :index="part.index" :special="part.special"
+                            @execTo="executeTo"/>
+              <span v-else
                     :key="'code-' + index + '-part-' + index2"
                     :class="{'exec-inline-error': part.error}"
                     v-html="codeToHtml(part.text)">
               </span>
-              <SentenceEnd v-else-if="part.type === 'end'"
-                           :key="'code-' + index + '-end-' + index2"
-                           :index="part.index" :special="part.special"/>
           </template>
       </inlineable>
       <div v-if="hasErrorBlock" class="exec-error">
@@ -34,47 +35,12 @@ export default {
   components: {SentenceEnd, Inlineable},
   mixins: [WpBlock],
   computed: {
-    parts: function() {
-      return [
-        {
-          type: 'code',
-          text: 'Check plus',
-        },
-        {
-          type: 'end',
-          index: 15,
-          special: 'done',
-        },
-        {
-          type: 'code',
-          text: '.\n',
-        },
-        {
-          type: 'code',
-          text: 'Check ',
-        },
-        {
-          type: 'code',
-          error: true,
-          text: 'plus',
-        },
-        {
-          type: 'end',
-          index: 32,
-          special: '',
-        },
-        {
-          type: 'code',
-          text: '.',
-        },
-      ];
-    },
     formattedText: function() {
       const text = this.block.text.trim();
 
       // Determine where to insert error, tick, or both
       const splitAt = this.foundSentences.map((i) => {
-        return {at: i, what: 'sentence-end'};
+        return {at: i - 1, what: 'sentence-end'};
       });
       if (this.hasError) {
         splitAt.push({
@@ -87,50 +53,58 @@ export default {
         });
       }
 
-      let newText = '';
+      const parts = [];
       // Sort from last to first
       splitAt.sort((obj1, obj2) => obj1.at - obj2.at);
       let index = 0;
+      let inError = false;
       for (const obj of splitAt) {
         const newIndex = obj.at;
-        newText = newText + this.highlight(this.escapeHtml(
-            text.slice(index, newIndex)
-        ));
+        if (newIndex > index) {
+          parts.push({
+            text: text.slice(index, newIndex),
+            error: inError,
+          });
+        }
         index = newIndex;
         if (obj.what === 'error-start') {
-          newText = newText + '<span class="exec-inline-error">';
+          inError = true;
         } else if (obj.what === 'error-end') {
-          newText = newText + '</span>';
-        } else if (obj.what === 'tick') {
-          // Take the last '.' and replace it with the tick
-          const insertAt = newText.lastIndexOf('.');
-          newText = newText.slice(0, insertAt)
-           + this.makeTick() + ' '
-           + newText.slice(insertAt + 1);
+          inError = false;
         } else if (obj.what === 'sentence-end') {
-          const realIndex = newIndex + this.block.state.textIndex;
+          const realIndex = newIndex + this.block.state.textIndex + 1;
           let type = '';
           if (realIndex === this.executedIndex) {
             type = 'done';
+            // skip a character (the final .)
+            index++;
           } else if (realIndex === this.runningIndex) {
             type = 'doing';
+            // skip a character (the final .)
+            index++;
           }
 
-          const insertAt = newText.lastIndexOf('.');
+          parts.push({
+            end: true,
+            index: realIndex,
+            special: type,
+          });
 
-          if (type === '') {
-            newText = newText.slice(0, insertAt)
-              + this.makeSentenceEnd(realIndex, type)
-              + newText.slice(insertAt);
-          } else {
-            newText = newText.slice(0, insertAt)
-              + this.makeSentenceEnd(realIndex, type) + ' '
-              + newText.slice(insertAt + 1);
+          if (this.inline && index === text.length) {
+            parts.push({
+              text: ' ',
+            });
           }
         }
       }
-      newText = newText + this.highlight(this.escapeHtml(text.slice(index)));
-      return newText;
+
+      if (index < text.length) {
+        parts.push({
+          text: text.slice(index),
+        });
+      }
+
+      return parts;
     },
     hasError: function() {
       return this.block.state.error !== null
@@ -180,6 +154,10 @@ export default {
     },
     codeToHtml: function(code) {
       return this.highlight(this.escapeHtml(code));
+    },
+    executeTo(index) {
+      console.log('execcing to', index);
+      this.eventBus.$emit('coqTo', index);
     },
   },
 };
