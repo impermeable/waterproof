@@ -11,6 +11,46 @@
     },
     {
       "type": "text",
+      "text": "## Upper bounds\n\nA number $M : ℝ$ is called an **upper bound** of a subset $A : ℝ \\to \\mathsf{Prop}$ of the real numbers, if for all $a : ℝ$, if $a ∈ A$ then $a ≤ M$.\n\n```\nDefinition is_upper_bound (A : ℝ → Prop) (M : ℝ) :=\n  ∀ a : A, a ∈ A ⇒ a ≤ M.\n```\n\nWe say that a subset $A : ℝ \\to \\mathsf{Prop}$ is bounded above if there exists an $M : ℝ$ such that $M$ is an upper bound of $A$.\n\n```\nDefinition is_bounded_above (A : ℝ → Prop) :=\n  ∃ M : ℝ, is_upper_bound A M.\n```\n\n## The supremum\n\nA real number $L : ℝ$ is called the **supremum** of a subset $A : ℝ \\to \\mathsf{Prop}$ if it is the smallest upper bound.\n```\nDefinition is_sup (A : ℝ → Prop) (L : ℝ) :=\n  (is_upper_bound A L) ∧ (∀ M : ℝ, is_upper_bound A M ⇒ (L ≤ M) ).\n```\n\n## The completeness axiom\n\nThe completeness axiom of the real numbers says that when a subset $A$ of the real numbers is bounded from above, and when there exists an element in the set, then there exists an $L$ such that $L$ is the supremum of $A$.\n\n```\nAxiom completeness : ∀ A : ℝ → Prop,\n      is_bounded_above A ⇒ \n        ((∃ x : ℝ, x ∈ A) ⇒ { M : ℝ | is_sup A M }).\n```"
+    },
+    {
+      "type": "text",
+      "text": "## Lower bounds\n\nA number $m : ℝ$ is called a lower bound of a subset $A : ℝ → \\mathsf{Prop}$, if for all $a : \\mathbb{R}$, if $a \\in A$ then $a ≥ m$."
+    },
+    {
+      "type": "code",
+      "text": "Definition is_lower_bound (A : ℝ → Prop) (m : ℝ) :=\n  ∀ a : ℝ, a ∈ A ⇒ m ≤ a."
+    },
+    {
+      "type": "text",
+      "text": "We say that a subset $A : ℝ → \\mathsf{Prop}$ is bounded below if there exists an $m : ℝ$ such that $m$ is a lower bound of $A$."
+    },
+    {
+      "type": "code",
+      "text": "Definition is_bdd_below (A : ℝ → Prop) :=\n  ∃ m : ℝ, is_lower_bound A m."
+    },
+    {
+      "type": "text",
+      "text": "## The infimum\n\nA real number $m : ℝ$ is called the **infimum** of a subset $A : ℝ → \\mathsf{Prop}$ if it is the largest lower bound."
+    },
+    {
+      "type": "code",
+      "text": "Definition is_inf :=\n  fun (A : ℝ → Prop) m \n    => (is_lower_bound A m) ∧ (∀ l : R, is_lower_bound A l ⇒ l ≤ m)."
+    },
+    {
+      "type": "code",
+      "text": "Lemma exists_inf :\n  ∀ A : (ℝ →  Prop), is_bdd_below A ⇒\n    ((∃ x : ℝ, x ∈ A) ⇒ { m : ℝ | is_inf A m })."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake A : (ℝ → Prop). Assume A_bdd_below : (is_bdd_below A).\nAssume ex_x : (∃ x : ℝ, x ∈ A)."
+    },
+    {
+      "type": "code",
+      "text": "Define B := (fun (x : ℝ) ↦ A (-x)).\nWe claim that (is_bdd_above B) (B_bdd_above).\n  We need to show that\n    (∃ M : ℝ, ∀ b : ℝ, b ∈ B ⇒ b ≤ M).\n  By A_bdd_below it holds that\n    (∃ m : ℝ, ∀ a : ℝ, a ∈ A ⇒ m ≤ a) (H1).\n  Choose m such that a_l_bd according to H1.\n  Choose M := (-m).\n  We need to show that\n    (∀ b : ℝ, (-b) ∈ A ⇒ b ≤ M).\n  Take b : ℝ. Assume min_b_in_A : ((-b) ∈ A).\n  It holds that ((-b) \\les ) (H2).\nAdmitted."
+    },
+    {
+      "type": "text",
       "text": "### A supremum is an upper bound\n\nIf $M$ is the supremum of a set $A$, it is also an upper bound."
     },
     {
@@ -54,20 +94,12 @@
       "text": "## Infima"
     },
     {
-      "type": "code",
-      "text": "Definition is_lower_bound :=\n  fun (A : R -> Prop) m \n    => forall a : R, A a -> m <= a."
-    },
-    {
-      "type": "code",
-      "text": "Definition is_inf :=\n  fun (A : R -> Prop) m \n    => (is_lower_bound A m) /\\ (forall l : R, is_lower_bound A l -> l <= m)."
-    },
-    {
       "type": "text",
       "text": "## An infimum is a lower bound"
     },
     {
       "type": "code",
-      "text": "Lemma inf_is_low_bd :\n  forall A : R -> Prop,\n    forall m : R,\n      is_inf A m -> is_lower_bound A m."
+      "text": "Lemma inf_is_low_bd :\n  ∀ A : ℝ → Prop,\n    ∀ m : ℝ,\n      is_inf A m ⇒ is_lower_bound A m."
     },
     {
       "type": "code",

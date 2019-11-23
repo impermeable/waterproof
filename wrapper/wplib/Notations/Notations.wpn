@@ -23,7 +23,7 @@
     },
     {
       "type": "code",
-      "text": "Notation is_sup := is_lub."
+      "text": "Notation is_sup := is_lub.\nNotation is_bdd_above := bound."
     },
     {
       "type": "text",
