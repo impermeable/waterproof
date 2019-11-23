@@ -1,0 +1,125 @@
+{
+  "exerciseSheet": true,
+  "blocks": [
+    {
+      "type": "text",
+      "text": "# Lecture 4 Exercise 2"
+    },
+    {
+      "type": "code",
+      "text": "Require Import Reals.\nRequire Import Classical.\nRequire Import Classical_Pred_Type.\n\nRequire Import wplib.Tactics.Tactics.\nRequire Import wplib.Tactics.TacticsContra.\nRequire Import wplib.Lib.sup_and_inf.\nRequire Import wplib.Lib.sequences.\nRequire Import wplib.Lib.subsequences.\nRequire Import wplib.Notations.Notations.\n\nNotation cv_to := Un_cv.\nHint Resolve Rabs_pos.\nHint Resolve Rabs_mult."
+    },
+    {
+      "type": "text",
+      "text": "## Introduction\n\nIn Exercise 2 of Lecture 4, we are given a sequence $a : ℕ → ℝ$, and it is assumed that the sequence is not bounded from above."
+    },
+    {
+      "type": "code",
+      "text": "Variable a : ℕ → ℝ.\nHypotheses a_not_bdd_above :\n  ¬ (∃ M : ℝ, ∀ n : ℕ, a n ≤ M)."
+    },
+    {
+      "type": "text",
+      "text": "\nIt is our task to show that there is a subsequence diverging to infinity. This exercise is rather difficult on paper, and to complete the full exercise within Waterproof is a bit too involved at this stage, which is why we distribute the work: you are asked to provide two parts of the exercise, and the other parts of the notebook will fill in the rest.\n\n## A helpful auxiliary sequence\n\nTo solve the exercise, it is useful to construct a new sequence, which we call $\\mathsf{max\\_a}$, and which is defined as follows\n\n$$\\mathsf{max\\_a}(n) := \\max_{k = 1, \\dots, n} a_k\n$$"
+    },
+    {
+      "type": "code",
+      "text": "Fixpoint max_a (n : ℕ) :=\n  match n with\n  | O => a O\n  | S m => Rmax (max_a m) (a n)\n  end."
+    },
+    {
+      "type": "text",
+      "text": "The following lemma just states that whenever a natural number $k : ℕ$ is less than a natural number $n : ℕ$, it holds that $a_k ≤ \\mathsf{max\\_a}(n)$. We need to show this by induction, and because we have not practiced with this yet, we will prove this fact for you."
+    },
+    {
+      "type": "code",
+      "text": "Lemma max_a_majorizes :\n  ∀ (n k: ℕ), (k ≤ n)%nat ⇒ a k ≤ max_a n."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\ninduction n as [|n IH]. Take k : ℕ.\nWe need to show that ((k ≤ 0)%nat ⇒ a k ≤ max_a 0).\nAssume k_le_0 : (k ≤ 0)%nat. It holds that (k = 0)%nat (H1).\nWrite goal using (k=0)%nat as\n  (a 0 ≤ max_a 0).\nWe need to show that (a 0 ≤ a 0).\nIt holds that (a 0 ≤ a 0).\nWe need to show that\n  (∀ k : ℕ, (k ≤ S n)%nat \n    ⇒ a k ≤ max_a (S n)).\nTake k : ℕ. Assume k_le_Sn : (k ≤ S n)%nat.\nWe need to show that\n  (a k ≤ Rmax (max_a n) (a (S n))).\nBy le_or_lt it holds that\n  (k ≤ n ∨ n < k)%nat (H2).\nBecause H2 either k_le_n or n_lt_k."
+    },
+    {
+      "type": "text",
+      "text": "In case $k \\leq n$..."
+    },
+    {
+      "type": "code",
+      "text": "By IH it holds that (a k ≤ max_a n) (H3).\nBy Rmax_l it holds that (max_a n ≤ Rmax (max_a n) (a (S n))) (H4).\nIt holds that (a k ≤ Rmax (max_a n) (a (S n)))."
+    },
+    {
+      "type": "text",
+      "text": "In case $n < k$..."
+    },
+    {
+      "type": "code",
+      "text": "It holds that (k = (S n)) (H5).\nWrite goal using (S n = k) as \n  (a k ≤ Rmax (max_a n) (a k)).\nBy Rmax_r it holds that\n  (a k ≤ Rmax (max_a n) (a k)) (H6).\nIt holds that (a k ≤ Rmax (max_a n) (a k)).\nQed."
+    },
+    {
+      "type": "text",
+      "text": "## Exercise Part 1\n\nNow it is your turn. Show that for all $m, N : ℕ$, there exists an $n : ℕ$ such that $n ≥ N$ and $a_n > m + 1$.\n\n**Remark:** In the lemma formulation below, we write $\\mathsf{INR}(m)$ because Waterproof is very strict about the **type** of the various variables involved, and in particular the natural number $m$ first needs to be converted to a real number (by using the embedding $\\mathsf{INR}$) before it can be compared to other real numbers.\n\n**Hint:** the following lemma may be useful:\n\n```Lemma le_or_lt : ∀ n m : ℕ, n ≤ m ∨ m < n```."
+    },
+    {
+      "type": "code",
+      "text": "Lemma exist_large_elements :\n  for all m N : ℕ, there exists n : ℕ, \n    (n ≥ N)%nat ∧ (a n > INR(m) + 1).\nProof."
+    },
+    {
+      "type": "input",
+      "start": true,
+      "id": "input-1"
+    },
+    {
+      "type": "text",
+      "text": "Write your solution here..."
+    },
+    {
+      "type": "code",
+      "text": "\nAdmitted."
+    },
+    {
+      "type": "input",
+      "start": false,
+      "id": "input-1"
+    },
+    {
+      "type": "text",
+      "text": "Given the previous lemma, it is possible to construct an index sequence $n : ℕ → ℕ$ inductively, such that $a_{n_k} > k + 1$ for all $k$.\n\nThe basic idea is as follows. One first takes $N = 1$ in the previous lemma, then one finds an $n_0 : ℕ$ such that $a_{n_0} > 1$.\n\nIf $n_k$ is defined, one takes $N = n_k + 1$ in the previous lemma. Then one finds a $n_{k+1} : \\mathbb{N}$ such that $n_{k+1} \\geq n_k + 1 > n_k$ and such that $a_{n_{k+1}} > (k+1) + 1$. The constructed sequence $n_k$ is then increasing by construction, and therefore an index sequence. Moreover, by construction, we have that for all $k : ℕ$, that $a_{n_k} \\geq k + 1$.\n\nThe precise construction in Waterproof is both a bit subtle and a bit involved, which is why we included the following lemma in the `subsequences` library:\n\n```\nLemma exists_good_subseq :\n  ∀ (b : ℕ → ℝ) (P : ℕ → (ℝ → Prop)),\n    (∀ (m : ℕ) (N : ℕ), \n       ∃ k : ℕ, (N ≤ k)%nat ∧ (P m (b k))\n    ) ⇒\n    (∃ n : ℕ → ℕ, \n      is_index_seq n ∧ \n      ∀ k : ℕ, P k (b (n k))\n    ).\n```"
+    },
+    {
+      "type": "text",
+      "text": "\nWe directly use the lemma to show that there exists an index sequence $n : ℕ → ℕ$ such that for all $k : ℕ$, we have $a_{n_k} > k + 1$."
+    },
+    {
+      "type": "code",
+      "text": "Lemma exists_growing_subs_pre :\n  ∃ n : ℕ → ℕ,\n    is_index_seq n ∧ ∀ k : ℕ, a (n k) > INR k + 1."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nDefine P := (fun (m : ℕ) ↦ \n              (fun (x : ℝ) ↦ (x > INR m + 1))).\nBy exist_large_elements it holds that\n  (∀ m N : ℕ, ∃ k : ℕ, (N ≤ k)%nat ∧ P m (a k)) (H1).\nBy (exists_good_subseq a P) it holds that\n  (∃ n : ℕ → ℕ,\n    is_index_seq n ∧ ∀ k : ℕ, a (n k) > INR k + 1) (H2).\nIt holds that\n  (∃ n : ℕ → ℕ,\n    is_index_seq n ∧ ∀ k : ℕ, a (n k) > INR k + 1).\nQed."
+    },
+    {
+      "type": "text",
+      "text": "## Exercise Part 2\n\nIn part 2 of the exercise, you can use the previous lemma to show that there exists a subsequence diverging to infinity.\n\n**Hint:** the following (reformulation of the) Archimedean axiom may be useful:\n```\nLemma archimed_mod :\n  ∀ x : ℝ, ∃ n : ℕ, INR(n) > x.\n```"
+    },
+    {
+      "type": "code",
+      "text": "Lemma exists_growing_subs :\n  ∃ n : ℕ → ℕ,\n    is_index_seq n ∧ cv_infty (fun (k : ℕ) ↦ a (n k)).\nProof."
+    },
+    {
+      "type": "input",
+      "start": true,
+      "id": "input-2"
+    },
+    {
+      "type": "text",
+      "text": "Write your solution here..."
+    },
+    {
+      "type": "code",
+      "text": "\nAdmitted."
+    },
+    {
+      "type": "input",
+      "start": false,
+      "id": "input-2"
+    }
+  ]
+}
