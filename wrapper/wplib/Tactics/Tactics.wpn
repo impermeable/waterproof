@@ -135,7 +135,7 @@
     },
     {
       "type": "code",
-      "text": "Tactic Notation \"It\" \"sufficies\" \"to\" \"show\" \"that\"\n  constr(t) :=\n  enough t by ( wp_power || fail \"Waterproof could confirm that proving the statement would be enough.\")."
+      "text": "Tactic Notation \"It\" \"suffices\" \"to\" \"show\" \"that\"\n  constr(t) :=\n  enough t by ( wp_power || fail \"Waterproof could not confirm that proving the statement would be enough.\")."
     },
     {
       "type": "code",
