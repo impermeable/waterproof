@@ -14,5 +14,15 @@ export default {
       this.alignGutter(animation);
     },
   },
+  watch: {
+    storeReaction() {
+      this.refreshExecStatus(false);
+    },
+  },
+  computed: {
+    storeReaction() {
+      return this.$store.state.sideWindowIndex;
+    },
+  },
 };
 </script>

@@ -331,38 +331,39 @@ export default {
     },
     alignGutter: function(animation = true) {
       this.ani = animation;
-
+      requestAnimationFrame(() => {
       // Set the gutter height to equal content height
-      this.setGutterHeight();
+        this.setGutterHeight();
 
-      const execTick = this.$refs.editPane
-          .querySelector('.sentence-end-' + this.executeIndex);
+        const execTick = this.$refs.editPane
+            .querySelector('.sentence-end-' + this.executeIndex);
 
-      const editPane = this.$refs.editPane;
-      const rect2 = editPane.getBoundingClientRect();
+        const editPane = this.$refs.editPane;
+        const rect2 = editPane.getBoundingClientRect();
 
-      if (execTick != null) {
-        const rect = execTick.getBoundingClientRect();
+        if (execTick != null) {
+          const rect = execTick.getBoundingClientRect();
 
-        this.execHeight = (rect.bottom + rect.top) / 2 - rect2.top - 10;
-        this.execHeightBall = rect.top - rect2.top;
-      }
+          this.execHeight = (rect.bottom + rect.top) / 2 - rect2.top - 10;
+          this.execHeightBall = rect.top - rect2.top;
+        }
 
-      const pendingTick = this.$refs.editPane
-          .querySelector('.sentence-end-' + this.pendingIndex);
+        const pendingTick = this.$refs.editPane
+            .querySelector('.sentence-end-' + this.pendingIndex);
 
-      if (pendingTick != null) {
-        const rect = pendingTick.getBoundingClientRect();
+        if (pendingTick != null) {
+          const rect = pendingTick.getBoundingClientRect();
 
-        this.pendingHeight = (rect.bottom + rect.top) / 2 - rect2.top - 10;
-        this.pendingHeightBall = rect.top - rect2.top;
-      }
+          this.pendingHeight = (rect.bottom + rect.top) / 2 - rect2.top - 10;
+          this.pendingHeightBall = rect.top - rect2.top;
+        }
 
-      if (!animation) {
-        setTimeout(() => {
-          this.ani = true;
-        }, 50);
-      }
+        if (!animation) {
+          setTimeout(() => {
+            this.ani = true;
+          }, 0);
+        }
+      });
     },
     insertTextBlock: function() {
       if (this.blocks.length === 0) {
