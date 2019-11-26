@@ -288,4 +288,99 @@ describe('serapi combined content & execution processor', () => {
     expect(execProc.state.target).to.equal(0);
     expect(execProc.state.lastExecuted).to.equal(0);
   });
+
+  it('should execute the first sentence after content change', async () => {
+    const text = 'Proof. Proof. Proof.';
+    const newText = ' ';
+
+
+    worker.addExpectedCall(text, [
+      'Ack',
+      '(Added 2((fname ToplevelInput)(line_nb 1)(bol_pos 0)' +
+      '(line_nb_last 1)(bol_pos_last 0)(bp 0)(ep 6))NewTip)',
+      '(Added 3((fname ToplevelInput)(line_nb 1)(bol_pos 0)' +
+      '(line_nb_last 1)(bol_pos_last 0)(bp 7)(ep 13))NewTip)',
+      '(Added 4((fname ToplevelInput)(line_nb 1)(bol_pos 0)' +
+      '(line_nb_last 1)(bol_pos_last 0)(bp 14)(ep 20))NewTip)',
+      'Completed',
+    ]);
+
+    worker.addExpectedCall('Exec 2', [
+      'Ack',
+      '(Feedback((doc_id 0)(span_id 2)(route 0)' +
+      '(contents(ProcessingIn master))))',
+      '(Feedback((doc_id 0)(span_id 1)(route 0)(contents Processed)))',
+      '(Feedback((doc_id 0)(span_id 2)(route 0)(contents Processed)))',
+      'Completed',
+    ]);
+
+    worker.addExpectedCall('Exec 3', [
+      'Ack',
+      '(Feedback((doc_id 0)(span_id 3)(route 0)' +
+      '(contents(ProcessingIn master))))',
+      '(Feedback((doc_id 0)(span_id 3)(route 0)(contents Processed)))',
+      'Completed',
+    ]);
+
+    worker.addExpectedCall('Query ((sid 3', [
+      'Ack',
+      '(ObjList())',
+      'Completed',
+    ]);
+
+    worker.addExpectedCall('Cancel (2 3 4)', [
+      'Ack',
+      '(Canceled(2 3 4))',
+      'Completed',
+    ]);
+
+    worker.addExpectedCall(`"${newText + text}"`, [
+      'Ack',
+      '(Added 5((fname ToplevelInput)(line_nb 1)(bol_pos 0)' +
+      '(line_nb_last 1)(bol_pos_last 0)(bp 1)(ep 7))NewTip)',
+      '(Added 6((fname ToplevelInput)(line_nb 1)(bol_pos 0)' +
+      '(line_nb_last 1)(bol_pos_last 0)(bp 8)(ep 14))NewTip)',
+      '(Added 7((fname ToplevelInput)(line_nb 1)(bol_pos 0)' +
+      '(line_nb_last 1)(bol_pos_last 0)(bp 15)(ep 21))NewTip)',
+      'Completed',
+    ]);
+
+    worker.addExpectedCall('Exec 5', [
+      'Ack',
+      '(Feedback((doc_id 0)(span_id 5)(route 0)' +
+      '(contents(ProcessingIn master))))',
+      '(Feedback((doc_id 0)(span_id 5)(route 0)(contents Processed)))',
+      'Completed',
+    ]);
+
+    worker.addExpectedCall('Query ((sid 5', [
+      'Ack',
+      '(ObjList())',
+      'Completed',
+    ]);
+
+    await contentProc.setContent(text);
+    await execProc.executeTo(15);
+    await contentProc.setContent(newText + text);
+
+    expect(editor.setContentSuccess.callCount).to.be.at.least(2);
+    expect(editor.setContentError.callCount).to.equal(0);
+    expect(contentProc.state.sentenceSize()).to.equal(3);
+    expect(contentProc.state.idOfSentence(0)).to.equal(5);
+
+    expect(contentProc.state.lastExecuted).to.equal(-1);
+    expect(execProc.state.target).to.equal(-1);
+
+    await execProc.executeNext();
+
+    expect(worker.getCallAmount()).to.equal(8);
+
+    expect(editor.executeStarted.callCount).to.be.at.least(3);
+    expect(editor.executeStarted.lastCall.args[0]).to.equal(7);
+    expect(editor.executeSuccess.callCount).to.equal(3);
+    expect(editor.executeError.callCount).to.equal(0);
+    // TODO: check params of success
+
+    expect(execProc.state.lastExecuted).to.equal(0);
+  });
 });

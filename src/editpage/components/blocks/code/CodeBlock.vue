@@ -118,10 +118,9 @@ export default {
     },
     codeStyle: function() {
       return {
+        'code-block wap-block': true,
         'codeExecuted': this.block.state.done,
-        'code-block': true,
         'code-block-not-selected': !this.isSelected,
-        'wap-block': true,
         'edit-block': this.isEditable,
       };
     },
@@ -132,9 +131,6 @@ export default {
     },
   },
   methods: {
-    makeSentenceEnd: function(index, type='') {
-      return `<span class="sentence-end-tag sentence-end-${index}"></span>`;
-    },
     highlight: function(text) {
       return text
           .replace(/\bLemma\b/g, '<span style="color:#2B39A7">Lemma</span>')
@@ -156,7 +152,6 @@ export default {
       return this.highlight(this.escapeHtml(code));
     },
     executeTo(index) {
-      console.log('execcing to', index);
       this.eventBus.$emit('coqTo', index);
     },
   },
