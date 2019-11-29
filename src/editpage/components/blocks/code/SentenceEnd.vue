@@ -1,6 +1,6 @@
 <template>
     <span :class="['sentence-end-tag', 'sentence-end-' + index]"
-          :data-special="special" @click.stop="executeTo">
+          :data-special="special" @click.stop="executeTo" :title="hoverText">
         <img v-if="special === 'done'" class="exec-inline-tick"
              alt="Done" src="../../../../assets/images/tick.svg">
         <img v-else-if="special === 'doing'" class="exec-inline-spinner"
@@ -18,6 +18,15 @@ export default {
   computed: {
     clickable() {
       return this.special === '';
+    },
+    hoverText() {
+      if (this.special === 'done') {
+        return 'Executed up to here';
+      } else if (this.special === 'doing') {
+        return 'Currently executing...';
+      } else {
+        return 'Execute upto here';
+      }
     },
   },
   methods: {

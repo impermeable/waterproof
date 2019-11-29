@@ -43,8 +43,8 @@ html, body {
 }
 
 
-$bar-animation-duration: .25s;
-$bar-animation-timing: linear;
+$bar-animation-duration: .3s;
+$bar-animation-timing: cubic-bezier(0,.75,.45,1);
 
 .exec-bar {
   position: absolute;
