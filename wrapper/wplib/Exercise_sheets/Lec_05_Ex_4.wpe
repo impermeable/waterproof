@@ -7,16 +7,32 @@
     },
     {
       "type": "code",
-      "text": "Require Import Reals.\nRequire Import Rfunctions.\n\nRequire Import wplib.Tactics.Tactics.\nRequire Import wplib.Lib.sequences.\nRequire Import wplib.Lib.series."
+      "text": "Require Import Reals.\nRequire Import Rfunctions.\n\nRequire Import wplib.Tactics.Tactics.\nRequire Import wplib.Notations.Notations.\nRequire Import wplib.Lib.sequences.\nRequire Import wplib.Lib.series.\n\nNotation cv_to := Un_cv."
+    },
+    {
+      "type": "text",
+      "text": "The formulation of the original exercise was: suppose $\\sum_{k} a_k$ is an absolutely converging series, show that\n\n$$\n\\left| \\sum_{k=0}^\\infty a_k \\right| ≤ \\sum_{k=0}^\\infty |a_k|\n$$\nIn fact, in this formulation it is a bit hard to see what you need to show. The formulation below makes this is a bit more explicit.\n\nIt says: suppose the series $\\sum_{k=0}^\\infty |a_k|$ converges and is equal to $l$, and suppose the series $\\sum_{k=0}^\\infty a_k$ converges and is equal to $m$, then $|m| \\leq l$.\n\n**Hints:** the following Lemmas may be useful.\n\n```\nLemma sum_f_R0_triangle : \n∀ (a : ℕ → ℝ) (n : ℕ),\n  ｜ partial_sums a n ｜ ≤ \n     partial_sums (fun (j : ℕ) ↦ ｜a j｜) n.\n```\n\n```\nLemma seq_ordered_lim_ordered :\n  ∀ (a b : ℕ → ℝ) (m l : ℝ),\n    cv_to a m ⇒ (\n      cv_to b l ⇒ (\n        (∀ n : ℕ, a n ≤ b n) ⇒ (\n          m ≤ l )\n      )\n    )\n```\n\n```\nLemma cv_cvabs :\n  ∀ (a : ℕ → ℝ) (l : ℝ),\n    cv_to a l ⇒ (\n      cv_to (fun (k : ℕ) ↦ ｜ a k ｜) (｜l｜))\n```"
     },
     {
       "type": "code",
-      "text": "Lemma lec_05_ex_04 :\n  ∀ (a : ℕ → ℝ) (m l : ℝ),\n    series_cv_abs_to a l ⇒ \n      (series_cv_to a m ⇒ Rabs m ≤ l)."
+      "text": "Check sum_f_R0_triangle.\nCheck seq_ordered_lim_ordered.\nCheck cv_cvabs."
+    },
+    {
+      "type": "code",
+      "text": "Lemma lec_05_ex_04 :\n  ∀ (a : ℕ → ℝ) (m l : ℝ),\n    series_cv_abs_to a l ⇒ \n      (series_cv_to a m ⇒ ｜m｜ ≤ l)."
     },
     {
       "type": "input",
       "start": true,
       "id": "input-1"
+    },
+    {
+      "type": "text",
+      "text": "Write your solution here..."
+    },
+    {
+      "type": "code",
+      "text": "\nAdmitted."
     },
     {
       "type": "input",
