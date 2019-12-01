@@ -6,18 +6,23 @@
     },
     {
         "name": "Assume (*name*) : ((*statement*)).",
-        "description": "If you need to show (*statement*) ⇒ B, this allows you to assume that A holds, giving this assumption the name (*name*).",
+        "description": "If you need to prove (*statement*) ⇒ B, this allows you to assume that A holds, giving this assumption the name (*name*).",
         "example": "Lemma A_impl_A : forall A : Prop, A ⇒ A.\nProof.\nTake A : Prop.\nAssume H_A.\nApply H_A.Qed."
     },
     {
         "name": "It holds that ((*statement*)) ((*name*)).",
-        "description": "Tries to automatically show (*statement*). If that works, (*statement*) is added as a hypothesis with name (*name*)",
+        "description": "Tries to automatically prove (*statement*). If that works, (*statement*) is added as a hypothesis with name (*name*).",
         "example": "It holds that (3=3) (three_equals_itself)."
     },
     {
         "name": "It holds that ((*current goal*)).",
-        "description": "Tries to automatically show the current goal.",
+        "description": "Tries to automatically prove the current goal.",
         "example": "Lemma 2_is_2 : 2 = 2. \nProof.\nIt holds that (2 = 2).\nQed."
+    },
+    {
+        "name": "By ((*lemma or assumption*)) it holds that ((*statement*)) ((*name*)).",
+        "description": "Tries to prove (*statement*) using (*lemma*) or (*assumption*). If that works, (*statement*) is added as a hypothesis with name (*name*).",
+        "example": "Lemma two_is_2 : 0 + 2 = 2. \nProof.\nBy (plus_O_n 2) it holds that (0 + 2 = 2) (H2). \nApply H2. \nQed."
     },
     {
         "name": "We claim that ((*statement*)) ((*name*)).",
