@@ -164,8 +164,12 @@ export default {
   pre.code-block {
     margin: 5px 0;
     display: block;
-    white-space: pre-line;
     overflow: visible;
+
+  }
+
+  pre.code-block > span:first-child {
+    margin-left: -2.4em;
   }
 
   .code-block-not-selected {

@@ -346,6 +346,8 @@ export default {
 
           this.execHeight = (rect.bottom + rect.top) / 2 - rect2.top - 10;
           this.execHeightBall = rect.top - rect2.top;
+        } else if (this.executeIndex >= 0) {
+          console.log('Cannot find sentence end: ', this.executeIndex);
         }
 
         const pendingTick = this.$refs.editPane
@@ -356,6 +358,8 @@ export default {
 
           this.pendingHeight = (rect.bottom + rect.top) / 2 - rect2.top - 10;
           this.pendingHeightBall = rect.top - rect2.top;
+        } else if (this.pendingIndex >= 0) {
+          console.log('Cannot find sentence end: ', this.pendingIndex);
         }
 
         if (!animation) {
