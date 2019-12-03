@@ -1,6 +1,6 @@
 {
   "name": "waterproof",
-  "version": "0.3.5",
+  "version": "0.3.6",
   "private": true,
   "description": "The Waterproof proof assistant.",
   "main": "background.js",
