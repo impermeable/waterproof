@@ -66,7 +66,7 @@ class SerapiContentProcessor extends SerapiProcessor {
       const contentToAdd = lastUnchangedSentence === -1 ? newContent :
           newContent.slice(editIndex);
 
-      if (editIndex !== -1 && this.state.lastExecuted > lastUnchangedSentence) {
+      if (this.state.lastExecuted > lastUnchangedSentence) {
         // FIRST revert the goal since it is visible to the user
         await this._getRerolledGoal(lastUnchangedSentence, editIndex);
       }
@@ -120,17 +120,18 @@ class SerapiContentProcessor extends SerapiProcessor {
    * @private
    */
   async _getRerolledGoal(lastUnchangedSentence, editIndex) {
-    if (lastUnchangedSentence < 0) {
-      // reroll everything
-      this.editor.setContentSuccess('', editIndex, true);
-      return Promise.resolve();
+    let newGoal = '';
+    if (lastUnchangedSentence >= 0) {
+      const sentenceId = this.state.idOfSentence(lastUnchangedSentence);
+      const result = await this.sendCommand(createGoalCommand(sentenceId), 'g');
+      newGoal = result.goal;
     }
-    const sentenceId = this.state.idOfSentence(lastUnchangedSentence);
-    return this.sendCommand(createGoalCommand(sentenceId), 'g')
-        .then((result) => {
-          this.state.lastExecuted = lastUnchangedSentence;
-          this.editor.setContentSuccess(result.goal, editIndex, true);
-        });
+
+    this.state.lastExecuted = lastUnchangedSentence;
+    this.state.target = Math.min(this.state.target, lastUnchangedSentence);
+    this.editor.executeStarted(lastUnchangedSentence < 0 ? -1
+        : this.state.endIndexOfSentence(lastUnchangedSentence));
+    this.editor.setContentSuccess(newGoal, editIndex, true);
   }
 
   /**

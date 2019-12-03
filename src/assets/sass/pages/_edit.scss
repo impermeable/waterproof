@@ -43,16 +43,19 @@ html, body {
 }
 
 
-$bar-animation-duration: .25s;
-$bar-animation-timing: ease-in-out;
+$bar-animation-duration: .3s;
+$bar-animation-timing: cubic-bezier(0,.75,.45,1);
 
 .exec-bar {
   position: absolute;
   background-color: $color-primary;
-  width: 10px;
-  left: 15px;
+  width: 20px;
+  left: 10px;
   top: 10px;
   transition: height $bar-animation-duration $bar-animation-timing;
+  z-index: 3;
+  border: 5px solid $color-gray-light;
+  border-bottom: 0;
 }
 
 .exec-ball {
@@ -65,7 +68,31 @@ $bar-animation-timing: ease-in-out;
   background-size: cover;
   transition: top $bar-animation-duration $bar-animation-timing;
   // Make sure the balls are drawn over top of the gutter lines
+  z-index: 4;
+}
+
+.pending-bar {
+  position: absolute;
+  border: 2px solid $color-primary;
+  border-bottom: 0;
+  //background: linear-gradient(to bottom, $color-primary 0%, $color-gray-light 100%);
+  background: $color-gray-light;
+  width: 10px;
+  left: 15px;
+  top: 10px;
   z-index: 2;
+}
+
+.pending-ball {
+  position: absolute;
+  border: 2px solid $color-primary;
+  border-radius: 10px;
+  width: 20px;
+  height: 20px;
+  left: 10px;
+  background-size: cover;
+  // Make sure the balls are drawn over top of the gutter lines
+  z-index: 1;
 }
 
 .edit-text-text {

@@ -223,7 +223,7 @@ export default {
           },
           {
             text: 'Execute to cursor',
-            event: 'coqTo',
+            event: 'coqToCursor',
             eventType: 'on-proof-window',
             shortkeyTag: 'executeToCursor',
             requires: ['notebook', 'coq-ready'],

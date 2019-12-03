@@ -131,6 +131,8 @@ class SerapiExecutionProcessor extends SerapiProcessor {
       if (targetValue < this.state.lastExecuted) {
         this.state.lastExecuted = this.state.target;
 
+        this._startPreviousGoal(this.state.target);
+
         releaseExecutionLock();
         return this._getGoal(this.state.target);
       }/* else if (this.state.target > this.state.sentenceSize() - 1) {
@@ -138,10 +140,9 @@ class SerapiExecutionProcessor extends SerapiProcessor {
         this.state.target = this.state.sentenceSize() - 1;
       }*/
 
-      this.editor.executeStarted(
-          this.state.endIndexOfSentence(this.state.target));
-
       while (targetValue > this.state.lastExecuted) {
+        this.editor.executeStarted(
+            this.state.endIndexOfSentence(this.state.target));
         const nextSentence = this.state.lastExecuted + 1;
         const executionFailed =
             await this._executeSentence(this.state.idOfSentence(nextSentence));
@@ -170,6 +171,7 @@ class SerapiExecutionProcessor extends SerapiProcessor {
     }
 
     if (error != null) {
+      this._startPreviousGoal(this.state.lastExecuted);
       this.editor.executeError(error.message, {
         start: error.beginIndex,
         end: error.endIndex,
@@ -217,6 +219,20 @@ class SerapiExecutionProcessor extends SerapiProcessor {
             return null;
           }
         });
+  }
+
+  /**
+   * Signals to the editor that we are reverting by 'starting' execution to
+   * some previous index
+   * @param {Number} index the sentence index of the the sentence to revert to
+   * @private
+   */
+  _startPreviousGoal(index) {
+    if (index < 0) {
+      this.editor.executeStarted(-1);
+    } else {
+      this.editor.executeStarted(this.state.endIndexOfSentence(index));
+    }
   }
 
   /**

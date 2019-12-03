@@ -20,6 +20,7 @@ describe('serapi content processor', () => {
 
     sinon.spy(editor, 'setContentSuccess');
     sinon.spy(editor, 'setContentError');
+    sinon.spy(editor, 'executeStarted');
 
     proc = new SerapiContentProcessor(
         new SerapiTagger(worker, null),
@@ -254,6 +255,8 @@ describe('serapi content processor', () => {
 
           expect(editor.setContentSuccess.callCount).to.be.at.least(1);
           expect(editor.setContentError.callCount).to.equal(0);
+          expect(editor.executeStarted.callCount).to.be.at.least(1);
+          expect(editor.executeStarted.lastCall.args[0]).to.equal(13);
 
           // no response from add so should just have two sentences
           expect(proc.state.sentences).to.have.lengthOf(3);
@@ -541,5 +544,48 @@ describe('serapi content processor', () => {
     expect(editor.setContentError.callCount).to.equal(0);
 
     expect(proc.state.sentenceSize()).to.equal(0);
+  });
+
+  it('should revert to no goal when first sentence modified', async () => {
+    proc.state.concatSentences([
+      {
+        beginIndex: 0,
+        endIndex: 6,
+        sentenceId: 2,
+      },
+    ]);
+    const baseText = 'Proof.';
+    const newText = 'Check plus.';
+    proc.currentContent = baseText;
+    proc.state.lastExecuted = 0;
+    // should be no goals message since no sentence before edit point
+
+    // answer cancel message
+    worker.addExpectedCall('Cancel', [
+      'Ack',
+      '(Canceled(2))',
+      'Completed',
+    ]);
+
+    worker.addExpectedCall(`"${newText}"`, [
+      'Ack',
+      '(Added 3((fname ToplevelInput)(line_nb 1)(bol_pos 0)' +
+      '(line_nb_last 1)(bol_pos_last 0)(bp 0)(ep 11))NewTip)',
+      'Completed',
+    ]);
+
+    await proc.setContent(newText);
+
+    expect(worker.getCallAmount()).to.equal(2);
+
+    expect(editor.setContentSuccess.callCount).to.be.at.least(1);
+    expect(editor.setContentError.callCount).to.equal(0);
+    expect(editor.executeStarted.callCount).to.be.at.least(1);
+    expect(editor.executeStarted.lastCall.args[0]).to.equal(-1);
+
+    // no response from add so should just have two sentences
+    expect(proc.state.sentences).to.have.lengthOf(1);
+    expect(proc.state.sentences[0].sentenceId).to.equal(3);
+    expect(proc.state.lastExecuted).to.equal(-1);
   });
 });

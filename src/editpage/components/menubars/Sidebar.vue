@@ -56,7 +56,7 @@ export default {
         {
           text: 'Execute to cursor',
           icon: require('../../../assets/images/arrowToCursor.svg'),
-          event: 'coqTo',
+          event: 'coqToCursor',
           eventType: 'on-proof-window',
           requires: ['notebook', 'coq-ready'],
           shortkeyTag: 'executeToCursor',

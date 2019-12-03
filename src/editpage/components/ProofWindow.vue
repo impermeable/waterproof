@@ -15,7 +15,8 @@
     <div class="proof-window">
       <edit-window :blocks="notebook.blocks" :exercise="notebook.exerciseSheet"
                   :coq="coq" ref="editWindow" :debug="debug"
-                  :index="executedIndex" :targetIndex="targetIndex"
+                  :executeIndex="executedIndex"
+                  :pendingIndex="startedExecutionIndex"
                   :tabindex="index" :event-bus="eventBus"
                   :showFind="showFind" :shortKeys="shortKeys" />
       <response-window :event-bus="eventBus"
@@ -97,10 +98,16 @@ export default {
     coqCode: function(newCode) {
       this.coq.setContent(newCode);
 
+      let index = 0;
+
       // If something in an input block changes, remove any underlining error.
       this.notebook.blocks
           .filter((block) => block.type === 'code')
-          .forEach((block) => block.state.error = null);
+          .forEach((block) => {
+            block.state.error = null;
+            block.state.textIndex = index;
+            index += block.text.length + 1;
+          });
     },
   },
   methods: {

@@ -3,8 +3,10 @@
       @contextmenu="openContextMenu($event)"
       @click="insertTextBlock()">
     <Gutter :ani="ani" ref="execGutter" :height="gutterHeight"
-            :exec-height="execHeight"
-            :exec-height-ball="execHeightBall" :executed="executed"/>
+            :exec-height="execHeight" :exec-height-ball="execHeightBall"
+            :pending-height="pendingHeight"
+            :pending-height-ball="pendingHeightBall"
+            :executed="executed"/>
     <div ref="editPane"
         class="edit-pane"
         @click.self="onClick"
@@ -20,6 +22,8 @@
         <component v-show="!block.state.foldStatus.isFolded"
                   :is="toComponent(block.type)" :block="block"
                   :key="block.type + index" :index="index"
+                  :sentences="sentenceIndices"
+                  :executedIndex="executeIndex" :runningIndex="runningIndex"
                   :exercise="exercise" :event-bus="eventBus">
         </component>
         <fold-block v-if="block.state.foldStatus.startFold"
@@ -74,7 +78,7 @@ import 'codemirror/addon/search/searchcursor';
 import 'codemirror/addon/edit/matchbrackets';
 import debounce from 'lodash.debounce';
 
-import CodeBlock from './blocks/CodeBlock';
+import CodeBlock from './blocks/code/CodeBlock';
 import TextBlock from './blocks/TextBlock';
 import HintBlock from './blocks/HintBlock';
 import InputBlock from './blocks/InputBlock';
@@ -98,9 +102,9 @@ export default {
     BlockContextMenu, AssistanceBar,
   },
   props: {
-    index: Number,
+    executeIndex: Number,
     coq: CoqInterface,
-    targetIndex: Number,
+    pendingIndex: Number,
     blocks: Array,
     exercise: Boolean,
     debug: Boolean,
@@ -119,8 +123,6 @@ export default {
       execHeightBall: 0,
       gutterHeight: 100,
       timer: null,
-      executedUpTo: null,
-      pendingUpTo: null,
       cursorPos: null,
       isShowingAssistance: true,
       ani: true,
@@ -319,16 +321,6 @@ export default {
         return null;
       }
     },
-    clearCodeDecorations() {
-      for (const block of this.blocks) {
-        if (block.type !== 'code') {
-          continue;
-        }
-
-        // Clear the execution but not the error state
-        block.state.executedUpTo = -1;
-      }
-    },
     /**
      * Changes height of gutter to the height of the editpane,
      * adds 100 px as well for 'overleaf-scrolling'
@@ -339,26 +331,43 @@ export default {
     },
     alignGutter: function(animation = true) {
       this.ani = animation;
-
+      requestAnimationFrame(() => {
       // Set the gutter height to equal content height
-      this.setGutterHeight();
+        this.setGutterHeight();
 
-      const tick = this.$refs.editPane.querySelector('.exec-inline-tick');
+        const execTick = this.$refs.editPane
+            .querySelector('.sentence-end-' + this.executeIndex);
 
-      if (tick != null) {
-        const rect = tick.getBoundingClientRect();
         const editPane = this.$refs.editPane;
         const rect2 = editPane.getBoundingClientRect();
 
-        this.execHeight = (rect.bottom + rect.top) / 2 - rect2.top - 10;
-        this.execHeightBall = rect.top - rect2.top;
-      }
+        if (execTick != null) {
+          const rect = execTick.getBoundingClientRect();
 
-      if (!animation) {
-        setTimeout(() => {
-          this.ani = true;
-        }, 50);
-      }
+          this.execHeight = (rect.bottom + rect.top) / 2 - rect2.top - 10;
+          this.execHeightBall = rect.top - rect2.top;
+        } else if (this.executeIndex >= 0) {
+          console.log('Cannot find sentence end: ', this.executeIndex);
+        }
+
+        const pendingTick = this.$refs.editPane
+            .querySelector('.sentence-end-' + this.pendingIndex);
+
+        if (pendingTick != null) {
+          const rect = pendingTick.getBoundingClientRect();
+
+          this.pendingHeight = (rect.bottom + rect.top) / 2 - rect2.top - 10;
+          this.pendingHeightBall = rect.top - rect2.top;
+        } else if (this.pendingIndex >= 0) {
+          console.log('Cannot find sentence end: ', this.pendingIndex);
+        }
+
+        if (!animation) {
+          setTimeout(() => {
+            this.ani = true;
+          }, 0);
+        }
+      });
     },
     insertTextBlock: function() {
       if (this.blocks.length === 0) {
@@ -379,24 +388,29 @@ export default {
       this.blurSource();
     },
   },
-  watch: {
-    'index': function(newIndex) {
-      if (!newIndex) {
-        newIndex = 0;
-        this.pendingUpTo = 0;
+  computed: {
+    sentenceIndices() {
+      const sentences = [];
+      for (let i = 0; i < this.coq.getState().sentenceSize(); i++) {
+        sentences.push(this.coq.getState().endIndexOfSentence(i));
       }
-      this.executedUpTo = newIndex;
-
-      this.pendingUpTo = this.pendingUpTo
-          && Math.max(this.pendingUpTo, newIndex);
+      return sentences;
+    },
+    runningIndex() {
+      if (this.pendingIndex <= this.executeIndex) {
+        return this.executeIndex;
+      }
+      const index = this.sentenceIndices.indexOf(this.executeIndex) + 1;
+      return this.sentenceIndices[index];
+    },
+  },
+  watch: {
+    executeIndex: function() {
       this.refreshExecStatus(true);
     },
-
-    'targetIndex': function(newIndex) {
-      this.pendingUpTo = newIndex || 0;
+    pendingIndex: function() {
       this.refreshExecStatus(true);
     },
-
   },
   /**
    * Checks if DOM elements are changed and if so,

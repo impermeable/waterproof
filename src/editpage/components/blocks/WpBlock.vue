@@ -10,6 +10,9 @@ export default {
     index: Number,
     exercise: Boolean,
     eventBus: {$on: Function, $emit: Function},
+    sentences: Array,
+    executedIndex: Number,
+    runningIndex: Number,
   },
   data: function() {
     return {
