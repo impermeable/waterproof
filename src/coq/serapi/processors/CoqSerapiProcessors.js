@@ -6,6 +6,7 @@ import SerapiContentProcessor from './SerapiContentProcessor';
 import SerapiTagger from '../SerapiTagger';
 import SerapiExecutionProcessor from './SerapiExecutionProcessor';
 import SerapiSearchProcessor from './SerapiSearchProcessor';
+import SerapiASTProcessor from './SerapiASTProcessor';
 
 /**
  * The main interface to SerAPI. An implementation of CoqInterface
@@ -39,6 +40,9 @@ class CoqSerapiProcessors extends CoqInterface {
         new SerapiExecutionProcessor(this.tagger, this.state, editor);
     this.searchProcessor =
         new SerapiSearchProcessor(this.tagger, this.state, editor);
+
+    this.astProcessor =
+        new SerapiASTProcessor(this.tagger, this.state, editor);
   }
 
   /**
@@ -51,7 +55,11 @@ class CoqSerapiProcessors extends CoqInterface {
     if (!this.ready) {
       return Promise.resolve();
     }
-    return this.contentProcessor.setContent(content);
+    const intermediate = this.contentProcessor.setContent(content);
+    setTimeout(() => {
+      this.astProcessor.getAllAsts().then();
+    }, 100);
+    return intermediate;
   }
 
   /**

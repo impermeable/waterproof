@@ -49,6 +49,9 @@ class SerapiASTProcessor extends SerapiProcessor {
     return this.sendCommand(createASTCommand(sentenceId), 'ast')
         .then((result) => {
           this.state.setASTforSID(sentenceId, result.ast);
+          // for now just print json repr
+          console.log(`Got AST for ${sentenceId}: `,
+              JSON.parse(JSON.stringify(result.ast)));
         });
   }
 
