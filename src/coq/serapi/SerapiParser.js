@@ -132,9 +132,11 @@ function parseErrorResponse(response) {
   }
 
   if (responseContent.hasOwnProperty('stm_ids')) {
-    const stms = responseContent.stm_ids[0];
-    lastSentenceIdCorrect = +stms[0];
-    failureSentenceId = +stms[1];
+    if (Array.isArray(responseContent.stm_ids) && responseContent.stm_ids.length > 0) {
+      const stms = responseContent.stm_ids[0];
+      lastSentenceIdCorrect = +stms[0];
+      failureSentenceId = +stms[1];
+    }
   }
 
   if (responseContent.hasOwnProperty('str')) {
