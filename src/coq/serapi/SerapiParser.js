@@ -61,23 +61,6 @@ function parseErrorableFeedback(data) {
 }
 
 /**
- * Try to get just the informative parts of a serapi recursive message
- * @param {Object|string|Array} response the response
- * @return {string} the parsed answer
- */
-function parseRecursiveMessage(response) {
-  if (!Array.isArray(response)) {
-    return '';
-  }
-  if (response.length > 2) {
-    return parseRecursiveMessage(response[2]);
-  } else {
-    // only give the root cause (since it is usually the most descriptive one)
-    return response[1] + '';
-  }
-}
-
-/**
  * Parse a CoqExn from serapi
  * This method *should* be safe e.g. not crash and will try to extract as
  * much information as possible
@@ -132,7 +115,8 @@ function parseErrorResponse(response) {
   }
 
   if (responseContent.hasOwnProperty('stm_ids')) {
-    if (Array.isArray(responseContent.stm_ids) && responseContent.stm_ids.length > 0) {
+    if (Array.isArray(responseContent.stm_ids)
+          && responseContent.stm_ids.length > 0) {
       const stms = responseContent.stm_ids[0];
       lastSentenceIdCorrect = +stms[0];
       failureSentenceId = +stms[1];
