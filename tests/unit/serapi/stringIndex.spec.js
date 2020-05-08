@@ -1,4 +1,5 @@
-import {byteIndexToStringIndex} from '../../../src/coq/serapi/SerapiParser';
+import {byteIndexToStringIndex, byteIndicesToStringIndices}
+    from '../../../src/coq/serapi/SerapiParser';
 
 const chai = require('chai');
 const expect = chai.expect;
@@ -47,6 +48,23 @@ describe('serapi index calculator', () => {
     expect(result).to.equal(1);
     result = byteIndexToStringIndex(string, 4);
     expect(result).to.equal(2);
+    done();
+  });
+});
+
+describe('serapi indices conversion calculator', () => {
+  it('should give empty array for empty string', (done) => {
+    const string = '';
+    const result = byteIndicesToStringIndices(string);
+    expect(result).to.eql([]);
+    done();
+  });
+
+  it('should give the correct index for utf8 chars', (done) => {
+    const string = 'αεℚ∀🤔🅱';
+    const result = byteIndicesToStringIndices(string);
+    expect(result).to.eql([0, 0, 1, 1, 2, 2, 2, 3, 3, 3, 4,
+      4, 4, 5, 5, 5, 6, 6, 6, 7, 7, 7]);
     done();
   });
 });
