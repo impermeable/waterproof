@@ -79,6 +79,7 @@ function parseErrorResponse(response) {
   let lastSentenceIdCorrect = -1;
   let failureSentenceId = -1;
   let message = 'Unknown error occurred';
+  let exception = null;
 
   if (!Array.isArray(response)) {
     return {
@@ -110,8 +111,11 @@ function parseErrorResponse(response) {
   const responseContent = flatResponse[1];
 
   if (responseContent.hasOwnProperty('loc')) {
-    bp = +responseContent.loc.bp;
-    ep = +responseContent.loc.ep;
+    const locationInfo = responseContent.loc;
+    if (locationInfo != null && locationInfo.length > 0) {
+      bp = +locationInfo[0].bp;
+      ep = +locationInfo[0].ep;
+    }
   }
 
   if (responseContent.hasOwnProperty('stm_ids')) {
@@ -124,11 +128,11 @@ function parseErrorResponse(response) {
   }
 
   if (responseContent.hasOwnProperty('str')) {
-    message = responseContent.str;
+    message = String(responseContent.str);
   }
 
   if (responseContent.hasOwnProperty('exn')) {
-    message += '(' + responseContent.exn.join(',') + ')';
+    exception = '(' + responseContent.exn.join(',') + ')';
   }
 
   return {
@@ -137,6 +141,7 @@ function parseErrorResponse(response) {
     beginIndex: bp,
     endIndex: ep,
     message: message,
+    exception: exception,
   };
 }
 

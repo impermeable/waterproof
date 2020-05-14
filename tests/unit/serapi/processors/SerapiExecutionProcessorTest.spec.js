@@ -424,9 +424,14 @@ describe('serapi execution processor', () => {
       '(Pp_print_break 1 0)(Pp_string a)(Pp_print_break 1 0)' +
       '(Pp_string"was not found")(Pp_print_break 1 0)(Pp_string"in ' +
       'the current")(Pp_print_break 1 0)(Pp_string environment.)))))))',
-      `(CoqExn(((fname ToplevelInput)(line_nb 1)(bol_pos 0)(line_nb_last 1)` +
-      `(bol_pos_last 0)(bp ${bp})(ep ${ep})))((1 2))(Backtrace())` +
-      `(ExplainErr.EvaluatedError"${errorString}"))`,
+      '(CoqExn((loc(((fname ToplevelInput)(line_nb 1)(bol_pos 0)(line_nb_last' +
+      ` 1)(bol_pos_last 0)(bp ${bp})(ep ${ep}))))(stm_ids((1 2)))(backtrace(` +
+      'Backtrace()))(exn("Nametab.GlobalizationError(_)"))(pp(Pp_glue' +
+      '((Pp_glue())(Pp_glue((Pp_glue((Pp_glue((Pp_string"The reference")(' +
+      'Pp_print_break 1 0)(Pp_string b)))(Pp_print_break 1 0)(' +
+      'Pp_string"was not found")))(Pp_print_break 1 0)(Pp_string"in the ' +
+      'current")))(Pp_print_break 1 0)(Pp_string environment.))))' +
+      `(str"${errorString}")))`,
       'Completed',
     ]);
 
@@ -482,10 +487,15 @@ describe('serapi execution processor', () => {
         '(Pp_print_break 1 0)(Pp_string a)(Pp_print_break 1 0)' +
         '(Pp_string"was not found")(Pp_print_break 1 0)(Pp_string"in ' +
         'the current")(Pp_print_break 1 0)(Pp_string environment.)))))))',
-          `(CoqExn(((fname ToplevelInput)(line_nb 1)(bol_pos 0)` +
-          `(line_nb_last 1)(bol_pos_last 0)(bp ${bp})(ep ${ep})))((1 2))` +
-          `(Backtrace())(ExplainErr.EvaluatedError"${errorString}"))`,
-          'Completed',
+        '(CoqExn((loc(((fname ToplevelInput)(line_nb 1)(bol_pos 0)(line_nb_last' +
+        ` 1)(bol_pos_last 0)(bp ${bp})(ep ${ep}))))(stm_ids((1 2)))(backtrace(` +
+        'Backtrace()))(exn("Nametab.GlobalizationError(_)"))(pp(Pp_glue' +
+        '((Pp_glue())(Pp_glue((Pp_glue((Pp_glue((Pp_string"The reference")(' +
+        'Pp_print_break 1 0)(Pp_string b)))(Pp_print_break 1 0)(' +
+        'Pp_string"was not found")))(Pp_print_break 1 0)(Pp_string"in the ' +
+        'current")))(Pp_print_break 1 0)(Pp_string environment.))))' +
+        `(str"${errorString}")))`,
+        'Completed'
         ]);
 
         await proc.executeAll();
@@ -546,9 +556,14 @@ describe('serapi execution processor', () => {
       '(Pp_print_break 1 0)(Pp_string a)(Pp_print_break 1 0)' +
       '(Pp_string"was not found")(Pp_print_break 1 0)(Pp_string"in ' +
       'the current")(Pp_print_break 1 0)(Pp_string environment.)))))))',
-          `(CoqExn(((fname ToplevelInput)(line_nb 1)(bol_pos 0)` +
-      `(line_nb_last 1)(bol_pos_last 0)(bp ${bp})(ep ${ep})))((1 2))` +
-      `(Backtrace())(ExplainErr.EvaluatedError"${errorString}"))`,
+      '(CoqExn((loc(((fname ToplevelInput)(line_nb 1)(bol_pos 0)(line_nb_last'+
+      ` 1)(bol_pos_last 0)(bp ${bp})(ep ${ep}))))(stm_ids((1 2)))(backtrace(` +
+      'Backtrace()))(exn("Nametab.GlobalizationError(_)"))(pp(Pp_glue' +
+      '((Pp_glue())(Pp_glue((Pp_glue((Pp_glue((Pp_string"The reference")(' +
+      'Pp_print_break 1 0)(Pp_string b)))(Pp_print_break 1 0)(' +
+      'Pp_string"was not found")))(Pp_print_break 1 0)(Pp_string"in the ' +
+      'current")))(Pp_print_break 1 0)(Pp_string environment.))))' +
+      `(str"${errorString}")))`,
           'Completed',
         ]);
 
