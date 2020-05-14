@@ -296,6 +296,10 @@ function byteIndicesToStringIndices(str) {
       conversion.push(i);
     }
   }
+  // we also need to map the last byte to the last string part (since it might
+  // be non-inclusive)
+  conversion.push(str.length);
+
   return conversion;
 }
 
