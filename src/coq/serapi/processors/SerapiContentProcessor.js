@@ -1,6 +1,5 @@
 import SerapiProcessor from '../util/SerapiProcessor';
 import {
-  byteIndexToStringIndex,
   byteIndicesToStringIndices,
   COQ_EXCEPTION,
   getGoalsFromResponse,
