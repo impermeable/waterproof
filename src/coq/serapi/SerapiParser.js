@@ -263,10 +263,28 @@ function byteIndexToStringIndex(str, byteIndex) {
   return -1;
 }
 
+/**
+ * For a given string, compute a conversion from byte indices
+ * to string indices
+ * @param {String} str The string to compute the conversion for
+ * @return {Array} An array a such that a[i] is the index in the string
+ * of the character with byte index i
+ */
+function byteIndicesToStringIndices(str) {
+  const conversion = [];
+
+  for (let i = 0; i < str.length; i++ ) {
+    for (let j = 0; j < Buffer.byteLength(str[i]); j++ ) {
+      conversion.push(i);
+    }
+  }
+  return conversion;
+}
+
 export {
   parseFeedback, parseErrorableFeedback, parseErrorResponse,
   sanitise, getLastValidFullStop, isReadyFeedback,
   getGoalsFromResponse, isGeneralMessage, parseToSentence,
-  byteIndexToStringIndex,
+  byteIndexToStringIndex, byteIndicesToStringIndices,
   COQ_EXCEPTION, MESSAGE_ACK, MESSAGE_COMPLETED,
 };
