@@ -497,13 +497,13 @@ class Notebook {
 
       let startPos = 0;
       let endPos = 0;
-      nextComment = contentLeft.indexOf(COQ_SPECIAL_COMMENT_START, startPos);
+      nextComment = contentLeft.indexOf(COQ_COMMENT_START, startPos);
       let commentEnd = contentLeft.indexOf(COQ_COMMENT_END, endPos);
 
       while (commentEnd >= 0 && nextComment >=0 && nextComment < commentEnd) {
         startPos = nextComment + 2;
         endPos = commentEnd + 2;
-        nextComment = contentLeft.indexOf(COQ_SPECIAL_COMMENT_START, startPos);
+        nextComment = contentLeft.indexOf(COQ_COMMENT_START, startPos);
         commentEnd = contentLeft.indexOf(COQ_COMMENT_END, endPos);
       }
 
