@@ -1,6 +1,7 @@
 const fs = require('fs');
 
 const COQ_COMMENT_START = '(*';
+const COQ_SPECIAL_COMMENT_START = '(** ';
 const COQ_COMMENT_START_SPACE = '( *';
 const COQ_COMMENT_END = '*)';
 const COQ_COMMENT_END_SPACE = '* )';
@@ -481,7 +482,7 @@ class Notebook {
     const blocks = [];
     let contentLeft = coqCode;
     while (contentLeft.length > 0) {
-      let nextComment = contentLeft.indexOf(COQ_COMMENT_START);
+      let nextComment = contentLeft.indexOf(COQ_SPECIAL_COMMENT_START);
       if (nextComment < 0) {
         blocks.push(this.createCodeBlock(contentLeft.trim()));
         break;
@@ -492,17 +493,17 @@ class Notebook {
             this.createCodeBlock(contentLeft.substring(0, nextComment).trim()));
       }
       contentLeft = contentLeft.substring(nextComment)
-          .replace(COQ_COMMENT_START, '');
+          .replace(COQ_SPECIAL_COMMENT_START, '');
 
       let startPos = 0;
       let endPos = 0;
-      nextComment = contentLeft.indexOf(COQ_COMMENT_START, startPos);
+      nextComment = contentLeft.indexOf(COQ_SPECIAL_COMMENT_START, startPos);
       let commentEnd = contentLeft.indexOf(COQ_COMMENT_END, endPos);
 
       while (commentEnd >= 0 && nextComment >=0 && nextComment < commentEnd) {
         startPos = nextComment + 2;
         endPos = commentEnd + 2;
-        nextComment = contentLeft.indexOf(COQ_COMMENT_START, startPos);
+        nextComment = contentLeft.indexOf(COQ_SPECIAL_COMMENT_START, startPos);
         commentEnd = contentLeft.indexOf(COQ_COMMENT_END, endPos);
       }
 
@@ -534,9 +535,9 @@ function blockToCoqText(blocks) {
       coqContent += block.text;
     } else if (block.type === 'input') {
       if (block.start) {
-        coqContent += COQ_COMMENT_START + COQ_INPUT_START + COQ_COMMENT_END;
+        coqContent += COQ_SPECIAL_COMMENT_START + COQ_INPUT_START + COQ_COMMENT_END;
       } else {
-        coqContent += COQ_COMMENT_START + COQ_INPUT_END + COQ_COMMENT_END;
+        coqContent += COQ_SPECIAL_COMMENT_START + COQ_INPUT_END + COQ_COMMENT_END;
       }
     } else {
       let tempText = block.text;
