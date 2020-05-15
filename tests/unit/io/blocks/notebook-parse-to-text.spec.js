@@ -53,8 +53,8 @@ describe('Notebook parse to text ', () => {
     const output = notebook.parseToText();
     expect(output.trim()).startsWith('(*');
     expect(output.trim()).endsWith('*)');
-    expect(output).includes('[Start of input area]');
-    expect(output).includes('[End of input area]');
+    expect(output).includes('(* Start of input area *)');
+    expect(output).includes('(* End of input area *)');
 
     done();
   });

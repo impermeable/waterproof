@@ -105,8 +105,8 @@ if (process.env.NODE_ENV !== 'coverage') {
           }).then(() => {
             const data = fs.readFileSync(writeFile, 'utf-8');
             fs.unlinkSync(writeFile);
-            expect(data).to.include('(*[Start of input area]*)');
-            expect(data).to.include('(*[End of input area]*)');
+            expect(data).to.include('(*(* Start of input area *)*)');
+            expect(data).to.include('(*(* End of input area *)*)');
             done();
           }).catch(done);
         });

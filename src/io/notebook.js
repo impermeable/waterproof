@@ -1,12 +1,12 @@
 const fs = require('fs');
 
 const COQ_COMMENT_START = '(*';
-const COQ_SPECIAL_COMMENT_START = '(** ';
+const COQ_SPECIAL_COMMENT_START = '(*';
 const COQ_COMMENT_START_SPACE = '( *';
 const COQ_COMMENT_END = '*)';
 const COQ_COMMENT_END_SPACE = '* )';
-const COQ_INPUT_START = '[Start of input area]';
-const COQ_INPUT_END = '[End of input area]';
+const COQ_INPUT_START = '(* Start of input area *)';
+const COQ_INPUT_END = '(* End of input area *)';
 
 const DEFAULT_BLACKLIST = [
   // commands that allow introducing theorems without proof
@@ -472,9 +472,35 @@ class Notebook {
   }
 
   /**
+   * Cuts a string up in an array of strings. The cut points are
+   * exactly at the beginning of the matches of the regular expression keywords
+   * @param {String} string the string that needs to be cut up in pieces
+   * @param {RegExp} keywords the regular expression used to select the keywords
+   * @return {Array} An array with the pieces of the cut up string
+   */
+  cutStringBetweenKeywords(string,
+      keywords=/Lemma|Theorem|Proof|Definition|Notation/) {
+    const stringPieces = [];
+
+    let stringLeft = string;
+    let endPos = 1 + stringLeft.substring(1).search(keywords);
+    while (endPos > 0) {
+      stringPieces.push(stringLeft.substring(0, endPos).trim());
+      stringLeft = stringLeft.substring(endPos);
+      endPos = 1 + stringLeft.substring(1).search(keywords);
+    }
+    const tail = stringLeft.trim();
+    if (tail.length > 0) {
+      stringPieces.push(tail);
+    }
+
+    return stringPieces;
+  }
+
+  /**
    * Converts coq code to a notebook format
-   * This does not convert back any waterproof things and just puts all comments
-   * in text blocks and the rest in code blocks.
+   * This does not convert back any waterproof things and just puts all
+   * special comments in text blocks and the rest in code blocks.
    * @param {String} coqCode the input code
    * @return {Array} the blocks from the code
    */
@@ -483,15 +509,20 @@ class Notebook {
     let contentLeft = coqCode.replace(/\r/g, '');
     while (contentLeft.length > 0) {
       let nextComment = contentLeft.indexOf(COQ_SPECIAL_COMMENT_START);
-      if (nextComment < 0) {
-        blocks.push(this.createCodeBlock(contentLeft.trim()));
-        break;
+
+      if (nextComment < 0 || nextComment > 0) {
+        const codeBeforeComment = nextComment >= 0 ?
+            contentLeft.substring(0, nextComment) : contentLeft;
+        const codePieces =
+            this.cutStringBetweenKeywords(codeBeforeComment.trim());
+        for (let i = 0; i < codePieces.length; i++) {
+          blocks.push(this.createCodeBlock(codePieces[i]));
+        }
+        if (nextComment < 0) {
+          break;
+        }
       }
 
-      if (nextComment !== 0) {
-        blocks.push(
-            this.createCodeBlock(contentLeft.substring(0, nextComment).trim()));
-      }
       contentLeft = contentLeft.substring(nextComment)
           .replace(COQ_SPECIAL_COMMENT_START, '');
 
@@ -535,9 +566,11 @@ function blockToCoqText(blocks) {
       coqContent += block.text;
     } else if (block.type === 'input') {
       if (block.start) {
-        coqContent += COQ_SPECIAL_COMMENT_START + COQ_INPUT_START + COQ_COMMENT_END;
+        coqContent += COQ_SPECIAL_COMMENT_START + COQ_INPUT_START
+          + COQ_COMMENT_END;
       } else {
-        coqContent += COQ_SPECIAL_COMMENT_START + COQ_INPUT_END + COQ_COMMENT_END;
+        coqContent += COQ_SPECIAL_COMMENT_START + COQ_INPUT_END
+          + COQ_COMMENT_END;
       }
     } else {
       let tempText = block.text;
