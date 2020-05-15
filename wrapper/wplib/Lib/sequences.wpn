@@ -11,6 +11,50 @@
     },
     {
       "type": "text",
+      "text": "## What is a sequence?\n\nA sequence of real numbers is a function from the natural numbers to the real numbers. So a function $a : \\mathbb{N} → \\mathbb{R}$ is a sequence."
+    },
+    {
+      "type": "text",
+      "text": "### Examples of sequences\n\nLet us give a few examples of sequences of real numbers. The first example is the sequence $a : ℕ → ℝ$ defined by \n\n$$a := \\mathsf{fun} \\   n \\mapsto \\mathsf{INR}(n) + 2.$$\n\nIn Waterproof, we can write this as"
+    },
+    {
+      "type": "code",
+      "text": "\nDefinition a : ℕ → ℝ := fun n ↦ INR(n) + 2."
+    },
+    {
+      "type": "text",
+      "text": "We could also have written that $a: \\mathbb{N} → ℝ$ is defined by $a_n := \\mathsf{INR} (n) + 2$, and usually we just leave out the function $\\mathsf{INR}$ and would write $a_n := n + 2$."
+    },
+    {
+      "type": "text",
+      "text": "\nAnother example is the sequence $b: ℕ → ℝ$ defined by $b_n := 3$. The sequence $b$ is just constant! Within Waterproof, we could define the sequence $b$ by\n```\nDefinition b : ℕ → ℝ := 3.\n```\n\nHowever, let us also give an alternative way, which looks a  bit closer to the definition $b_n := 3$."
+    },
+    {
+      "type": "code",
+      "text": "\nDefinition b (n : ℕ) := 3."
+    },
+    {
+      "type": "text",
+      "text": "## Terminology about sequences\n\nWe call the function values $a(0)$, $a(1)$, $a(2)$, $\\dots$ the **elements** of the sequence. Instead of $a(n)$, in mathematics we often write $a_n$. Moreover, instead of writing *let $a : \\mathbb{N} \\to \\mathbb{R}$ be a sequence*, one often writes *let $(a_n)_{n \\in \\mathbb{N}}$ be a sequence*, or even shorter *let $(a_n)$ be a sequence*. \n\nThe reason for the name *sequence* becomes clearer by writing the elements in a row, i.e. in a sequence,\n$$\na_0, a_1, a_2, a_3, a_4, a_5, a_6, a_7, a_8, \\dots\n$$\n\nHowever convenient and intuitive this notation is, it can also become confusing if you forget that a sequence of real numbers is *really* a function from the natural numbers to the real numbers."
+    },
+    {
+      "type": "text",
+      "text": "## Asymptotic behavior of sequences\n\nAnalysis all revolves around questions such as: what happens if a parameter gets very small? What happens if a parameter gets very large?\n\nFor sequences, the interesting question is: what can we say about the elements $a_n$ when $n$ gets very large? Think for instance about the sequence $a_n := 1/n$. Then we might want to say: when $n$ gets very large, the element $a_n$ is very close to zero.\n\nThe only thing is, that we need to make the previous sentence much more precise if we want to work with it in mathematics. For all $\\epsilon : ℝ$, if $ε > 0$, then there is a certain threshold $N : ℕ$ such that for all $n: ℕ$, if $n \\geq N$ then $a_n$ is within distance $\\epsilon$ from $0$.`"
+    },
+    {
+      "type": "code",
+      "text": "Definition cv_to (a : ℕ → ℝ) (c : ℝ) :=\n  ∀ ε : ℝ, ε > 0 ⇒ \n    ∃ N : ℕ, ∀ n : ℕ, (n ≥ N)%nat ⇒\n      R_dist (a n) c < ε."
+    },
+    {
+      "type": "text",
+      "text": "The definition of `cv_to` is completely equivalent to the definition of `Un_cv` in the standard library. "
+    },
+    {
+      "type": "code",
+      "text": "Lemma cv_to_is_Un_cv : cv_to = Un_cv.\nProof.\n  trivial.\nQed."
+    },
+    {
+      "type": "text",
       "text": "## Preparation for a simple limit"
     },
     {

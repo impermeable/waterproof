@@ -1,6 +1,6 @@
 import SerapiProcessor from '../util/SerapiProcessor';
 import {
-  byteIndexToStringIndex,
+  byteIndicesToStringIndices,
   COQ_EXCEPTION,
   getGoalsFromResponse,
   getLastValidFullStop,
@@ -171,10 +171,11 @@ class SerapiContentProcessor extends SerapiProcessor {
     const baseOffset = this.currentContent.length;
     let furthestIndex = -1;
     const sentences = [];
+    const conversion = byteIndicesToStringIndices(contentAdded);
     for (const [key, value] of Object.entries(result)) {
       if (key !== 'error') {
-        const bp = byteIndexToStringIndex(contentAdded, value.beginIndex);
-        const ep = byteIndexToStringIndex(contentAdded, value.endIndex);
+        const bp = conversion[value.beginIndex];
+        const ep = conversion[value.endIndex];
         const stringValue = contentAdded.slice(bp, ep);
         sentences.push({sid: value.sentenceId, str: stringValue,
           bp: bp + baseOffset, ep: ep + baseOffset,
