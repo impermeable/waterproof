@@ -7,7 +7,7 @@
     },
     {
       "type": "code",
-      "text": "Require Import Rbase.\nRequire Import Rfunctions.\nRequire Import SeqSeries.\nRequire Import Rtrigo.\nRequire Import Ranalysis.\nRequire Import Integration.\nRequire Import micromega.Lra.\nRequire Import Omega.\nRequire Import Max.\n(* Require Import Unicode.Utf8. *)\n"
+      "text": "Require Import Rbase.\nRequire Import Rfunctions.\nRequire Import SeqSeries.\nRequire Import Rtrigo.\nRequire Import Ranalysis.\nRequire Import Integration.\nRequire Import micromega.Lra.\nRequire Import Omega.\nRequire Import Max.\n(* Require Import Unicode.Utf8. *)\nRequire Import Sets.Ensembles.\nRequire Import Sets.Classical_sets."
     },
     {
       "type": "text",
@@ -292,6 +292,14 @@
     {
       "type": "code",
       "text": "Hint Resolve Rmult_gt_0_compat : real.\nHint Resolve Rmult_lt_0_compat : real."
+    },
+    {
+      "type": "text",
+      "text": "\n(Work from 17-04-2020 onward)\n\nNotation to make set equality proofs less messy: "
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"We\" \"prove\" \"equality\" \"by\" \"proving\" \"two\" \"inclusions\" :=\n   apply Extensionality_Ensembles; \n   unfold Same_set; \n   unfold Setminus; \n   split."
     }
   ]
 }
