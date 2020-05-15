@@ -480,7 +480,7 @@ class Notebook {
    */
   coqToCodeAndText(coqCode) {
     const blocks = [];
-    let contentLeft = coqCode;
+    let contentLeft = coqCode.replace(/\r/g, '');
     while (contentLeft.length > 0) {
       let nextComment = contentLeft.indexOf(COQ_SPECIAL_COMMENT_START);
       if (nextComment < 0) {
