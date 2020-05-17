@@ -573,11 +573,7 @@ function blockToCoqText(blocks) {
     } else {
       coqContent += COQ_SPECIAL_COMMENT_START + block.text + COQ_COMMENT_END;
     }
-    if (block.type === 'hint') {
-      coqContent += '\n';
-    } else {
-      coqContent += ' ';
-    }
+    coqContent += '\n';
   }
   return coqContent;
 }
