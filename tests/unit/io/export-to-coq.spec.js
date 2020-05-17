@@ -115,29 +115,5 @@ if (process.env.NODE_ENV !== 'coverage') {
             done();
           }).catch(done);
         });
-
-    it('should not include Coq comment indicators in text blocks', (done) => {
-      const block = {
-        type: 'text',
-        text: 'There is a (* Coq comment*) in this text block.',
-      };
-
-      notebook.exerciseSheet = false;
-      notebook.blocks = [block];
-
-      const name = notebookPath + 'save-test.temp';
-
-      exportToCoq(name).then(() => {
-        let text = fs.readFileSync(name, 'utf-8');
-
-        fs.unlinkSync(name);
-        expect(text).to.startWith('(*');
-        expect(text).to.endWith('*) ');
-        text = text.slice(2, text.length - 3);
-        expect(text).not.to.include('(*');
-        expect(text).not.to.include('*)');
-        done();
-      }).catch(done);
-    });
   });
 }

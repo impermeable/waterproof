@@ -194,12 +194,12 @@ describe('Parse coq to code and text', () => {
         done();
       });
 
-  it('should not revert exported comments "( *", "* )" in comments',
+  it('should not revert "( *", "* )" in comments',
       (done) => {
         // export -> import does not need to give the same result
         const comment = ' Just a comment ( * Nested comment * )';
 
-        const input = '(*' + comment + '*)';
+        const input = COQ_SPECIAL_COMMENT_START + comment + '*)';
 
         const blocks = notebook.coqToCodeAndText(input);
 
