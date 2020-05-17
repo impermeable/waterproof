@@ -1,4 +1,5 @@
 import Notebook from '../../../src/io/notebook';
+import {COQ_SPECIAL_COMMENT_START} from '../../../src/io/notebook';
 
 const chai = require('chai');
 const expect = chai.expect;
@@ -75,7 +76,7 @@ describe('Parse coq to code and text', () => {
 
   it('should give just one text block if there are only comments',
       (done) => {
-        const input = '(* Just a comment *)';
+        const input = COQ_SPECIAL_COMMENT_START + ' Just a comment *)';
 
         const blocks = notebook.coqToCodeAndText(input);
 
@@ -89,7 +90,7 @@ describe('Parse coq to code and text', () => {
         const code = 'Lemma trans (A B C :Prop): (A -> B) -> (B->C) -> A -> C.';
         const comment = ' Just a comment ';
 
-        const input = code + '(*' + comment + '*)';
+        const input = code + COQ_SPECIAL_COMMENT_START + comment + '*)';
 
         const blocks = notebook.coqToCodeAndText(input);
 
@@ -105,7 +106,7 @@ describe('Parse coq to code and text', () => {
         const code = 'Lemma trans (A B C :Prop): (A -> B) -> (B->C) -> A -> C.';
         const comment = ' Just a comment ';
 
-        const input = '(*' + comment + '*)' + code;
+        const input = COQ_SPECIAL_COMMENT_START + comment + '*)' + code;
 
         const blocks = notebook.coqToCodeAndText(input);
 
@@ -121,7 +122,7 @@ describe('Parse coq to code and text', () => {
         const code = 'Lemma trans (A B C :Prop): (A -> B) -> (B->C) -> A -> C.';
         const comment = ' Just a comment ';
 
-        const input = code + '(*' + comment + '*)' + code;
+        const input = code + COQ_SPECIAL_COMMENT_START + comment + '*)' + code;
 
         const blocks = notebook.coqToCodeAndText(input);
 
@@ -137,7 +138,7 @@ describe('Parse coq to code and text', () => {
       (done) => {
         const comment = '(* Just a comment *)';
 
-        const input = '(*' + comment + '*)';
+        const input = COQ_SPECIAL_COMMENT_START + comment + '*)';
 
         const blocks = notebook.coqToCodeAndText(input);
 
@@ -151,7 +152,7 @@ describe('Parse coq to code and text', () => {
       (done) => {
         const comment = ' Just a comment ';
 
-        const input = '(*' + comment;
+        const input = COQ_SPECIAL_COMMENT_START + comment;
 
         const blocks = notebook.coqToCodeAndText(input);
 
@@ -166,7 +167,7 @@ describe('Parse coq to code and text', () => {
         const code = 'Lemma trans (A B C :Prop): (A -> B) -> (B->C) -> A -> C.';
         const comment = ' Just a comment ';
 
-        const input = code + '(*' + comment;
+        const input = code + COQ_SPECIAL_COMMENT_START + comment;
 
         const blocks = notebook.coqToCodeAndText(input);
 
@@ -182,7 +183,7 @@ describe('Parse coq to code and text', () => {
         const code = 'Lemma trans (A B C :Prop): (A -> B) -> (B->C) -> A -> C.';
         const comment = ' Just a comment (* Nested comment *)';
 
-        const input = code + ' (*' + comment;
+        const input = code + COQ_SPECIAL_COMMENT_START + comment;
 
         const blocks = notebook.coqToCodeAndText(input);
 

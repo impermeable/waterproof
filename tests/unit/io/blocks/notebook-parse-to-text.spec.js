@@ -1,4 +1,5 @@
 import Notebook from '../../../../src/io/notebook';
+import {COQ_SPECIAL_COMMENT_START} from '../../../../src/io/notebook';
 
 const chai = require('chai');
 const expect = chai.expect;
@@ -33,7 +34,7 @@ describe('Notebook parse to text ', () => {
     notebook.blocks.push(
         notebook.createTextBlock(code, false));
     const output = notebook.parseToText();
-    expect(output.trim()).to.equal('(*' + code + '*)');
+    expect(output.trim()).to.equal(COQ_SPECIAL_COMMENT_START + code + '*)');
 
     done();
   });

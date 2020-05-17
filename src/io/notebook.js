@@ -1,10 +1,8 @@
 const fs = require('fs');
 
 const COQ_COMMENT_START = '(*';
-const COQ_SPECIAL_COMMENT_START = '(*';
-const COQ_COMMENT_START_SPACE = '( *';
+const COQ_SPECIAL_COMMENT_START = '(** ';
 const COQ_COMMENT_END = '*)';
-const COQ_COMMENT_END_SPACE = '* )';
 const COQ_INPUT_START = '(* Start of input area *)';
 const COQ_INPUT_END = '(* End of input area *)';
 
@@ -573,10 +571,7 @@ function blockToCoqText(blocks) {
           + COQ_COMMENT_END;
       }
     } else {
-      let tempText = block.text;
-      tempText = tempText.replace(COQ_COMMENT_START, COQ_COMMENT_START_SPACE);
-      tempText = tempText.replace(COQ_COMMENT_END, COQ_COMMENT_END_SPACE);
-      coqContent += COQ_COMMENT_START + tempText + COQ_COMMENT_END;
+      coqContent += COQ_SPECIAL_COMMENT_START + block.text + COQ_COMMENT_END;
     }
     if (block.type === 'hint') {
       coqContent += '\n';
@@ -587,4 +582,4 @@ function blockToCoqText(blocks) {
   return coqContent;
 }
 
-export {blockToCoqText};
+export {blockToCoqText, COQ_SPECIAL_COMMENT_START};
