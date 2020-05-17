@@ -415,7 +415,7 @@ class Notebook {
         onError(err);
         throw err;
       }
-      if( onExported ) {
+      if ( onExported ) {
         onExported();
       }
     });
