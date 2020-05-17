@@ -45,9 +45,11 @@ export default {
     },
     render: function(text) {
       // Replace coqdoc-style headers (*) with markdown headers (#)
-      const converted = text.replace(/^[ ]*([*]+) /gm, (match, p1) => {
+      let converted = text.replace(/^[ ]*([*]+) /gm, (match, p1) => {
         return '#'.repeat(p1.length) + ' ';
       });
+      // Replace coqdoc-style lists (-) with markdown lists (*)
+      converted = converted.replace(/^([ ]*)- /gm, '$1* ');
       return md.render(converted);
     },
     renderToSpan: function(text) {
