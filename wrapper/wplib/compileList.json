@@ -2,6 +2,7 @@
   "Tactics/Tactics",
   "Tactics/TacticsContra",
   "Notations/Notations",
+  "Notations/SetNotations",
   "Lib/sup_and_inf",
   "Lib/sequences",
   "Lib/series",

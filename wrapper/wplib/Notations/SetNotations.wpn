@@ -1,0 +1,13 @@
+{
+  "exerciseSheet": false,
+  "blocks": [
+    {
+      "type": "text",
+      "text": "# Set notations\nFor Coq's Ensembles library"
+    },
+    {
+      "type": "code",
+      "text": "Require Import Sets.Ensembles. \nRequire Import wplib.Tactics.Tactics.\n\nVariable U : Type.\n\nNotation \"'subsetU'\" := \n  (Ensemble U) (at level 50). \n(*Didn't manage to define this with U as variable. Also, isn't this a subset of the set of all elements of type U, which is Full_set U = Ω, so maybe subsetΩ is better? *)\n\nNotation \"'setOfSubsetsU'\" := \n  (Ensemble (subsetU)) (at level 50). \n\nNotation \"∅\" := \n  (Empty_set U). \n  \nNotation \"'Ω'\" := \n  (Full_set U) (at level 0). \n\nNotation \"A ∩ B\" := \n  (Intersection _ A B) (at level 50). \n\nNotation \"A ∪ B\" := \n  (Union _ A B) (at level 50). \n\nNotation \"A \\ B\" := \n  (Setminus _ A B) (at level 50). \n\nNotation \"x ∈ A\" := \n  (In _ A x) (at level 50). \n\nNotation \"x ∉ A\" :=  \n  (~ In _ A x) (at level 50). \n\nNotation \"A ⊂ B\" := \n  (Included _ A B) (at level 50). \n\nNotation \"｛ x : T | P ｝\" := \n  (fun (x : T) ↦ P) (x at level 99).\n(*these brackets are not the same as {}, and are not yet included in shortcuts! *)\n\nTactic Notation \"We\" \"prove\" \"equality\" \"by\" \"proving\" \"two\" \"inclusions\" :=\n   apply Extensionality_Ensembles; \n   unfold Same_set; \n   unfold Included;\n   split."
+    }
+  ]
+}
