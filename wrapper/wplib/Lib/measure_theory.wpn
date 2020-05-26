@@ -7,7 +7,7 @@
     },
     {
       "type": "code",
-      "text": "Require Import Sets.Ensembles.\nRequire Import Sets.Classical_sets.\nRequire Import wplib.Tactics.Tactics.\nRequire Import wplib.Tactics.TacticsContra.\nRequire Import Sets.Powerset.\nRequire Import Coq.Logic.Classical_Pred_Type.\n\nRequire Import wplib.Notations.SetNotations."
+      "text": "Require Import Sets.Ensembles.\nRequire Import Sets.Classical_sets.\nRequire Import wplib.Tactics.Tactics.\nRequire Import wplib.Tactics.TacticsContra.\nRequire Import Sets.Powerset.\nRequire Import Coq.Logic.Classical_Pred_Type.\nRequire Import wplib.Notations.SetNotations."
     },
     {
       "type": "code",
@@ -19,7 +19,7 @@
     },
     {
       "type": "code",
-      "text": "Definition is_π_system (Π : setOfSubsets U) \n  : Prop := \n    ∀ A : subset U, A ∈ Π ⇒ \n      ∀ B : subset U, B ∈ Π ⇒ \n         (A ∩ B) ∈ Π. \n         \nDefinition Countable_union (A : (ℕ → subset U) ) \n  : subset U := \n    ｛ x:U | ∃n : ℕ, x ∈ (A n)｝.\n\nDefinition full_set_in_set (Λ : setOfSubsets U) \n  : Prop :=\n    Ω ∈ Λ. \n\nDefinition complement_in_set (Λ : setOfSubsets U) \n  : Prop := \n    ∀A  : subset U, A ∈ Λ \n      ⇒ (Ω \\ A) ∈ Λ. \n\nDefinition closed_under_disjoint_countable_union (Λ : setOfSubsets U) \n  : Prop :=\n    ∀C : (ℕ → (subset U)), \n      (∀ m n : ℕ, m ≠ n ⇒ Disjoint _ (C m) (C n)) \n        ⇒ (∀ n : ℕ, (C n) ∈ Λ) ⇒  (Countable_union C) ∈ Λ.\n\nDefinition closed_under_countable_union (Λ : setOfSubsets U) \n  : Prop :=  \n    ∀C : (ℕ → (subset U)), (∀ n : ℕ, (C n) ∈ Λ) \n      ⇒ (Countable_union C) ∈ Λ.\n\nDefinition is_λ_system (Λ : setOfSubsets U) \n  : Prop :=\n    full_set_in_set Λ ∧ \n    complement_in_set Λ ∧\n    closed_under_disjoint_countable_union Λ. \n\nDefinition λ_system_generated_by (A : setOfSubsets U) \n  : (setOfSubsets U) := \n    {B : subset U | (∀ Λ : setOfSubsets U, is_λ_system Λ \n       ⇒ (A ⊂ Λ ⇒ B ∈ Λ))}. \n\nDefinition is_σ_algebra (F : setOfSubsets U) \n  : Prop := \n    full_set_in_set F ∧ \n    complement_in_set F ∧\n    closed_under_countable_union F.\n\nDefinition σ_algebra_generated_by (A : setOfSubsets U) \n  : (setOfSubsets U) := \n    ｛B : subset U | ∀ F : setOfSubsets U, is_σ_algebra F ⇒ (A ⊂ F ⇒ B ∈ F)｝ . \n\nDefinition restriction (F : setOfSubsets U) (A : (subset U)) \n  : (setOfSubsets U) := \n    ｛C : subset U | ∃B : subset U, B ∈ F ⇒ C = A ∩ B｝. "
+      "text": "(*Variable U : Type. *)\nNotation U := SetNotations.U.\n\nDefinition is_π_system (Π : setOfSubsets U) \n  : Prop := \n    ∀ A : subset U, A ∈ Π ⇒ \n      ∀ B : subset U, B ∈ Π ⇒ \n         (A ∩ B) ∈ Π. \n         \nDefinition Countable_union (A : (ℕ → subset U) ) \n  : subset U := \n    ｛ x:U | ∃n : ℕ, x ∈ (A n)｝. \n\nDefinition full_set_in_set (Λ : setOfSubsets U) \n  : Prop :=\n    Ω ∈ Λ. \n\nDefinition complement_in_set (Λ : setOfSubsets U) \n  : Prop := \n    ∀ A  : subset U, A ∈ Λ \n      ⇒ (Ω \\ A) ∈ Λ. \n\nDefinition closed_under_disjoint_countable_union (Λ : setOfSubsets U) \n  : Prop :=\n    ∀ C : (ℕ → (subset U)), \n      (∀ m n : ℕ, m ≠ n ⇒ Disjoint _ (C m) (C n)) \n        ⇒ (∀ n : ℕ, (C n) ∈ Λ) ⇒  (Countable_union C) ∈ Λ.\n\nDefinition closed_under_countable_union (Λ : setOfSubsets U) \n  : Prop :=  \n    ∀ C : (ℕ → (subset U)), (∀ n : ℕ, (C n) ∈ Λ) \n      ⇒ (Countable_union C) ∈ Λ.\n\nDefinition is_λ_system (Λ : setOfSubsets U) \n  : Prop :=\n    full_set_in_set Λ ∧ \n    complement_in_set Λ ∧\n    closed_under_disjoint_countable_union Λ. \n\nDefinition λ_system_generated_by (A : setOfSubsets U) \n  : (setOfSubsets U) := \n    ｛B : subset U | (∀ Λ : setOfSubsets U, is_λ_system Λ \n       ⇒ (A ⊂ Λ ⇒ B ∈ Λ))｝. \n\nDefinition is_σ_algebra (F : setOfSubsets U) \n  : Prop := \n    full_set_in_set F ∧ \n    complement_in_set F ∧\n    closed_under_countable_union F.\n\nDefinition σ_algebra_generated_by (A : setOfSubsets U) \n  : (setOfSubsets U) := \n    ｛B : subset U | ∀ F : setOfSubsets U, is_σ_algebra F ⇒ (A ⊂ F ⇒ B ∈ F)｝. \n\nDefinition restriction (F : setOfSubsets U) (A : (subset U)) \n  : (setOfSubsets U) := \n    ｛C : subset U | ∃B : subset U, B ∈ F ⇒ C = A ∩ B｝. "
     },
     {
       "type": "text",
@@ -35,7 +35,7 @@
     },
     {
       "type": "code",
-      "text": "Hint Resolve Full_intro : measure_theory.  (*nieuwe database measure theory*)\nHint Resolve Intersection_intro : measure_theory. \nHint Resolve Union_introl Union_intror : measure_theory. \nHint Resolve Disjoint_intro : measure_theory. "
+      "text": "Hint Resolve Full_intro : measure_theory.  \nHint Resolve Intersection_intro : measure_theory. \nHint Resolve Union_introl Union_intror : measure_theory. \nHint Resolve Disjoint_intro : measure_theory. "
     }
   ]
 }
