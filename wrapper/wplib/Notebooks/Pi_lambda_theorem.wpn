@@ -1,0 +1,149 @@
+{
+  "exerciseSheet": false,
+  "blocks": [
+    {
+      "type": "text",
+      "text": "# The π-λ theorem\nThis proof is rather extensive, and makes use of a number of auxiliary lemmas and definitions. In general, we adhere to the structure provided by exercises 2.4.4 - 2.4.7 from the lecture notes *An introduction to Measure Theory and Integration* by J. Portegies. \n\n## Warming up\n\nFirst, we will prove several more set-theoretical lemmas that are often taken for granted in a hand written proof. We will need these at various points in later proofs. "
+    },
+    {
+      "type": "code",
+      "text": "Require Import ClassicalFacts. \nRequire Import Coq.Arith.Wf_nat.\nRequire Import Logic. \nRequire Import Omega. \nRequire Import Sets.Classical_sets.\nRequire Import Sets.Ensembles.\nRequire Import Sets.Powerset.\nRequire Import wplib.Lib.measure_theory.\nRequire Import wplib.Lib.sets.\nRequire Import wplib.Notations.SetNotations.\nRequire Import wplib.Tactics.Tactics.\nRequire Import wplib.Tactics.TacticsContra.\n\n\nNotation \"'U'\" := SetNotations.U.\n(*We do not want this, but otherwise notations \n  such as Ω and ∅ do not work. How to fix? *)\n\n\nLemma complement_as_intersection : \n  ∀ A B : subset U, \n    A \\ B = (Ω \\ B) ∩ A. \n\nProof. \nTake A B : (subset U). \nWe prove equality by proving two inclusions. \n\nTake x : U. \nAssume x_in_A_without_B. \nIt holds that (x ∈ ((Ω \\ B) ∩ A)). \n\nTake x : U. \nAssume x_in_rhs. \nBy x_in_rhs it holds that \n  (x ∈ (Ω \\ B) ∧ (x ∈ A)) (x_in_A_and_comp_B). \nIt holds that (x ∈ (A \\ B)). \nQed. "
+    },
+    {
+      "type": "text",
+      "text": "## π and λ implies σ\n\nThe next definition and the lemmas after that all lead up to a proof for the lemma `π_and_λ_is_σ`, which states that if a collection of sets is both a π-system and a λ-system, it is also a σ-algebra. The setting in the rest of this section is that we have a collection of subsets of Ω that is both a π-system and a λ-system. \n\nTo prove more interesting results, we make use of some definitions and lemmas in the `sets` library of Waterproof. The definition `disjoint_seq` turns a sequence of sets into  a disjoint sequence of sets with the same union. `disj_seq_disjoint` then tells us that the sequence is indeed disjoint, and from `CU_sets_disjointsets_equal` we know that the countable union of this sequence is equal to the original one. "
+    },
+    {
+      "type": "text",
+      "text": "We now have all the results that we need concerning our constructed disjoint sequence of sets. Now, we continue our way to the proof of `π_and_λ_is_σ` by proving some statements on collections of sets that are both a π-system and a λ-system. First of all, we show that for sets $A$ and $B$ in such a collection, $A$ \\ $B$ is also included:"
+    },
+    {
+      "type": "code",
+      "text": "Lemma complements_in_π_and_λ : \n  ∀ F : setOfSubsets U, \n    F is_a_π-system ∧ F is_a_λ-system\n    ⇒ ∀ A B : subset U, A ∈ F ∧ B ∈ F\n      ⇒ A \\ B ∈ F. \n\nProof. \nTake F : (setOfSubsets U). \nAssume F_is_π_and_λ_system.\nBy F_is_π_and_λ_system \n  it holds that (F is_a_π-system) (F_is_π_system). \nBy F_is_π_and_λ_system \n  it holds that (F is_a_λ-system) (F_is_λ_system). \nTake A B : (subset U). \nAssume A_and_B_in_F. \nBy F_is_λ_system it holds that \n  (Ω \\ B ∈ F) (comp_B_in_F). \nBy F_is_π_system it holds that \n  (A ∩ (Ω \\ B) ∈ F) (set_in_F). \nBy complement_as_intersection it holds that \n  (A \\ B = (Ω \\ B) ∩ A) (set_is_complement). \nWrite goal using (A \\ B = ((Ω \\ B) ∩ A)) \n  as (((Ω \\ B) ∩ A) ∈ F). \nIt holds that (((Ω \\ B) ∩ A) ∈ F). \nQed. "
+    },
+    {
+      "type": "text",
+      "text": "Next, we have a more set-theoretical lemma. This is then used in `unions_in_π_and_λ` to show that the union of two sets is again included in the our collection of sets. "
+    },
+    {
+      "type": "code",
+      "text": "Lemma union_as_complements : \n  ∀ A B : subset U, \n    (A ∪ B) = (Ω \\ ((Ω \\ A) ∩ (Ω \\ B))). \n\nProof. \nTake A B : (subset U). \nWe prove equality by proving two inclusions. \nTake x : U; Assume x_in_union. \nBy union_to_or it holds that \n  (x ∈ A ∨ x ∈ B) (x_in_A_or_B). \nBy classic it holds that \n  (¬((x ∉ A) ∧ (x ∉ B))) (not_not_A_and_not_B). \nBy not_not_A_and_not_B it holds that \n  (¬(x ∈ (Ω \\ A) ∧ x ∈ (Ω \\ B))) (not_compA_and_compB). \nBy not_compA_and_compB it holds that \n  (x ∉ ((Ω \\ A) ∩ (Ω \\ B))) (not_compA_int_compB). \nIt holds that (x ∈ (Ω \\ ((Ω \\ A) ∩ (Ω \\ B)))). \n\nTake x : U; Assume x_in_comp. \nWe argue by contradiction. \nBy union_to_or it holds that (¬ (x ∈ A ∨ x ∈ B)) (not_A_or_B).\n\nIt holds that \n  (x ∉ ((Ω \\ A) ∩ (Ω \\ B))) (not_compA_int_compB). \nBy not_compA_int_compB it holds that \n  (¬(x ∈ (Ω \\ A) ∧ x ∈ (Ω \\ B))) (not_compA_and_compB). \nBy not_compA_and_compB it holds that \n  (¬((x ∉ A) ∧ (x ∉ B))) (not_not_A_and_not_B). \nBy not_not_A_and_not_B it holds that \n  ((x ∈ A ∨ x ∈ B)) (A_or_B). \nContradiction. \nQed. \n\n\nLemma unions_in_π_and_λ : \n  ∀ F : setOfSubsets U, \n    F is_a_π-system ⇒ F is_a_λ-system\n    ⇒ ∀ A B : subset U, A ∈ F ⇒ B ∈ F\n      ⇒ A ∪ B ∈ F.\n\nProof. \nTake F : (setOfSubsets U). \nAssume F_is_π_system; Assume F_is_λ_system. \nTake A B : (subset U). \nAssume A_in_F; Assume B_in_F.\n\nBy union_as_complements it holds that \n  ((A ∪ B) = (Ω \\ ((Ω \\ A) ∩ (Ω \\ B)))) (union_is_comp). \nWrite goal using \n  ((A ∪ B) = (Ω \\ ((Ω \\ A) ∩ (Ω \\ B)))) \n    as ((Ω \\ ((Ω \\ A) ∩ (Ω \\ B))) ∈ F). \nBy F_is_λ_system it holds that \n  ((Ω \\ A) ∈ F) (comp_A_in_F). \nBy F_is_λ_system it holds that \n  ((Ω \\ B) ∈ F) (comp_B_in_F). \nBy F_is_π_system it holds that \n  ((Ω \\ A) ∩ (Ω \\ B) ∈ F) (int_in_F). \nIt holds that ((Ω \\ ((Ω \\ A) ∩ (Ω \\ B))) ∈ F). \nQed."
+    },
+    {
+      "type": "text",
+      "text": "Next, we present a rather dull lemma, that usually would be seen as trivial. Waterproof reminds us that it is not. "
+    },
+    {
+      "type": "code",
+      "text": "Lemma empty_in_λ : \n  ∀ F : setOfSubsets U, \n    F is_a_λ-system ⇒ ∅ ∈ F. \n\nProof.  \nTake F : (setOfSubsets U); Assume F_is_λ_system. \nBy complement_full_is_empty it holds that \n  (∅ = (Ω \\ Ω)) (comp_full_empty).\nWrite goal using (∅ = (Ω \\ Ω)) as ((Ω \\ Ω) ∈ F). \nIt holds that ((Ω \\ Ω) ∈ F). \nQed.  "
+    },
+    {
+      "type": "text",
+      "text": "These now serve to prove that our collection of sets is closed under taking the countable union. Note the absence of the word 'disjoint' there - indeed, this is the third criterion for a collection of sets to be a σ-algebra. The only thing standing in our way is that we not yet know that the finite union of a (not necessarily disjoint) sequence of sets is in our collection of sets. "
+    },
+    {
+      "type": "code",
+      "text": "Lemma FU_in_π_and_λ : \n  ∀ F : setOfSubsets U, \n    F is_a_π-system ⇒ F is_a_λ-system\n    ⇒ ∀ C : (ℕ → (subset U)), (∀ n : ℕ, (C n) ∈ F) \n      ⇒ ∀ n : ℕ, (finite_union_up_to C n) ∈ F.\n\nProof. \nTake F : (setOfSubsets U). \nAssume F_is_π_system.\nAssume F_is_λ_system.  \nTake C : (ℕ ⇨ subset U). \nAssume all_Cn_in_F.\nTake n : ℕ. \nWe prove by induction on n.\n(* Base case: *)\nBy FU_up_to_0_empty it holds that \n  (finite_union_up_to C 0 = ∅) (FU0_is_empty). \nWrite goal using (finite_union_up_to C 0 = ∅) \n  as (∅ ∈ F). \nApply empty_in_λ; Apply F_is_λ_system. \n(* Induction step: *)\nBy FU_S_as_union it holds that \n  (finite_union_up_to C (S n) \n    = (finite_union_up_to C n) ∪ (C n)) (FU_union).  \nWrite goal using \n  (finite_union_up_to C (S n) \n    = (finite_union_up_to C n) ∪ (C n)) \n      as ((finite_union_up_to C n) ∪ (C n) ∈ F).\nBy all_Cn_in_F it holds that (C n ∈ F) (Cn_in_F). \nBy unions_in_π_and_λ it holds that \n  ((finite_union_up_to C n ∪ C n) ∈ F) (xx). \nApply xx. \nQed. "
+    },
+    {
+      "type": "text",
+      "text": "Finally, we have all ingredients to prove that our collection of sets, being both a π-system and a λ-system, is indeed a σ-algebra:"
+    },
+    {
+      "type": "code",
+      "text": "Lemma π_and_λ_is_σ : \n  ∀ F : setOfSubsets U, \n    F is_a_π-system ⇒ F is_a_λ-system \n      ⇒ F is_a_σ-algebra. \n\nProof. \nTake F : (setOfSubsets U).\nAssume F_is_π_system. \nAssume F_is_λ_system. \nIt holds that \n  (closed_under_disjoint_countable_union F) (cu_disj_CU). \nWe need to show that (full_set_in_set F \n  ∧ complement_in_set F \n    ∧ closed_under_countable_union F). \nsplit. (*WP version for split?*)\nIt holds that (full_set_in_set F) .\nsplit.\nIt holds that (complement_in_set F). \n\nWe need to show that (∀ C : ℕ ⇨ subset U,\n  (∀ n : ℕ, C n ∈ F) \n    ⇒ Countable_union C ∈ F). \nTake C : (ℕ ⇨ subset U); Assume all_C_n_in_F. \nBy classic it holds that \n  ((∀ m n : ℕ, m ≠ n ⇒ Disjoint _ (C m) (C n)) ∨ \n  ¬(∀ m n : ℕ, m ≠ n ⇒ Disjoint _ (C m) (C n))) (all_or_not_all_disjoint). \nBecause all_or_not_all_disjoint \n  either all_disjoint or not_all_disjoint. \n(*Case 1: all C_n disjoint.*) \nIt holds that (Countable_union C ∈ F). \n(*Case 2: not all C_n disjoint. *)\nBy CU_sets_disjointsets_equal it holds that \n  (Countable_union (disjoint_seq C) = Countable_union C) (CUdisj_is_CU).\nWrite goal using \n  (Countable_union C = Countable_union (disjoint_seq C)) \n    as (Countable_union (disjoint_seq C) ∈ F). \n\nWe claim that (∀ n : ℕ, disjoint_seq C n ∈ F) (disj_in_F). \nTake n : ℕ. \nBy FU_in_π_and_λ it holds that \n  ((finite_union_up_to C n) ∈ F) (FU_in_F).\nBy complements_in_π_and_λ it holds that \n  ((C n) \\ (finite_union_up_to C n) ∈ F) (comp_in_F).\nWrite goal using \n  (disjoint_seq C n = (C n \\ finite_union_up_to C n)) \n    as ((C n \\ finite_union_up_to C n) ∈ F). \nApply comp_in_F. \n\nBy disj_seq_disjoint it holds that \n  ((∀ m n : ℕ, m ≠ n ⇒ \n    Disjoint _ \n      (disjoint_seq C m) (disjoint_seq C n))) (disj_seq_disj). \nIt holds that (Countable_union (disjoint_seq C) ∈ F).\nQed. "
+    },
+    {
+      "type": "text",
+      "text": "## On generated λ-systems\nThe next step toward our proof of the π-λ theorem is to define a λ-system generated by a collection of sets, and prove that it is indeed a λ-system. The definition, analogous to the generated σ-algebra, is already in the library. Now we prove that for a collection $A$ of subsets of Ω, the generated λ-system, written $λ(A)$, is indeed a λ-system. "
+    },
+    {
+      "type": "code",
+      "text": "Lemma generated_system_is_λ : \n  ∀ A : setOfSubsets U, \n    λ(A) is_a_λ-system.\n\nProof. \nTake A : (setOfSubsets U). \nWe need to show that (full_set_in_set (λ(A))\n  ∧ complement_in_set (λ(A)) \n    ∧ closed_under_disjoint_countable_union (λ(A))). \nIt holds that (∀ Λ : setOfSubsets U, \n  Λ is_a_λ-system ⇒ (full_set_in_set Λ)\n    ∧ complement_in_set Λ\n      ∧ closed_under_disjoint_countable_union Λ) \n        (lambda_props_for_all). \nsplit. \nIt follows that (full_set_in_set (λ(A))). \nsplit. \nIt follows that (complement_in_set (λ(A))). \n\nWe need to show that (∀ C : ℕ ⇨ subset U,\n  (∀ m n : ℕ, m ≠ n ⇒ Disjoint U (C m) (C n))\n    ⇒ (∀ n : ℕ, C n ∈ λ(A)) \n      ⇒ Countable_union C ∈ λ(A)). \nTake C : (ℕ ⇨ subset U). \nAssume all_Cn_disjoint. \nAssume all_Cn_in_λA.\n\nWe claim that (∀ Λ : setOfSubsets U, \n  Λ is_a_λ-system ⇒ A ⊂ Λ \n    ⇒ (Countable_union C) ∈ Λ) (CU_in_all).\nTake Λ : (setOfSubsets U). \nAssume Λ_is_λ_system. \nAssume A_subs_Λ. \nIt holds that \n  (closed_under_disjoint_countable_union Λ) \n    (closed_under_disj_CU). \nIt holds that (\n  (∀ m n : ℕ, m ≠ n ⇨ Disjoint U (C m) (C n))  \n    ⇒ ∀ n : ℕ, C n ∈ Λ) (disj_implies_all_Cn_in_Λ).\nIt follows that (Countable_union C ∈ Λ). \nIt follows that (Countable_union C ∈ λ(A)). \nQed."
+    },
+    {
+      "type": "text",
+      "text": "## λ(Π) a σ-algebra?\nAfter the rather concise previous proof, now the most technical and involved stretch of the proof will commence. We assume Π to be a π-system, and want to show that λ(Π) is a σ-algebra. As we already know that λ(Π) is a λ-system, by the lemma `π_and_λ_is_σ` we only need to show that λ(Π) is a π-system. The proof is divided into three parts, exactly as exercise 2.4.6. \n\nIn the first part, we introduce the collection of sets $H$, and show that it is a λ-system. This will be the longest part of the proof, and involves quite a few additional lemma's and definitions. Before defining $H$, we will first prove some smaller results. All of these come together in the proof of `H_is_λ_system`. \n\n### Disjoint unions in λ(Π)\nOne of the properties of  λ-systems that we want to use, is that the union of two disjoint sets in λ(Π) is again in λ(Π). \nTo prove this, we use that λ-systems are closed under taking the countable union of disjoint sequences of sets. For this, we make use of the sequence $(A,B,∅,∅,...)$ as presented in the `sets` library, for $A$ and $B$ disjoint.  We will use two statements about this sequence. First, that the countable union of this sequence is the union of $A$ and $B$, in `CU_aux_is_union`.\nNext, from `disjoint_aux` we know that the sequence is indeed disjoint. Finally, using these two statements, we can prove that for $A, B ∈ λ(Π)$, we have that $A ∪ B ∈ λ(Π)$. "
+    },
+    {
+      "type": "code",
+      "text": "Lemma disj_union_in_λ_system : \n  ∀ Λ : setOfSubsets U, Λ is_a_λ-system\n    ⇒ ∀ A B : subset U, A ∈ Λ ⇒ B ∈ Λ \n      ⇒ Disjoint _ A B ⇒ A ∪ B ∈ Λ. \n\nProof. \nTake Λ : (setOfSubsets U); Assume Λ_is_a_λ_system. \nTake A B : (subset U). \nAssume A_in_Λ; Assume B_in_Λ. \nAssume A_B_disjoint. \n\nWe claim that (∀ n : ℕ, aux_seq A B n ∈ Λ) (all_aux_in_Λ). \nTake n : ℕ. \nWe prove by induction on n. \nIt holds that (aux_seq A B 0 ∈ Λ). \nWe prove by induction on n. (*0 and 1 defined, rest inductively. Other way? *)\nIt holds that (aux_seq A B 1 ∈ Λ). \nWrite goal using (aux_seq A B (S (S n)) = ∅) \n  as (∅ ∈ Λ). \nBy empty_in_λ it holds that \n  (∅ ∈ Λ) (empty_in_Λ).\nApply empty_in_Λ.  \n\nBy CU_aux_is_union it holds that \n  (A ∪ B = Countable_union (aux_seq A B)) (union_to_CU). \nWrite goal using (A ∪ B = Countable_union (aux_seq A B))\n  as (Countable_union (aux_seq A B) ∈ Λ). \n\nBy disjoint_aux it holds that \n  (∀ m n : ℕ, m ≠ n ⇒ Disjoint _ (aux_seq A B m) (aux_seq A B n)) (aux_disjoint).\nBy Λ_is_a_λ_system it holds that \n  (closed_under_disjoint_countable_union Λ) (closed_under_disj_CU). \nIt holds that ((∀ m n : ℕ, m ≠ n ⇒ Disjoint U (aux_seq A B m) (aux_seq A B n))\n    ⇒ (for all n : ℕ, aux_seq A B n ∈ Λ)) (props_cu_disj_CU). \nBy closed_under_disj_CU it holds that ((Countable_union (aux_seq A B)) ∈ Λ) (xx). \nApply xx. \nQed. "
+    },
+    {
+      "type": "text",
+      "text": "### Intermezzo about sets\nBefore we go to our set $H$, we need to prove some set-theoretical lemmas that we will use in proving `H_is_λ_system`. First, we rewrite $(Ω \\setminus A) ∩ B$ in a way that allows us to show that it is an element of $H$, and show that the two expressions are equal: "
+    },
+    {
+      "type": "code",
+      "text": "Lemma complement_as_union_intersection : \n  ∀ A B : subset U, (Ω \\ ((A ∩ B) ∪ (Ω \\ B))) = (Ω \\ A) ∩ B.\n\nProof. \nTake A B : (subset U). \nWe prove equality by proving two inclusions. \nTake x : U; Assume x_in_lhs. \ndestruct x_in_lhs.\nBy H0 it holds that \n  ((x ∉ (A ∩ B)) ∧ (x ∉ (Ω \\ B))) (x_not_in_int_comp). \nBecause x_not_in_int_comp \n  both x_not_in_int and x_not_in_comp. \nBy x_not_in_int it holds that \n  (x ∉ A) (x_not_in_A). \nIt holds that (x ∈ (Ω \\ A)) (x_in_comp_A). \nBy not_in_comp it holds that (x ∈ B) (x_in_B).\nIt follows that (x ∈ ((Ω \\ A) ∩ B)). \n\nTake x : U; Assume x_in_rhs. \ndestruct x_in_rhs. (*\"Because x_in_rhs both x_in_comp_A and x_in_B\" doesn't work*)\nBy H it holds that (x ∉ A) (x_not_in_A). \nBy H0 it holds that (x ∉ (Ω \\ B)) (x_not_in_comp). \n\nWe claim that (x ∉ (A ∩ B)) (x_not_in_AB).\nWe argue by contradiction. \nWe claim that (x ∈ (A ∩ B)) (x_in_AB).\nApply NNPP; Apply H1.   \ndestruct x_in_AB. \nContradiction. \n\nWe claim that (x ∉ ((A ∩ B) ∪ (Ω \\ B))) (x_not_in_union).\nWe argue by contradiction. \nWe claim that (x ∈ ((A ∩ B) ∪ (Ω \\ B))) (x_in_union). \nApply NNPP; Apply H1. \nBecause x_in_union either x_in_AB or x_in_comp. \nContradiction. \nContradiction. (*tactic 'contradiction in both cases'? *)\nIt follows that (x ∈ (Ω \\ ((A ∩ B) ∪ (Ω \\ B)))). \nQed.  "
+    },
+    {
+      "type": "text",
+      "text": "Later we will use the above equality to rewrite a proof goal so that it involves the left-hand side instead of the right-hand side. We then want to show that, provided $A,B ∈ λ(Π)$, we also have that $(Ω \\setminus ((A ∩ B) ∪ (Ω \\ B))) ∈ λ(Π)$. \n\nWe already know that if some set $D∈λ(Π)$, then $Ω \\setminus D∈λ(Π)$. What we still need to prove is that A ∩ B and Ω \\ B are disjoint; only in that case we may use `disj_union_in_λ_system` to argue that their union is also in λ(Π). That is what the following lemma does:"
+    },
+    {
+      "type": "code",
+      "text": "Lemma intersection_and_complement_disjoint : \n  ∀ A B : subset U, Disjoint _ (A ∩ B) (Ω \\ B). \n\nProof. \nTake A B : (subset U). \nIt suffices to show that (∀ x : U, x ∉ ((A ∩ B) ∩ (Ω \\ B))). \nTake x : U. \nWe argue by contradiction. \nWe claim that (x ∈ ((A ∩ B) ∩ (Ω \\ B))) (x_in_AB_and_comp).\nApply NNPP; Apply H. \ndestruct x_in_AB_and_comp. \ndestruct H0. \nBy H1 it holds that (x ∉ B) (x_not_in_B).\nContradiction.  \nQed."
+    },
+    {
+      "type": "text",
+      "text": "### The set H\nAt last, we are ready to define our set $H$: "
+    },
+    {
+      "type": "code",
+      "text": "Definition H (B : subset U) (λΠ : setOfSubsets U)\n  : setOfSubsets U := \n    ｛A : (subset U) | (A ∩ B ∈ λΠ)｝. "
+    },
+    {
+      "type": "text",
+      "text": "To prove that $H$ is a λ-system, amongst others, we need to show that it is closed under taking  disjoint countable unions. For this, we need to show that for some sequence of sets $C_n$, the countable union of $(C_n ∩ B)_{n=0}^{∞}$ is in λ(Π). In order to do this, we first need to define this sequence of intersections, and show that it is indeed disjoint, provided that all $C_n$ are disjoint: "
+    },
+    {
+      "type": "code",
+      "text": "Definition seq_intersection (C : (ℕ ⇨ subset U)) (B : subset U)\n  : ℕ ⇨ subset U := \n    fun (n : ℕ) ↦ ((C n) ∩ B).\n\nLemma C_int_B_disjoint : \n  ∀ C : (ℕ ⇨ subset U), ∀ B : subset U, \n    (∀ m n : ℕ, m ≠ n ⇨ Disjoint U (C m) (C n))\n      ⇒ ∀ m n : ℕ, m ≠ n \n        ⇒ Disjoint U (seq_intersection C B m) (seq_intersection C B n). \n\nProof. \nTake C : (ℕ ⇨ subset U); Take B : (subset U). \nAssume all_Cn_disjoint. \nTake m n : ℕ. \nAssume m_neq_n. \nBy all_Cn_disjoint it holds that \n  (Disjoint U (C m) (C n)) (Cm_Cn_disj).\nWe argue by contradiction. \nBy H0 it holds that \n  (∃ x : U, x ∈ ((C m ∩ B) ∩ (C n ∩ B))) (exists_x_in_CmB_CnB).\nChoose x such that x_in_CmB_CnB \n  according to exists_x_in_CmB_CnB.\nBy x_in_CmB_CnB it holds that \n  (x ∈ (C m ∩ B) ∧ x ∈ (C n ∩ B)) (x_in_CmB_and_CnB). \nBecause x_in_CmB_and_CnB \n  both x_in_CmB and x_in_CnB. \nBy x_in_CmB it holds that \n  (x ∈ C m ∧ x ∈ B) (x_in_Cm_and_B).\nIt holds that (x ∈ C m) (x_in_Cm). \nBy x_in_CnB it holds that \n  (x ∈ C n ∧ x ∈ B) (x_in_Cn_and_B).\nIt holds that (x ∈ C n) (x_in_Cn).\nIt holds that \n  (x ∈ C n ∧ x ∈ C m) (x_in_Cm_and_Cn). \nBy x_in_Cm_and_Cn it holds that \n  (x ∈ (C m ∩ C n)) (x_in_Cm_Cn). \ndestruct Cm_Cn_disj.\nBy H1 it holds that (x ∉ (C m ∩ C n)) (x_not_in_Cm_Cn). \nContradiction. \nQed. "
+    },
+    {
+      "type": "text",
+      "text": "The next step to showing that the countable union of our new sequence is in λ(Π), is proving that $∪_{n=0}^{∞} (C_n ∩ B) = (∪_{n=0}^{∞} C_n) ∩ B$: "
+    },
+    {
+      "type": "code",
+      "text": "Lemma CU_seq_int_is_CU_int : \n  ∀ C : (ℕ ⇨ subset U), ∀ B : subset U, \n    Countable_union (seq_intersection C B) = (Countable_union C) ∩ B. \n\nProof. \nTake C : (ℕ ⇨ subset U); Take B : (subset U). \nWe prove equality by proving two inclusions. \nTake x : U; Assume x_in_lhs. \nChoose n such that x_in_seq_Cn according to x_in_lhs.\ndestruct x_in_seq_Cn. \nBy H0 it holds that (x ∈ Countable_union C) (x_in_CU). \nBy H1 it holds that (x ∈ B) (x_in_B). \nIt follows that (x ∈ (Countable_union C ∩ B)). \n\nTake x : U; Assume x_in_rhs. \nBy x_in_rhs it holds that \n  (x ∈ Countable_union C ∧ x ∈ B) (x_in_CU_and_B).\nBecause x_in_CU_and_B both x_in_CU and x_in_B. \nChoose n such that x_in_Cn according to x_in_CU. \nIt holds that (x ∈ C n ∧ x ∈ B) (x_in_Cn_and_B). \nBy x_in_Cn_and_B it holds that \n  (x ∈ ((C n) ∩ B)) (x_in_CnB). \nIt holds that (x ∈ (seq_intersection C B n)) (x_in_seq_n). \nIt follows that (x ∈ Countable_union (seq_intersection C B)). \nQed."
+    },
+    {
+      "type": "text",
+      "text": "Now, we are ready to prove our long-desired result, that $H$ is a λ-system: "
+    },
+    {
+      "type": "code",
+      "text": "Lemma H_is_λ_system : \n  ∀ Π : setOfSubsets U, Π is_a_π-system\n    ⇒ ∀ B : subset U, B ∈ (λ(Π)) \n      ⇒ (H B (λ(Π))) is_a_λ-system.\n\nProof. \nTake Π : (setOfSubsets U); Assume Π_is_a_π_system.\nTake B : (subset U); Assume B_in_λΠ. \nDefine H := (H B (λ(Π))). \nWe need to show that (full_set_in_set H \n  ∧ complement_in_set H \n    ∧ closed_under_disjoint_countable_union H). \nsplit.\n\nWe claim that (Ω ∩ B ∈ λ(Π)) (omega_int_B_in_λΠ). \nBy intersection_full it holds that \n  (Ω ∩ B = B) (omega_int_B_is_B). \nWrite goal using (Ω ∩ B = B) as (B ∈ λ(Π)). \nIt holds that (B ∈ (λ(Π))). \nIt follows that (full_set_in_set H). \n\nsplit. \nWe need to show that (∀ A : subset U,\n  A ∈ H ⇒ (Ω \\ A) ∈ H). \nTake A : (subset U); Assume A_in_H.\nWe claim that (((A ∩ B) ∪ (Ω \\ B)) ∈ λ(Π)) (union_in_λΠ). \nApply disj_union_in_λ_system. \nBy generated_system_is_λ it holds that \n  ((λ(Π)) is_a_λ-system) (xx). \nApply xx. \nIt holds that (A ∩ B ∈ λ(Π)).\nIt holds that (Ω \\ B ∈ λ(Π)). \nBy intersection_and_complement_disjoint it holds that \n  (Disjoint _ (A ∩ B) (Ω \\ B)) (xx).\nApply xx. \n\nIt holds that ((Ω \\ ((A ∩ B) ∪ (Ω \\ B))) ∈ λ(Π)) (comp_in_λΠ).\nBy complement_as_union_intersection it holds that \n  ((Ω \\ ((A ∩ B) ∪ (Ω \\ B))) = (Ω \\ A) ∩ B) (to_int).\nWrite comp_in_λΠ using \n  ((Ω \\ ((A ∩ B) ∪ (Ω \\ B))) = (Ω \\ A) ∩ B)\n    as ((Ω \\ A) ∩ B ∈ λ(Π)). \nBy comp_in_λΠ it holds that ((Ω \\ A) ∈ H) (xx).\nApply xx.  \n\nWe need to show that (∀ C : ℕ ⇨ subset U,\n  (∀ m n : ℕ, m ≠ n ⇒ Disjoint U (C m) (C n)) \n    ⇒ (∀ n : ℕ, C n ∈ H) \n      ⇒ Countable_union C ∈ H). \nTake C : (ℕ ⇨ subset U). \nAssume all_Cn_disjoint; Assume all_Cn_in_H. \nBy all_Cn_in_H it holds that \n  (∀ n : ℕ, ((C n) ∩ B) ∈ λ(Π)) (all_CnB_in_λΠ).\nBy C_int_B_disjoint it holds that \n  (∀ m n : ℕ, m ≠ n ⇒ Disjoint _ \n    (seq_intersection C B m) \n      (seq_intersection C B n)) (all_CnB_disjoint). \nWe claim that (Countable_union (seq_intersection C B) ∈ λ(Π)) (CU_in_λΠ).\nBy generated_system_is_λ it holds that \n  ((λ(Π)) is_a_λ-system) (λΠ_is_λ).\nBy λΠ_is_λ it holds that \n  (closed_under_disjoint_countable_union (λ(Π))) (λΠ_closed_under_CU). \nIt follows that (Countable_union (seq_intersection C B) ∈ (λ( Π))). \nBy CU_seq_int_is_CU_int it holds that \n  (Countable_union (seq_intersection C B) = (Countable_union C) ∩ B) (CUs_equal).\nWrite CU_in_λΠ using \n  (Countable_union (seq_intersection C B) = (Countable_union C) ∩ B)\n    as ((Countable_union C) ∩ B ∈ (λ( Π))). \nIt follows that (Countable_union C ∈ H). \nQed. "
+    },
+    {
+      "type": "text",
+      "text": "### Intersections in λ(Π) \nMost of the hard work for showing that λ(Π) is a σ-algebra is now done. Now we will show that under certain conditions on $A$ and $B$, we have that $A ∩ B ∈ λ(Π)$. This is a step towards $A ∩ B$ being in λ(Π) for all $A, B ∈ λ(Π)$, which is exactly what we wanted to prove (this is the condition for being a π-system). \nIn both cases, $H$ will play an important role in the proof, which somewhat justifies the amount of time and effort we have spent on it. \n\nFirst, we consider the situation where $A∈λ(Π)$ and $B∈Π$. One small and almost trivial lemma is needed first, namely that $Π ⊂ H$. The proof itself for this situation is also concise, after all the preliminary work we have done. "
+    },
+    {
+      "type": "code",
+      "text": "Lemma Π_subset_H : \n  ∀ Π : setOfSubsets U, Π is_a_π-system\n    ⇒ ∀ B : subset U, B ∈ Π\n        ⇒ Π ⊂ H B (λ(Π)).\n\nProof. \nTake Π : (setOfSubsets U); Assume Π_is_π_system.\nTake B : (subset U); Assume B_in_Π. \nWe need to show that (∀ C : subset U,\n  C ∈ Π ⇒ C ∈ H B (λ( Π))).\nTake C : (subset U); Assume C_in_Π.\nBy Π_is_π_system it holds that \n  (C ∩ B ∈ Π) (CB_in_Π).\nIt follows that (C ∈ H B (λ(Π))). \nQed. \n\n\nLemma int_in_λΠ : \n  ∀ Π : setOfSubsets U, Π is_a_π-system\n    ⇒ ∀ A : subset U, A ∈(λ(Π))\n      ⇒ ∀ B : subset U, B ∈ Π\n        ⇒ (A ∩ B) ∈ (λ(Π)).\n\nProof. \nTake Π : (setOfSubsets U); Assume Π_is_π_system.\nTake A : (subset U); Assume A_in_λΠ. \nTake B : (subset U); Assume B_in_Π. \nIt holds that (B ∈ λ(Π)) (B_in_λΠ). \nBy H_is_λ_system it holds that \n  ((H B (λ(Π))) is_a_λ-system) (H_is_λ_system).\nBy Π_subset_H it holds that \n  (Π ⊂ H B (λ(Π))) (Π_subs_H).\nIt holds that (λ(Π) ⊂ H B (λ(Π))) (λΠ_subs_H).\nIt holds that (A ∈ H B (λ(Π))) (A_in_H). \nIt follows that ((A ∩ B) ∈ λ(Π)). \nQed. "
+    },
+    {
+      "type": "text",
+      "text": "Using this result, we can now prove that λ(Π) is a σ-algebra: "
+    },
+    {
+      "type": "code",
+      "text": "Lemma λΠ_is_σ_algebra : \n  ∀ Π : setOfSubsets U, Π is_a_π-system\n    ⇒ λ(Π) is_a_σ-algebra.\n\nProof. \nTake Π : (setOfSubsets U).\nAssume Π_is_π_system.\nWe claim that (λ(Π) is_a_π-system) (λΠ_is_π). \nWe need to show that (\n  ∀ A : subset U, A ∈ (λ(Π)) \n    ⇒ ∀ B : subset U, B ∈ (λ(Π))\n      ⇒ (A ∩ B) ∈ (λ(Π))).\nTake A : (subset U); Assume A_in_λΠ. \nTake B : (subset U); Assume B_in_λΠ. \nWe claim that (Π ⊂ H B (λ(Π))) (Π_subs_H).\nWe need to show that \n  (∀ C : subset U, C ∈ Π ⇒ C ∈ H B (λ(Π))). \nTake C : (subset U); Assume C_in_Π. \nBy int_in_λΠ it holds that \n  ((B ∩ C) ∈ λ(Π)) (BC_in_λΠ). \nBy intersection_symmetric it holds that \n  (B ∩ C = C ∩ B) (CB_is_BC). \nWrite BC_in_λΠ using (B ∩ C = C ∩ B)\n  as ((C ∩ B) ∈ λ(Π)). \nIt follows that (C ∈ H B (λ(Π))).\n\nBy H_is_λ_system it holds that \n  ((H B (λ(Π))) is_a_λ-system) (H_is_λ_system).\nIt holds that (λ(Π) ⊂ H B (λ(Π))) (λΠ_subs_H).\nIt holds that (A ∈ H B (λ(Π))) (A_in_H). \nIt follows that ((A ∩ B) ∈ (λ(Π))). \nBy generated_system_is_λ it holds that \n  (λ(Π) is_a_λ-system) (λΠ_is_λ). \nBy π_and_λ_is_σ it holds that \n  ((λ(Π)) is_a_σ-algebra) (xx).\nApply xx. \nQed. "
+    },
+    {
+      "type": "text",
+      "text": "## Bringing everything together\nFinally, we can state and prove what was our main goal: the π-λ theorem. With all the preparation, the proof itself is satisfyingly short (and deceivingly, considering the prior effort). Also, it is remarkable that only the last lemma, `λΠ_is_σ_algebra`, is called upon; all other arguments were valid from the beginning. "
+    },
+    {
+      "type": "code",
+      "text": "Theorem π_λ_theorem : \n  ∀ Π Λ : setOfSubsets U, \n    Π is_a_π-system ∧ Λ is_a_λ-system ∧ Π ⊂ Λ\n    ⇒ (σ(Π)) ⊂ Λ. \n\nProof. \nTake Π : (setOfSubsets U); Take Λ : (setOfSubsets U). \nAssume Π_Λ_included_systems. \n\nWe need to show that (∀ x : subset U,\n  x ∈ (σ(Π)) ⇒ x ∈ Λ). \nTake A : (subset U); Assume A_in_σΠ.\nBy Π_Λ_included_systems it holds that \n  (Π is_a_π-system) (Π_is_π). \nBy λΠ_is_σ_algebra it holds that \n  (λ(Π) is_a_σ-algebra) (λΠ_is_σ_algebra).\nBy A_in_σΠ it holds that \n  (∀ F : setOfSubsets U, \n    F is_a_σ-algebra ⇒ Π ⊂ F \n      ⇒ A ∈ F) (A_in_all_σ).\nIt holds that \n  (λ(Π) is_a_σ-algebra \n    ⇒ Π ⊂ (λ(Π))) (Π_in_λΠ). \nBy A_in_all_σ it holds that \n  (A ∈(λ(Π))) (A_in_λΠ). \nIt holds that (Λ is_a_λ-system ⇒ Π ⊂ Λ) (Π_in_Λ). \nIt holds that (A ∈ Λ). \nQed."
+    },
+    {
+      "type": "text",
+      "text": " "
+    }
+  ]
+}
