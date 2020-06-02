@@ -143,14 +143,6 @@
     },
     {
       "type": "text",
-      "text": "Now a somewhat experimental and non-standard notation to resolve a goal using another assumption/lemma. The usual `By ... it holds that ...` does not do this, even without adding a name. "
-    },
-    {
-      "type": "code",
-      "text": "Tactic Notation \"By\" constr(u) \"it\" \"holds\" \"that\" constr(t) \"which\" \"concludes\" ident(the) \"proof\":= \n  By u it holds that t (the); \n  apply the. "
-    },
-    {
-      "type": "text",
       "text": "TODO: preferably deprecate this notation."
     },
     {
