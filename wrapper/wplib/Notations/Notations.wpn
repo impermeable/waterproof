@@ -27,6 +27,14 @@
     },
     {
       "type": "text",
+      "text": "## Sequences"
+    },
+    {
+      "type": "code",
+      "text": "Notation \"an 'converges' 'to' a\" := \n  (Un_cv an a) (at level 50). "
+    },
+    {
+      "type": "text",
       "text": "## Sums and series"
     },
     {
