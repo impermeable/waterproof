@@ -27,6 +27,14 @@
     },
     {
       "type": "text",
+      "text": "## Sums and series"
+    },
+    {
+      "type": "code",
+      "text": "Notation \"'Σ' Cn 'equals' x\" := \n  (infinite_sum Cn x) (at level 50)."
+    },
+    {
+      "type": "text",
       "text": "## Sets"
     },
     {
