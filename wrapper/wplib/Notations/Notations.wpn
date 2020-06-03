@@ -31,7 +31,7 @@
     },
     {
       "type": "code",
-      "text": "Notation \"'Σ' Cn 'equals' x\" := \n  (infinite_sum Cn x) (at level 50)."
+      "text": "Notation \"'Σ' Cn 'equals' x\" := \n  (infinite_sum Cn x) (at level 50).\n  \nNotation \"'Σ' 'of' Cn 'up' 'to' n\" := \n  (sum_f_R0 Cn n) (at level 50). "
     },
     {
       "type": "text",
