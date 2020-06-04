@@ -7,7 +7,7 @@
     },
     {
       "type": "code",
-      "text": "Require Import Sets.Ensembles.\nRequire Import Sets.Classical_sets.\nRequire Import wplib.Tactics.Tactics.\nRequire Import wplib.Tactics.TacticsContra.\nRequire Import Sets.Powerset.\nRequire Import Coq.Logic.Classical_Pred_Type.\nRequire Import wplib.Notations.SetNotations."
+      "text": "Require Import Sets.Ensembles.\nRequire Import Sets.Classical_sets.\nRequire Import wplib.Tactics.Tactics.\nRequire Import wplib.Tactics.TacticsContra.\nRequire Import Sets.Powerset.\nRequire Import Coq.Logic.Classical_Pred_Type.\nRequire Import wplib.Notations.SetNotations.\nRequire Import Reals."
     },
     {
       "type": "code",
@@ -15,7 +15,7 @@
     },
     {
       "type": "text",
-      "text": "Definitions concerning π-systems, λ-systems, σ-algebras and their properties: "
+      "text": "## Collections of sets\nDefinitions concerning π-systems, λ-systems, σ-algebras and their properties: "
     },
     {
       "type": "code",
@@ -27,7 +27,27 @@
     },
     {
       "type": "code",
-      "text": "Notation \"A is_a_π-system\" := \n  (is_π_system A) (at level 50).\n  \nNotation \"A is_a_λ-system\" := \n  (is_λ_system A) (at level 50). \n\nNotation \"A is_a_σ-algebra\" := \n  (is_σ_algebra A) (at level 50).\n(*TODO: general tactic for the form above? *)\n\nNotation \"λ( A )\" := \n (λ_system_generated_by A) (at level 50).\n \nNotation \"σ( A )\" := \n (σ_algebra_generated_by A) (at level 50)."
+      "text": "Notation \"A 'is' 'a' 'π-system'\" := \n  (is_π_system A) (at level 50). \n  \nNotation \"A 'is' 'a' 'λ-system'\" := \n  (is_λ_system A) (at level 50).\n\nNotation \"A 'is' 'a' 'σ-algebra'\" := \n  (is_σ_algebra A) (at level 50).\n(*TODO: general tactic for the form above? *)\n\nNotation \"λ( A )\" := \n (λ_system_generated_by A) (at level 50).\n \nNotation \"σ( A )\" := \n (σ_algebra_generated_by A) (at level 50)."
+    },
+    {
+      "type": "text",
+      "text": "## Measures"
+    },
+    {
+      "type": "text",
+      "text": "Definitions of σ-additivity, measure and probability measure:"
+    },
+    {
+      "type": "code",
+      "text": "Definition σ_additive_on (F : setOfSubsets U) (μ : (subset U ⇨ ℝ)) : Prop := \n  ∀C : (ℕ → (subset U)), (∀n : ℕ, C n ∈ F) \n    ⇒ (∀ m n : ℕ, m ≠ n ⇒ Disjoint _ (C m) (C n)) \n      ⇒ infinite_sum (fun (n:ℕ) ↦ (μ (C n))) (μ (Countable_union C)).\n      \nDefinition is_measure_on (F : setOfSubsets U) (μ : (subset U → ℝ)) : Prop := \n  is_σ_algebra F ∧ μ ∅ = 0 ∧ σ_additive_on F μ.\n  \nDefinition is_probability_measure_on (F : setOfSubsets U) (μ : (subset U → ℝ)) \n  : Prop := \n    is_measure_on F μ ∧ μ Ω = 1."
+    },
+    {
+      "type": "text",
+      "text": "Notations for these:"
+    },
+    {
+      "type": "code",
+      "text": "Notation \"μ 'is' 'σ-additive' 'on' F\" := \n  (σ_additive_on F μ) (at level 50). \n  \nNotation \"μ 'is' 'a' 'measure' 'on' F\" := \n  (is_measure_on F μ) (at level 50). "
     },
     {
       "type": "text",
