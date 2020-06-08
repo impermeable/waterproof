@@ -7,7 +7,7 @@
     },
     {
       "type": "code",
-      "text": "Require Import Reals.\nRequire Import Lra.\nRequire Import Classical.\nRequire Import Classical_Pred_Type.\nRequire Import ClassicalChoice.\n\nRequire Import wplib.Tactics.Tactics.\nRequire Import wplib.Tactics.TacticsContra.\nRequire Import wplib.Lib.sup_and_inf.\n\nHint Resolve Rabs_Rabsolu.\nHint Resolve Rabs_minus_sym.\nHint Resolve Rmult_lt_0_compat : real.\nHint Resolve Rinv_lt_contravar : real."
+      "text": "Require Import Reals.\nRequire Import Lra.\nRequire Import Classical.\nRequire Import Classical_Pred_Type.\nRequire Import ClassicalChoice.\n\nRequire Import wplib.Tactics.Tactics.\nRequire Import wplib.Tactics.TacticsContra.\nRequire Import wplib.Notations.Notations.\nRequire Import wplib.Lib.sup_and_inf.\n\nHint Resolve Rabs_Rabsolu.\nHint Resolve Rabs_minus_sym.\nHint Resolve Rmult_lt_0_compat : real.\nHint Resolve Rinv_lt_contravar : real."
     },
     {
       "type": "text",

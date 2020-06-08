@@ -7,7 +7,7 @@
     },
     {
       "type": "code",
-      "text": "Require Import Reals.\nRequire Import Lra.\nRequire Import Classical.\nRequire Import Classical_Pred_Type.\nRequire Import ClassicalChoice.\n\nRequire Import wplib.Tactics.Tactics.\nRequire Import wplib.Tactics.TacticsContra.\nRequire Import wplib.Lib.sup_and_inf.\n\nHint Resolve Rabs_Rabsolu.\nHint Resolve Rabs_minus_sym.\nHint Resolve Rmult_lt_0_compat : real.\nHint Resolve Rinv_lt_contravar : real.\n\nTactic Notation \"Take\" ident(s1) \",\" ident(s2) \":\" constr(t):=\n  intro_strict s1 t; intro_strict s2 t.\nTactic Notation \"Take\" ident(s1) \",\" ident(s2) \",\" ident(s3) \":\" constr(t):=\n  intro_strict s1 t; intro_strict s2 t; intro_strict s3 t.\nLemma test : forall a b: nat, 0 = 0.\n  Take a, b : nat.\n  trivial.\nQed.\n\nTactic Notation  \"Assume\" ident(s1) \"and\" ident(s2) := \n  intro s1; destruct s1 as [s1 s2]."
+      "text": "Require Import Reals.\nRequire Import Lra.\nRequire Import Classical.\nRequire Import Classical_Pred_Type.\nRequire Import ClassicalChoice.\n\nRequire Import wplib.Tactics.Tactics.\nRequire Import wplib.Tactics.TacticsContra.\nRequire Import wplib.Notations.Notations.\nRequire Import wplib.Lib.sup_and_inf.\n\nHint Resolve Rabs_Rabsolu.\nHint Resolve Rabs_minus_sym.\nHint Resolve Rmult_lt_0_compat : real.\nHint Resolve Rinv_lt_contravar : real."
     },
     {
       "type": "text",
@@ -71,7 +71,7 @@
     },
     {
       "type": "code",
-      "text": "Tactic Notation \"Take\" ident(s1) \":\" constr(t1) \"such\" \"that\" ident(s2) := \n  intro_strict s1 t1; intro s2.\n\nDefinition similar_sequences (a b : ℕ → ℝ) := (∃ k : ℕ,\n      ∀ n : ℕ, (n ≥ k)%nat ⇒ a n = b n).\n\nLemma conv_similar_seq :\n  ∀ (a b : ℕ → ℝ) (l : ℝ), similar_sequences a b ∧ a ⟶ l ⇒ b ⟶ l."
+      "text": "Definition similar_sequences (a b : ℕ → ℝ) := (∃ k : ℕ,\n      ∀ n : ℕ, (n ≥ k)%nat ⇒ a n = b n).\n\nLemma conv_similar_seq :\n  ∀ (a b : ℕ → ℝ) (l : ℝ), similar_sequences a b ∧ a ⟶ l ⇒ b ⟶ l."
     },
     {
       "type": "code",
