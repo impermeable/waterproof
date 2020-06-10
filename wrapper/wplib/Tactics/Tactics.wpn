@@ -323,7 +323,7 @@
     },
     {
       "type": "code",
-      "text": "Hint Resolve Rmult_gt_0_compat : real.\nHint Resolve Rmult_lt_0_compat : real."
+      "text": "Hint Resolve Rmult_gt_0_compat : real.\nHint Resolve Rmult_lt_0_compat : real.\nHint Resolve R_dist_eq : real."
     },
     {
       "type": "text",
