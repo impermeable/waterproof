@@ -31,11 +31,31 @@
     },
     {
       "type": "text",
-      "text": "### σ-algebras as record types"
+      "text": "### Record types"
+    },
+    {
+      "type": "text",
+      "text": "TO DO: The following three procedures are completely analogous. More efficient way?\n\nπ-systems:"
     },
     {
       "type": "code",
-      "text": "Record σ_algebra := make_sigma_algebra\n  { underlying_set_of_subsets : setOfSubsets U;\n    proof_is_sigma_algebra : is_σ_algebra underlying_set_of_subsets}.\n\n\nVariable G : σ_algebra.\n\nCoercion underlying_set_of_subsets : σ_algebra >-> setOfSubsets.\n\nDefinition F : setOfSubsets U := G.\nHint Resolve proof_is_sigma_algebra : measure_theory.\nHint Resolve underlying_set_of_subsets : measure_theory.\n\nLemma F_is_σ_algebra : is_σ_algebra F.\n\nProof. \nIt holds that (is_σ_algebra (underlying_set_of_subsets G)) (G_sets_sigma). \nIt holds that (is_σ_algebra F).\nQed."
+      "text": "Record π_system := make_pi_system\n  { underlying_set_of_subsets_pi : setOfSubsets U;\n    proof_is_pi_system : is_π_system underlying_set_of_subsets_pi}.\n    \nVariable P : π_system.\n\nCoercion underlying_set_of_subsets_pi : π_system >-> setOfSubsets.\n\nDefinition Π : setOfSubsets U := P.\n\nHint Resolve proof_is_pi_system : measure_theory.\nHint Resolve underlying_set_of_subsets_pi : measure_theory.\n\n\nLemma Π_is_π_system : is_π_system Π.\n\nProof. \nIt holds that (is_π_system (underlying_set_of_subsets_pi P)) (xx). \nIt holds that (is_π_system Π).\nQed.\nHint Resolve Π_is_π_system : measure_theory."
+    },
+    {
+      "type": "text",
+      "text": "λ-systems:"
+    },
+    {
+      "type": "code",
+      "text": "\nRecord λ_system := make_lambda_system\n  { underlying_set_of_subsets_lambda : setOfSubsets U;\n    proof_is_lambda_system : is_λ_system underlying_set_of_subsets_lambda}.\n    \nVariable L : λ_system.\n\nCoercion underlying_set_of_subsets_lambda : λ_system >-> setOfSubsets.\n\nDefinition Λ : setOfSubsets U := L.\n\nHint Resolve proof_is_lambda_system : measure_theory.\nHint Resolve underlying_set_of_subsets_lambda : measure_theory.\n\n\nLemma Λ_is_λ_system : is_λ_system L.\n\nProof. \nIt holds that (is_λ_system (underlying_set_of_subsets_lambda L)) (xx). \nIt holds that (is_λ_system Λ).\nQed.\nHint Resolve Λ_is_λ_system : measure_theory.\n"
+    },
+    {
+      "type": "text",
+      "text": "σ-algebras:"
+    },
+    {
+      "type": "code",
+      "text": "Record σ_algebra := make_sigma_algebra\n  { underlying_set_of_subsets_sigma : setOfSubsets U;\n    proof_is_sigma_algebra : is_σ_algebra underlying_set_of_subsets_sigma}.\n\n\nVariable G : σ_algebra.\n\nCoercion underlying_set_of_subsets_sigma : σ_algebra >-> setOfSubsets.\n\nDefinition F : setOfSubsets U := G.\nHint Resolve proof_is_sigma_algebra : measure_theory.\nHint Resolve underlying_set_of_subsets_sigma : measure_theory.\n\nLemma F_is_σ_algebra : is_σ_algebra F.\n\nProof. \nIt holds that (is_σ_algebra (underlying_set_of_subsets_sigma G)) (G_sets_sigma). \nIt holds that (is_σ_algebra F).\nQed."
     },
     {
       "type": "text",
