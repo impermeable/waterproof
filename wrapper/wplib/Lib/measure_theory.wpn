@@ -15,7 +15,7 @@
     },
     {
       "type": "text",
-      "text": "## Collections of sets\nDefinitions concerning π-systems, λ-systems, σ-algebras and their properties: "
+      "text": "## Collections of sets\n### Definitions \nConcerning π-systems, λ-systems, σ-algebras and their properties: "
     },
     {
       "type": "code",
@@ -23,7 +23,7 @@
     },
     {
       "type": "text",
-      "text": "Next, notations to make these definitions more useable/readable:"
+      "text": "### Notations \nTo make the definitions above more useable/readable:"
     },
     {
       "type": "code",
@@ -35,7 +35,7 @@
     },
     {
       "type": "text",
-      "text": "Definitions of σ-additivity, measure and probability measure:"
+      "text": "### Definitions \nOf σ-additivity, measure and probability measure:"
     },
     {
       "type": "code",
@@ -43,7 +43,7 @@
     },
     {
       "type": "text",
-      "text": "Notations for these:"
+      "text": "### Notations"
     },
     {
       "type": "code",
@@ -51,11 +51,19 @@
     },
     {
       "type": "text",
+      "text": "## Record types"
+    },
+    {
+      "type": "code",
+      "text": "Record σ_algebra := make_sigma_algebra\n  { underlying_set_of_subsets : setOfSubsets U;\n    proof_is_sigma_algebra : is_σ_algebra underlying_set_of_subsets}.\n\n\nVariable G : σ_algebra.\n\nCoercion underlying_set_of_subsets : σ_algebra >-> setOfSubsets.\n\nDefinition F : setOfSubsets U := G.\nHint Resolve proof_is_sigma_algebra : measure_theory.\nHint Resolve underlying_set_of_subsets : measure_theory.\n\nLemma F_is_σ_algebra : is_σ_algebra F.\n\nProof. \nIt holds that (is_σ_algebra (underlying_set_of_subsets G)) (G_sets_sigma). \nIt holds that (is_σ_algebra F).\nQed."
+    },
+    {
+      "type": "text",
       "text": "# Hints"
     },
     {
       "type": "code",
-      "text": "Hint Resolve Full_intro : measure_theory.  \nHint Resolve Intersection_intro : measure_theory. \nHint Resolve Union_introl Union_intror : measure_theory. \nHint Resolve Disjoint_intro : measure_theory. "
+      "text": "Hint Resolve Full_intro : measure_theory.  \nHint Resolve Intersection_intro : measure_theory. \nHint Resolve Union_introl Union_intror : measure_theory. \nHint Resolve Disjoint_intro : measure_theory. \nHint Resolve F_is_σ_algebra : measure_theory."
     }
   ]
 }
