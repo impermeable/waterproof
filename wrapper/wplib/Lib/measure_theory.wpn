@@ -31,6 +31,14 @@
     },
     {
       "type": "text",
+      "text": "### σ-algebras as record types"
+    },
+    {
+      "type": "code",
+      "text": "Record σ_algebra := make_sigma_algebra\n  { underlying_set_of_subsets : setOfSubsets U;\n    proof_is_sigma_algebra : is_σ_algebra underlying_set_of_subsets}.\n\n\nVariable G : σ_algebra.\n\nCoercion underlying_set_of_subsets : σ_algebra >-> setOfSubsets.\n\nDefinition F : setOfSubsets U := G.\nHint Resolve proof_is_sigma_algebra : measure_theory.\nHint Resolve underlying_set_of_subsets : measure_theory.\n\nLemma F_is_σ_algebra : is_σ_algebra F.\n\nProof. \nIt holds that (is_σ_algebra (underlying_set_of_subsets G)) (G_sets_sigma). \nIt holds that (is_σ_algebra F).\nQed."
+    },
+    {
+      "type": "text",
       "text": "## Measures"
     },
     {
@@ -39,7 +47,7 @@
     },
     {
       "type": "code",
-      "text": "Definition σ_additive_on (F : setOfSubsets U) (μ : (subset U ⇨ ℝ)) : Prop := \n  ∀C : (ℕ → (subset U)), (∀n : ℕ, C n ∈ F) \n    ⇒ (∀ m n : ℕ, m ≠ n ⇒ Disjoint _ (C m) (C n)) \n      ⇒ infinite_sum (fun (n:ℕ) ↦ (μ (C n))) (μ (Countable_union C)).\n      \nDefinition is_measure_on (F : setOfSubsets U) (μ : (subset U → ℝ)) : Prop := \n  is_σ_algebra F ∧ μ ∅ = 0 ∧ σ_additive_on F μ.\n  \nDefinition is_probability_measure_on (F : setOfSubsets U) (μ : (subset U → ℝ)) \n  : Prop := \n    is_measure_on F μ ∧ μ Ω = 1."
+      "text": "Definition σ_additive_on F (μ : (subset U ⇨ ℝ)) : Prop := \n  ∀C : (ℕ → (subset U)), (∀n : ℕ, C n ∈ F) \n    ⇒ (∀ m n : ℕ, m ≠ n ⇒ Disjoint _ (C m) (C n)) \n      ⇒ infinite_sum (fun (n:ℕ) ↦ (μ (C n))) (μ (Countable_union C)).\n      \nDefinition is_measure_on F (μ : (subset U → ℝ)) : Prop := \n  is_σ_algebra F ∧ μ ∅ = 0 ∧ σ_additive_on F μ.\n  \nDefinition is_probability_measure_on F (μ : (subset U → ℝ)) \n  : Prop := \n    is_measure_on F μ ∧ μ Ω = 1."
     },
     {
       "type": "text",
@@ -51,11 +59,11 @@
     },
     {
       "type": "text",
-      "text": "## Record types"
+      "text": "### Measures as record types"
     },
     {
       "type": "code",
-      "text": "Record σ_algebra := make_sigma_algebra\n  { underlying_set_of_subsets : setOfSubsets U;\n    proof_is_sigma_algebra : is_σ_algebra underlying_set_of_subsets}.\n\n\nVariable G : σ_algebra.\n\nCoercion underlying_set_of_subsets : σ_algebra >-> setOfSubsets.\n\nDefinition F : setOfSubsets U := G.\nHint Resolve proof_is_sigma_algebra : measure_theory.\nHint Resolve underlying_set_of_subsets : measure_theory.\n\nLemma F_is_σ_algebra : is_σ_algebra F.\n\nProof. \nIt holds that (is_σ_algebra (underlying_set_of_subsets G)) (G_sets_sigma). \nIt holds that (is_σ_algebra F).\nQed."
+      "text": "Definition set_function {U} := (subset U ⇨ ℝ).\n\nRecord measure_on {F} := make_measure \n  { underlying_function : set_function; \n    proof_is_measure : is_measure_on F underlying_function}.\n    \nVariable ν : @measure_on F.\n\nCoercion underlying_function : measure_on >-> set_function.\n\nDefinition μ : set_function := ν.\n\nHint Resolve underlying_function : measure_theory.\nHint Resolve proof_is_measure : measure_theory.\n\n\nLemma μ_is_measure_on_F : is_measure_on F μ.\n\nProof. \nIt holds that (is_measure_on F (underlying_function ν)) (xx). \nIt holds that (is_measure_on F μ).\nQed.\nHint Resolve μ_is_measure_on_F : measure_theory."
     },
     {
       "type": "text",
