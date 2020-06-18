@@ -319,6 +319,14 @@
     },
     {
       "type": "text",
+      "text": "## A tool for set equalities and inclusions"
+    },
+    {
+      "type": "code",
+      "text": "Ltac destruct_intersec :=\n  match goal with \n    | [H : In _ (Intersection _ _ _) _ |- _] => destruct H\n  end.\n\nLtac trivial_set_inclusion := \n  try intro x;\n  try intro H;\n  try destruct_intersec;\n  try contradiction;\n  try wp_power.\n\nLtac trivial_set_equality := \n  try intros A;\n  try intros B;\n  try apply Extensionality_Ensembles;\n  try unfold Same_set;\n  try unfold Included;\n  split;\n  trivial_set_inclusion;\n  trivial_set_inclusion.\n\n\nTactic Notation \"This\" \"equality\" \"is\" \"trivial\" := \n   trivial_set_equality."
+    },
+    {
+      "type": "text",
       "text": "\n\n## Hints"
     },
     {
