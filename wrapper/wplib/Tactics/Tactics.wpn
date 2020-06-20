@@ -331,7 +331,7 @@
     },
     {
       "type": "code",
-      "text": "Hint Resolve Rmult_gt_0_compat : real.\nHint Resolve Rmult_lt_0_compat : real.\nHint Resolve R_dist_eq : real."
+      "text": "Hint Resolve Rmult_gt_0_compat : real.\nHint Resolve Rmult_lt_0_compat : real.\nHint Resolve R_dist_eq : real.\nHint Resolve Full_intro : measure_theory.  \nHint Resolve Intersection_intro : measure_theory. \nHint Resolve Union_introl Union_intror : measure_theory. \nHint Resolve Disjoint_intro : measure_theory. "
     },
     {
       "type": "text",
