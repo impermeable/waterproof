@@ -335,7 +335,7 @@
     },
     {
       "type": "code",
-      "text": "Hint Resolve Rmult_gt_0_compat : real.\nHint Resolve Rmult_lt_0_compat : real.\nHint Resolve R_dist_eq : real.\nHint Constructors Union Intersection Disjoint Full_set : sets. \n(*Adds all constructors of inductive definitions as Hint Resolve*)\n\nHint Extern 5 (_ = _) => trivial_set_equality : sets. \n(*Adds tactic to auto and eauto. Is 5 the right cost?? *)"
+      "text": "Hint Resolve Rmult_gt_0_compat : real.\nHint Resolve Rmult_lt_0_compat : real.\nHint Resolve R_dist_eq : real.\nHint Constructors Union Intersection Disjoint Full_set : sets. \n\n(*Would like to add the following hint, but this undesirably interferes with workings of e.g. wp_power. Also, what weight to use?\nHint Extern 5 (_ = _) => try trivial_set_equality : sets. \n*)"
     },
     {
       "type": "text",
