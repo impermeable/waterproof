@@ -3,11 +3,11 @@
   "Tactics/TacticsContra",
   "Notations/Notations",
   "Notations/SetNotations",
-  "Lib/measure_theory",
   "Lib/sup_and_inf",
   "Lib/sequences",
   "Lib/series",
   "Lib/sets",
+  "Lib/measure_theory",
   "Lib/subsequences",
   "Lib/sequential_accumulation_points"
 ]
