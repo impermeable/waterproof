@@ -7,7 +7,7 @@
     },
     {
       "type": "code",
-      "text": "Require Import ClassicalFacts. \nRequire Import Coq.Arith.Wf_nat. \nRequire Import Logic. \nRequire Import Omega. \nRequire Import Reals.\nRequire Import Sets.Classical_sets.\nRequire Import Sets.Ensembles.\nRequire Import Sets.Powerset.\nRequire Import wplib.Lib.measure_theory.\nRequire Import wplib.Lib.sets.\nRequire Import wplib.Notations.Notations.\nRequire Import wplib.Notations.SetNotations.\nRequire Import wplib.Tactics.Tactics.\nRequire Import wplib.Tactics.TacticsContra.\n\nOpen Scope nat.\n\nNotation \"'U'\" := SetNotations.U.\n(*We may not want this, but otherwise notations \n  such as Ω and ∅ do not work. How to fix? *)\n\nVariable F : σ_algebra.\nVariable μ : (subset U → ℝ)."
+      "text": "Require Import ClassicalFacts. \nRequire Import Coq.Arith.Wf_nat. \nRequire Import Logic. \nRequire Import Omega. \nRequire Import Reals.\nRequire Import Sets.Classical_sets.\nRequire Import Sets.Ensembles.\nRequire Import Sets.Powerset.\nRequire Import wplib.Lib.measure_theory.\nRequire Import wplib.Lib.sets.\nRequire Import wplib.Notations.Notations.\nRequire Import wplib.Notations.SetNotations.\nRequire Import wplib.Tactics.Tactics.\nRequire Import wplib.Tactics.TacticsContra.\n\nOpen Scope nat.\n\n\nVariable U : Type.\nVariable F : @σ_algebra U.\nVariable μ : (subset U → ℝ)."
     },
     {
       "type": "text",
@@ -15,7 +15,7 @@
     },
     {
       "type": "code",
-      "text": "\nLemma empty_in_σ : \n  ∅ ∈ F. \n\nProof.   \nWrite goal using (∅ = (Ω \\ Ω)) as ((Ω \\ Ω) ∈ F). \nIt holds that (is_σ_algebra F) (F_is_sig).\nIt follows that ((Ω \\ Ω) ∈ F).\nQed.  \n\n\nLemma unions_in_σ : \n  ∀ A B : subset U, A ∈ F ∧ B ∈ F\n    ⇒ A ∪ B ∈ F.\n\nProof. \nTake A B : (subset U). \nDefine D := (aux_seq A B).\nAssume A_and_B_in_F. \n\nWe claim that (∀ n : ℕ, D n ∈ F) (all_aux_in_F). \nTake n : ℕ. \nWe prove by induction on n. \nIt holds that (D 0 ∈ F). \nWe prove by induction on n. \nIt holds that (D 1 ∈ F). \nWrite goal using (D (S (S n)) = ∅) \n  as (∅ ∈ F). \nBy empty_in_σ it holds that \n  (∅ ∈ F) (empty_in_F).\nApply empty_in_F.  \n\nBy CU_aux_is_union it holds that \n  (A ∪ B = countable_union D) (union_to_CU). \nWrite goal using (A ∪ B = countable_union (aux_seq A B))\n  as (countable_union D ∈ F).\nIt holds that (F is a σ-algebra) (F_is_σ_algebra).\nBy F_is_σ_algebra it holds that (countable_union D ∈ F)\n  which concludes the proof. \nQed."
+      "text": "\nLemma empty_in_σ : \n  ∅ ∈ F. \n\nProof.   \nWrite goal using (@empty U = (Ω \\ Ω)) as ((Ω \\ Ω) ∈ F). \nIt holds that (is_σ_algebra F) (F_is_sig).\nIt follows that ((Ω \\ Ω) ∈ F).\nQed.  \n\n\nLemma unions_in_σ : \n  ∀ A B : subset U, A ∈ F ∧ B ∈ F\n    ⇒ A ∪ B ∈ F.\n\nProof. \nTake A B : (subset U). \nDefine D := (aux_seq A B).\nAssume A_and_B_in_F. \n\nWe claim that (∀ n : ℕ, D n ∈ F) (all_aux_in_F). \nTake n : ℕ. \nWe prove by induction on n. \nIt holds that (D 0 ∈ F). \nWe prove by induction on n. \nIt holds that (D 1 ∈ F). \nWrite goal using (D (S (S n)) = ∅) \n  as (∅ ∈ F). \nBy empty_in_σ it holds that \n  (∅ ∈ F) (empty_in_F).\nApply empty_in_F.  \n\nBy CU_aux_is_union it holds that \n  (A ∪ B = countable_union D) (union_to_CU). \nWrite goal using (A ∪ B = countable_union (aux_seq A B))\n  as (countable_union D ∈ F).\nIt holds that (F is a σ-algebra) (F_is_σ_algebra).\nBy F_is_σ_algebra it holds that (countable_union D ∈ F)\n  which concludes the proof. \nQed."
     },
     {
       "type": "text",
