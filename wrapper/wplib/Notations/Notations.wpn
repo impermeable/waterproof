@@ -43,6 +43,18 @@
     },
     {
       "type": "text",
+      "text": "## Functions"
+    },
+    {
+      "type": "text",
+      "text": "For the composition of a sequence and a function (e.g. for the sequence of measures of a sequence of sets):"
+    },
+    {
+      "type": "code",
+      "text": "Notation \"μ ◦ C\" := \n  (fun (n:ℕ) ↦ (μ (C n))) (at level 45)."
+    },
+    {
+      "type": "text",
       "text": "## Sets"
     },
     {
