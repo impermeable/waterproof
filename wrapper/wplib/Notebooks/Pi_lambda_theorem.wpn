@@ -19,19 +19,35 @@
     },
     {
       "type": "text",
-      "text": "Now, we continue our way to the proof of `π_and_λ_is_σ`  by proving some statements on collections of sets that are both a π-system and a λ-system. First of all, we show that for sets $A$ and $B$ in such a collection, $A \\setminus B$ is also included. We do this using another, more set theoretical lemma that we prove first, which proves that $A \\setminus B = (Ω \\setminus B) ∩ A$. "
+      "text": "Now, we continue our way to the proof of `π_and_λ_is_σ`  by proving some statements on collections of sets that are both a π-system and a λ-system.  We first prove that $A \\setminus B = (Ω \\setminus B) ∩ A$, which we will need in the lemma after that. "
     },
     {
       "type": "code",
-      "text": "Section π_and_λ_implies_σ_sets.\nVariable A B : subset U.\nVariable F : set_of_subsets U.\n\nLemma complement_as_intersection : \n  A \\ B = (Ω \\ B) ∩ A. \n\nProof. \nWe prove equality by proving two inclusions. \n\nTake x : U. \nAssume x_in_A_without_B. \nIt holds that (x ∈ ((Ω \\ B) ∩ A)). \n\nTake x : U. \nAssume x_in_rhs. \nBy x_in_rhs it holds that \n  (x ∈ (Ω \\ B) ∧ (x ∈ A)) (x_in_A_and_comp_B). \nIt holds that (x ∈ (A \\ B)). \nQed. \n\n\nLemma complements_in_π_and_λ : \n  F is a π-system ⇒ F is a λ-system\n    ⇒ A ∈ F ∧ B ∈ F\n      ⇒ A \\ B ∈ F. \n\nProof. \nAssume F_is_π_system. \nAssume F_is_λ_system. \nAssume A_and_B_in_F. \nBy F_is_λ_system it holds that \n  (Ω \\ B ∈ F) (comp_B_in_F). \nBy F_is_π_system it holds that \n  (A ∩ (Ω \\ B) ∈ F) (set_in_F). \nBy complement_as_intersection it holds that \n  (A \\ B = (Ω \\ B) ∩ A) (set_is_complement). \nWrite goal using (A \\ B = ((Ω \\ B) ∩ A)) \n  as (((Ω \\ B) ∩ A) ∈ F). \nBy F_is_π_system it holds that \n  (((Ω \\ B) ∩ A) ∈ F) which concludes the proof. \nQed. "
+      "text": "Section π_and_λ_implies_σ_sets.\nVariable A B : subset U.\nVariable F : set_of_subsets U.\n\nLemma complement_as_intersection : \n  A \\ B = (Ω \\ B) ∩ A. \n\nProof. \nWe prove equality by proving two inclusions. \n\nTake x : U. \nAssume x_in_A_without_B. \nIt holds that (x ∈ ((Ω \\ B) ∩ A)). \n\nTake x : U. \nAssume x_in_rhs. \nBy x_in_rhs it holds that \n  (x ∈ (Ω \\ B) ∧ (x ∈ A)) (x_in_A_and_comp_B). \nIt holds that (x ∈ (A \\ B)). \nQed. \n"
     },
     {
       "type": "text",
-      "text": "Next, we have a more set-theoretical lemma. This is then used in `unions_in_π_and_λ` to show that the union of two sets is again included in the our collection of sets. "
+      "text": "Now, we show that for sets $A$ and $B$ in collection that is both a π-system and a λ-system, $A \\setminus B$ is also included."
     },
     {
       "type": "code",
-      "text": "Lemma union_as_complements : \n  (A ∪ B) = (Ω \\ ((Ω \\ A) ∩ (Ω \\ B))). \n\nProof. \nWe prove equality by proving two inclusions. \nTake x : U; Assume x_in_union. \nIt holds that \n  (x ∈ A ∨ x ∈ B) (x_in_A_or_B). \nIt holds that \n  (¬((x ∉ A) ∧ (x ∉ B))) (not_not_A_and_not_B). \nBy not_not_A_and_not_B it holds that \n  (¬(x ∈ (Ω \\ A) ∧ x ∈ (Ω \\ B))) (not_compA_and_compB). \nBy not_compA_and_compB it holds that \n  (x ∉ ((Ω \\ A) ∩ (Ω \\ B))) (not_compA_int_compB). \nIt holds that (x ∈ (Ω \\ ((Ω \\ A) ∩ (Ω \\ B)))). \n\nTake x : U; Assume x_in_comp. \nWe argue by contradiction. \nIt holds that (¬ (x ∈ A ∨ x ∈ B)) (not_A_or_B).\n\nIt holds that \n  (x ∉ ((Ω \\ A) ∩ (Ω \\ B))) (not_compA_int_compB). \nBy not_compA_int_compB it holds that \n  (¬(x ∈ (Ω \\ A) ∧ x ∈ (Ω \\ B))) (not_compA_and_compB). \nBy not_compA_and_compB it holds that \n  (¬((x ∉ A) ∧ (x ∉ B))) (not_not_A_and_not_B). \nBy not_not_A_and_not_B it holds that \n  ((x ∈ A ∨ x ∈ B)) (A_or_B). \nContradiction. \nQed. \n\n\nLemma unions_in_π_and_λ : \n  F is a π-system ⇒ F is a λ-system\n    ⇒ A ∈ F ⇒ B ∈ F\n      ⇒ A ∪ B ∈ F.\n\nProof. \nAssume F_is_π_system; Assume F_is_λ_system. \nAssume A_in_F; Assume B_in_F.\n\nBy union_as_complements it holds that \n  ((A ∪ B) = (Ω \\ ((Ω \\ A) ∩ (Ω \\ B)))) (union_is_comp). \nWrite goal using \n  ((A ∪ B) = (Ω \\ ((Ω \\ A) ∩ (Ω \\ B)))) \n    as ((Ω \\ ((Ω \\ A) ∩ (Ω \\ B))) ∈ F). \nBy F_is_λ_system it holds that \n  ((Ω \\ A) ∈ F) (comp_A_in_F). \nBy F_is_λ_system it holds that \n  ((Ω \\ B) ∈ F) (comp_B_in_F). \nBy F_is_π_system it holds that \n  ((Ω \\ A) ∩ (Ω \\ B) ∈ F) (int_in_F). \nBy F_is_λ_system it holds that \n  ((Ω \\ ((Ω \\ A) ∩ (Ω \\ B))) ∈ F)\n    which concludes the proof. \nQed."
+      "text": "\n\nLemma complements_in_π_and_λ : \n  F is a π-system ⇒ F is a λ-system\n    ⇒ A ∈ F ∧ B ∈ F\n      ⇒ A \\ B ∈ F. \n\nProof. \nAssume F_is_π_system. \nAssume F_is_λ_system. \nAssume A_and_B_in_F. \nBy F_is_λ_system it holds that \n  (Ω \\ B ∈ F) (comp_B_in_F). \nBy F_is_π_system it holds that \n  (A ∩ (Ω \\ B) ∈ F) (set_in_F). \nBy complement_as_intersection it holds that \n  (A \\ B = (Ω \\ B) ∩ A) (set_is_complement). \nWrite goal using (A \\ B = ((Ω \\ B) ∩ A)) \n  as (((Ω \\ B) ∩ A) ∈ F). \nBy F_is_π_system it holds that \n  (((Ω \\ B) ∩ A) ∈ F) which concludes the proof. \nQed. "
+    },
+    {
+      "type": "text",
+      "text": "Next, we again prove a more set-theoretical lemma that we will need afterwards."
+    },
+    {
+      "type": "code",
+      "text": "Lemma union_as_complements : \n  (A ∪ B) = (Ω \\ ((Ω \\ A) ∩ (Ω \\ B))). \n\nProof. \nWe prove equality by proving two inclusions. \nTake x : U; Assume x_in_union. \nIt holds that \n  (x ∈ A ∨ x ∈ B) (x_in_A_or_B). \nIt holds that \n  (¬((x ∉ A) ∧ (x ∉ B))) (not_not_A_and_not_B). \nBy not_not_A_and_not_B it holds that \n  (¬(x ∈ (Ω \\ A) ∧ x ∈ (Ω \\ B))) (not_compA_and_compB). \nBy not_compA_and_compB it holds that \n  (x ∉ ((Ω \\ A) ∩ (Ω \\ B))) (not_compA_int_compB). \nIt holds that (x ∈ (Ω \\ ((Ω \\ A) ∩ (Ω \\ B)))). \n\nTake x : U; Assume x_in_comp. \nWe argue by contradiction. \nIt holds that (¬ (x ∈ A ∨ x ∈ B)) (not_A_or_B).\n\nIt holds that \n  (x ∉ ((Ω \\ A) ∩ (Ω \\ B))) (not_compA_int_compB). \nBy not_compA_int_compB it holds that \n  (¬(x ∈ (Ω \\ A) ∧ x ∈ (Ω \\ B))) (not_compA_and_compB). \nBy not_compA_and_compB it holds that \n  (¬((x ∉ A) ∧ (x ∉ B))) (not_not_A_and_not_B). \nBy not_not_A_and_not_B it holds that \n  ((x ∈ A ∨ x ∈ B)) (A_or_B). \nContradiction. \nQed. \n"
+    },
+    {
+      "type": "text",
+      "text": "This is then used in to show that the union of two sets is again included in the our collection of sets. "
+    },
+    {
+      "type": "code",
+      "text": "\n\nLemma unions_in_π_and_λ : \n  F is a π-system ⇒ F is a λ-system\n    ⇒ A ∈ F ⇒ B ∈ F\n      ⇒ A ∪ B ∈ F.\n\nProof. \nAssume F_is_π_system; Assume F_is_λ_system. \nAssume A_in_F; Assume B_in_F.\n\nBy union_as_complements it holds that \n  ((A ∪ B) = (Ω \\ ((Ω \\ A) ∩ (Ω \\ B)))) (union_is_comp). \nWrite goal using \n  ((A ∪ B) = (Ω \\ ((Ω \\ A) ∩ (Ω \\ B)))) \n    as ((Ω \\ ((Ω \\ A) ∩ (Ω \\ B))) ∈ F). \nBy F_is_λ_system it holds that \n  ((Ω \\ A) ∈ F) (comp_A_in_F). \nBy F_is_λ_system it holds that \n  ((Ω \\ B) ∈ F) (comp_B_in_F). \nBy F_is_π_system it holds that \n  ((Ω \\ A) ∩ (Ω \\ B) ∈ F) (int_in_F). \nBy F_is_λ_system it holds that \n  ((Ω \\ ((Ω \\ A) ∩ (Ω \\ B))) ∈ F)\n    which concludes the proof. \nQed."
     },
     {
       "type": "text",
@@ -99,11 +115,19 @@
     },
     {
       "type": "text",
-      "text": "To prove that $H$ is a λ-system, amongst others, we need to show that it is closed under taking  disjoint countable unions. For this, we need to show that for some sequence of sets $C_n$, the countable union of $(C_n ∩ B)_{n=0}^{∞}$ is in $λ(Π)$. In order to do this, we first need to define this sequence of intersections, and show that it is indeed disjoint, provided that all $C_n$ are disjoint: "
+      "text": "To prove that $H$ is a λ-system, amongst others, we need to show that it is closed under taking  disjoint countable unions. For this, we need to show that for some sequence of sets $C_n$, the countable union of $(C_n ∩ B)_{n=0}^{∞}$ is in $λ(Π)$. In order to do this, we first need to define this sequence of intersections: "
     },
     {
       "type": "code",
-      "text": "Definition seq_intersection (C : (ℕ ⇨ subset U)) (B : subset U)\n  : ℕ ⇨ subset U := \n    fun (n : ℕ) ↦ ((C n) ∩ B).\n\nSection sequence_intersection_properties.\nVariable C : (ℕ ⇨ subset U).\nVariable B : subset U. \n\nLemma C_int_B_disjoint : \n  (C is a disjoint sequence of sets)\n      ⇒ (seq_intersection C B) is a disjoint sequence of sets . \n\nProof. \nAssume all_Cn_disjoint. \nWe need to show that (∀ m n : ℕ, m ≠ n \n  ⇒ (seq_intersection C B m) \n    and (seq_intersection C B n) are disjoint).\nTake m n : ℕ. \nAssume m_neq_n. \nBy all_Cn_disjoint it holds that \n  (Disjoint U (C m) (C n)) (Cm_Cn_disj).\nWe argue by contradiction. \nBy H0 it holds that \n  (∃ x : U, x ∈ ((C m ∩ B) ∩ (C n ∩ B))) (exists_x_in_CmB_CnB).\nChoose x such that x_in_CmB_CnB \n  according to exists_x_in_CmB_CnB.\nBy x_in_CmB_CnB it holds that \n  (x ∈ (C m ∩ B) ∧ x ∈ (C n ∩ B)) (x_in_CmB_and_CnB). \nBecause x_in_CmB_and_CnB \n  both x_in_CmB and x_in_CnB. \nBy x_in_CmB it holds that \n  (x ∈ C m ∧ x ∈ B) (x_in_Cm_and_B).\nIt holds that (x ∈ C m) (x_in_Cm). \nBy x_in_CnB it holds that \n  (x ∈ C n ∧ x ∈ B) (x_in_Cn_and_B).\nIt holds that (x ∈ C n) (x_in_Cn).\nIt holds that \n  (x ∈ C n ∧ x ∈ C m) (x_in_Cm_and_Cn). \nBy x_in_Cm_and_Cn it holds that \n  (x ∈ (C m ∩ C n)) (x_in_Cm_Cn). \ndestruct Cm_Cn_disj.\nBy H1 it holds that (x ∉ (C m ∩ C n)) (x_not_in_Cm_Cn). \nContradiction. \nQed. "
+      "text": "Definition seq_intersection (C : (ℕ ⇨ subset U)) (B : subset U)\n  : ℕ ⇨ subset U := \n    fun (n : ℕ) ↦ ((C n) ∩ B).\n"
+    },
+    {
+      "type": "text",
+      "text": "Also, we need to show that it is indeed disjoint, provided that all $C_n$ are disjoint: "
+    },
+    {
+      "type": "code",
+      "text": "\nSection sequence_intersection_properties.\nVariable C : (ℕ ⇨ subset U).\nVariable B : subset U. \n\nLemma C_int_B_disjoint : \n  (C is a disjoint sequence of sets)\n      ⇒ (seq_intersection C B) is a disjoint sequence of sets . \n\nProof. \nAssume all_Cn_disjoint. \nWe need to show that (∀ m n : ℕ, m ≠ n \n  ⇒ (seq_intersection C B m) \n    and (seq_intersection C B n) are disjoint).\nTake m n : ℕ. \nAssume m_neq_n. \nBy all_Cn_disjoint it holds that \n  (Disjoint U (C m) (C n)) (Cm_Cn_disj).\nWe argue by contradiction. \nBy H0 it holds that \n  (∃ x : U, x ∈ ((C m ∩ B) ∩ (C n ∩ B))) (exists_x_in_CmB_CnB).\nChoose x such that x_in_CmB_CnB \n  according to exists_x_in_CmB_CnB.\nBy x_in_CmB_CnB it holds that \n  (x ∈ (C m ∩ B) ∧ x ∈ (C n ∩ B)) (x_in_CmB_and_CnB). \nBecause x_in_CmB_and_CnB \n  both x_in_CmB and x_in_CnB. \nBy x_in_CmB it holds that \n  (x ∈ C m ∧ x ∈ B) (x_in_Cm_and_B).\nIt holds that (x ∈ C m) (x_in_Cm). \nBy x_in_CnB it holds that \n  (x ∈ C n ∧ x ∈ B) (x_in_Cn_and_B).\nIt holds that (x ∈ C n) (x_in_Cn).\nIt holds that \n  (x ∈ C n ∧ x ∈ C m) (x_in_Cm_and_Cn). \nBy x_in_Cm_and_Cn it holds that \n  (x ∈ (C m ∩ C n)) (x_in_Cm_Cn). \ndestruct Cm_Cn_disj.\nBy H1 it holds that (x ∉ (C m ∩ C n)) (x_not_in_Cm_Cn). \nContradiction. \nQed. "
     },
     {
       "type": "text",
@@ -123,11 +147,19 @@
     },
     {
       "type": "text",
-      "text": "### Intersections in λ(Π) \nMost of the hard work for showing that λ(Π) is a σ-algebra is now done. Now we will show that under certain conditions on $A$ and $B$, we have that $A ∩ B ∈ λ(Π)$. This is a step towards $A ∩ B$ being in λ(Π) for all $A, B ∈ λ(Π)$, which is exactly what we wanted to prove (this is the condition for being a π-system). \nIn both cases, $H$ will play an important role in the proof, which somewhat justifies the amount of time and effort we have spent on it. \n\nFirst, we consider the situation where $A∈λ(Π)$ and $B∈Π$. One small and almost trivial lemma is needed first, namely that $Π ⊂ H$. The proof itself for this situation is also concise, after all the preliminary work we have done. "
+      "text": "### Intersections in λ(Π) \nMost of the hard work for showing that λ(Π) is a σ-algebra is now done. Now we will show that under certain conditions on $A$ and $B$, we have that $A ∩ B ∈ λ(Π)$. This is a step towards $A ∩ B$ being in λ(Π) for all $A, B ∈ λ(Π)$, which is exactly what we wanted to prove (this is the condition for being a π-system). \nIn both cases, $H$ will play an important role in the proof, which somewhat justifies the amount of time and effort we have spent on it. \n\nFirst, we consider the situation where $A∈λ(Π)$ and $B∈Π$. One small and almost trivial lemma is needed first, namely that $Π ⊂ H$. "
     },
     {
       "type": "code",
-      "text": "Lemma Π_subset_H : \n  ∀ B : subset U, B ∈ Π\n    ⇒ Π ⊂ H B Π.\n\nProof. \nTake B : (subset U); Assume B_in_Π. \nWe need to show that (∀ C : subset U,\n  C ∈ Π ⇒ C ∈ H B Π).\nTake C : (subset U); Assume C_in_Π.\n\nIt holds that (Π is a π-system) (Π_is_π_system).\nBy Π_is_π_system it holds that \n  (C ∩ B ∈ Π) (CB_in_Π).\nIt follows that (C ∈ H B Π). \nQed. \n\n\nLemma int_in_λΠ : \n  ∀ A : subset U, A ∈ (λ(Π))\n    ⇒ ∀ B : subset U, B ∈ Π\n      ⇒ (A ∩ B) ∈ (λ(Π)).\n\nProof. \nTake A : (subset U); Assume A_in_λΠ. \nTake B : (subset U); Assume B_in_Π. \nDefine H := (H B Π). \nIt holds that (B ∈ λ(Π)) (B_in_λΠ). \nBy H_is_λ_system it holds that \n  (H is a λ-system) (H_is_λ_system).\nBy Π_subset_H it holds that \n  (Π ⊂ H) (Π_subs_H).\nIt holds that (λ(Π) ⊂ H) (λΠ_subs_H).\nIt holds that (A ∈ H) (A_in_H). \nIt follows that ((A ∩ B) ∈ λ(Π)). \nQed. "
+      "text": "Lemma Π_subset_H : \n  ∀ B : subset U, B ∈ Π\n    ⇒ Π ⊂ H B Π.\n\nProof. \nTake B : (subset U); Assume B_in_Π. \nWe need to show that (∀ C : subset U,\n  C ∈ Π ⇒ C ∈ H B Π).\nTake C : (subset U); Assume C_in_Π.\n\nIt holds that (Π is a π-system) (Π_is_π_system).\nBy Π_is_π_system it holds that \n  (C ∩ B ∈ Π) (CB_in_Π).\nIt follows that (C ∈ H B Π). \nQed. \n"
+    },
+    {
+      "type": "text",
+      "text": "The proof itself for intersections being in $λ(Π)$ in this situation is also concise, after all the preliminary work we have done:"
+    },
+    {
+      "type": "code",
+      "text": "\n\nLemma int_in_λΠ : \n  ∀ A : subset U, A ∈ (λ(Π))\n    ⇒ ∀ B : subset U, B ∈ Π\n      ⇒ (A ∩ B) ∈ (λ(Π)).\n\nProof. \nTake A : (subset U); Assume A_in_λΠ. \nTake B : (subset U); Assume B_in_Π. \nDefine H := (H B Π). \nIt holds that (B ∈ λ(Π)) (B_in_λΠ). \nBy H_is_λ_system it holds that \n  (H is a λ-system) (H_is_λ_system).\nBy Π_subset_H it holds that \n  (Π ⊂ H) (Π_subs_H).\nIt holds that (λ(Π) ⊂ H) (λΠ_subs_H).\nIt holds that (A ∈ H) (A_in_H). \nIt follows that ((A ∩ B) ∈ λ(Π)). \nQed. "
     },
     {
       "type": "text",

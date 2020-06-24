@@ -11,11 +11,19 @@
     },
     {
       "type": "text",
-      "text": "## Finite unions in σ-algebras\n\nAt several points of the upcoming proofs, we use finite unions. The following lemmas are similar to ones in the π-λ theorem proof, but are now stated for a σ-algebra, $F$. We want to prove that the finite union of elements of $F$ is again an element of $F$. For this, we first need two lemmas:"
+      "text": "## Finite unions in σ-algebras\n\nAt several points of the upcoming proofs, we use finite unions. The following lemmas are similar to ones in the π-λ theorem proof, but are now stated for a σ-algebra, $F$. We want to prove that the finite union of elements of $F$ is again an element of $F$. For this, we first need two lemmas. First, that every σ-algebra contains the empty set:"
     },
     {
       "type": "code",
-      "text": "\nLemma empty_in_σ : \n  ∅ ∈ F. \n\nProof.   \nWrite goal using (@empty U = (Ω \\ Ω)) as ((Ω \\ Ω) ∈ F). \nIt holds that (is_σ_algebra F) (F_is_sig).\nIt follows that ((Ω \\ Ω) ∈ F).\nQed.  \n\n\nLemma unions_in_σ : \n  ∀ A B : subset U, A ∈ F ∧ B ∈ F\n    ⇒ A ∪ B ∈ F.\n\nProof. \nTake A B : (subset U). \nDefine D := (aux_seq A B).\nAssume A_and_B_in_F. \n\nWe claim that (∀ n : ℕ, D n ∈ F) (all_aux_in_F). \nTake n : ℕ. \nWe prove by induction on n. \nIt holds that (D 0 ∈ F). \nWe prove by induction on n. \nIt holds that (D 1 ∈ F). \nWrite goal using (D (S (S n)) = ∅) \n  as (∅ ∈ F). \nBy empty_in_σ it holds that \n  (∅ ∈ F) (empty_in_F).\nApply empty_in_F.  \n\nBy CU_aux_is_union it holds that \n  (A ∪ B = countable_union D) (union_to_CU). \nWrite goal using (A ∪ B = countable_union (aux_seq A B))\n  as (countable_union D ∈ F).\nIt holds that (F is a σ-algebra) (F_is_σ_algebra).\nBy F_is_σ_algebra it holds that (countable_union D ∈ F)\n  which concludes the proof. \nQed."
+      "text": "\nLemma empty_in_σ : \n  ∅ ∈ F. \n\nProof.   \nWrite goal using (@empty U = (Ω \\ Ω)) as ((Ω \\ Ω) ∈ F). \nIt holds that (is_σ_algebra F) (F_is_sig).\nIt follows that ((Ω \\ Ω) ∈ F).\nQed.  \n\n"
+    },
+    {
+      "type": "text",
+      "text": "And second, using the above, that σ-algebras are closed under the formation of finite unions:"
+    },
+    {
+      "type": "code",
+      "text": "\nLemma unions_in_σ : \n  ∀ A B : subset U, A ∈ F ∧ B ∈ F\n    ⇒ A ∪ B ∈ F.\n\nProof. \nTake A B : (subset U). \nDefine D := (aux_seq A B).\nAssume A_and_B_in_F. \n\nWe claim that (∀ n : ℕ, D n ∈ F) (all_aux_in_F). \nTake n : ℕ. \nWe prove by induction on n. \nIt holds that (D 0 ∈ F). \nWe prove by induction on n. \nIt holds that (D 1 ∈ F). \nWrite goal using (D (S (S n)) = ∅) \n  as (∅ ∈ F). \nBy empty_in_σ it holds that \n  (∅ ∈ F) (empty_in_F).\nApply empty_in_F.  \n\nBy CU_aux_is_union it holds that \n  (A ∪ B = countable_union D) (union_to_CU). \nWrite goal using (A ∪ B = countable_union (aux_seq A B))\n  as (countable_union D ∈ F).\nIt holds that (F is a σ-algebra) (F_is_σ_algebra).\nBy F_is_σ_algebra it holds that (countable_union D ∈ F)\n  which concludes the proof. \nQed."
     },
     {
       "type": "text",
@@ -27,19 +35,35 @@
     },
     {
       "type": "text",
-      "text": "## The disjoint sequence\nAs mentioned before, the disjoint sequence `disjoint_seq` as defined in the `sets` library will play an important role in this proof. But of course we can only use it properly if, given a sequence of non-disjoint sets in $F$, all of the elements of the sequence it represents are in $F$ as well. This is what we prove in the next five lemmas. After that, we show what the union of the first $n$ elements of the disjoint sequence turns out to be. \n\n### σ-algebras and the disjoint sequence\nWe now prove the five lemmas. The first two show that $F$ is closed under taking intersections: the first one rewrites the intersection of two sets to a combination of a union and complements of these sets, the second uses properties of a σ-algebra to show that for $A$ and $B$ in $F$, the result is again in $F$. "
+      "text": "## The disjoint sequence\nAs mentioned before, the disjoint sequence `disjoint_seq` as defined in the `sets` library will play an important role in this proof. But of course we can only use it properly if, given a sequence of non-disjoint sets in $F$, all of the elements of the sequence it represents are in $F$ as well. This is what we prove in the next five lemmas. After that, we show what the union of the first $n$ elements of the disjoint sequence turns out to be. \n\n### σ-algebras and the disjoint sequence\nWe now prove the five lemmas. The first two together show that $F$ is closed under taking intersections. The first one rewrites the intersection of two sets to a combination of a union and complements of these sets: "
     },
     {
       "type": "code",
-      "text": "Chapter disjoint_sequence.\nVariable C : (ℕ → (subset U)).\n\nSection disjoint_sets.\nVariable A B : subset U.\n\nLemma intersection_to_complement : \n  A ∩ B = Ω \\ ((Ω \\ A) ∪ (Ω \\ B)). \n\nProof. \nWe prove equality by proving two inclusions. \nTake x : U; Assume x_in_lhs. \ndestruct x_in_lhs. \nBy H it holds that (x ∉ Ω \\ A) (x_not_in_A). \nBy H0 it holds that (x ∉ Ω \\ B) (x_not_in_comp). \n\nWe claim that (x ∉ (Ω \\ A) ∪ (Ω \\ B)) (x_not_in_AB).\nWe argue by contradiction. \nWe claim that (x ∈ (Ω \\ A) ∪ (Ω \\ B)) (x_in_AB).\nApply NNPP; Apply H1.   \ndestruct x_in_AB. \nContradiction.\nContradiction. \nIt follows that (x ∈ Ω \\ ((Ω \\ A) ∪ (Ω \\ B))). \n\nTake x : U; Assume x_in_rhs. \ndestruct x_in_rhs.\nBy H0 it holds that \n  ((x ∉ Ω \\ A) ∧ (x ∉ Ω \\ B)) (x_not_in_int_comp). \nBecause x_not_in_int_comp \n  both x_not_in_compA and x_not_in_compB.\nWe claim that (x ∈ A) (x_in_A).\nWe argue by contradiction. \nBy H1 it holds that (x ∈ Ω \\ A) (x_in_compA).\nContradiction.  \n\nWe claim that (x ∈ B) (x_in_B).\nWe argue by contradiction. \nBy H1 it holds that (x ∈ Ω \\ B) (x_in_compB).\nContradiction. \nIt follows that (x ∈ A ∩ B). \nQed.  \n\nLemma intersections_in_σ : \n  A ∈ F ∧ B ∈ F\n    ⇒ A ∩ B ∈ F.\n\nProof. \nAssume A_and_B_in_F. \nIt holds that (F is a σ-algebra) (F_is_σ). \nBy intersection_to_complement it holds that \n  (A ∩ B = Ω \\ ((Ω \\ A) ∪ (Ω \\ B))) (int_is_comp). \nWrite goal using (A ∩ B = Ω \\ ((Ω \\ A) ∪ (Ω \\ B)))\n  as (Ω \\ ((Ω \\ A) ∪ (Ω \\ B)) ∈ F). \nBy unions_in_σ it holds that \n ((Ω \\ A) ∪ (Ω \\ B) ∈ F) (compA_compB_in_F). \nIt follows that (Ω \\ ((Ω \\ A) ∪ (Ω \\ B)) ∈ F).\nQed."
+      "text": "Chapter disjoint_sequence.\nVariable C : (ℕ → (subset U)).\n\nSection disjoint_sets.\nVariable A B : subset U.\n\nLemma intersection_to_complement : \n  A ∩ B = Ω \\ ((Ω \\ A) ∪ (Ω \\ B)). \n\nProof. \nWe prove equality by proving two inclusions. \nTake x : U; Assume x_in_lhs. \ndestruct x_in_lhs. \nBy H it holds that (x ∉ Ω \\ A) (x_not_in_A). \nBy H0 it holds that (x ∉ Ω \\ B) (x_not_in_comp). \n\nWe claim that (x ∉ (Ω \\ A) ∪ (Ω \\ B)) (x_not_in_AB).\nWe argue by contradiction. \nWe claim that (x ∈ (Ω \\ A) ∪ (Ω \\ B)) (x_in_AB).\nApply NNPP; Apply H1.   \ndestruct x_in_AB. \nContradiction.\nContradiction. \nIt follows that (x ∈ Ω \\ ((Ω \\ A) ∪ (Ω \\ B))). \n\nTake x : U; Assume x_in_rhs. \ndestruct x_in_rhs.\nBy H0 it holds that \n  ((x ∉ Ω \\ A) ∧ (x ∉ Ω \\ B)) (x_not_in_int_comp). \nBecause x_not_in_int_comp \n  both x_not_in_compA and x_not_in_compB.\nWe claim that (x ∈ A) (x_in_A).\nWe argue by contradiction. \nBy H1 it holds that (x ∈ Ω \\ A) (x_in_compA).\nContradiction.  \n\nWe claim that (x ∈ B) (x_in_B).\nWe argue by contradiction. \nBy H1 it holds that (x ∈ Ω \\ B) (x_in_compB).\nContradiction. \nIt follows that (x ∈ A ∩ B). \nQed.  \n"
     },
     {
       "type": "text",
-      "text": "These now serve to prove that $F$ is also closed under taking complements. We need one more lemma for this, which rewrites the complement of a set with respect to another set. "
+      "text": "The next lemma uses properties of a σ-algebra to show that for $A$ and $B$ in $F$, the result above is again in $F$. "
     },
     {
       "type": "code",
-      "text": "\nLemma complement_as_intersection : \n  A \\ B = (Ω \\ B) ∩ A. \n\nProof. \nWe prove equality by proving two inclusions. \n\nTake x : U. \nAssume x_in_A_without_B. \nIt holds that (x ∈ ((Ω \\ B) ∩ A)). \n\nTake x : U. \nAssume x_in_rhs. \nBy x_in_rhs it holds that \n  (x ∈ (Ω \\ B) ∧ (x ∈ A)) (x_in_A_and_comp_B). \nIt holds that (x ∈ (A \\ B)). \nQed. \n\nEnd disjoint_sets.\n\n\nLemma complements_in_σ : \n  ∀ A B : subset U, A ∈ F ∧ B ∈ F\n    ⇒ A \\ B ∈ F. \n\nProof. \nTake A B : (subset U). \nAssume A_and_B_in_F. \nIt holds that \n  (F is a σ-algebra) (F_is_σ). \nIt holds that \n  (Ω \\ B ∈ F) (comp_B_in_F). \nBy intersections_in_σ it holds that \n  ((Ω \\ B) ∩ A ∈ F) (set_in_F). \nBy complement_as_intersection it holds that \n  (A \\ B = (Ω \\ B) ∩ A) (set_is_complement). \nWrite goal using (A \\ B = ((Ω \\ B) ∩ A)) \n  as (((Ω \\ B) ∩ A) ∈ F). \nIt holds that ((Ω \\ B) ∩ A ∈ F). \nQed. "
+      "text": "\nLemma intersections_in_σ : \n  A ∈ F ∧ B ∈ F\n    ⇒ A ∩ B ∈ F.\n\nProof. \nAssume A_and_B_in_F. \nIt holds that (F is a σ-algebra) (F_is_σ). \nBy intersection_to_complement it holds that \n  (A ∩ B = Ω \\ ((Ω \\ A) ∪ (Ω \\ B))) (int_is_comp). \nWrite goal using (A ∩ B = Ω \\ ((Ω \\ A) ∪ (Ω \\ B)))\n  as (Ω \\ ((Ω \\ A) ∪ (Ω \\ B)) ∈ F). \nBy unions_in_σ it holds that \n ((Ω \\ A) ∪ (Ω \\ B) ∈ F) (compA_compB_in_F). \nIt follows that (Ω \\ ((Ω \\ A) ∪ (Ω \\ B)) ∈ F).\nQed."
+    },
+    {
+      "type": "text",
+      "text": "We need one more lemma for this, which rewrites the complement of a set with respect to another set. "
+    },
+    {
+      "type": "code",
+      "text": "\nLemma complement_as_intersection : \n  A \\ B = (Ω \\ B) ∩ A. \n\nProof. \nWe prove equality by proving two inclusions. \n\nTake x : U. \nAssume x_in_A_without_B. \nIt holds that (x ∈ ((Ω \\ B) ∩ A)). \n\nTake x : U. \nAssume x_in_rhs. \nBy x_in_rhs it holds that \n  (x ∈ (Ω \\ B) ∧ (x ∈ A)) (x_in_A_and_comp_B). \nIt holds that (x ∈ (A \\ B)). \nQed. \n\nEnd disjoint_sets.\n"
+    },
+    {
+      "type": "text",
+      "text": "These now serve to prove that $F$ is also closed under taking complements. "
+    },
+    {
+      "type": "code",
+      "text": "\n\nLemma complements_in_σ : \n  ∀ A B : subset U, A ∈ F ∧ B ∈ F\n    ⇒ A \\ B ∈ F. \n\nProof. \nTake A B : (subset U). \nAssume A_and_B_in_F. \nIt holds that \n  (F is a σ-algebra) (F_is_σ). \nIt holds that \n  (Ω \\ B ∈ F) (comp_B_in_F). \nBy intersections_in_σ it holds that \n  ((Ω \\ B) ∩ A ∈ F) (set_in_F). \nBy complement_as_intersection it holds that \n  (A \\ B = (Ω \\ B) ∩ A) (set_is_complement). \nWrite goal using (A \\ B = ((Ω \\ B) ∩ A)) \n  as (((Ω \\ B) ∩ A) ∈ F). \nIt holds that ((Ω \\ B) ∩ A ∈ F). \nQed. "
     },
     {
       "type": "text",
