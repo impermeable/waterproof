@@ -7,7 +7,7 @@
     },
     {
       "type": "code",
-      "text": "Require Import ClassicalFacts. \nRequire Import Coq.Arith.Wf_nat.\nRequire Import Logic. \nRequire Import Omega. \nRequire Import Sets.Classical_sets.\nRequire Import Sets.Ensembles.\nRequire Import Sets.Powerset.\nRequire Import wplib.Lib.measure_theory.\nRequire Import wplib.Lib.sets.\nRequire Import wplib.Notations.SetNotations.\nRequire Import wplib.Tactics.Tactics.\nRequire Import wplib.Tactics.TacticsContra.\n\nVariable U : Type. \nVariable Π : @π_system U."
+      "text": "Require Import ClassicalFacts. \nRequire Import Coq.Arith.Wf_nat.\nRequire Import Logic. \nRequire Import Omega. \nRequire Import Sets.Classical_sets.\nRequire Import Sets.Ensembles.\nRequire Import Sets.Powerset.\nRequire Import wplib.Lib.measure_theory.\nRequire Import wplib.Lib.sets.\nRequire Import wplib.Notations.SetNotations.\nRequire Import wplib.Tactics.Tactics.\nRequire Import wplib.Tactics.TacticsContra.\n\nChapter π_λ_theorem_proof. \nVariable U : Type. \nVariable Π : @π_system U."
     },
     {
       "type": "code",
@@ -175,7 +175,7 @@
     },
     {
       "type": "code",
-      "text": "Theorem π_λ_theorem : \n  ∀ Λ : set_of_subsets U, \n    Λ is a λ-system ⇒ Π ⊂ Λ\n    ⇒ σ(Π) ⊂ Λ. \n\nProof. \nTake Λ : (set_of_subsets U). \nAssume Λ_is_λ_system.\nAssume Π_subs_Λ. \n\nWe need to show that (∀ A : subset U,\n  A ∈ (σ(Π)) ⇒ A ∈ Λ). \nTake A : (subset U); Assume A_in_σΠ.\nIt holds that (Π is a π-system) (Π_is_π). \nBy λΠ_is_σ_algebra it holds that \n  (λ(Π) is a σ-algebra) (λΠ_is_σ_algebra).\nBy A_in_σΠ it holds that \n  (∀ F : set_of_subsets U, \n    F is a σ-algebra ⇒ Π ⊂ F \n      ⇒ A ∈ F) (A_in_all_σ).\nIt holds that \n  ((λ(Π)) is a σ-algebra \n    ⇒ Π ⊂ (λ(Π))) (Π_in_λΠ). \nBy A_in_all_σ it holds that \n  (A ∈(λ(Π))) (A_in_λΠ). \nIt holds that (Λ is a λ-system ⇒ Π ⊂ Λ) (Π_in_Λ). \nIt holds that (A ∈ Λ). \nQed."
+      "text": "Theorem π_λ_theorem : \n  ∀ Λ : set_of_subsets U, \n    Λ is a λ-system ⇒ Π ⊂ Λ\n    ⇒ σ(Π) ⊂ Λ. \n\nProof. \nTake Λ : (set_of_subsets U). \nAssume Λ_is_λ_system.\nAssume Π_subs_Λ. \n\nWe need to show that (∀ A : subset U,\n  A ∈ (σ(Π)) ⇒ A ∈ Λ). \nTake A : (subset U); Assume A_in_σΠ.\nIt holds that (Π is a π-system) (Π_is_π). \nBy λΠ_is_σ_algebra it holds that \n  (λ(Π) is a σ-algebra) (λΠ_is_σ_algebra).\nBy A_in_σΠ it holds that \n  (∀ F : set_of_subsets U, \n    F is a σ-algebra ⇒ Π ⊂ F \n      ⇒ A ∈ F) (A_in_all_σ).\nIt holds that \n  ((λ(Π)) is a σ-algebra \n    ⇒ Π ⊂ (λ(Π))) (Π_in_λΠ). \nBy A_in_all_σ it holds that \n  (A ∈(λ(Π))) (A_in_λΠ). \nIt holds that (Λ is a λ-system ⇒ Π ⊂ Λ) (Π_in_Λ). \nIt holds that (A ∈ Λ). \nQed.\n\nEnd π_λ_theorem_proof. "
     },
     {
       "type": "text",
