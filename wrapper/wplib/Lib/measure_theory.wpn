@@ -67,10 +67,6 @@
     },
     {
       "type": "text",
-      "text": "### Notations: \nDeclare Scope measure_theory_scope.\nNotation \"A ∈ F\" := \n  (A ∈ underlying_set_of_subsets_σ F) \n    (at level 55) : measure_theory_scope. "
-    },
-    {
-      "type": "text",
       "text": "## Measures"
     },
     {
@@ -79,7 +75,7 @@
     },
     {
       "type": "code",
-      "text": "Definition σ_additive_on {U} F (μ : (subset U ⇨ ℝ)) : Prop := \n  ∀ C : (ℕ → (subset U)), (∀ n : ℕ, C n ∈ F) \n    ⇒ C is a disjoint sequence of sets\n      (*∀ m n : ℕ, m ≠ n ⇒ Disjoint _ (C m) (C n)*) \n      ⇒ Σ (fun (n:ℕ) ↦ (μ (C n))) \n          equals (μ (countable_union C)).\n\nOpen Scope R_scope.      \nDefinition is_measure_on {U} F (μ : (subset U → ℝ)) : Prop := \n  μ ∅ = 0 ∧ σ_additive_on F μ.\n  \nDefinition is_probability_measure_on {U} F (μ : (subset U → ℝ)) \n  : Prop := \n    is_measure_on F μ ∧ μ Ω = 1."
+      "text": "Variable μ : @σ_algebra U → ℝ.\nDefinition σ_additive_on {U} (F : σ_algebra) (μ : (subset U ⇨ ℝ)) : Prop := \n  ∀ C : (ℕ → (subset U)), (∀ n : ℕ, C n ∈ F) \n    ⇒ C is a disjoint sequence of sets\n      ⇒ Σ (fun (n:ℕ) ↦ (μ (C n))) \n          equals (μ (countable_union C)).\n\nOpen Scope R_scope.      \nDefinition is_measure_on {U} (F : σ_algebra) (μ : (subset U → ℝ)) : Prop := \n  μ ∅ = 0 ∧ σ_additive_on F μ.\n  \nDefinition is_probability_measure_on {U} (F : σ_algebra) (μ : (subset U → ℝ)) \n  : Prop := \n    is_measure_on F μ ∧ μ Ω = 1."
     },
     {
       "type": "text",
