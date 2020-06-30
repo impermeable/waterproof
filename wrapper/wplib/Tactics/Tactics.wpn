@@ -139,7 +139,7 @@
     },
     {
       "type": "code",
-      "text": "Create HintDb decidability.\nHint Resolve Rlt_dec Rle_dec Rgt_dec Rge_dec : decidability.\nHint Resolve Rlt_le_dec Rle_lt_dec Rgt_ge_dec Rge_gt_dec : decidability.\n"
+      "text": "Create HintDb decidability.\nHint Resolve Req_EM_T : decidability.\nHint Resolve Rlt_dec Rle_dec Rgt_dec Rge_dec : decidability.\nHint Resolve Rlt_le_dec Rle_lt_dec Rgt_ge_dec Rge_gt_dec : decidability.\n"
     },
     {
       "type": "text",
@@ -163,7 +163,7 @@
     },
     {
       "type": "code",
-      "text": "Tactic Notation \"Either\" constr(t1) \"or\" constr(t2) :=\n  first [\n    assert (u : {t1} + {t2}) by auto with decidability nocore;\n      destruct u |\n    assert (u : {t2} + {t1}) by auto with decidability nocore;\n      destruct u\n    ].\n    \n    Lemma test2 : forall a b : R, 0 = 0.\nProof.\nintros.\nEither (a < b) or (a >= b).\nEither (a < b) or (b <= a).\nEither (a < b) or (~(a < b)).\nEither (a < b) or (~(b > a)).\n\nEither (a <= b) or (a > b).\nEither (a <= b) or (b < a).\nEither (a <= b) or (~(a <= b)).\nEither (a <= b) or (~(b >= a)).\n\nEither (a > b) or (a <= b).\nEither (a > b) or (b >= a).\nEither (a > b) or (~(a > b)).\nEither (a > b) or (~(b < a)).\n\nEither (a >= b) or (a < b).\nEither (a >= b) or (b > a).\nEither (a >= b) or (~ (a >= b)).\nEither (a >= b) or (~ (b <= a)).\nall: trivial.\nQed."
+      "text": "Tactic Notation \"Either\" constr(t1) \"or\" constr(t2) :=\n  first [\n    assert (u : {t1} + {t2}) by auto with decidability nocore;\n      destruct u |\n    assert (u : {t2} + {t1}) by auto with decidability nocore;\n      destruct u\n    ]."
     },
     {
       "type": "text",
