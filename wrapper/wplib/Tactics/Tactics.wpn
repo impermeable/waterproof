@@ -127,7 +127,7 @@
     },
     {
       "type": "text",
-      "text": "## **Forward reasoning**\n\nThese tactics try to use forward reasoning to deduce more useful hypothesis."
+      "text": "## **Forward reasoning**\n\nThese tactics try to use forward reasoning to deduce more useful hypothesis. "
     },
     {
       "type": "code",
@@ -135,7 +135,35 @@
     },
     {
       "type": "text",
-      "text": ""
+      "text": "#### **Decidability**\nThere are a number of tactics that deal with decidability. They are of the form ``{r1 s1 r2} + {r1 s2 r2}``, and can be useful in case evaluation.\nTo implement this, we create a new database ``decidiability``, and a tactic that uses this database (only).\nWe first add existing lemmas to the new database."
+    },
+    {
+      "type": "code",
+      "text": "Create HintDb decidability.\nHint Resolve Rlt_dec Rle_dec Rgt_dec Rge_dec : decidability.\nHint Resolve Rlt_le_dec Rle_lt_dec Rgt_ge_dec Rge_gt_dec : decidability.\n"
+    },
+    {
+      "type": "text",
+      "text": "The following lemmas are necessary to write e.g. `{r1 ≤ r2} + {r2 < r1}`."
+    },
+    {
+      "type": "code",
+      "text": "Lemma Rlt_ge_dec : forall r1 r2, {r1 < r2} + {r1 >= r2}.\nProof.\n  intros.\n  destruct (total_order_T r1 r2). destruct s. \n    apply (left r).\n    apply (right (Req_ge r1 r2 e)). \n    apply (right (Rle_ge r2 r1 (Rlt_le r2 r1 r))).\nQed.\n\nLemma Rgt_le_dec : forall r1 r2, {r1 > r2} + {r1 <= r2}.\nProof.\n  intros.\n  destruct (total_order_T r1 r2). destruct s. \n    apply (right (Rlt_le r1 r2 r)).\n    apply (right (Req_le r1 r2 e)). \n    apply (left r).\nQed.\n\nHint Resolve Rlt_ge_dec Rgt_le_dec : decidability."
+    },
+    {
+      "type": "text",
+      "text": "Finally, we add four more lemmas to write e.g. `{r1 ≤ r2} + {~r2 ≥ r1}`."
+    },
+    {
+      "type": "code",
+      "text": "Lemma Rlt_gt_dec : forall r1 r2, {r1 < r2} + {~ r2 > r1}.\nProof.\n  intros.\n  destruct (total_order_T r1 r2). destruct s.\n    apply (left r).\n    apply (right (Rge_not_gt r2 r1 (Req_ge r1 r2 e))).\n    apply (right (Rgt_asym r1 r2 r)).\nQed.\n\nLemma Rgt_lt_dec : forall r1 r2, {r1 > r2} + {~ r2 < r1}.\nProof.\n  intros.\n  destruct (total_order_T r1 r2). destruct s.\n    apply (right (Rlt_asym r1 r2 r)).\n    apply (right (Rle_not_gt r1 r2 (Req_le r1 r2 e))).\n    apply (left r).\nQed.\n\nLemma Rle_ge_dec : forall r1 r2, {r1 <= r2} + {~ r2 >= r1}.\nProof.\n  intros.\n  destruct (total_order_T r1 r2). destruct s.\n    apply (left (Rlt_le r1 r2 r)).\n    apply (left (Req_le r1 r2 e)).\n    apply (right (Rlt_not_ge r2 r1 r)).\nQed.\n\nLemma Rge_le_dec : forall r1 r2, {r1 >= r2} + {~ r2 <= r1}.\nProof.\n  intros.\n  destruct (total_order_T r1 r2). destruct s.\n    apply (right (Rlt_not_le r2 r1 r)).\n    apply (left (Req_ge r1 r2 e)).\n    apply (left (Rgt_ge r1 r2 r)).\nQed.\n\nHint Resolve Rlt_gt_dec Rgt_lt_dec Rle_ge_dec Rge_le_dec : decidability."
+    },
+    {
+      "type": "text",
+      "text": "Using the database `decidability`, we can then make a new tactic to destruct lemmas of the type `{r1 s1 r2} + {r1 s2 r2}`."
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"Either\" constr(t1) \"or\" constr(t2) :=\n  first [\n    assert (u : {t1} + {t2}) by auto with decidability nocore;\n      destruct u |\n    assert (u : {t2} + {t1}) by auto with decidability nocore;\n      destruct u\n    ].\n    \n    Lemma test2 : forall a b : R, 0 = 0.\nProof.\nintros.\nEither (a < b) or (a >= b).\nEither (a < b) or (b <= a).\nEither (a < b) or (~(a < b)).\nEither (a < b) or (~(b > a)).\n\nEither (a <= b) or (a > b).\nEither (a <= b) or (b < a).\nEither (a <= b) or (~(a <= b)).\nEither (a <= b) or (~(b >= a)).\n\nEither (a > b) or (a <= b).\nEither (a > b) or (b >= a).\nEither (a > b) or (~(a > b)).\nEither (a > b) or (~(b < a)).\n\nEither (a >= b) or (a < b).\nEither (a >= b) or (b > a).\nEither (a >= b) or (~ (a >= b)).\nEither (a >= b) or (~ (b <= a)).\nall: trivial.\nQed."
     },
     {
       "type": "text",
@@ -195,14 +223,6 @@
     },
     {
       "type": "text",
-      "text": "## **Applying one of the assumptions**\nDeprecate (?)"
-    },
-    {
-      "type": "code",
-      "text": "Tactic Notation \"This\" \"follows\" \"by\" \"assumption\" := \n  assumption."
-    },
-    {
-      "type": "text",
       "text": ""
     },
     {
@@ -235,7 +255,7 @@
     },
     {
       "type": "text",
-      "text": "## Applying lemmas and theorems"
+      "text": "## **Applying lemmas and theorems**\n\nThe following tactics are variants of the ``apply`` tactic.\nNote: when using `constr(t)` instead of `uconstr(t)`, the use of wildcards is no longer possible.\\\n**TODO**\n- Add option `apply with`.\n- More variation on choice of specific words (e.g. `Use` or `By ...`."
     },
     {
       "type": "code",
@@ -247,11 +267,7 @@
     },
     {
       "type": "text",
-      "text": "Note: when using `constr(t)` instead of `uconstr(t)`, the use of wildcareds is no longer possible.\n\nTODO: add option to do an 'apply with'."
-    },
-    {
-      "type": "text",
-      "text": "## Expanding definitions\n\nTODO: add more options for these tactics."
+      "text": "## **Expanding definitions**\nThe following tactics are variants of the `` unfold`` tactic.\n\n**TODO:**\n- Ideally, replace this with a more 'natural' tactic.\n- Allow use of keywords (`in`, `as`, etc.)"
     },
     {
       "type": "code",
@@ -271,11 +287,39 @@
     },
     {
       "type": "text",
-      "text": "## Strings of (in)equalities\n\nThe following tactics should help in situations where in a pen-and-paper proof we would write a string equalities and inequalites.\n\n**Note:** As of now, forward reasoning by \"it holds that\" seems to be a better option.\n\nThe tactic `trans_ineq eq_or_ineq` reduces the inequality in the goal to a new one by using `eq_or_ineq`."
+      "text": "## **Strings of (in)equalities**\n\nThe following tactics should help in situations where in a pen-and-paper proof we would write a string equalities and inequalites.\n\n**Note:** As of now, forward reasoning by \"it holds that\" seems to be a better option.\n\n**TODO**:\n- Define type s.t. we can use arbitrary number of (in)equalities in a string, or\n- Define lots of tactic notations, each for a specific order of (in)equalities.\n- Incorporate rewriting tactics, reducing trivial or small steps automatically\n- Improve 'proving the step'"
+    },
+    {
+      "type": "text",
+      "text": "#### **Proving the step**\nFirst, we define auxiliary tactics that help with proving the transitive 'step'.\nCurrently, try to solve with auto and to prove by (rewriting) assumptions."
     },
     {
       "type": "code",
-      "text": "Ltac trans_ineq eq_or_ineq := \n  match goal with \n  | [|-?x <= ?z] => \n    match (type of eq_or_ineq) with \n    | (x <= ?y) => apply (Rle_trans x y z eq_or_ineq)\n    | _ => idtac \"not a less-than-or-equal-to inequality\"\n    end\n  | _ => idtac \"Goal is not a less-than-or-equal-to inequality.\"\n  end."
+      "text": "Ltac extended_reflexivity :=\n  try reflexivity;\n  try apply Rle_refl;\n  try apply Rge_refl.\n\nLtac extended_assumption :=\n  try assumption;\n  try (apply Rlt_le; assumption);\n  try (apply Rgt_ge; assumption).\n\nLtac rewrite_all_tac :=\n  match goal with\n  |[ H : _ = _  |- _] => try rewrite H; extended_reflexivity\n  end.\n\nLtac prove_step step :=\n  try auto with rorders;\n  try rewrite_all_tac;\n  try extended_assumption.\n"
+    },
+    {
+      "type": "text",
+      "text": "#### **Transitive step**\nHere, try to convert the goal by using transitivity.\\\n**Note:** do not add Rlt_trans and Rgt_trans. They can lead to an inprovable statement."
+    },
+    {
+      "type": "code",
+      "text": "Ltac trans_ineq x y z step symbol :=\n  idtac x y z step symbol;\n  match symbol with\n  | Rlt => \n    idtac \"hi\";\n      try apply (Rlt_le_trans x y z step);\n      try apply (Rle_lt_trans x y z step)\n  | Rle => \n      try apply (Rle_trans x y z step);\n      try apply (Rle_trans x y z (Rlt_le x y step))\n  | Rgt =>\n      try apply (Rge_gt_trans x y z step);\n      try apply (Rgt_ge_trans x y z step)\n  | Rge =>\n      try apply (Rge_trans x y z step);\n      try apply (Rle_trans x y z (Rgt_ge x y step))\n  | eq =>\n      idtac \"Rewriting\" step;\n      rewrite step\n  | _ => idtac x y z step symbol\n  end.\n"
+    },
+    {
+      "type": "text",
+      "text": "#### **String of (in)equalities**\nHere, the actual tactic is implemented.\nCurrently works as follows on call ``Rewrite (a ≤ b) (b ≤ c)``:\n- Two subcalls to ``string_of_ineqs``, once with ``(a ≤ b)``, once with ``(b ≤ c)``.\n- In subcall, first prove that step ``a ≤ b`` actually holds.\n- If the goal is the same as the step, we finish the proof.\n- If the goal is of the form `a ≤ c`, use transitivity to change the goal to `b ≤ c`. "
+    },
+    {
+      "type": "code",
+      "text": ""
+    },
+    {
+      "type": "text",
+      "text": ""
+    },
+    {
+      "type": "code",
+      "text": "\nLtac string_of_ineqs step_form := \n  let step := fresh in\n    assert (step : step_form);\n      [> prove_step step; fail \"Could not find proof for\" step_form | ];\n    idtac \"Succesfully found proof for\" step_form;\n  match goal with\n  | [|- ?symbol ?x ?z ] => \n    match (type of step) with\n    | (symbol x z) => idtac \"exact\" step; exact step\n    | (_ x ?y) => idtac \"Transitivity\"; trans_ineq x y z step symbol\n    | _ => fail \"Your string of inequalities should start with\" x\n    end\n  end;\n  try extended_reflexivity.\n\nTactic Notation \"Rewrite\" constr(t) := string_of_ineqs t.\nTactic Notation \"Rewrite\" constr(t1) constr(t2) := string_of_ineqs t1; string_of_ineqs t2.\nTactic Notation \"Rewrite\" constr(t1) constr(t2) constr(t3) := string_of_ineqs t1; string_of_ineqs t2; string_of_ineqs t3."
     },
     {
       "type": "text",
@@ -283,7 +327,7 @@
     },
     {
       "type": "text",
-      "text": "## Defining new variables"
+      "text": "## **Defining new variables**\nThe following tactics are used to define new variables (e.g. `Define k := a / b`)."
     },
     {
       "type": "code",
@@ -295,15 +339,15 @@
     },
     {
       "type": "text",
-      "text": "## Reflexivity"
+      "text": "## **Finishing a proof**\nThe following tactics can be used to finish a proof.\\\n**TODO**:\n- Add more variants of this\n- Perhaps add more automation to these steps"
     },
     {
       "type": "code",
-      "text": "Tactic Notation \"This\" \"follows\" \"by\" \"reflexivity\" :=\n  reflexivity."
+      "text": "Tactic Notation \"This\" \"follows\" \"by\" \"reflexivity\" :=\n  reflexivity.\n \nTactic Notation \"This\" \"concludes\" \"the\" \"proof\" :=\n  try reflexivity; try trivial.\n \nTactic Notation \"This\" \"follows\" \"by\" \"assumption\" :=\n  assumption."
     },
     {
       "type": "text",
-      "text": "## Simplification\n\nTODO: the following tactic notation may need to be improved."
+      "text": "## **Simplification**\nDeprecate(?)"
     },
     {
       "type": "code",
@@ -311,7 +355,7 @@
     },
     {
       "type": "text",
-      "text": "## Hints"
+      "text": "## **Hints**"
     },
     {
       "type": "code",

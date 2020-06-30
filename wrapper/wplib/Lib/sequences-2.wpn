@@ -42,10 +42,6 @@
       "text": "## Asymptotic behavior of sequences\n\nAnalysis all revolves around questions such as: what happens if a parameter gets very small? What happens if a parameter gets very large?\n\nFor sequences, the interesting question is: what can we say about the elements $a_n$ when $n$ gets very large? Think for instance about the sequence $a_n := 1/n$. Then we might want to say: when $n$ gets very large, the element $a_n$ is very close to zero.\n\nThe only thing is, that we need to make the previous sentence much more precise if we want to work with it in mathematics. For all $\\epsilon : ℝ$, if $ε > 0$, then there is a certain threshold $N : ℕ$ such that for all $n: ℕ$, if $n \\geq N$ then $a_n$ is within distance $\\epsilon$ from $0$.`"
     },
     {
-      "type": "code",
-      "text": "Definition converges_to (a : ℕ → ℝ) (c : ℝ) :=\n  ∀ ε : ℝ, ε > 0 ⇒ \n    ∃ N : ℕ, ∀ n : ℕ, (n ≥ N)%nat ⇒\n      R_dist (a n) c < ε.\n      \nNotation \"a ⟶ l\" := (converges_to a l) (at level 20)."
-    },
-    {
       "type": "text",
       "text": "The definition of `cv_to` is completely equivalent to the definition of `Un_cv` in the standard library. "
     },
@@ -63,19 +59,15 @@
     },
     {
       "type": "code",
-      "text": "Proof.\nTake x : ℝ.\ndestruct (Rle_lt_dec x 0).\nChoose n := 1%nat. \nIt holds that (INR 1 > INR 0) (H1).\nRewrite using (0 = INR(0)) in r.\nIt follows that (INR 1 > x).\nBy archimed it holds that (IZR(up x) > x ∧ IZR( up x ) - x ≤ 1) (H2).\nIt holds that (IZR( up x ) > x) (H3).\nIt holds that (0 < IZR( up x )) (H4).\nBy lt_0_IZR it holds that (0 < up x)%Z (H5).\nIt holds that (0 <= up x)%Z (H6).\nBy IZN it holds that (∃ k : ℕ, up x = Z.of_nat k) (H7).\nChoose k such that up_x_is_k according to H7.\nChoose n := k.\nWe need to show that (INR k > x).\nBy INR_IZR_INZ it holds that (INR k = IZR (Z.of_nat k)) (H8).\nRewrite using (INR k = IZR (Z.of_nat k)).\nRewrite using (Z.of_nat k = up x).\nassumption.\nQed."
+      "text": "Proof.\nTake x : ℝ.\nEither (x <= 0) or (0 < x).\nChoose n := 1%nat. \nIt holds that (INR 1 > INR 0) (H1).\nRewrite using (0 = INR(0)) in r.\nIt follows that (INR 1 > x).\nBy archimed it holds that (IZR(up x) > x ∧ IZR( up x ) - x ≤ 1) (H2).\nIt holds that (IZR( up x ) > x) (H3).\nIt holds that (0 < IZR( up x )) (H4).\nBy lt_0_IZR it holds that (0 < up x)%Z (H5).\nIt holds that (0 <= up x)%Z (H6).\nBy IZN it holds that (∃ k : ℕ, up x = Z.of_nat k) (H7).\nChoose k such that up_x_is_k according to H7.\nChoose n := k.\nWe need to show that (INR k > x).\nBy INR_IZR_INZ it holds that (INR k = IZR (Z.of_nat k)) (H8).\nRewrite using (INR k = IZR (Z.of_nat k)).\nRewrite using (Z.of_nat k = up x).\nassumption.\nQed."
     },
     {
       "type": "code",
-      "text": "Ltac extended_reflexivity :=\n  try reflexivity;\n  try apply Rle_refl;\n  try apply Rge_refl.\n\nLtac rewrite_all_tac :=\n  match goal with\n  |[ H : _ = _  |- _] => try rewrite H; extended_reflexivity\n  end.\n\nLtac trans_ineq eq_or_ineq_form := \n  (** TODO: add impliaction a < b => a <= b *)\n  let eq_or_ineq := fresh in\n    assert (eq_or_ineq : eq_or_ineq_form);\n    try assumption;\n    try rewrite_all_tac;\n    idtac eq_or_ineq eq_or_ineq_form;\n  match goal with \n  | [|-?x <= ?z] => \n    match (type of eq_or_ineq) with \n    | (x < ?y) => try apply (Rlt_trans x y z eq_or_ineq); \n                  try apply (Rle_trans x y z (Rlt_le x y eq_or_ineq))\n    | (x <= ?y) => apply (Rle_trans x y z eq_or_ineq)\n    | (x = ?y) => replace x with y by eq_or_ineq; idtac  \"success\" x y\n    | _ => idtac \"not a less-than-or-equal-to inequality\"; idtac eq_or_ineq\n    end\n  | _ => idtac \"Goal is not a less-than-or-equal-to inequality.\"\n  end;\n  try extended_reflexivity.\n\nTactic Notation \"Rewrite\" constr(t1) \"=\" constr(t2) := \n  trans_ineq (t1 = t2).\nTactic Notation \"Rewrite\" constr(t1) \"=\" constr(t2) \"=\" constr(t3) := \n  trans_ineq (t1 = t2); trans_ineq(t2 = t3).\nTactic Notation \"Rewrite\" constr(t1) \"=\" constr(t2) \"<=\" constr(t3) := \n  trans_ineq (t1 = t2); trans_ineq(t2 <= t3).\nTactic Notation \"Rewrite\" constr(t1) \"=\" constr(t2) \"<\" constr(t3) := \n  trans_ineq (t1 = t2); trans_ineq(t2 < t3).\n\n\nTactic Notation \"Rewrite\" constr(t1) \"<\" constr(t2) := \n  trans_ineq (t1 < t2).\nTactic Notation \"Rewrite\" constr(t1) \"<\" constr(t2) \"=\" constr(t3) := \n  trans_ineq (t1 < t2); trans_ineq(t2 = t3).\nTactic Notation \"Rewrite\" constr(t1) \"<\" constr(t2) \"<=\" constr(t3) := \n  trans_ineq (t1 < t2); trans_ineq(t2 <= t3).\nTactic Notation \"Rewrite\" constr(t1) \"<\" constr(t2) \"<\" constr(t3) := \n  trans_ineq (t1 < t2); trans_ineq(t2 < t3).\n"
+      "text": "Definition similar_sequences (a b : ℕ → ℝ) := (∃ k : ℕ,\n      ∀ n : ℕ, (n ≥ k)%nat ⇒ a n = b n).\n\n\nLemma test : forall a b c : nat, a = b -> b = c -> a = c.\nProof.\nintros.\nRewrite (a0 = b0) (b0 = c).\n\n\nLemma conv_similar_seq :\n  ∀ (a b : ℕ → ℝ) (l : ℝ), similar_sequences a b ∧ a ⟶ l ⇒ b ⟶ l."
     },
     {
       "type": "code",
-      "text": "Definition similar_sequences (a b : ℕ → ℝ) := (∃ k : ℕ,\n      ∀ n : ℕ, (n ≥ k)%nat ⇒ a n = b n).\n\nLemma conv_similar_seq :\n  ∀ (a b : ℕ → ℝ) (l : ℝ), similar_sequences a b ∧ a ⟶ l ⇒ b ⟶ l."
-    },
-    {
-      "type": "code",
-      "text": "Proof.\nTake a, b : (ℕ → ℝ). Take l : ℝ.\nAssume a_b_similar and a_to_l.\n\nunfold converges_to.\n\nTo show: (∀ ε : ℝ, ε > 0 ⇒ ∃ N : ℕ, ∀ n : ℕ, (n ≥ N)%nat ⇒ R_dist (b n) l <ε).\n\nTake ε : ℝ such that ε_gt_0.\nChoose n1 such that a_close_to_l according to (a_to_l ε ε_gt_0).\nChoose k such that an_is_bn_for_n_ge_k according to a_b_similar.\nChoose N:= (Nat.max n1 k).\n\nTake n : ℕ such that n_ge_N.\nIt holds that (a n = b n) (an_eq_bn). \nIt holds that (R_dist (a n) l < ε) (an_close_to_l).\n\nRewrite (R_dist (b n) l) = (R_dist (a n) l) < ε.\nQed."
+      "text": "Proof.\nTake a, b : (ℕ → ℝ). Take l : ℝ.\nAssume a_b_similar and a_to_l.\n\nTo show: (∀ ε : ℝ, ε > 0 ⇒ ∃ N : ℕ, ∀ n : ℕ, (n ≥ N)%nat ⇒ R_dist (b n) l <ε).\n\nTake ε : ℝ such that ε_gt_0.\nChoose n1 such that a_close_to_l according to (a_to_l ε ε_gt_0).\nChoose k such that an_is_bn_for_n_ge_k according to a_b_similar.\nChoose N:= (Nat.max n1 k).\n\nTake n : ℕ such that n_ge_N.\nIt holds that (a n = b n) (an_eq_bn). \nIt holds that (R_dist (a n) l < ε) (an_close_to_l).\n\n\n\nQed."
     },
     {
       "type": "code",
