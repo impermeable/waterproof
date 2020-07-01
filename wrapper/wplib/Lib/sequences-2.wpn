@@ -59,35 +59,43 @@
     },
     {
       "type": "code",
-      "text": "Proof.\nTake x : ℝ.\nEither (x <= 0) or (0 < x).\nChoose n := 1%nat. \nIt holds that (INR 1 > INR 0) (H1).\nRewrite using (0 = INR(0)) in r.\nIt follows that (INR 1 > x).\nBy archimed it holds that (IZR(up x) > x ∧ IZR( up x ) - x ≤ 1) (H2).\nIt holds that (IZR( up x ) > x) (H3).\nIt holds that (0 < IZR( up x )) (H4).\nBy lt_0_IZR it holds that (0 < up x)%Z (H5).\nIt holds that (0 <= up x)%Z (H6).\nBy IZN it holds that (∃ k : ℕ, up x = Z.of_nat k) (H7).\nChoose k such that up_x_is_k according to H7.\nChoose n := k.\nWe need to show that (INR k > x).\nBy INR_IZR_INZ it holds that (INR k = IZR (Z.of_nat k)) (H8).\nRewrite using (INR k = IZR (Z.of_nat k)).\nRewrite using (Z.of_nat k = up x).\nassumption.\nQed."
-    },
-    {
-      "type": "code",
-      "text": "Definition similar_sequences (a b : ℕ → ℝ) := (∃ k : ℕ,\n      ∀ n : ℕ, (n ≥ k)%nat ⇒ a n = b n).\n\n\nLemma test : forall a b c : nat, a = b -> b = c -> a = c.\nProof.\nintros.\nRewrite (a0 = b0) (b0 = c).\n\n\nLemma conv_similar_seq :\n  ∀ (a b : ℕ → ℝ) (l : ℝ), similar_sequences a b ∧ a ⟶ l ⇒ b ⟶ l."
-    },
-    {
-      "type": "code",
-      "text": "Proof.\nTake a, b : (ℕ → ℝ). Take l : ℝ.\nAssume a_b_similar and a_to_l.\n\nTo show: (∀ ε : ℝ, ε > 0 ⇒ ∃ N : ℕ, ∀ n : ℕ, (n ≥ N)%nat ⇒ R_dist (b n) l <ε).\n\nTake ε : ℝ such that ε_gt_0.\nChoose n1 such that a_close_to_l according to (a_to_l ε ε_gt_0).\nChoose k such that an_is_bn_for_n_ge_k according to a_b_similar.\nChoose N:= (Nat.max n1 k).\n\nTake n : ℕ such that n_ge_N.\nIt holds that (a n = b n) (an_eq_bn). \nIt holds that (R_dist (a n) l < ε) (an_close_to_l).\n\n\n\nQed."
-    },
-    {
-      "type": "code",
-      "text": "Lemma eq_seq_conv_to_same_lim :\n  ∀ (a : ℕ → ℝ) (b : ℕ → ℝ) (l : ℝ),\n    (∀ n : ℕ, a n = b n) ⇒ Un_cv a l ⇒ Un_cv b l."
-    },
-    {
-      "type": "code",
-      "text": "Proof.\nTake a : (ℕ → ℝ). Take b : (ℕ → ℝ). \nTake l : ℝ. Assume seq_eq: (∀ n : ℕ, a n = b n).\nApply evt_eq_seq_conv_to_same_lim.\nWe need to show that (∃ k : ℕ, ∀ n : ℕ, \n  (n ≥ k)%nat ⇒ a n = b n).\nChoose k := O.\nTake n : ℕ. Assume n_ge_0. Apply seq_eq.\nQed."
+      "text": "Proof.\nTake x : ℝ.\nEither (x <= 0) or (0 < x).\nChoose n := 1%nat.\nIt holds that (INR 1 > INR 0) (H1).\nRewrite using (0 = INR(0)) in r.\nIt follows that (INR 1 > x).\n\nBy archimed it holds that (IZR(up x) > x ∧ IZR( up x ) - x ≤ 1) (H2).\nIt holds that (IZR( up x ) > x) (H3).\nIt holds that (0 < IZR( up x )) (H4).\nBy lt_0_IZR it holds that (0 < up x)%Z (H5).\nIt holds that (0 <= up x)%Z (H6).\nBy IZN it holds that (∃ k : ℕ, up x = Z.of_nat k) (H7).\nChoose k such that up_x_is_k according to H7.\nChoose n := k.\nWe need to show that (INR k > x).\nBy INR_IZR_INZ it holds that (INR k = IZR (Z.of_nat k)) (H8).\nRewrite using (INR k = IZR (Z.of_nat k)).\nRewrite using (Z.of_nat k = up x).\nThis follows by assumption.\nQed."
     },
     {
       "type": "text",
-      "text": "## A simple limit"
+      "text": "Next, we introduce eventually equal sequences, and show that they converge to the same limit."
     },
     {
       "type": "code",
-      "text": "Lemma lim_const_seq :\n  ∀ (c : ℝ), Un_cv (fun (n : ℕ) ↦ c) c."
+      "text": "Definition evt_eq_sequences (a b : ℕ → ℝ) := (∃ k : ℕ,\n      ∀ n : ℕ, (n ≥ k)%nat ⇒ a n = b n).\n\nLemma conv_evt_eq_seq :\n  ∀ (a b : ℕ → ℝ) (l : ℝ), evt_eq_sequences a b ⇒ a ⟶ l ⇒ b ⟶ l."
     },
     {
       "type": "code",
-      "text": "Proof.\nTake c : ℝ. Expand the definition of Un_cv.\nTake ε : ℝ. Assume ε_gt_0.\nChoose N := O.\nTake n : ℕ. Assume n_ge_N.\nBy R_dist_eq it holds that (R_dist c c = 0) (H1).\nRewrite using (R_dist c c = 0).\nassumption.\nQed."
+      "text": "Proof.\nTake a, b : (ℕ → ℝ) and l : ℝ.\nAssume a_b_similar and a_to_l.\n\nTo show: (∀ ε : ℝ, ε > 0 ⇒ ∃ N : ℕ, ∀ n : ℕ, (n ≥ N)%nat ⇒ ｜(b n) - l ｜ <ε).\n\nTake ε : ℝ; such that ε_gt_0 : (ε > 0).\nChoose n1 such that a_close_to_l according to (a_to_l ε ε_gt_0).\nChoose k such that an_is_bn_for_n_ge_k according to a_b_similar.\nChoose N := (Nat.max n1 k).\n\nTake n : ℕ; such that n_ge_N : (n ≥ N)%nat.\nIt holds that (a n = b n) (an_eq_bn). \nIt holds that (｜(a n) - l ｜ < ε) (an_close_to_l).\n\nRewrite (｜(b n) - l ｜ = ｜(a n) - l｜).\nexact an_close_l.\nRewrite ((｜(a n) - l ｜) < ε).\nQed."
+    },
+    {
+      "type": "text",
+      "text": "From This, it is fairly easy to prove that sequences that are exactly the same also converge to the same limit.\nWe do this by first using the lemma, and then proving that the sequences are indeed eventually equal."
+    },
+    {
+      "type": "code",
+      "text": "Lemma eq_seq_conv_to_same_lim :\n  ∀ (a : ℕ → ℝ) (b : ℕ → ℝ) (l : ℝ),\n    (∀ n : ℕ, a n = b n) ⇒ a ⟶ l ⇒ b ⟶ l."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake a, b : (ℕ → ℝ) and l : R.\nAssume seq_eq: (∀ n : ℕ, a n = b n).\nApply conv_evt_eq_seq.\n(** By our lemma, it suffices to prove that (evt_eq_sequences a b) *)\n\nWe need to show that (∃ k : ℕ, ∀ n : ℕ, \n  (n ≥ k)%nat ⇒ a n = b n).\nChoose k := O.\nTake n : ℕ; such that n_gt_k : (n ≥ k)%nat.\nThen (a n = b n) holds by assumption.\nQed."
+    },
+    {
+      "type": "text",
+      "text": "## A simple limit\n\nThe simplest sequence we can think of is the constant sequence, e.g. $1, 1, 1, 1, 1, ...$.\nWe can generalise this to any real number $c$, and define the constant sequence $s_n = c, ∀ n : \\mathbb{N}$.\nSince we can choose $n$ as large as possible, without changing the value of $s_n$, this sequences clearly converges to its constant value $c$, i.e. $\\lim_{n \\to \\infty} s_n = c$."
+    },
+    {
+      "type": "code",
+      "text": "Definition constant_sequence (c : ℝ) := fun (n : ℕ) ↦ c.\n\nLemma lim_const_seq :\n  ∀ (c : ℝ), constant_sequence c ⟶ c."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake c : ℝ. \nDefine s := (constant_sequence c).\nTo show: (∀ ε : ℝ, ε > 0 ⇒ ∃ N : ℕ, ∀ n : ℕ, (n ≥ N)%nat ⇒ R_dist (s n) c < ε).\n\nTake ε : ℝ; such that ε_gt_0 : (ε > 0).\nChoose N := O.\nTake n : ℕ; such that n_ge_N : (n ≥ N)%nat.\nRewrite (R_dist (s n) c = R_dist c c) (R_dist c c = 0) (0 < ε).\nQed."
     },
     {
       "type": "code",

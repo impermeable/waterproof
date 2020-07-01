@@ -3,7 +3,7 @@
   "blocks": [
     {
       "type": "text",
-      "text": "# Definitions and Notations for Waterproof"
+      "text": "# **Definitions and Notations for Waterproof**"
     },
     {
       "type": "code",
@@ -51,11 +51,11 @@
     },
     {
       "type": "text",
-      "text": "## Real numbers"
+      "text": "## Real numbers\n\nWe have to take care with the associative leve.\nWhen using this in rewrites, $<$, $>$, etc. should bind stronger."
     },
     {
       "type": "code",
-      "text": "Notation \"｜ x ｜\" := (Rabs x) (at level 20)."
+      "text": "Notation \"｜ x ｜\" := (Rabs x) (at level 20).\nNotation \"｜ x - y ｜\" := (R_dist x y) (at level 69, x at level 49, y at level 49)."
     },
     {
       "type": "text",
@@ -72,6 +72,6 @@
     {
       "type": "code",
       "text": "Definition is_in {D : Set} := fun (A : (D → Prop)) ↦ (fun (x : D) ↦ A x).\nNotation \"x ∈ A\" := (@is_in _ A x) (at level 50)."
-    }    
+    }
   ]
 }

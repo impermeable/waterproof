@@ -27,7 +27,7 @@
     },
     {
       "type": "text",
-      "text": "## **Introducing variables and hypotheses.**\n\nThe following tactics are variations on the `intro` tactic.\nWe distinguish on introducing variables (`Take`) and listing assumptions (`Assume`).\nCurrently supports introduction of one and two terms simultaneously.\n\n**TODO**:\n- Variable arity of tactics\n- More variation on choice of specific words (e.g. `Let` instead of `Take`; `and` instead of `','`)\n- Consider assumptions as sequence of conjunctions\n- Consider more fluent introduction of $\\varepsilon > 0$, $n \\geq N$, etc.\n- Add more feedback."
+      "text": "## **Introducing variables and hypotheses.**\n\nThe following tactics are variations on the `intro` tactic.\nWe distinguish on introducing variables (`Take`) and listing assumptions (`Assume`).\nCurrently supports introduction of one and two terms simultaneously.\n\n**TODO**:\n- Variable arity of tactics\n- More variation on choice of specific words (e.g. `Let` instead of `Take`)\n- Consider assumptions as sequence of conjunctions\n- Consider more fluent introduction of $\\varepsilon > 0$, $n \\geq N$, etc.\n- Add more feedback."
     },
     {
       "type": "text",
@@ -43,11 +43,27 @@
     },
     {
       "type": "text",
-      "text": "#### **Introducing variables**\nEnforce a strict introduction."
+      "text": "#### **Introducing variables**\nEnforce a strict introduction.\nThe first tactic enables introduction of single variable."
     },
     {
       "type": "code",
-      "text": "Tactic Notation \"Take\" ident(s) \":\" constr(t):= \n  intro_strict s t.\n \nTactic Notation \"Take\" ident(s1) \",\" ident(s2) \":\" constr(t):=\n  intro_strict s1 t; intro_strict s2 t.\n   \nTactic Notation \"Take\" ident(s1) \":\" constr(t1) \",\" ident(s2) \":\" constr(t2) :=\n  intro_strict s1 t1; intro_strict s2 t2."
+      "text": "Tactic Notation \"Take\" ident(s) \":\" constr(t):= \n  intro_strict s t."
+    },
+    {
+      "type": "text",
+      "text": "Next, we consider the introduction of two variables."
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"Take\" ident(s1) \",\" ident(s2) \":\" constr(t):=\n  intro_strict s1 t; intro_strict s2 t.\n\nTactic Notation \"Take\" ident(s1) \"and\" ident(s2) \":\" constr(t):=\n  intro_strict s1 t; intro_strict s2 t.\n  \nTactic Notation \"Take\" ident(s1) \":\" constr(t1) \",\" ident(s2) \":\" constr(t2):=\n  intro_strict s1 t1; intro_strict s2 t2.\n\nTactic Notation \"Take\" ident(s1) \":\" constr(t1) \"and\" ident(s2) \":\" constr(t2):=\n  intro_strict s1 t1; intro_strict s2 t2."
+    },
+    {
+      "type": "text",
+      "text": "Similarly, the following tactics allow for introduction of three variables."
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"Take\" ident(s1) \",\" ident(s2) \",\" ident(s3) \":\" constr(t) :=\n  intro_strict s1 t; intro_strict s2 t; intro_strict s3 t.\n\nTactic Notation \"Take\" ident(s1) \",\" ident(s2) \"and\" ident(s3) \":\" constr(t) :=\n  intro_strict s1 t; intro_strict s2 t; intro_strict s3 t.\n  \nTactic Notation \"Take\" ident(s1) \",\" ident(s2) \":\" constr(t1) \",\" ident(s3) \":\" constr(t2) :=\n  intro_strict s1 t1; intro_strict s2 t1; intro_strict s3 t2.\nTactic Notation \"Take\" ident(s1) \",\" ident(s2) \":\" constr(t1) \"and\" ident(s3) \":\" constr(t2) :=\n  intro_strict s1 t1; intro_strict s2 t1; intro_strict s3 t2.\n  \nTactic Notation \"Take\" ident(s1) \":\" constr(t1) \",\" ident(s2) \",\" ident(s3) \":\" constr(t2) :=\n  intro_strict s1 t1; intro_strict s2 t2; intro_strict s3 t2.\nTactic Notation \"Take\" ident(s1) \":\" constr(t1) \"and\" ident(s2) \",\" ident(s3) \":\" constr(t2) :=\n  intro_strict s1 t1; intro_strict s2 t2; intro_strict s3 t2.\n  \nTactic Notation \"Take\" ident(s1) \":\" constr(t1) \",\" ident(s2) \":\" constr(t2) \",\" ident(s3) \":\" constr(t3) :=\n  intro_strict s1 t1; intro_strict s2 t2; intro_strict s3 t3.\nTactic Notation \"Take\" ident(s1) \":\" constr(t1) \",\" ident(s2) \":\" constr(t2) \"and\" ident(s3) \":\" constr(t3) :=\n  intro_strict s1 t1; intro_strict s2 t2; intro_strict s3 t3."
     },
     {
       "type": "text",
@@ -67,11 +83,11 @@
     },
     {
       "type": "text",
-      "text": "#### **Introducing variable with assumption**\nTake care of introducing a variable with an assumption, e.g. let $\\varepsilon \\in \\mathbb{R}$ such that $ε > 0$.\\\n**TODO**: this should be implemented differently."
+      "text": "#### **Introducing variable with assumption**\nTake care of introducing a variable with an assumption, e.g. let $\\varepsilon \\in \\mathbb{R}$ such that $ε > 0$.\\\n**TODO**:\n- Note that it is possible to use a newly introduced variable right of the tactical `;`, so perhaps the best option is to interpret keywords (like `such`) as `;`.\nThis should most likely be done one the Waterproof side."
     },
     {
       "type": "code",
-      "text": "Tactic Notation \"Take\" ident(s1) \":\" constr(t1) \"such\" \"that\" ident(s2) := \n  intro_strict s1 t1; intro s2."
+      "text": "Tactic Notation \"such\" \"that\" ident(s1) \":\" constr(t1) :=\n  assume_strict s1 t1."
     },
     {
       "type": "text",
@@ -135,7 +151,7 @@
     },
     {
       "type": "text",
-      "text": "#### **Decidability**\nThere are a number of tactics that deal with decidability. They are of the form ``{r1 s1 r2} + {r1 s2 r2}``, and can be useful in case evaluation.\nTo implement this, we create a new database ``decidiability``, and a tactic that uses this database (only).\nWe first add existing lemmas to the new database."
+      "text": "#### **Decidability**\nThere are a number of tactics that deal with decidability. They are of the form ``{r1 s1 r2} + {r1 s2 r2}``, and can be useful in case evaluation.\nTo implement this, we create a new database ``decidiability``, and a tactic that uses this database (only).\nWe first add existing lemmas to the new database.\n\n**TODO**:\n- Add options to split hypotheses ``{r1 <= r2}`` into ``Either {r1 < r2} or {r1 = r2}``."
     },
     {
       "type": "code",
@@ -295,7 +311,15 @@
     },
     {
       "type": "code",
-      "text": "Ltac extended_reflexivity :=\n  try reflexivity;\n  try apply Rle_refl;\n  try apply Rge_refl.\n\nLtac extended_assumption :=\n  try assumption;\n  try (apply Rlt_le; assumption);\n  try (apply Rgt_ge; assumption).\n\nLtac rewrite_all_tac :=\n  match goal with\n  |[ H : _ = _  |- _] => try rewrite H; extended_reflexivity\n  end.\n\nLtac prove_step step :=\n  try auto with rorders;\n  try rewrite_all_tac;\n  try extended_assumption.\n"
+      "text": "Ltac extended_reflexivity :=\n  try reflexivity;\n  try apply Rle_refl;\n  try apply Rge_refl.\n\nLtac extended_assumption :=\n  try assumption;\n  try (apply Rlt_le; assumption);\n  try (apply Rgt_ge; assumption).\n\nLtac rewrite_all_tac :=\n  match goal with\n  |[ H : _ = _  |- _] => try rewrite H; extended_reflexivity\n  end.\n\nCreate HintDb rewriters.\n\nLtac prove_step step :=\n  try auto with rorders rewriters;\n  try rewrite_all_tac;\n  try extended_assumption.\n"
+    },
+    {
+      "type": "text",
+      "text": "The `auto` core database is not strong enough to prove all trivial steps, so we add some useful lemmas to a new database."
+    },
+    {
+      "type": "code",
+      "text": "\nHint Resolve R_dist_eq : rewriters."
     },
     {
       "type": "text",
@@ -303,7 +327,7 @@
     },
     {
       "type": "code",
-      "text": "Ltac trans_ineq x y z step symbol :=\n  idtac x y z step symbol;\n  match symbol with\n  | Rlt => \n    idtac \"hi\";\n      try apply (Rlt_le_trans x y z step);\n      try apply (Rle_lt_trans x y z step)\n  | Rle => \n      try apply (Rle_trans x y z step);\n      try apply (Rle_trans x y z (Rlt_le x y step))\n  | Rgt =>\n      try apply (Rge_gt_trans x y z step);\n      try apply (Rgt_ge_trans x y z step)\n  | Rge =>\n      try apply (Rge_trans x y z step);\n      try apply (Rle_trans x y z (Rgt_ge x y step))\n  | eq =>\n      idtac \"Rewriting\" step;\n      rewrite step\n  | _ => idtac x y z step symbol\n  end.\n"
+      "text": "Ltac trans_ineq x y z step symbol :=\n  idtac x y z step symbol;\n  match symbol with\n  | Rlt => \n      first [apply (Rlt_le_trans x y z step) |\n            apply (Rle_lt_trans x y z step)|\n            idtac \"Transitive step did not work\"]\n  | Rle => \n      first [apply (Rle_trans x y z step) |\n            apply (Rle_trans x y z (Rlt_le x y step))|\n            idtac \"Transitive step did not work\"]\n  | Rgt =>\n      first [apply (Rge_gt_trans x y z step) |\n            apply (Rgt_ge_trans x y z step)|\n            idtac \"Transitive step did not work\"]\n  | Rge =>\n      first [apply (Rge_trans x y z step) |\n            apply (Rle_trans x y z (Rgt_ge x y step))|\n            idtac \"Transitive step did not work\"]\n  | eq =>\n      first [rewrite step|\n            idtac \"Rewrite step did not work\"]\n  | _ => idtac \"Did not find\" x y z step symbol\n  end."
     },
     {
       "type": "text",
@@ -319,7 +343,7 @@
     },
     {
       "type": "code",
-      "text": "\nLtac string_of_ineqs step_form := \n  let step := fresh in\n    assert (step : step_form);\n      [> prove_step step; fail \"Could not find proof for\" step_form | ];\n    idtac \"Succesfully found proof for\" step_form;\n  match goal with\n  | [|- ?symbol ?x ?z ] => \n    match (type of step) with\n    | (symbol x z) => idtac \"exact\" step; exact step\n    | (_ x ?y) => idtac \"Transitivity\"; trans_ineq x y z step symbol\n    | _ => fail \"Your string of inequalities should start with\" x\n    end\n  end;\n  try extended_reflexivity.\n\nTactic Notation \"Rewrite\" constr(t) := string_of_ineqs t.\nTactic Notation \"Rewrite\" constr(t1) constr(t2) := string_of_ineqs t1; string_of_ineqs t2.\nTactic Notation \"Rewrite\" constr(t1) constr(t2) constr(t3) := string_of_ineqs t1; string_of_ineqs t2; string_of_ineqs t3."
+      "text": "\nLtac string_of_ineqs step_form := \n  let step := fresh in\n    assert (step : step_form);\n      [> prove_step step; fail \"Could not find proof for\" step_form | ];\n    idtac \"Succesfully found proof for\" step_form;\n  match goal with\n  | [|- ?symbol ?x ?z ] => \n    match (type of step) with\n    | (symbol x z) => idtac \"exact\" step; exact step\n    | (?symbol2 x ?y) => idtac \"Transitivity\"; trans_ineq x y z step symbol2\n    | _ => idtac \"x\" x; idtac \"z\" z; idtac \"symbol\" symbol; fail \"Your string of inequalities should start with\" x\n    end\n  end;\n  try extended_reflexivity.\n\nTactic Notation \"Rewrite\" constr(t) := string_of_ineqs t.\nTactic Notation \"Rewrite\" constr(t1) constr(t2) := string_of_ineqs t1; string_of_ineqs t2.\nTactic Notation \"Rewrite\" constr(t1) constr(t2) constr(t3) := string_of_ineqs t1; string_of_ineqs t2; string_of_ineqs t3."
     },
     {
       "type": "text",
@@ -339,11 +363,11 @@
     },
     {
       "type": "text",
-      "text": "## **Finishing a proof**\nThe following tactics can be used to finish a proof.\\\n**TODO**:\n- Add more variants of this\n- Perhaps add more automation to these steps"
+      "text": "## **Finishing a proof**\nThe following tactics can be used to finish a proof.\\\n**TODO**:\n- Add more variants of this\n- Perhaps add more automation to these steps\n- Perhaps add a check that it indeed follows by the assumption."
     },
     {
       "type": "code",
-      "text": "Tactic Notation \"This\" \"follows\" \"by\" \"reflexivity\" :=\n  reflexivity.\n \nTactic Notation \"This\" \"concludes\" \"the\" \"proof\" :=\n  try reflexivity; try trivial.\n \nTactic Notation \"This\" \"follows\" \"by\" \"assumption\" :=\n  assumption."
+      "text": "Tactic Notation \"This\" \"follows\" \"by\" \"reflexivity\" :=\n  reflexivity.\n \nTactic Notation \"This\" \"concludes\" \"the\" \"proof\" :=\n  try reflexivity; try trivial.\n \nTactic Notation \"This\" \"follows\" \"by\" \"assumption\" :=\n  assumption.\n  \nTactic Notation \"Then\" constr(t) \"holds\" \"by\" \"assumption\" :=\n  conclude_proof t."
     },
     {
       "type": "text",
