@@ -71,7 +71,7 @@
     },
     {
       "type": "code",
-      "text": "Proof.\nTake a, b : (ℕ → ℝ) and l : ℝ.\nAssume a_b_similar and a_to_l.\n\nTo show: (∀ ε : ℝ, ε > 0 ⇒ ∃ N : ℕ, ∀ n : ℕ, (n ≥ N)%nat ⇒ ｜(b n) - l ｜ <ε).\n\nTake ε : ℝ; such that ε_gt_0 : (ε > 0).\nChoose n1 such that a_close_to_l according to (a_to_l ε ε_gt_0).\nChoose k such that an_is_bn_for_n_ge_k according to a_b_similar.\nChoose N := (Nat.max n1 k).\n\nTake n : ℕ; such that n_ge_N : (n ≥ N)%nat.\nIt holds that (a n = b n) (an_eq_bn). \nIt holds that (｜(a n) - l ｜ < ε) (an_close_to_l).\n\nRewrite (｜(b n) - l ｜ = ｜(a n) - l｜).\nexact an_close_l.\nRewrite ((｜(a n) - l ｜) < ε).\nQed."
+      "text": "Proof.\nTake a, b : (ℕ → ℝ) and l : ℝ.\nAssume a_b_similar and a_to_l.\n\nTo show: (∀ ε : ℝ, ε > 0 ⇒ ∃ N : ℕ, ∀ n : ℕ, (n ≥ N)%nat ⇒ ｜(b n) - l ｜ <ε).\n\nTake ε : ℝ; such that ε_gt_0 : (ε > 0).\nChoose n1 such that a_close_to_l according to (a_to_l ε ε_gt_0).\nChoose k such that an_is_bn_for_n_ge_k according to a_b_similar.\nChoose N := (Nat.max n1 k).\n\nTake n : ℕ; such that n_ge_N : (n ≥ N)%nat.\nIt holds that (a n = b n) (an_eq_bn). \nIt holds that (｜(a n) - l ｜ < ε) (an_close_to_l).\n\nRewrite (｜(b n) - l ｜) = (｜(a n) - l｜) < ε.\nQed."
     },
     {
       "type": "text",
@@ -95,7 +95,7 @@
     },
     {
       "type": "code",
-      "text": "Proof.\nTake c : ℝ. \nDefine s := (constant_sequence c).\nTo show: (∀ ε : ℝ, ε > 0 ⇒ ∃ N : ℕ, ∀ n : ℕ, (n ≥ N)%nat ⇒ R_dist (s n) c < ε).\n\nTake ε : ℝ; such that ε_gt_0 : (ε > 0).\nChoose N := O.\nTake n : ℕ; such that n_ge_N : (n ≥ N)%nat.\nRewrite (R_dist (s n) c = R_dist c c) (R_dist c c = 0) (0 < ε).\nQed."
+      "text": "Proof.\nTake c : ℝ. \nDefine s := (constant_sequence c).\nTo show: (∀ ε : ℝ, ε > 0 ⇒ ∃ N : ℕ, ∀ n : ℕ, (n ≥ N)%nat ⇒ ｜(s n) - c｜ < ε).\n\nTake ε : ℝ; such that ε_gt_0 : (ε > 0).\nChoose N := O.\nTake n : ℕ; such that n_ge_N : (n ≥ N)%nat.\nRewrite (｜s n - c｜) = 0 < ε.\nQed."
     },
     {
       "type": "code",
