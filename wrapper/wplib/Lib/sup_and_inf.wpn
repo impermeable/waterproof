@@ -7,7 +7,7 @@
     },
     {
       "type": "code",
-      "text": "Require Import Reals.\nRequire Import Lra.\nRequire Import Classical.\nRequire Import Classical_Pred_Type.\n\nRequire Import wplib.Tactics.Tactics.\nRequire Import wplib.Notations.Notations.\nRequire Import wplib.Tactics.TacticsContra."
+      "text": "Require Import Reals.\nRequire Import Lra.\nRequire Import Classical.\nRequire Import Classical_Pred_Type.\n\nRequire Import wplib.Tactics.Tactics.\nRequire Import wplib.Notations.Notations.\nRequire Import wplib.Tactics.TacticsContra.\nRequire Import wplib.Tactics.Databases."
     },
     {
       "type": "text",

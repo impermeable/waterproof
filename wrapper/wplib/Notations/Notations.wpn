@@ -39,7 +39,7 @@
     },
     {
       "type": "code",
-      "text": "Open Scope nat_scope.\nOpen Scope R_scope.\n\n(* TODO: the below definition doesn't work very nicely *)\nNotation \"x ↦ y\" := (fun x => y) (at level 0).\n\nNotation \"'ℕ'\" := (nat).\nNotation \"'ℝ'\" := (R).\n\n(** Add field and lra to tactics to try automatically *)\nHint Extern 3 ( _ = _ ) => field : real.\nHint Extern 3 ( _ <= _ ) => lra : real.\nHint Extern 3 ( _ >= _ ) => lra : real.\nHint Extern 3 ( _ < _ ) => lra : real.\nHint Extern 3 ( _ > _ ) => lra : real."
+      "text": "Open Scope nat_scope.\nOpen Scope R_scope.\n\n(* TODO: the below definition doesn't work very nicely *)\nNotation \"x ↦ y\" := (fun x => y) (at level 0).\n\nNotation \"'ℕ'\" := (nat).\nNotation \"'ℝ'\" := (R).\n\n(** We use coercions to get around writing INR and IZR *)\nCoercion INR: nat >-> R.\nCoercion IZR: Z >-> R.\n\n(** Add field and lra to tactics to try automatically *)\nHint Extern 3 ( _ = _ ) => field : real.\nHint Extern 3 ( _ <= _ ) => lra : real.\nHint Extern 3 ( _ >= _ ) => lra : real.\nHint Extern 3 ( _ < _ ) => lra : real.\nHint Extern 3 ( _ > _ ) => lra : real."
     },
     {
       "type": "text",
@@ -55,7 +55,7 @@
     },
     {
       "type": "code",
-      "text": "Notation \"｜ x ｜\" := (Rabs x) (at level 20).\nNotation \"｜ x - y ｜\" := (R_dist x y) (at level 69, x at level 49, y at level 49)."
+      "text": "Notation \"｜ x ｜\" := (Rabs x) (at level 69, x at level 200).\n(** Notation \"｜ x - y ｜\" := (R_dist x y) (at level 69, x at level 48, y at level 48). *)"
     },
     {
       "type": "text",

@@ -1,10 +1,6 @@
 [
-  "Tactics/Tactics",
-  "Tactics/TacticsContra",
   "Notations/Notations",
-  "Lib/sup_and_inf",
-  "Lib/sequences",
-  "Lib/series",
-  "Lib/subsequences",
-  "Lib/sequential_accumulation_points"
+  "Tactics/Databases",
+  "Tactics/Tactics",
+  "Tactics/TacticsContra"
 ]

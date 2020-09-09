@@ -7,7 +7,7 @@
     },
     {
       "type": "code",
-      "text": "Require Import Rbase.\nRequire Import Rfunctions.\nRequire Import SeqSeries.\nRequire Import Rtrigo.\nRequire Import Ranalysis.\nRequire Import Integration.\nRequire Import micromega.Lra.\nRequire Import Omega.\nRequire Import Max.\n(* Require Import Unicode.Utf8. *)\n\nRequire Import wplib.Notations.Notations."
+      "text": "Require Import Rbase.\nRequire Import Rfunctions.\nRequire Import SeqSeries.\nRequire Import Rtrigo.\nRequire Import Ranalysis.\nRequire Import Integration.\nRequire Import micromega.Lra.\nRequire Import Omega.\nRequire Import Max.\n(* Require Import Unicode.Utf8. *)\n\nRequire Import wplib.Notations.Notations.\nRequire Import wplib.Tactics.Databases."
     },
     {
       "type": "text",
@@ -307,19 +307,27 @@
     },
     {
       "type": "text",
+      "text": "#### **Distance, absolute values and positivity**\n\nThe hint database `distabs` takes care of simple conversions of `Rabs` and `R_dist`.\nThe following lemmas are all in the standard `Reals` library."
+    },
+    {
+      "type": "code",
+      "text": "Create HintDb distabs.\nCreate HintDb positivity.\n\nHint Unfold R_dist : distabs.\nHint Resolve R_dist_pos R_dist_sym R_dist_refl R_dist_eq R_dist_tri R_dist_plus R_dist_mult_l: distabs.\nHint Resolve Rabs_R0 Rabs_R1 Rabs_no_R0 : distabs.\nHint Resolve Rabs_left Rabs_right : distabs.\nHint Resolve Rabs_pos Rle_abs Rabs_le Rabs_pos_eq : distabs.\nHint Resolve Rabs_Rabsolu Rabs_pos_lt Rabs_minus_sym Rabs_mult Rabs_Rinv Rabs_Ropp : distabs.\nHint Resolve Rabs_triang Rabs_triang_inv Rabs_triang_inv2 : distabs.\nHint Resolve Rabs_def1 Rabs_def2 : distabs.\n\nHint Resolve pos_INR : positivity.\nHint Resolve Rmult_lt_0_compat Rmult_gt_0_compat : positivity.\nHint Resolve RinvN_pos : positivity."
+    },
+    {
+      "type": "text",
+      "text": "The next lemmas are not already in the standard library, but nonetheless simple steps we want to skip."
+    },
+    {
+      "type": "code",
+      "text": "Lemma R_dist_0_r : forall a : R, R_dist a 0 = Rabs a.\nProof.\n  intros.\n  unfold R_dist.\n  rewrite Rminus_0_r.\n  reflexivity.\nQed.\n\nHint Resolve R_dist_0_r : distabs.\n\nLemma R_dist_0_l : forall a : R, R_dist 0 a = Rabs a.\nProof.\n  intros.\n  rewrite R_dist_sym.\n  apply R_dist_0_r.\nQed.\n\nHint Resolve R_dist_0_l : distabs.\n\nLemma Rinv_0_gt_compat : forall r : R, r > 0 -> / r > 0.\nProof.\n  intros.\n  apply Rlt_gt, Rinv_0_lt_compat, H.\nQed.\n\nHint Resolve Rinv_0_lt_compat Rinv_0_gt_compat : positivity.\n"
+    },
+    {
+      "type": "text",
       "text": "#### **Proving the step**\nFirst, we define auxiliary tactics that help with proving the transitive 'step'.\nCurrently, try to solve with auto and to prove by (rewriting) assumptions."
     },
     {
       "type": "code",
-      "text": "Ltac extended_reflexivity :=\n  try reflexivity;\n  try apply Rle_refl;\n  try apply Rge_refl.\n\nLtac extended_assumption :=\n  try assumption;\n  try (apply Rlt_le; assumption);\n  try (apply Rgt_ge; assumption).\n\nLtac rewrite_all_tac :=\n  match goal with\n  |[ H : _ = _  |- _] => try rewrite H; extended_reflexivity\n  end.\n\nCreate HintDb rewriters.\n\nLtac prove_step step :=\n  try auto with rorders rewriters;\n  try rewrite_all_tac;\n  try extended_assumption.\n"
-    },
-    {
-      "type": "text",
-      "text": "The `auto` core database is not strong enough to prove all trivial steps, so we add some useful lemmas to a new database."
-    },
-    {
-      "type": "code",
-      "text": "\nHint Resolve R_dist_eq : rewriters."
+      "text": "Ltac extended_reflexivity :=\n  try reflexivity;\n  try apply Rle_refl;\n  try apply Rge_refl.\n\nLtac extended_assumption :=\n  try assumption;\n  try (apply Rlt_le; assumption);\n  try (apply Rgt_ge; assumption).\n\nLtac rewrite_all_tac :=\n  match goal with\n  |[ H : _ = _  |- _] => try rewrite H; extended_reflexivity\n  end.\n\nLtac prove_step step :=\n  try auto with rorders distabs positivity real;\n  try rewrite_all_tac;\n  try extended_assumption.\n"
     },
     {
       "type": "text",
