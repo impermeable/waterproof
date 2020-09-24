@@ -7,7 +7,7 @@
     },
     {
       "type": "code",
-      "text": "Require Import Reals.\nRequire Import Lra.\nRequire Import Classical.\nRequire Import Classical_Pred_Type.\nRequire Import ClassicalChoice.\n\nRequire Import wplib.Tactics.Tactics.\nRequire Import wplib.Tactics.TacticsContra.\nRequire Import wplib.Tactics.Databases.\nRequire Import wplib.Notations.Notations.\nRequire Import wplib.Lib.sup_and_inf.\nRequire Import wplib.Lib.sequences.\n\nHint Resolve Rabs_Rabsolu.\nHint Resolve Rabs_minus_sym.\nHint Resolve Rmult_lt_0_compat : real.\nHint Resolve Rinv_lt_contravar : real."
+      "text": "Require Import Reals.\nRequire Import Lra.\nRequire Import Classical.\nRequire Import Classical_Pred_Type.\nRequire Import ClassicalChoice.\n\nRequire Import wplib.Tactics.Tactics.\nRequire Import wplib.Tactics.TacticsContra.\nRequire Import wplib.Tactics.Databases.\nRequire Import wplib.Notations.Notations.\nRequire Import wplib.Lib.sequences.\n\nHint Resolve Rabs_Rabsolu.\nHint Resolve Rabs_minus_sym.\nHint Resolve Rmult_lt_0_compat : real.\nHint Resolve Rinv_lt_contravar : real."
     },
     {
       "type": "code",
@@ -55,11 +55,11 @@
     },
     {
       "type": "code",
-      "text": "apply evt_eq_seq_conv_to_same_lim\n  with (a := fun N ↦ sigma a k (l-1) + sigma a l N)\n       (b := fun N ↦ sigma a k N).\nChoose M such that H5 according to H3.\nChoose k0 := M.\nTake n : ℕ. Assume n_ge_M : (n ≥ M)%nat.\nIt holds that (sigma a k n = sigma a k (l-1) + sigma a l n) (H6).\nIt holds that (sigma a k (l-1) + sigma a l n = sigma a k n).\nApply H2."
+      "text": "apply conv_evt_eq_seq\n  with (a := fun N ↦ sigma a k (l-1) + sigma a l N)\n       (b := fun N ↦ sigma a k N).\nChoose M such that H5 according to H3.\nChoose k0 := M.\nTake n : ℕ. Assume n_ge_M : (n ≥ M)%nat.\nIt holds that (sigma a k n = sigma a k (l-1) + sigma a l n) (H6).\nIt holds that (sigma a k (l-1) + sigma a l n = sigma a k n).\nApply H2."
     },
     {
       "type": "code",
-      "text": "Assume sigma_k_cv.\nBy lim_const_seq it holds that\n  (Un_cv (fun N ↦ sigma a k (l-1)) (sigma a k (l-1))) (H7).\nBy CV_minus it holds that\n  (Un_cv (fun N ↦ sigma a k N - (sigma a k (l-1)))\n         (sigma a k (l-1) + L - (sigma a k (l-1)))) (H8).\nWe claim that\n  (∃ M : ℕ, \n    ∀ n : ℕ, (n ≥ M)%nat ⇒\n      sigma a k n - sigma a k (l - 1)%nat = sigma a l n ) (H9).\nChoose M := l.\nTake n : ℕ. Assume n_ge_l : (n ≥ l)%nat. \nBy sigma_split_v2 it holds that \n  (sigma a k n = sigma a k (l - 1)%nat + sigma a l n) (H10).\nWe need to show that (sigma a k n - sigma a k (l-1) = sigma a l n).\nIt follows that (sigma a k n - sigma a k (l - 1) =\nsigma a l n).\n\nRewrite using (L = sigma a k (l-1) + L - sigma a k (l-1)).\napply evt_eq_seq_conv_to_same_lim\n  with (a := fun n ↦ sigma a k n - sigma a k (l-1))\n       (b := fun n ↦ sigma a l n).\nChoose M such that H11 according to H9.\nChoose k0 := M.\nApply H11.\nApply H8.\nQed."
+      "text": "Assume sigma_k_cv.\nBy lim_const_seq it holds that\n  (Un_cv (fun N ↦ sigma a k (l-1)) (sigma a k (l-1))) (H7).\nBy CV_minus it holds that\n  (Un_cv (fun N ↦ sigma a k N - (sigma a k (l-1)))\n         (sigma a k (l-1) + L - (sigma a k (l-1)))) (H8).\nWe claim that\n  (∃ M : ℕ, \n    ∀ n : ℕ, (n ≥ M)%nat ⇒\n      sigma a k n - sigma a k (l - 1)%nat = sigma a l n ) (H9).\nChoose M := l.\nTake n : ℕ. Assume n_ge_l : (n ≥ l)%nat. \nBy sigma_split_v2 it holds that \n  (sigma a k n = sigma a k (l - 1)%nat + sigma a l n) (H10).\nWe need to show that (sigma a k n - sigma a k (l-1) = sigma a l n).\nIt follows that (sigma a k n - sigma a k (l - 1) =\nsigma a l n).\n\nRewrite using (L = sigma a k (l-1) + L - sigma a k (l-1)).\napply conv_evt_eq_seq\n  with (a := fun n ↦ sigma a k n - sigma a k (l-1))\n       (b := fun n ↦ sigma a l n).\nChoose M such that H11 according to H9.\nChoose k0 := M.\nApply H11.\nApply H8.\nQed."
     },
     {
       "type": "code",
