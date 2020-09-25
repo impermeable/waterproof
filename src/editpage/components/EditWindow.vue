@@ -19,8 +19,7 @@
           :index="0">
       </inter-block>
       <template v-for="(block, index) in blocks">
-        <component v-show="!block.state.foldStatus.isFolded &&
-                    (block.type !== 'code' || index !== focusedElement)"
+        <component v-show="!block.state.foldStatus.isFolded"
                   :is="toComponent(block.type)" :block="block"
                   :key="block.type + index" :index="index"
                   :sentences="sentenceIndices"
