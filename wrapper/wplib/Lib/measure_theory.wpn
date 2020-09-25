@@ -1,0 +1,105 @@
+{
+  "exerciseSheet": false,
+  "blocks": [
+    {
+      "type": "text",
+      "text": "# Measure theory definitions & notations"
+    },
+    {
+      "type": "code",
+      "text": "Require Import Sets.Ensembles.\nRequire Import Sets.Classical_sets.\nRequire Import wplib.Tactics.Tactics.\nRequire Import wplib.Tactics.TacticsContra.\nRequire Import Sets.Powerset.\nRequire Import Coq.Logic.Classical_Pred_Type.\nRequire Import wplib.Notations.Notations.\nRequire Import wplib.Notations.SetNotations.\nRequire Import Reals.\nRequire Import wplib.Lib.sets.\n\nOpen Scope ensemble_scope.\n\nVariable U : Type."
+    },
+    {
+      "type": "code",
+      "text": "\n"
+    },
+    {
+      "type": "text",
+      "text": "## Collections of sets\n### Definitions \nConcerning π-systems, λ-systems, σ-algebras and their properties: "
+    },
+    {
+      "type": "code",
+      "text": "Definition is_π_system {U} (Π : set_of_subsets U) \n  : Prop := \n    ∀ A : subset U, A ∈ Π ⇒ \n      ∀ B : subset U, B ∈ Π ⇒ \n         (A ∩ B) ∈ Π. \n         \nDefinition is_λ_system {U} (Λ : set_of_subsets U) \n  : Prop :=\n    full_set_in_set Λ ∧ \n    complement_in_set Λ ∧\n    closed_under_disjoint_countable_union Λ. \n\nDefinition λ_system_generated_by {U} (A : set_of_subsets U) \n  : (set_of_subsets U) := \n    ｛B : subset U | (∀ Λ : set_of_subsets U, \n      is_λ_system Λ ⇒ (A ⊂ Λ ⇒ B ∈ Λ))｝. \n\nDefinition is_σ_algebra {U} (F : set_of_subsets U) \n  : Prop := \n    full_set_in_set F ∧ \n    complement_in_set F ∧\n    closed_under_countable_union F.\n\nDefinition σ_algebra_generated_by {U} (A : set_of_subsets U) \n  : (set_of_subsets U) := \n    ｛B : subset U | ∀ F : set_of_subsets U, is_σ_algebra F ⇒ (A ⊂ F ⇒ B ∈ F)｝. \n\nDefinition restriction {U} (F : set_of_subsets U) (A : (subset U)) \n  : (set_of_subsets U) := \n    ｛C : subset U | ∃ B : subset U, B ∈ F ⇒ C = A ∩ B｝. "
+    },
+    {
+      "type": "text",
+      "text": "### Notations \nTo make the definitions above more useable/readable:"
+    },
+    {
+      "type": "code",
+      "text": "Notation \"A 'is' 'a' 'π-system'\" := \n  (is_π_system A) (at level 50). \n  \nNotation \"A 'is' 'a' 'λ-system'\" := \n  (is_λ_system A) (at level 50).\n\nNotation \"A 'is' 'a' 'σ-algebra'\" := \n  (is_σ_algebra A) (at level 50).\n(*TODO: general tactic for the form above? *)\n\nNotation \"λ( A )\" := \n (λ_system_generated_by A) (at level 50).\n \nNotation \"σ( A )\" := \n (σ_algebra_generated_by A) (at level 50)."
+    },
+    {
+      "type": "text",
+      "text": "### Record types"
+    },
+    {
+      "type": "text",
+      "text": "TO DO: The following four procedures are completely analogous. More efficient way?\n\nπ-systems:"
+    },
+    {
+      "type": "code",
+      "text": "Record π_system {U} := make_π_system\n  { underlying_set_of_subsets_π : set_of_subsets U;\n    proof_is_π_system : is_π_system underlying_set_of_subsets_π}.\n    \nCoercion underlying_set_of_subsets_π : \n  π_system >-> Ensemble.\n"
+    },
+    {
+      "type": "text",
+      "text": "λ-systems:"
+    },
+    {
+      "type": "code",
+      "text": "\nRecord λ_system {U} := make_λ_system\n  { underlying_set_of_subsets_λ : set_of_subsets U;\n    proof_is_λ_system : is_λ_system underlying_set_of_subsets_λ}.\n    \nCoercion underlying_set_of_subsets_λ : \n  λ_system >-> Ensemble.\n\n\n"
+    },
+    {
+      "type": "text",
+      "text": "σ-algebras:"
+    },
+    {
+      "type": "code",
+      "text": "Record σ_algebra {U} := make_σ_algebra\n  { underlying_set_of_subsets_σ : set_of_subsets U;\n    proof_is_σ_algebra : is_σ_algebra underlying_set_of_subsets_σ}.\n\nCoercion underlying_set_of_subsets_σ : \n  σ_algebra >-> Ensemble.\n"
+    },
+    {
+      "type": "text",
+      "text": "A collection that is both a π-system and a λ-system (mostly for proof of π_and_λ_is_σ): "
+    },
+    {
+      "type": "code",
+      "text": "Record π_and_λ_system {U} := make_π_and_λ_system\n  { underlying_set_of_subsets_π_and_λ : set_of_subsets U;\n    proof_is_π_and_λ_system : (is_λ_system underlying_set_of_subsets_π_and_λ \n      /\\ is_π_system underlying_set_of_subsets_π_and_λ)}.\n      \nCoercion underlying_set_of_subsets_π_and_λ : \n  π_and_λ_system >-> Ensemble.\n"
+    },
+    {
+      "type": "text",
+      "text": "## Measures"
+    },
+    {
+      "type": "text",
+      "text": "### Definitions \nOf σ-additivity, measure and probability measure:"
+    },
+    {
+      "type": "code",
+      "text": "Variable μ : @σ_algebra U → ℝ.\nDefinition σ_additive_on {U} (F : σ_algebra) (μ : (subset U ⇨ ℝ)) : Prop := \n  ∀ C : (ℕ → (subset U)), (∀ n : ℕ, C n ∈ F) \n    ⇒ C is a disjoint sequence of sets\n      ⇒ Σ (fun (n:ℕ) ↦ (μ (C n))) \n          equals (μ (countable_union C)).\n\nOpen Scope R_scope.      \nDefinition is_measure_on {U} (F : σ_algebra) (μ : (subset U → ℝ)) : Prop := \n  μ ∅ = 0 ∧ σ_additive_on F μ.\n  \nDefinition is_probability_measure_on {U} (F : σ_algebra) (μ : (subset U → ℝ)) \n  : Prop := \n    is_measure_on F μ ∧ μ Ω = 1."
+    },
+    {
+      "type": "text",
+      "text": "### Notations"
+    },
+    {
+      "type": "code",
+      "text": "Notation \"μ 'is' 'σ-additive' 'on' F\" := \n  (σ_additive_on F μ) (at level 50). \n  \nNotation \"μ 'is' 'a' 'measure' 'on' F\" := \n  (is_measure_on F μ) (at level 50). "
+    },
+    {
+      "type": "text",
+      "text": "### Measures as record types"
+    },
+    {
+      "type": "code",
+      "text": "(*\nDefinition set_function {U} := (subset U ⇨ ℝ).\n\nRecord measure_on {F} := make_measure \n  { underlying_function : set_function; \n    proof_is_measure : is_measure_on F underlying_function}.\n    \n\nCoercion underlying_function : measure_on >-> set_function.\n*)"
+    },
+    {
+      "type": "text",
+      "text": "# Hints"
+    },
+    {
+      "type": "code",
+      "text": "Hint Resolve proof_is_π_system : measure_theory.\nHint Resolve underlying_set_of_subsets_π : measure_theory.\nHint Resolve proof_is_λ_system : measure_theory.\nHint Resolve underlying_set_of_subsets_λ : measure_theory.\nHint Resolve proof_is_σ_algebra : measure_theory.\nHint Resolve underlying_set_of_subsets_σ : measure_theory.\nHint Resolve proof_is_π_and_λ_system : measure_theory.\nHint Resolve underlying_set_of_subsets_π_and_λ : measure_theory.\n(*\nHint Resolve underlying_function : measure_theory.\nHint Resolve proof_is_measure : measure_theory.\n*)"
+    }
+  ]
+}

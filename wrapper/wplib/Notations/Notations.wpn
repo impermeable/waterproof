@@ -67,11 +67,39 @@
     },
     {
       "type": "text",
+      "text": "## Sequences"
+    },
+    {
+      "type": "code",
+      "text": "Notation \"an 'converges' 'to' a\" := \n  (Un_cv an a) (at level 50). "
+    },
+    {
+      "type": "text",
+      "text": "## Sums and series"
+    },
+    {
+      "type": "code",
+      "text": "Notation \"'Σ' Cn 'equals' x\" := \n  (infinite_sum Cn x) (at level 50).\n  \nNotation \"'Σ' 'of' Cn 'up' 'to' n\" := \n  (sum_f_R0 Cn n) (at level 50). \n(* Sum and series also defined in series.wpn. What to adapt? *)"
+    },
+    {
+      "type": "text",
+      "text": "## Functions"
+    },
+    {
+      "type": "text",
+      "text": "For the composition of a sequence and a function (e.g. for the sequence of measures of a sequence of sets):"
+    },
+    {
+      "type": "code",
+      "text": "Notation \"μ ◦ C\" := \n  (fun (n:ℕ) ↦ (μ (C n))) (at level 45)."
+    },
+    {
+      "type": "text",
       "text": "## Sets"
     },
     {
       "type": "code",
-      "text": "Definition is_in {D : Set} := fun (A : (D → Prop)) ↦ (fun (x : D) ↦ A x).\nNotation \"x ∈ A\" := (@is_in _ A x) (at level 50)."
+      "text": "Definition is_in {D : Set} := fun (A : (D → Prop)) ↦ (fun (x : D) ↦ A x).\nNotation \"x ∈ A\" := (@is_in _ A x) (at level 50) : analysis_scope."
     }
   ]
 }

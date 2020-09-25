@@ -7,7 +7,7 @@
     },
     {
       "type": "code",
-      "text": "Require Import Rbase.\nRequire Import Rfunctions.\nRequire Import SeqSeries.\nRequire Import Rtrigo.\nRequire Import Ranalysis.\nRequire Import Integration.\nRequire Import micromega.Lra.\nRequire Import Omega.\nRequire Import Max.\n(* Require Import Unicode.Utf8. *)\n\nRequire Import wplib.Notations.Notations."
+      "text": "Require Import Rbase.\nRequire Import Rfunctions.\nRequire Import SeqSeries.\nRequire Import Rtrigo.\nRequire Import Ranalysis.\nRequire Import Integration.\nRequire Import micromega.Lra.\nRequire Import Omega.\nRequire Import Max.\n(* Require Import Unicode.Utf8. *)\nRequire Import Sets.Ensembles.\nRequire Import Sets.Classical_sets."
     },
     {
       "type": "text",
@@ -195,6 +195,14 @@
     },
     {
       "type": "text",
+      "text": "Now a somewhat experimental and non-standard notation to resolve a goal using another assumption/lemma. The usual `By ... it holds that ...` does not do this, even without adding a name."
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"By\" constr(u) \"it\" \"holds\" \"that\" constr(t) \"which\" \"concludes\" ident(the) \"proof\":= \n  By u it holds that t (the); \n  apply the. "
+    },
+    {
+      "type": "text",
       "text": "TODO: preferably deprecate this notation."
     },
     {
@@ -371,11 +379,35 @@
     },
     {
       "type": "text",
-      "text": "## **Hints**"
+      "text": "## Proving by induction\n\nVery basic notation, room for improvement. Also not the nicest formulation, but `Proof` is already used. "
     },
     {
       "type": "code",
-      "text": "Hint Resolve Rmult_gt_0_compat : real.\nHint Resolve Rmult_lt_0_compat : real."
+      "text": "Tactic Notation \"We\" \"prove\" \"by\" \"induction\" \"on\" ident(x) := \n  induction x. "
+    },
+    {
+      "type": "text",
+      "text": "## A tool for set equalities and inclusions"
+    },
+    {
+      "type": "text",
+      "text": "TODO This tool works well in separate lemmas, but not always in larger contexts. Also, no error message is built in yet."
+    },
+    {
+      "type": "code",
+      "text": "Ltac set_power :=\n  timeout 1 (first [ solve [auto with sets]\n        | solve [eauto with sets]\n        | solve [firstorder (auto with sets)]\n        | solve [firstorder (eauto with sets)]]).\n\nLtac destruct_sets :=\n  match goal with \n    | [H : In _ (Intersection _ _ _) _ |- _] => destruct H\n    | [H : In _ (Union _ _ _) _  |- _] => destruct H; try set_power\n  end.\n\nLtac trivial_set_inclusion := \n  try intro x;\n  try intro H;\n  try destruct_sets;\n  try contradiction;\n  try set_power.\n\nLtac trivial_set_equality := \n  try intros A;\n  try intros B;\n  try apply Extensionality_Ensembles;\n  try unfold Same_set;\n  try unfold Included;\n  split;\n  trivial_set_inclusion;\n  trivial_set_inclusion.\n\n\nTactic Notation \"This\" \"equality\" \"is\" \"trivial\" := \n   trivial_set_equality."
+    },
+    {
+      "type": "text",
+      "text": "\n\n## Hints"
+    },
+    {
+      "type": "code",
+      "text": "Hint Resolve Rmult_gt_0_compat : real.\nHint Resolve Rmult_lt_0_compat : real.\nHint Resolve R_dist_eq : real.\nHint Constructors Union Intersection Disjoint Full_set : sets. \n\n(*Would like to add the following hint, but this undesirably interferes with workings of e.g. wp_power. Also, what weight to use?\nHint Extern 5 (_ = _) => try trivial_set_equality : sets. \n*)"
+    },
+    {
+      "type": "text",
+      "text": ""
     }
   ]
 }

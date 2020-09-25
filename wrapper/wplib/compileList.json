@@ -5,7 +5,10 @@
   "Tactics/TacticsContra",
   "Lib/sup_and_inf",
   "Lib/sequences",
-  "Lib/series",
   "Lib/subsequences",
-  "Lib/sequential_accumulation_points"
+  "Lib/sequential_accumulation_points",
+  "Notations/SetNotations",
+  "Lib/series",
+  "Lib/sets",
+  "Lib/measure_theory"
 ]
