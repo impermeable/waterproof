@@ -55,7 +55,7 @@
     },
     {
       "type": "code",
-      "text": "Notation \"｜ x ｜\" := (Rabs x) (at level 69, x at level 200).\n(** Notation \"｜ x - y ｜\" := (R_dist x y) (at level 69, x at level 48, y at level 48). *)"
+      "text": "Notation \"｜ x ｜\" := (Rabs x) (at level 69, x at level 200).\n Notation \"｜ x - y ｜\" := (R_dist x y) (at level 69, x at level 48, y at level 48)."
     },
     {
       "type": "text",
@@ -71,7 +71,7 @@
     },
     {
       "type": "code",
-      "text": "Notation \"an 'converges' 'to' a\" := \n  (Un_cv an a) (at level 50). "
+      "text": "(**Notation \"an 'converges' 'to' a\" := \n  (Un_cv an a) (at level 50).*) "
     },
     {
       "type": "text",
@@ -79,7 +79,7 @@
     },
     {
       "type": "code",
-      "text": "Notation \"'Σ' Cn 'equals' x\" := \n  (infinite_sum Cn x) (at level 50).\n  \nNotation \"'Σ' 'of' Cn 'up' 'to' n\" := \n  (sum_f_R0 Cn n) (at level 50). \n(* Sum and series also defined in series.wpn. What to adapt? *)"
+      "text": "Notation \"'Σ' Cn 'equals' x\" := \n  (infinite_sum Cn x) (at level 50).\n  \n(*Notation \"'Σ' 'of' Cn 'up' 'to' n\" := \n  (sum_f_R0 Cn n) (at level 50). \n (*Sum and series also defined in series.wpn. What to adapt?*)*)"
     },
     {
       "type": "text",
@@ -91,7 +91,7 @@
     },
     {
       "type": "code",
-      "text": "Notation \"μ ◦ C\" := \n  (fun (n:ℕ) ↦ (μ (C n))) (at level 45)."
+      "text": "(*Notation \"μ ◦ C\" := \n  (fun (n:ℕ) ↦ (μ (C n))) (at level 45).*)"
     },
     {
       "type": "text",

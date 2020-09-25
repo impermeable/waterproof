@@ -7,7 +7,7 @@
     },
     {
       "type": "code",
-      "text": "Require Import Rbase.\nRequire Import Rfunctions.\nRequire Import SeqSeries.\nRequire Import Rtrigo.\nRequire Import Ranalysis.\nRequire Import Integration.\nRequire Import micromega.Lra.\nRequire Import Omega.\nRequire Import Max.\n(* Require Import Unicode.Utf8. *)\nRequire Import Sets.Ensembles.\nRequire Import Sets.Classical_sets."
+      "text": "Require Import Rbase.\nRequire Import Rfunctions.\nRequire Import SeqSeries.\nRequire Import Rtrigo.\nRequire Import Ranalysis.\nRequire Import Integration.\nRequire Import micromega.Lra.\nRequire Import Omega.\nRequire Import Max.\n(* Require Import Unicode.Utf8. *)\n\nRequire Import wplib.Notations.Notations.\nRequire Import Sets.Ensembles.\nRequire Import Sets.Classical_sets."
     },
     {
       "type": "text",

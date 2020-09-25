@@ -7,7 +7,7 @@
     },
     {
       "type": "code",
-      "text": "Require Import Sets.Ensembles.\nRequire Import Sets.Classical_sets.\nRequire Import wplib.Tactics.Tactics.\nRequire Import wplib.Tactics.TacticsContra.\nRequire Import Sets.Powerset.\nRequire Import Coq.Logic.Classical_Pred_Type.\nRequire Import wplib.Notations.Notations.\nRequire Import wplib.Notations.SetNotations.\nRequire Import Reals.\nRequire Import wplib.Lib.sets.\n\nOpen Scope ensemble_scope.\n\nVariable U : Type."
+      "text": "Require Import Sets.Ensembles.\nRequire Import Sets.Classical_sets.\nRequire Import wplib.Notations.Notations.\nRequire Import wplib.Tactics.Tactics.\nRequire Import wplib.Tactics.TacticsContra.\nRequire Import Sets.Powerset.\nRequire Import Coq.Logic.Classical_Pred_Type.\nRequire Import wplib.Notations.Notations.\nRequire Import wplib.Notations.SetNotations.\nRequire Import Reals.\nRequire Import wplib.Lib.sets.\n\nOpen Scope ensemble_scope.\n\nVariable U : Type."
     },
     {
       "type": "code",

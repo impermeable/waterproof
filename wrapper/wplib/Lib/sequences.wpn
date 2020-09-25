@@ -95,7 +95,7 @@
     },
     {
       "type": "code",
-      "text": "Proof.\nTake c : ℝ. \nDefine s := (constant_sequence c).\nTo show: (∀ ε : ℝ, ε > 0 ⇒ ∃ N : ℕ, ∀ n : ℕ, (n ≥ N)%nat ⇒ ｜(s n) - c｜ < ε).\n\nTake ε : ℝ; such that ε_gt_0 : (ε > 0).\nChoose N := O.\nTake n : ℕ; such that n_ge_N : (n ≥ N)%nat.\nIt holds that (s n = c) (H).\nIt holds that (c - c = 0) (H1).\nRewrite (｜s n - c｜) = (｜c - c｜).\n(* Something is not right with the rewrite right now *)\nrewrite H1, Rabs_R0.\nThis follows immediately.\nQed."
+      "text": "Proof.\nTake c : ℝ. \nDefine s := (constant_sequence c).\nTo show: (∀ ε : ℝ, ε > 0 ⇒ ∃ N : ℕ, ∀ n : ℕ, (n ≥ N)%nat ⇒ ｜(s n) - c｜ < ε).\n\nTake ε : ℝ; such that ε_gt_0 : (ε > 0).\nChoose N := O.\nTake n : ℕ; such that n_ge_N : (n ≥ N)%nat.\nIt holds that (s n = c) (H).\nIt holds that (｜c - c｜ = 0) (H1).\nRewrite (｜s n - c｜) = (｜c - c｜) < ε.\nQed."
     },
     {
       "type": "text",
