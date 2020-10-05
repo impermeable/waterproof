@@ -1,0 +1,117 @@
+{
+  "exerciseSheet": false,
+  "blocks": [
+    {
+      "type": "text",
+      "text": "# **Databases**\nIn this file, we construct so-called Hint Databases.\nThese databases can be used in combination with the tactics `auto` and `eauto`.\nWhen using such a tactic, the hints in th database are recursively called until a certain search depth (standard is 5).\nWe choose to split the interesting hints among a number of different databases, so that the recursive search  size and the corresponding search time remain relatively small.\n\n## **Equality**\nWe first look at databases that can be used for solving equalities, like $x + y = y + x$ and $|(\\left|\\log(e^x)|)\\right| = |x|$.\nThe most important operation in each of the databases is the `reflexivity` tactic, since with that tactic, we want to solve the step.\nWe distinguish a number of operations and characteristics, and initialise these databases by adding a reflexivity hint."
+    },
+    {
+      "type": "code",
+      "text": "Require Import Reals.\nLocal Open Scope R_scope.\nHint Extern 0 => reflexivity : \n  eq_general\n  eq_opp eq_zero eq_one\n  eq_abs eq_sqr eq_exp eq_other \n  eq_plus eq_minus eq_mult.\n"
+    },
+    {
+      "type": "text",
+      "text": "Next, we will categorise existing lemmas of the form `forall _ : R, _ = _`, and use the rewrite tactic to change the goal.\nThese are ideal for solving equalities, since they do not require any assumptions.\n\nNote that we add all lemmas to a general database `eq_general`."
+    },
+    {
+      "type": "text",
+      "text": "### **Plus, minus and multiplication rewriters**\nIn this database, we will add commutative, associative and distributative properties of numbers in combination with the $+$ operator.\nWe let $x, y ∈ \\mathbb{R}$.\n\n#### Commutativity:\nWe have the following commutative properties:"
+    },
+    {
+      "type": "code",
+      "text": "Hint Extern 1 => (rewrite Rplus_comm) : eq_general eq_plus. (* x + y = y + x *)\nHint Extern 1 => (rewrite Rmult_comm) : eq_general eq_mult. (* x * y = y * x *)"
+    },
+    {
+      "type": "text",
+      "text": "#### Associativity\nWe have the following associative properties:"
+    },
+    {
+      "type": "code",
+      "text": "Hint Extern 1 => (rewrite Rplus_assoc) : eq_general eq_plus. (* x + y + z = x + (y + z) *)\nHint Extern 1 => (rewrite Rmult_assoc) : eq_general eq_mult. (* x * y * z = x * (y * z) *)"
+    },
+    {
+      "type": "text",
+      "text": "#### Distributivity\nWe have the following distributive properties:"
+    },
+    {
+      "type": "code",
+      "text": "Hint Extern 1 => (rewrite Rdiv_plus_distr) : eq_general eq_plus. \n  (* (x + y) / z = x / z + y / z *)\nHint Extern 1 => (rewrite Rdiv_minus_distr) : eq_general eq_minus. \n  (* (x - y) / z = x / z - y / z *)\nHint Extern 1 => (rewrite Rmult_plus_distr_l) : eq_general eq_mult eq_plus. \n  (* x * (y+z) = x * y + x * z *)\nHint Extern 1 => (rewrite Rmult_plus_distr_r) : eq_general eq_mult eq_plus. \n  (* (x+y) * z = x * z + y * z *)"
+    },
+    {
+      "type": "text",
+      "text": "#### Other\nWe have some other properties:\n"
+    },
+    {
+      "type": "code",
+      "text": "Hint Extern 1 => (unfold Rminus) : eq_minus."
+    },
+    {
+      "type": "text",
+      "text": "### **Opposite rewriters**\nIn this database, we will add properties with the additive inverse."
+    },
+    {
+      "type": "text",
+      "text": "#### Distributitivity\nWe have the following distributive properties containing additive inverses:"
+    },
+    {
+      "type": "code",
+      "text": "Hint Extern 1 => (rewrite Ropp_minus_distr) : eq_general eq_opp. \n  (* - (x - y) = y - x *)\nHint Extern 1 => (rewrite Ropp_minus_distr') : eq_general eq_opp. \n  (* - (y - x) = x - y *)\nHint Extern 1 => (rewrite Ropp_mult_distr_l) : eq_general eq_opp. \n  (* - (x * y) = - x * y *)\nHint Extern 1 => (rewrite Ropp_mult_distr_r) : eq_general eq_opp.\n  (* - (x * y) = x * - y *)\nHint Extern 1 => (rewrite Ropp_mult_distr_l_reverse) : eq_general eq_opp. \n  (* - x * y = - (x * y) *)\nHint Extern 1 => (rewrite Ropp_mult_distr_r_reverse) : eq_general eq_opp. \n  (* x * - y = - (x * y) *)\nHint Extern 1 => (rewrite Ropp_plus_distr) : eq_general eq_opp. \n  (* - (x + y) = - x + - y. *)"
+    },
+    {
+      "type": "text",
+      "text": "#### Other \nWe have some other properties:"
+    },
+    {
+      "type": "code",
+      "text": "Hint Extern 1 => (rewrite Ropp_involutive) : eq_general eq_opp. (* --a = a *)\nHint Extern 1 => (rewrite Rmult_opp_opp) : eq_general eq_opp. (* -a * -b = a * b *)\nHint Extern 1 => (rewrite Ropp_div) : eq_general eq_opp. (* - a / b = - (a / b) *)\nHint Extern 1 => (rewrite Rplus_opp_l) : eq_general eq_opp. (* -a  + a = 0 *)\nHint Extern 1 => (rewrite Rplus_opp_r) : eq_general eq_opp. (* a  + -a = 0 *)"
+    },
+    {
+      "type": "text",
+      "text": "### **Simple number arithmetic**\nAddition with 0 and multiplication with 0 or 1 is a trivial task, so we use two databases to resolve such simple steps.\n\n#### Arithmetic with 0's\nWe have the following properties for equations with 0:"
+    },
+    {
+      "type": "code",
+      "text": "Hint Extern 1 => (rewrite Rplus_0_l) : eq_general eq_zero. (* 0 + x = x *)\nHint Extern 1 => (rewrite Rplus_0_r) : eq_general eq_zero. (* x + 0 = x *)\nHint Extern 1 => (rewrite Rminus_0_l) : eq_general eq_zero. (* 0 - x = - x *)\nHint Extern 1 => (rewrite Rminus_0_r) : eq_general eq_zero. (* x - 0 = x *)\nHint Extern 1 => (rewrite Rmult_0_l) : eq_general eq_zero. (* 0 * x = 0 *)\nHint Extern 1 => (rewrite Rmult_0_r) : eq_general eq_zero. (* x * 0 = 0 *)\nHint Extern 1 => (rewrite pow_O) : eq_general eq_zero. (* x ^ 0 = 1 *)"
+    },
+    {
+      "type": "text",
+      "text": "#### Arithmetic with 1's\nWe have the following properties for equations with 1:"
+    },
+    {
+      "type": "code",
+      "text": "Hint Extern 1 => (rewrite Rmult_1_l) : eq_general eq_one. (* 1 * x = x *)\nHint Extern 1 => (rewrite Rmult_1_r) : eq_general eq_one. (* x * 1 = x *)\nHint Extern 1 => (rewrite Rinv_1) : eq_general eq_one. (* x / 1 = x *)\nHint Extern 1 => (rewrite pow_1) : eq_general eq_one. (* x ^ 1 = x *)"
+    },
+    {
+      "type": "text",
+      "text": "### **Distances and absolute values**\nThere are a number of trivial steps regarding distances, or absolute values.\n\n#### Distance (R_dist)\nWe have the following properties:"
+    },
+    {
+      "type": "code",
+      "text": "Hint Extern 1 => (rewrite R_dist_eq) : eq_general eq_abs. \n  (* ||a - a|| = 0 *)\nHint Extern 1 => (rewrite R_dist_mult_l) : eq_general eq_abs. \n  (* ||a * b - a * c|| = ||a|| * ||b - c|| *)\nHint Extern 1 => (rewrite R_dist_sym) : eq_general eq_abs. \n  (*||a - b|| = ||b - a||*)"
+    },
+    {
+      "type": "text",
+      "text": "#### Absolute value (Rabs)\nWe have the following properties:"
+    },
+    {
+      "type": "code",
+      "text": "Hint Extern 1 => (rewrite Rabs_minus_sym) : eq_general eq_abs. \n  (* |a - b| = |b - a|, using Rabs *)\nHint Extern 1 => (rewrite Rabs_Rabsolu) : eq_general eq_abs. \n  (* | |a| | = |a| *)\nHint Extern 1 => (rewrite Rabs_Ropp) : eq_general eq_abs. \n  (* |-a| = |a| *)\nHint Extern 1 => (rewrite Rabs_mult) : eq_general eq_abs. \n  (* |a * b| = |a| * |b| *)\nHint Extern 1 => (rewrite Rsqr_abs) : eq_general eq_abs. \n  (* a^2 = |a|^2 *)\nHint Extern 1 => (rewrite sqrt_Rsqr_abs) : eq_general eq_abs. \n  (* sqrt(a^2) = |a| *)\nHint Extern 1 => (rewrite pow2_abs) : eq_general eq_abs. \n  (* | a |^2 = a^2*)"
+    },
+    {
+      "type": "text",
+      "text": "### **Squares**\nThere are a number of trivial steps regarding squares.\nWe have the following properties:"
+    },
+    {
+      "type": "code",
+      "text": "Hint Extern 1 => (rewrite Rsqr_pow2) : eq_general eq_sqr. (* a² = a ^ 2 *)\nHint Extern 1 => (rewrite Rsqr_plus) : eq_general eq_sqr. (* (a-b)² = a² + b² + 2*a*b *)\nHint Extern 1 => (rewrite Rsqr_plus_minus) : eq_general eq_sqr. (* (a+b)*(a-b) = a² - b² *)\nHint Extern 1 => (rewrite Rsqr_minus) : eq_general eq_sqr. (* (a-b)² = a² + b² - 2*a*b *)\nHint Extern 1 => (rewrite Rsqr_minus_plus) : eq_general eq_sqr. (* (a-b)*(a+b) = a² - b² *)\nHint Extern 1 => (rewrite Rsqr_neg) : eq_general eq_sqr. (* a² = (-a)² *)\nHint Extern 1 => (rewrite Rsqr_neg_minus) : eq_general eq_sqr. (* (a-b)² = (b-a)² *)\nHint Extern 1 => (rewrite Rsqr_mult) : eq_general eq_sqr. (* (a*b)² = a² * b² *)"
+    },
+    {
+      "type": "text",
+      "text": "### **Exponentials**\nThere are a number of trivial steps regarding exponentials. We have the following properties:"
+    },
+    {
+      "type": "code",
+      "text": "Hint Extern 1 => (rewrite ln_exp) : eq_general eq_exp. (* ln (exp a)) = a *)\nHint Extern 1 => (rewrite exp_Ropp) : eq_general eq_exp. (* exp (-a) = / exp a*)\nHint Extern 1 => (rewrite exp_plus) : eq_general eq_exp. (* exp(a+b) = exp(a) * exp(b) *)\nHint Extern 1 => (rewrite ln_exp) : eq_general eq_exp. (* ln (exp a)) = a *)"
+    }
+  ]
+}

@@ -1,0 +1,137 @@
+{
+  "exerciseSheet": false,
+  "blocks": [
+    {
+      "type": "text",
+      "text": "# Continuity of measure\nAn extremely important result in measure theory is the continuity of measures. There are multiple formulations and variants to state it. The one that we aim to prove in this notebook is continuity from below, that is, continuity of measure for an increasing sequence of sets. This result is used over and over in measure theory, and for example forms the basis of the monotone convergence theorem. \n\nThe proof can roughly be divided into four parts, of which only the last two involve measures; the first two are purely set-theoretical.  \nFirst, we show that a σ-algebra is closed under taking finite unions. Next, we prove some more properties of the disjoint sequence also used in the proof of the π-λ theorem. Then we show that measures are finitely additive and finally, we use all prior results to prove our main result, the lemma `incr_cont_meas`. \n\nWe begin with importing some libraries and introducing some variables and notations. "
+    },
+    {
+      "type": "code",
+      "text": "Require Import ClassicalFacts. \nRequire Import Coq.Arith.Wf_nat. \nRequire Import Logic. \nRequire Import Omega. \nRequire Import Reals.\nRequire Import Sets.Classical_sets.\nRequire Import Sets.Ensembles.\nRequire Import Sets.Powerset.\nRequire Import wplib.Lib.measure_theory.\nRequire Import wplib.Lib.sets.\nRequire Import wplib.Notations.Notations.\nRequire Import wplib.Notations.SetNotations.\nRequire Import wplib.Tactics.Tactics.\nRequire Import wplib.Tactics.TacticsContra.\n\nChapter continuity_of_measure.\nOpen Scope nat.\n\nVariable U : Type.\nVariable F : @σ_algebra U.\nVariable μ : (subset U → ℝ)."
+    },
+    {
+      "type": "text",
+      "text": "## Finite unions in σ-algebras\n\nAt several points of the upcoming proofs, we use finite unions. The following lemmas are similar to ones in the π-λ theorem proof, but are now stated for a σ-algebra, $F$. We want to prove that the finite union of elements of $F$ is again an element of $F$. For this, we first need two lemmas. First, that every σ-algebra contains the empty set:"
+    },
+    {
+      "type": "code",
+      "text": "\nLemma empty_in_σ : \n  ∅ ∈ F. \n\nProof.   \nWrite goal using (@empty U = (Ω \\ Ω)) as ((Ω \\ Ω) ∈ F). \nIt holds that (is_σ_algebra F) (F_is_sig).\nIt follows that ((Ω \\ Ω) ∈ F).\nQed.  \n\n"
+    },
+    {
+      "type": "text",
+      "text": "And second, using the above, that σ-algebras are closed under the formation of finite unions:"
+    },
+    {
+      "type": "code",
+      "text": "\nLemma unions_in_σ : \n  ∀ A B : subset U, A ∈ F ∧ B ∈ F\n    ⇒ A ∪ B ∈ F.\n\nProof. \nTake A B : (subset U). \nDefine D := (aux_seq A B).\nAssume A_and_B_in_F. \n\nWe claim that (∀ n : ℕ, D n ∈ F) (all_aux_in_F). \nTake n : ℕ. \nWe prove by induction on n. \nIt holds that (D 0 ∈ F). \nWe prove by induction on n. \nIt holds that (D 1 ∈ F). \nWrite goal using (D (S (S n)) = ∅) \n  as (∅ ∈ F). \nBy empty_in_σ it holds that \n  (∅ ∈ F) (empty_in_F).\nApply empty_in_F.  \n\nBy CU_aux_is_union it holds that \n  (A ∪ B = countable_union D) (union_to_CU). \nWrite goal using (A ∪ B = countable_union (aux_seq A B))\n  as (countable_union D ∈ F).\nIt holds that (F is a σ-algebra) (F_is_σ_algebra).\nBy F_is_σ_algebra it holds that (countable_union D ∈ F)\n  which concludes the proof. \nQed."
+    },
+    {
+      "type": "text",
+      "text": "These two lemmas will help us prove that if $F$ is a σ-algebra, it is closed under taking countable unions: "
+    },
+    {
+      "type": "code",
+      "text": "Lemma FU_in_σ : \n  ∀ C : (ℕ → (subset U)), (∀ n : ℕ, (C n) ∈ F) \n      ⇒ ∀ n : ℕ, (finite_union_up_to C n) ∈ F.\n\nProof. \nTake C : (ℕ ⇨ subset U). \nAssume all_Cn_in_F.\nTake n : ℕ. \nWe prove by induction on n.\n(* Base case: *)\nWrite goal using (finite_union_up_to C 0 = ∅) \n  as (∅ ∈ F). \nApply empty_in_σ. \n(* Induction step: *)\nWrite goal using \n  (finite_union_up_to C (S n) \n    = (finite_union_up_to C n) ∪ (C n)) \n      as ((finite_union_up_to C n) ∪ (C n) ∈ F).\nBy all_Cn_in_F it holds that (C n ∈ F) (Cn_in_F). \nBy unions_in_σ it holds that \n  ((finite_union_up_to C n ∪ C n) ∈ F) \n    which concludes the proof. \nQed. "
+    },
+    {
+      "type": "text",
+      "text": "## The disjoint sequence\nAs mentioned before, the disjoint sequence `disjoint_seq` as defined in the `sets` library will play an important role in this proof. But of course we can only use it properly if, given a sequence of non-disjoint sets in $F$, all of the elements of the sequence it represents are in $F$ as well. This is what we prove in the next five lemmas. After that, we show what the union of the first $n$ elements of the disjoint sequence turns out to be. \n\n### σ-algebras and the disjoint sequence\nWe now prove the five lemmas. The first two together show that $F$ is closed under taking intersections. The first one rewrites the intersection of two sets to a combination of a union and complements of these sets: "
+    },
+    {
+      "type": "code",
+      "text": "Chapter disjoint_sequence.\nVariable C : (ℕ → (subset U)).\n\nSection disjoint_sets.\nVariable A B : subset U.\n\nLemma intersection_to_complement : \n  A ∩ B = Ω \\ ((Ω \\ A) ∪ (Ω \\ B)). \n\nProof. \nWe prove equality by proving two inclusions. \nTake x : U; Assume x_in_lhs. \ndestruct x_in_lhs. \nBy H it holds that (x ∉ Ω \\ A) (x_not_in_A). \nBy H0 it holds that (x ∉ Ω \\ B) (x_not_in_comp). \n\nWe claim that (x ∉ (Ω \\ A) ∪ (Ω \\ B)) (x_not_in_AB).\nWe argue by contradiction. \nWe claim that (x ∈ (Ω \\ A) ∪ (Ω \\ B)) (x_in_AB).\nApply NNPP; Apply H1.   \ndestruct x_in_AB. \nContradiction.\nContradiction. \nIt follows that (x ∈ Ω \\ ((Ω \\ A) ∪ (Ω \\ B))). \n\nTake x : U; Assume x_in_rhs. \ndestruct x_in_rhs.\nBy H0 it holds that \n  ((x ∉ Ω \\ A) ∧ (x ∉ Ω \\ B)) (x_not_in_int_comp). \nBecause x_not_in_int_comp \n  both x_not_in_compA and x_not_in_compB.\nWe claim that (x ∈ A) (x_in_A).\nWe argue by contradiction. \nBy H1 it holds that (x ∈ Ω \\ A) (x_in_compA).\nContradiction.  \n\nWe claim that (x ∈ B) (x_in_B).\nWe argue by contradiction. \nBy H1 it holds that (x ∈ Ω \\ B) (x_in_compB).\nContradiction. \nIt follows that (x ∈ A ∩ B). \nQed.  \n"
+    },
+    {
+      "type": "text",
+      "text": "The next lemma uses properties of a σ-algebra to show that for $A$ and $B$ in $F$, the result above is again in $F$. "
+    },
+    {
+      "type": "code",
+      "text": "\nLemma intersections_in_σ : \n  A ∈ F ∧ B ∈ F\n    ⇒ A ∩ B ∈ F.\n\nProof. \nAssume A_and_B_in_F. \nIt holds that (F is a σ-algebra) (F_is_σ). \nBy intersection_to_complement it holds that \n  (A ∩ B = Ω \\ ((Ω \\ A) ∪ (Ω \\ B))) (int_is_comp). \nWrite goal using (A ∩ B = Ω \\ ((Ω \\ A) ∪ (Ω \\ B)))\n  as (Ω \\ ((Ω \\ A) ∪ (Ω \\ B)) ∈ F). \nBy unions_in_σ it holds that \n ((Ω \\ A) ∪ (Ω \\ B) ∈ F) (compA_compB_in_F). \nIt follows that (Ω \\ ((Ω \\ A) ∪ (Ω \\ B)) ∈ F).\nQed."
+    },
+    {
+      "type": "text",
+      "text": "We need one more lemma for this, which rewrites the complement of a set with respect to another set. "
+    },
+    {
+      "type": "code",
+      "text": "\nLemma complement_as_intersection : \n  A \\ B = (Ω \\ B) ∩ A. \n\nProof. \nWe prove equality by proving two inclusions. \n\nTake x : U. \nAssume x_in_A_without_B. \nIt holds that (x ∈ ((Ω \\ B) ∩ A)). \n\nTake x : U. \nAssume x_in_rhs. \nBy x_in_rhs it holds that \n  (x ∈ (Ω \\ B) ∧ (x ∈ A)) (x_in_A_and_comp_B). \nIt holds that (x ∈ (A \\ B)). \nQed. \n\nEnd disjoint_sets.\n"
+    },
+    {
+      "type": "text",
+      "text": "These now serve to prove that $F$ is also closed under taking complements. "
+    },
+    {
+      "type": "code",
+      "text": "\n\nLemma complements_in_σ : \n  ∀ A B : subset U, A ∈ F ∧ B ∈ F\n    ⇒ A \\ B ∈ F. \n\nProof. \nTake A B : (subset U). \nAssume A_and_B_in_F. \nIt holds that \n  (F is a σ-algebra) (F_is_σ). \nIt holds that \n  (Ω \\ B ∈ F) (comp_B_in_F). \nBy intersections_in_σ it holds that \n  ((Ω \\ B) ∩ A ∈ F) (set_in_F). \nBy complement_as_intersection it holds that \n  (A \\ B = (Ω \\ B) ∩ A) (set_is_complement). \nWrite goal using (A \\ B = ((Ω \\ B) ∩ A)) \n  as (((Ω \\ B) ∩ A) ∈ F). \nIt holds that ((Ω \\ B) ∩ A ∈ F). \nQed. "
+    },
+    {
+      "type": "text",
+      "text": "Now, we can show what we set out to do this section, which is that al elements of the sequence constructed from the definition `disjoint_seq` are in $F$:"
+    },
+    {
+      "type": "code",
+      "text": "Lemma disj_seq_in_F : \n  C is an increasing sequence of sets\n    ⇒ (∀ n : ℕ, C n ∈ F)\n      ⇒ (∀n : ℕ, (disjoint_seq C) n ∈ F). \n\nProof. \nAssume C_is_incr_seq.\nAssume all_Cn_in_F.\nDefine D := (disjoint_seq C). \n\nTake n : ℕ. \nWe need to show that (C n \\ (finite_union_up_to C n) ∈ F).\nWe claim that ((finite_union_up_to C n) ∈ F) (FU_in_F). \nApply FU_in_σ.\nIt holds that \n  (F is a σ-algebra) (F_is_σ). \nApply all_Cn_in_F. \nIt holds that (C n ∈ F) (Cn_in_F).\nBy complements_in_σ it holds that \n  (C n \\ finite_union_up_to C n ∈ F) \n    which concludes the proof.\nQed. "
+    },
+    {
+      "type": "text",
+      "text": "### Finite unions of the disjoint sequence\nA useful consequence of the construction of a disjoint sequence using `disjoint_seq` is that, when given some sequence of sets $(C_n)$, the union of the first $n$ elements of this sequence is equal to the set $C_n$ itself. This will come in handy during our final proof, when rewriting the measure of some set $C_n$ to a sum of measures of disjoint sets. "
+    },
+    {
+      "type": "code",
+      "text": "Open Scope nat.\nLemma FUn_disj_is_Cn : \n  C is an increasing sequence of sets\n    ⇒ ∀ n : ℕ, finite_union_up_to \n      (disjoint_seq C) (S n) = C n.\n\nProof. \nAssume C_is_incr_seq.\nDefine D := (disjoint_seq C). \nTake n : ℕ. \nWe prove equality by proving two inclusions. \nTake x : U; Assume x_in_FU. \nChoose n0 such that x_in_Dn0 according to x_in_FU. \nBy x_in_Dn0 it holds that \n  (x ∈ C n0) (x_in_Cn0).\nBy increasing_seq_mn it holds that \n  (C n0 ⊂ C n) (Cn0_subs_Cn). \nIt follows that (x ∈ C n). \n\nTake x : U; Assume x_in_C.\nDefine aux_prop := (fun (n : ℕ) ↦ (x ∈ C n)).\nIt holds that \n  (∀ n, aux_prop n ∨ ¬aux_prop n) (aux_prop_decidable). \nBy dec_inh_nat_subset_has_unique_least_element it holds that\n  (has_unique_least_element le aux_prop) (exists_least_n). \nChoose n1 such that x_in_C_minimal_n according to exists_least_n. \nIt holds that ( aux_prop n1 \n  ∧ ( ∀ n2 : ℕ, aux_prop n2 \n    ⇒ (n1 ≤ n2))) (aux_n1_and_n1_le_n2).\nBecause aux_n1_and_n1_le_n2 both aux_n1 and n1_le_n2. \nIt holds that (x ∈ D n1) (x_in_Dn1). \nWe claim that (n1 < S n) (n1_l_n).\nBy x_in_C it holds that (aux_prop n) (aux_n_min_1). \nBy n1_le_n2 it holds that \n  (n1 ≤ n) (n1_leq_n_min_1). \nIt holds that \n  (n1 < S n). \n  \nIt holds that (∃i : ℕ,  \n  ((i < (S n)) ∧ x ∈ (D i))) (exists_i). \nIt follows that (x ∈ finite_union_up_to D (S n)).\nQed.\n\nEnd disjoint_sequence."
+    },
+    {
+      "type": "text",
+      "text": "## Finite additivity of measure\nFinally, we turn to measures. For our continuity proof at the end of this document, we need the property of finite additivity of measures. We now prove this in two steps: first, we show that for disjoint sets $A, B ∈ F$, we have that $μ(A∪B) = μ(A) + μ(B)$. Then, by induction, we show that this holds for an arbitrary number of mutually disjoint sets.\n\n### Additivity of measure\nWe again make use of the auxiliary sequence (denoted by $C$ here) that was also used, among others, to show that σ-algebras are closed under taking the union of two sets. In the same way that we went from closedness under countable union to closedness under 'regular' union, we now go from σ-additivity to  additivity. \n\nFor this, we first show that we may evaluate a measure on $F$ in $A$ and $B$ if both are in $F$ and if they are disjoint; this enables us to apply the σ-additivity property of the measure to show that $\\sum_{n=0}^{∞} μ(C_n) = μ \\left(∪_{n=0}^{∞} C_n \\right)$:"
+    },
+    {
+      "type": "code",
+      "text": "Section additivity. \nVariable A B : subset U.\nOpen Scope nat.\n\n\nLemma aux_additive : \n  is_measure_on F μ \n    ⇒ A ∈ F ⇒ B ∈ F\n      ⇒ A and B are disjoint \n        ⇒ (Σ (fun (n:ℕ) ↦ (μ ((aux_seq A B) n))) \n          equals (μ (countable_union (aux_seq A B)))).\n\nProof. \nAssume μ_is_measure_on_F. \nAssume A_in_F; Assume B_in_F.\nAssume A_B_disjoint.\nDefine D := (aux_seq A B).\nBy μ_is_measure_on_F it holds that \n  (μ is σ-additive on F) (add_on_F).\nApply add_on_F.\nTake n : ℕ. \nWe prove by induction on n.\nIt holds that (D 0 ∈ F).\nWe prove by induction on n.\nIt holds that (D 1 ∈ F).\n\nIt holds that (D (S (S n)) = ∅) (DSS_empty). \nBy empty_in_σ it holds that \n  (D (S (S n)) ∈ F) \n    which concludes the proof.\n \nBy disjoint_aux it holds that \n  (D is a disjoint sequence of sets) \n      which concludes the proof.  \nQed."
+    },
+    {
+      "type": "text",
+      "text": "Next, we prove the additivity property itself. It is a rather long proof, so we split it into three parts, and give explanation in between. \n\nThe beginning is straightforward: we make all necessary assumptions, rewrite our goal and state two properties that we will use later. Then, we state a claim, proving which takes up most of the proof."
+    },
+    {
+      "type": "code",
+      "text": "Open Scope R_scope. \n\nLemma additivity_meas : \n  is_measure_on F μ \n    ⇒ A ∈ F ⇒ B ∈ F\n      ⇒ A and B are disjoint\n        ⇒ μ (A ∪ B) = μ A + μ B. \n\nProof. \nAssume μ_is_measure_on_F. \nAssume A_in_F; Assume B_in_F.\nAssume A_B_disjoint.\nDefine D := (aux_seq A B).\nBy CU_aux_is_union it holds that \n  (A ∪ B = countable_union D) (union_is_CU).\nWrite goal using (A ∪ B = countable_union D)\n  as (μ (countable_union D) = μ A + μ B).\nBy aux_additive it holds that \n  (Σ (μ ◦ D) equals \n    (μ (countable_union D))) (sum_meas_is_meas_CU).\n\nWe claim that (Σ (μ ◦ D) equals\n  (μ A + μ B)) (series_is_sumAB). \nWe need to show that (\n   ∀ ε : ℝ, ε > 0\n    ⇒ ∃ N : ℕ ,\n       ∀ n : ℕ, (n ≥ N)%nat \n        ⇒ ｜(Σ of (μ ◦ D) up to n) - (μ A + μ B)｜ < ε).\nTake ε : R; Assume ε_g0. "
+    },
+    {
+      "type": "text",
+      "text": "But proving this claim mostly comes down to the proof of a smaller claim.\nFor us it is obvious that (counting from 0, as WaterProof does) for $n ≥ 1$, it holds that $\\sum_{i=0}^{n} μ(C_i) = μ \\left(∪_{i=0}^{n} C_i \\right)$, since for larger $n$, $C_n$ is empty so neither the sum on the left nor the union on the right change. In Waterproof this is far from trivial, and proving this is the hard work of the proof."
+    },
+    {
+      "type": "code",
+      "text": "We claim that ( ∀ n : ℕ, (n ≥ 1)%nat \n  ⇒ ｜ (Σ of (μ ◦ D) up to n) -  \n    (μ A + μ B) ｜ < ε) (holds_for_ge_1).\nWe prove by induction on n. \n(* n=0: *)\nIt holds that (¬(0 ≥ 1)%nat) (not_0_geq_1). \nContradiction.\n(* induction step *)\nIt holds that \n  (n = 0%nat ∨ (n > 0)%nat) (n_0_or_n_g0).\nBecause n_0_or_n_g0 either n_0 or n_g0. \n(* n=1: *)\nIt holds that (S n = 1%nat) (Sn_is_1).\nWrite goal using (S n = 1%nat)\n  as ((1 ≥ 1)%nat \n  ⇒ ｜ (Σ of (μ ◦ D) up to 1) -\n    (μ A + μ B) ｜ < ε).\nWrite goal using (Σ of (μ ◦ D) up to 1 = μ A + μ B)\n  as (｜ (μ A + μ B) - (μ A + μ B) ｜ < ε). \nBy R_dist_eq it holds that \n  (｜ (μ A + μ B) - (μ A + μ B) ｜ = 0) (dist_is_0).\nIt follows that (｜ (μ A + μ B) - (μ A + μ B) ｜ < ε).\n(* n>1: *)\nIt holds that ((n ≥ 1)%nat) (n_geq_1).\nBy IHn it holds that \n  (｜ (Σ of (μ ◦ D) up to n) - (μ A + μ B) ｜ < ε) (dist_l_eps). \nWe claim that ((μ ◦ D) (S n) = 0) (µSn_0).\nBy aux_ge2_empty it holds that \n  (D (S n) = ∅) (DSn_empty).\nBy μ_is_measure_on_F it holds that \n  (μ ∅ = 0) (µ_empty_0). \nWe need to show that (μ (D (S n)) = 0).\nWrite goal using (D (S n) = ∅)\n  as (μ ∅ = 0).\nApply µ_empty_0. \n\nWrite goal using (Σ of (μ ◦ D) up to (S n)\n  = Σ of (μ ◦ D) up to n + (μ ◦ D) (S n))\n    as (｜ (Σ of (μ ◦ D) up to n + (μ ◦ D) (S n)) -\n      (μ A + μ B) ｜ < ε). \nWrite goal using ((μ ◦ D) (S n) = 0) \n  as (｜ (Σ of (μ ◦ D) up to n + 0) - (μ A + μ B) ｜ < ε).\nWrite goal using \n  (Σ of (μ ◦ D) up to n + 0 = Σ of (μ ◦ D) up to n)\n    as (｜ (Σ of (μ ◦ D) up to n) - (μ A + μ B) ｜ < ε).\nApply dist_l_eps."
+    },
+    {
+      "type": "text",
+      "text": "Only now do we come back to the claim made in the first block of this proof. Once this is resolved, we know that $\\sum_{n=0}^{∞} μ (C_n) = μ \\left(∪_{n=0}^{∞} C_n \\right)$ (from earlier) and $\\sum_{n=0}^{∞} μ (C_n) = μ(A) + μ(B)$, from which  our rewritten goal immediately follows:"
+    },
+    {
+      "type": "code",
+      "text": "\nIt follows that (∃ N : ℕ ,\n  ∀ n : ℕ, (n ≥ N)%nat \n    ⇒ ｜ (Σ of (μ ◦ D) up to n) -\n      (μ A + μ B) ｜ < ε). \nBy uniqueness_sum it holds that \n  (μ (countable_union D) = μ A + μ B) \n    which concludes the proof. \nQed.\n\nEnd additivity."
+    },
+    {
+      "type": "text",
+      "text": "### From  additivity to finite additivity\n\nHaving proven additivity for two sets, we now consider an arbitrary number of sets, and prove that the property still holds. We do this by induction, using the additivity result proven above. "
+    },
+    {
+      "type": "code",
+      "text": "Open Scope R_scope.\nSection finite_additivity.\nVariable C : (ℕ → (subset U)).\n\nLemma finite_additivity_meas : \n  is_measure_on F μ \n    ⇒ (∀n : ℕ, C n ∈ F) \n      ⇒ C is a disjoint sequence of sets  \n        ⇒ ∀ N : ℕ,  μ (finite_union_up_to C (S N))\n          = Σ of (fun (n : ℕ) ↦ (μ (C n))) up to N.\n\nProof. \nAssume μ_is_measure_on_F. \nAssume all_Cn_in_F.  \nAssume C_n_disjoint. \nDefine FU_C := (finite_union_up_to C). \nTake N : ℕ.\nWe prove by induction on N. \n(* Base case: *)\nIt holds that \n  (finite_union_up_to C 1 = C 0%nat) (FU1_is_C0).\nWrite goal using (FU_C 1%nat = C 0%nat)\n  as (μ (C 0%nat) = Σ of (μ ◦ C) up to 0%nat).\nIt holds that (μ (C 0%nat) = Σ of (μ ◦ C) up to 0). \n(*Induction step: *)\nIt holds that (Σ of (μ ◦ C) up to (S N) \n  = Σ of (μ ◦ C) up to N + (μ ◦ C) (S N)) (sum_to_sum).\nWrite goal using (Σ of (μ ◦ C) up to (S N) \n  = Σ of (μ ◦ C) up to N + (μ ◦ C) (S N)) \n    as (μ (FU_C (S (S N)))\n      = Σ of (μ ◦ C) up to N + (μ ◦ C) (S N)). \n\nBy FU_S_as_union it holds that \n  (FU_C (S (S N)) \n    = (FU_C (S N)) ∪ (C (S N))) (FU_to_union). \nWe claim that ((FU_C (S N)) and \n  (C (S N)) are disjoint) (FUSn_CSn_disj). \nWe argue by contradiction. \nBy H it holds that (∃ x : U, \n  x ∈ ((FU_C (S N)) ∩ (C (S N)))) (int_not_empty).\nChoose x such that x_in_int \n  according to int_not_empty. \ndestruct x_in_int. (*how to destruct with certain names?*)\nChoose n0 such that x_in_Cn \n  according to H0.\nIt holds that (x ∈ C n0 ∧ x ∈ C (S N)) (x_in_Cn0_and_CSN). \nBy C_n_disjoint it holds that \n  ((C n0) and (C (S N)) are disjoint) (Cn0_CSN_disj). \ndestruct Cn0_CSN_disj. \nIt holds that (x ∉ C n0 ∩ C (S N)) (not_x_in_int_Cn0_CSN).\nBy not_x_in_int_Cn0_CSN it holds that \n  (¬ (x ∈ C n0 ∧ x ∈ C (S N))) (not_x_in_Cn0_and_CSN).\nContradiction. \n(*now show: both sets in F *)\nIt holds that (C (S N) ∈ F) (CSN_in_F). \nBy FU_in_σ it holds that \n  (FU_C (S N) ∈ F) (FU_C_in_F). \n  \nBy additivity_meas it holds that\n  (μ ((FU_C (S N)) ∪ (C (S N))) \n    = μ (FU_C (S N)) + μ (C (S N))) (muFUS_is_muFU_muS).\n\nWrite goal using (FU_C (S (S N)) \n  = (FU_C (S N)) ∪ (C (S N)))\n    as (μ ((FU_C (S N)) ∪ (C (S N))) \n      = Σ of (μ ◦ C) up to N + (μ ◦ C) (S N)).\nWrite goal using (μ ((FU_C (S N)) ∪ (C (S N))) \n  = μ (FU_C (S N)) + μ (C (S N)))\n    as (μ (FU_C (S N)) + μ (C (S N)) \n      = Σ of (μ ◦ C) up to N + (μ ◦ C) (S N)). \nIt holds that (μ (FU_C (S N)) + μ (C (S N)) \n  = Σ of (μ ◦ C) up to N + (μ ◦ C) (S N)). \nQed.\n\nEnd finite_additivity."
+    },
+    {
+      "type": "text",
+      "text": "## The continuity lemma"
+    },
+    {
+      "type": "text",
+      "text": "Now we are ready to prove our main result."
+    },
+    {
+      "type": "code",
+      "text": "Lemma incr_cont_meas : \n  is_measure_on F μ  \n    ⇒ ∀ C : (ℕ → (subset U)), \n      C is an increasing sequence of sets\n        ⇒ (∀ n : ℕ, C n ∈ F)\n          ⇒ (fun (n : ℕ) ↦ (μ (C n))) \n            converges to (μ (countable_union C)). \n\nProof. \nAssume μ_is_measure_on_F. \nTake C_ : (ℕ ⇨ subset U) . \nAssume C_is_incr_seq.\nAssume all_Cn_in_F.\nDefine D_ := (disjoint_seq C_). \nDefine D := (countable_union D_).\nBy CU_sets_disjointsets_equal it holds that \n  ((countable_union C_) = D) (CUC_is_CUD).\nWrite goal using \n  ((countable_union C_) = D) \n    as ((μ ◦ C_) converges to (μ (D))). \nBy μ_is_measure_on_F it holds that \n  (μ is σ-additive on F) (μ_is_σ_additive). \nBy disj_seq_disjoint it holds that \n  (D_ is a disjoint sequence of sets) (D_disj). \nBy disj_seq_in_F it holds that \n  (∀ n : ℕ, D_ n ∈ F) (all_Dn_in_F).\nBy μ_is_σ_additive it holds that \n  (Σ (μ ◦ D_) equals\n    (μ (D))) (μDn_is_μCUD).\n\nWe need to show that (\n  ∀ ε : ℝ, ε > 0\n    ⇒ ∃ N : ℕ , ∀ n : ℕ,  (n ≥ N)%nat \n      ⇒ ｜ (μ (C_ n)) - (μ (D)) ｜ < ε).\nTake ε : ℝ; Assume ε_g0. \nBy μDn_is_μCUD it holds that (\n  ∃ N : ℕ , ∀ n : ℕ,  (n ≥ N)%nat \n    ⇒ ｜ (Σ of (μ ◦ D_) up to n) -\n     (μ (D)) ｜ < ε) (exists_N_μSumD_μCUD_l_ε).\nChoose N such that μSumN_μCU_l_ε \n  according to exists_N_μSumD_μCUD_l_ε.\n\nIt suffices to show that (∀ n : ℕ,\n  (n ≥ N)%nat ⇨ ｜ (μ (C_ n)) -\n    (μ (D)) ｜ < ε).\nTake n : ℕ; Assume n_geq_N.\nWe claim that (μ(C_ n) = \n  (Σ of (μ ◦ D_) up to n) ) (μCn_is_sum_μDn). \nBy FUn_disj_is_Cn it holds that \n  (finite_union_up_to D_ (S n) = C_ n) (FUD_is_C).\nWrite goal using (C_ n = finite_union_up_to D_ (S n))\n  as (μ (finite_union_up_to D_ (S n)) \n    = Σ of (μ ◦ D_) up to n). \nBy finite_additivity_meas it holds that \n  (μ (finite_union_up_to D_ (S n)) \n    = Σ of (μ ◦ D_) up to n) \n      which concludes the proof. \n\nWrite goal using (μ (C_ n) = Σ of (μ ◦ D_) up to n) \n  as (｜ (Σ of (μ ◦ D_) up to n) -\n    (μ (D)) ｜ < ε).\nIt holds that (｜ (Σ of (μ ◦ D_) up to n) -\n  (μ (D)) ｜ < ε). \nQed. \n\nEnd continuity_of_measure."
+    }
+  ]
+}

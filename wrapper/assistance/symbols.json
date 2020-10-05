@@ -92,7 +92,8 @@
             { "symbol": "↔", "name": "arrow-left-right" },
             { "symbol": "⇐", "name": "implies-left" },
             { "symbol": "⇒", "name": "implies-right" },
-            { "symbol": "⇔", "name": "implies-left-right" }
+            { "symbol": "⇔", "name": "implies-left-right" },
+            { "symbol": "⟶", "name": "converges" }
         ]
     },
     {
