@@ -33,9 +33,14 @@ const responseWithText = [
 const errorResponse = [
   'Ack',
   '(Feedback((doc_id 0)(span_id 1)(route 0)(contents Processed)))',
-  '(CoqExn(((fname ToplevelInput)(line_nb 1)(bol_pos 0)(line_nb_last 1)' +
-  '(bol_pos_last 0)(bp 6)(ep 9)))()(Backtrace())(ExplainErr.EvaluatedError' +
-  '"The reference abc was not found in the current environment."))',
+  '(CoqExn((loc(((fname ToplevelInput)(line_nb 1)(bol_pos 0)(line_nb_last' +
+  ` 1)(bol_pos_last 0)(bp 6)(ep 9))))(stm_ids((1 2)))(backtrace(` +
+  'Backtrace()))(exn("Nametab.GlobalizationError(_)"))(pp(Pp_glue' +
+  '((Pp_glue())(Pp_glue((Pp_glue((Pp_glue((Pp_string"The reference")(' +
+  'Pp_print_break 1 0)(Pp_string b)))(Pp_print_break 1 0)(' +
+  'Pp_string"was not found")))(Pp_print_break 1 0)(Pp_string"in the ' +
+  'current")))(Pp_print_break 1 0)(Pp_string environment.))))' +
+  `(str"The reference abc was not found in the current environment.")))`,
   'Completed',
 ];
 

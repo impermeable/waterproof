@@ -451,9 +451,14 @@ describe('serapi content processor', () => {
     const ep = 6;
     worker.addExpectedCall(`${content}`, [
       'Ack',
-      '(CoqExn(((fname ToplevelInput)(line_nb 1)(bol_pos 0)(line_nb_last 1)' +
-      `(bol_pos_last 0)(bp ${bp})(ep ${ep})))()(Backtrace())(Stream.Error"` +
-      errorString + '"))',
+      '(CoqExn((loc(((fname ToplevelInput)(line_nb 1)(bol_pos 0)' +
+      `(line_nb_last 1)(bol_pos_last 0)(bp ${bp})(ep ${ep}))))(stm_ids())` +
+      '(backtrace(Backtrace()))(exn(Stream.Error"[Prim.ident_decl] expected ' +
+      'after [vernac:thm_token] (in [vernac:gallina])"))(pp())' +
+      `(str"${errorString}")))`,
+      // '(CoqExn(((fname ToplevelInput)(line_nb 1)(bol_pos 0)(line_nb_last 1)'+
+      // `(bol_pos_last 0)(bp ${bp})(ep ${ep})))()(Backtrace())(Stream.Error"` +
+      // errorString + '"))',
       'Completed',
     ]);
 
@@ -482,9 +487,11 @@ describe('serapi content processor', () => {
 
     worker.addExpectedCall(`${content}`, [
       'Ack',
-      '(CoqExn(((fname ToplevelInput)(line_nb 1)(bol_pos 0)(line_nb_last 1)' +
-      `(bol_pos_last 0)(bp ${bp})(ep ${ep})))()(Backtrace())` +
-      `(Stream.Error"${errorString}"))`,
+      '(CoqExn((loc(((fname ToplevelInput)(line_nb 1)(bol_pos 0)' +
+      `(line_nb_last 1)(bol_pos_last 0)(bp ${bp})(ep ${ep}))))(stm_ids())` +
+      '(backtrace(Backtrace()))(exn(Stream.Error"[Prim.ident_decl] expected ' +
+      'after [vernac:thm_token] (in [vernac:gallina])"))(pp())' +
+      `(str"${errorString}")))`,
       'Completed',
     ], async () => {
       duringPromise = proc.setContent(secondContent);

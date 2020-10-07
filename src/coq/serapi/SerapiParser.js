@@ -61,23 +61,6 @@ function parseErrorableFeedback(data) {
 }
 
 /**
- * Try to get just the informative parts of a serapi recursive message
- * @param {Object|string|Array} response the response
- * @return {string} the parsed answer
- */
-function parseRecursiveMessage(response) {
-  if (!Array.isArray(response)) {
-    return '';
-  }
-  if (response.length > 2) {
-    return parseRecursiveMessage(response[2]);
-  } else {
-    // only give the root cause (since it is usually the most descriptive one)
-    return response[1] + '';
-  }
-}
-
-/**
  * Parse a CoqExn from serapi
  * This method *should* be safe e.g. not crash and will try to extract as
  * much information as possible
@@ -96,6 +79,7 @@ function parseErrorResponse(response) {
   let lastSentenceIdCorrect = -1;
   let failureSentenceId = -1;
   let message = 'Unknown error occurred';
+  let exception = null;
 
   if (!Array.isArray(response)) {
     return {
@@ -107,51 +91,48 @@ function parseErrorResponse(response) {
     };
   }
 
-  if (response[0] !== COQ_EXCEPTION) {
+
+  const flatResponse = flatten(response);
+
+  if (flatResponse.length < 2) {
+    return {
+      lastCorrectSentence: lastSentenceIdCorrect,
+      failureAtSentence: failureSentenceId,
+      beginIndex: bp,
+      endIndex: ep,
+      message: message,
+    };
+  }
+
+  if (flatResponse[0] !== COQ_EXCEPTION) {
     console.log('Warning might not be an error');
   }
 
-  if (response.length > 1 && Array.isArray(response[1]) &&
-      response[1].length > 0) {
-    if (Array.isArray(response[1][0])) {
-      const locations = flatten(response[1][0]);
-      bp = locations.bp;
-      ep = locations.ep;
-    } else {
-      console.log('unknown locations:');
-      console.log(response[1]);
-      console.warn(response[1]);
+  const responseContent = flatResponse[1];
+
+  if (responseContent.hasOwnProperty('loc')) {
+    const locationInfo = responseContent.loc;
+    if (locationInfo != null && locationInfo.length > 0) {
+      bp = +locationInfo[0].bp;
+      ep = +locationInfo[0].ep;
     }
   }
 
-  if (response.length > 2) {
-    const sentenceOffset = response[2][0];
-    if (Array.isArray(sentenceOffset) && sentenceOffset.length > 1) {
-      lastSentenceIdCorrect = +sentenceOffset[0];
-      failureSentenceId = +sentenceOffset[1];
+  if (responseContent.hasOwnProperty('stm_ids')) {
+    if (Array.isArray(responseContent.stm_ids)
+          && responseContent.stm_ids.length > 0) {
+      const stms = responseContent.stm_ids[0];
+      lastSentenceIdCorrect = +stms[0];
+      failureSentenceId = +stms[1];
     }
   }
 
-  if (response.length > 3) {
-    if (!Array.isArray(response[3]) ||
-        response[3][0] !== 'Backtrace' ||
-        !Array.isArray(response[3][1]) ||
-        response[3][1].length > 0) {
-      console.log('Non backtrace please investigate:');
-      console.log(response[3]);
-      console.warn(response[3]);
-      console.error(response[3]);
-      console.info(response[3]);
-    }
+  if (responseContent.hasOwnProperty('str')) {
+    message = String(responseContent.str);
   }
 
-  if (response.length > 4) {
-    const responseMessage = response[4];
-    if (!Array.isArray(responseMessage)) {
-      message = responseMessage;
-    } else {
-      message = parseRecursiveMessage(response[4]);
-    }
+  if (responseContent.hasOwnProperty('exn')) {
+    exception = '(' + responseContent.exn.join(',') + ')';
   }
 
   return {
@@ -160,6 +141,7 @@ function parseErrorResponse(response) {
     beginIndex: bp,
     endIndex: ep,
     message: message,
+    exception: exception,
   };
 }
 

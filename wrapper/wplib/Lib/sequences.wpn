@@ -7,7 +7,47 @@
     },
     {
       "type": "code",
-      "text": "Require Import Reals.\nRequire Import Lra.\nRequire Import Classical.\nRequire Import Classical_Pred_Type.\nRequire Import ClassicalChoice.\n\nRequire Import wplib.Tactics.Tactics.\nRequire Import wplib.Tactics.TacticsContra.\nRequire Import wplib.Lib.sup_and_inf.\n\nHint Resolve Rabs_Rabsolu.\nHint Resolve Rabs_minus_sym.\nHint Resolve Rmult_lt_0_compat : real.\nHint Resolve Rinv_lt_contravar : real."
+      "text": "Require Import Reals.\nRequire Import Lra.\nRequire Import Classical.\nRequire Import Classical_Pred_Type.\nRequire Import ClassicalChoice.\n\nRequire Import wplib.Tactics.Tactics.\nRequire Import wplib.Tactics.TacticsContra.\nRequire Import wplib.Notations.Notations.\n\nHint Resolve Rabs_Rabsolu.\nHint Resolve Rabs_minus_sym.\nHint Resolve Rmult_lt_0_compat : real.\nHint Resolve Rinv_lt_contravar : real."
+    },
+    {
+      "type": "text",
+      "text": "## What is a sequence?\n\nA sequence of real numbers is a function from the natural numbers to the real numbers. So a function $a : \\mathbb{N} → \\mathbb{R}$ is a sequence."
+    },
+    {
+      "type": "text",
+      "text": "### Examples of sequences\n\nLet us give a few examples of sequences of real numbers. The first example is the sequence $a : ℕ → ℝ$ defined by \n\n$$a := \\mathsf{fun} \\   n \\mapsto \\mathsf{INR}(n) + 2.$$\n\nIn Waterproof, we can write this as"
+    },
+    {
+      "type": "code",
+      "text": "\nDefinition a : ℕ → ℝ := fun n ↦ INR(n) + 2."
+    },
+    {
+      "type": "text",
+      "text": "We could also have written that $a: \\mathbb{N} → ℝ$ is defined by $a_n := \\mathsf{INR} (n) + 2$, and usually we just leave out the function $\\mathsf{INR}$ and would write $a_n := n + 2$."
+    },
+    {
+      "type": "text",
+      "text": "\nAnother example is the sequence $b: ℕ → ℝ$ defined by $b_n := 3$. The sequence $b$ is just constant! Within Waterproof, we could define the sequence $b$ by\n```\nDefinition b : ℕ → ℝ := 3.\n```\n\nHowever, let us also give an alternative way, which looks a  bit closer to the definition $b_n := 3$."
+    },
+    {
+      "type": "code",
+      "text": "\nDefinition b (n : ℕ) := 3."
+    },
+    {
+      "type": "text",
+      "text": "## Terminology about sequences\n\nWe call the function values $a(0)$, $a(1)$, $a(2)$, $\\dots$ the **elements** of the sequence. Instead of $a(n)$, in mathematics we often write $a_n$. Moreover, instead of writing *let $a : \\mathbb{N} \\to \\mathbb{R}$ be a sequence*, one often writes *let $(a_n)_{n \\in \\mathbb{N}}$ be a sequence*, or even shorter *let $(a_n)$ be a sequence*. \n\nThe reason for the name *sequence* becomes clearer by writing the elements in a row, i.e. in a sequence,\n$$\na_0, a_1, a_2, a_3, a_4, a_5, a_6, a_7, a_8, \\dots\n$$\n\nHowever convenient and intuitive this notation is, it can also become confusing if you forget that a sequence of real numbers is *really* a function from the natural numbers to the real numbers."
+    },
+    {
+      "type": "text",
+      "text": "## Asymptotic behavior of sequences\n\nAnalysis all revolves around questions such as: what happens if a parameter gets very small? What happens if a parameter gets very large?\n\nFor sequences, the interesting question is: what can we say about the elements $a_n$ when $n$ gets very large? Think for instance about the sequence $a_n := 1/n$. Then we might want to say: when $n$ gets very large, the element $a_n$ is very close to zero.\n\nThe only thing is, that we need to make the previous sentence much more precise if we want to work with it in mathematics. For all $\\epsilon : ℝ$, if $ε > 0$, then there is a certain threshold $N : ℕ$ such that for all $n: ℕ$, if $n \\geq N$ then $a_n$ is within distance $\\epsilon$ from $0$.`"
+    },
+    {
+      "type": "text",
+      "text": "The definition of `cv_to` is completely equivalent to the definition of `Un_cv` in the standard library. "
+    },
+    {
+      "type": "code",
+      "text": "Lemma convergence_equivalence : converges_to = Un_cv.\nProof.\n  trivial.\nQed."
     },
     {
       "type": "text",
@@ -19,47 +59,55 @@
     },
     {
       "type": "code",
-      "text": "Proof.\nTake x : ℝ.\ndestruct (Rle_lt_dec x 0).\nChoose n := 1%nat. \nIt holds that (INR 1 > INR 0) (H1).\nRewrite using (0 = INR(0)) in r.\nIt follows that (INR 1 > x).\nBy archimed it holds that (IZR(up x) > x ∧ IZR( up x ) - x ≤ 1) (H2).\nIt holds that (IZR( up x ) > x) (H3).\nIt holds that (0 < IZR( up x )) (H4).\nBy lt_0_IZR it holds that (0 < up x)%Z (H5).\nIt holds that (0 <= up x)%Z (H6).\nBy IZN it holds that (∃ k : ℕ, up x = Z.of_nat k) (H7).\nChoose k such that up_x_is_k according to H7.\nChoose n := k.\nWe need to show that (INR k > x).\nBy INR_IZR_INZ it holds that (INR k = IZR (Z.of_nat k)) (H8).\nRewrite using (INR k = IZR (Z.of_nat k)).\nRewrite using (Z.of_nat k = up x).\nassumption.\nQed."
-    },
-    {
-      "type": "code",
-      "text": "Lemma evt_eq_seq_conv_to_same_lim :\n  ∀ (a : ℕ → ℝ) (b : ℕ → ℝ) (l : ℝ),\n    (∃ k : ℕ,\n      ∀ n : ℕ, (n ≥ k)%nat ⇒ a n = b n) ⇒ Un_cv a l ⇒ Un_cv b l."
-    },
-    {
-      "type": "code",
-      "text": "Proof.\nTake a : (ℕ → ℝ). Take b : (ℕ → ℝ). Take l : ℝ.\nAssume a_eq_b. Assume a_cv_to_l. Expand the definition of Un_cv.\nTake ε : ℝ. Assume ε_gt_0.\nChoose n1 such that a_close_to_l according to (a_cv_to_l ε ε_gt_0).\nChoose k such that an_is_bn_for_n_ge_k according to a_eq_b.\nChoose N:= (Nat.max n1 k). \nTake n : ℕ. Assume n_ge_N. \nIt holds that (a n = b n) (H3). \nRewrite using (b n = a n). Apply a_close_to_l. \nWe need to show that (n ≥ n1)%nat.\nThis follows immediately.\nQed."
-    },
-    {
-      "type": "code",
-      "text": "Lemma eq_seq_conv_to_same_lim :\n  ∀ (a : ℕ → ℝ) (b : ℕ → ℝ) (l : ℝ),\n    (∀ n : ℕ, a n = b n) ⇒ Un_cv a l ⇒ Un_cv b l."
-    },
-    {
-      "type": "code",
-      "text": "Proof.\nTake a : (ℕ → ℝ). Take b : (ℕ → ℝ). \nTake l : ℝ. Assume seq_eq: (∀ n : ℕ, a n = b n).\nApply evt_eq_seq_conv_to_same_lim.\nWe need to show that (∃ k : ℕ, ∀ n : ℕ, \n  (n ≥ k)%nat ⇒ a n = b n).\nChoose k := O.\nTake n : ℕ. Assume n_ge_0. Apply seq_eq.\nQed."
+      "text": "Proof.\nTake x : ℝ.\nEither (x <= 0) or (0 < x).\nChoose n := 1%nat.\nIt holds that (INR 1 > INR 0) (H1).\nRewrite using (0 = INR(0)) in r.\nIt follows that (INR 1 > x).\n\nBy archimed it holds that (IZR( up x) > x ∧ IZR( up x ) - x ≤ 1) (H2).\nIt holds that (IZR( up x ) > x) (H3).\nIt holds that (0 < IZR( up x )) (H4).\nBy lt_0_IZR it holds that (0 < up x)%Z (H5).\nIt holds that (0 <= up x)%Z (H6).\nBy IZN it holds that (∃ k : ℕ, up x = Z.of_nat k) (H7).\nChoose k such that up_x_is_k according to H7.\nChoose n := k.\nWe need to show that (INR k > x).\nBy INR_IZR_INZ it holds that (INR k = IZR (Z.of_nat k)) (H8).\nRewrite using (INR k = IZR (Z.of_nat k)).\nRewrite using (Z.of_nat k = up x).\nThis follows by assumption.\nQed."
     },
     {
       "type": "text",
-      "text": "## A simple limit"
+      "text": "Next, we introduce eventually equal sequences, and show that they converge to the same limit."
     },
     {
       "type": "code",
-      "text": "Lemma lim_const_seq :\n  ∀ (c : ℝ), Un_cv (fun (n : ℕ) ↦ c) c."
+      "text": "Definition evt_eq_sequences (a b : ℕ → ℝ) := (∃ k : ℕ,\n      ∀ n : ℕ, (n ≥ k)%nat ⇒ a n = b n).\n\nLemma conv_evt_eq_seq :\n  ∀ (a b : ℕ → ℝ) (l : ℝ), evt_eq_sequences a b ⇒ a ⟶ l ⇒ b ⟶ l."
     },
     {
       "type": "code",
-      "text": "Proof.\nTake c : ℝ. Expand the definition of Un_cv.\nTake ε : ℝ. Assume ε_gt_0.\nChoose N := O.\nTake n : ℕ. Assume n_ge_N.\nBy R_dist_eq it holds that (R_dist c c = 0) (H1).\nRewrite using (R_dist c c = 0).\nassumption.\nQed."
+      "text": "Proof.\nTake a, b : (ℕ → ℝ) and l : ℝ.\nAssume a_b_similar and a_to_l.\n\nTo show: (∀ ε : ℝ, ε > 0 ⇒ ∃ N : ℕ, ∀ n : ℕ, (n ≥ N)%nat ⇒ ｜(b n) - l ｜ <ε).\n\nTake ε : ℝ; such that ε_gt_0 : (ε > 0).\nChoose n1 such that a_close_to_l according to (a_to_l ε ε_gt_0).\nChoose k such that an_is_bn_for_n_ge_k according to a_b_similar.\nChoose N := (Nat.max n1 k).\n\nTake n : ℕ; such that n_ge_N : (n ≥ N)%nat.\nIt holds that (a n = b n) (an_eq_bn). \nIt holds that (｜(a n) - l ｜ < ε) (an_close_to_l).\n\nRewrite (｜(b n) - l ｜) = (｜(a n) - l｜) < ε.\nQed."
+    },
+    {
+      "type": "text",
+      "text": "From This, it is fairly easy to prove that sequences that are exactly the same also converge to the same limit.\nWe do this by first using the lemma, and then proving that the sequences are indeed eventually equal."
     },
     {
       "type": "code",
-      "text": "Definition n_to_1_over_n_plus_1 :=\n  fun (n : ℕ) ↦ 1 / (INR(n) + 1)."
+      "text": "Lemma eq_seq_conv_to_same_lim :\n  ∀ (a : ℕ → ℝ) (b : ℕ → ℝ) (l : ℝ),\n    (∀ n : ℕ, a n = b n) ⇒ a ⟶ l ⇒ b ⟶ l."
     },
     {
       "type": "code",
-      "text": "Lemma one_over_n_plus_1_to_0 :\n  Un_cv n_to_1_over_n_plus_1 0."
+      "text": "Proof.\nTake a, b : (ℕ → ℝ) and l : R.\nAssume seq_eq: (∀ n : ℕ, a n = b n).\nApply conv_evt_eq_seq.\n(** By our lemma, it suffices to prove that (evt_eq_sequences a b) *)\n\nWe need to show that (∃ k : ℕ, ∀ n : ℕ, \n  (n ≥ k)%nat ⇒ a n = b n).\nChoose k := O.\nTake n : ℕ; such that n_gt_k : (n ≥ k)%nat.\nThen (a n = b n) holds by assumption.\nQed."
+    },
+    {
+      "type": "text",
+      "text": "## A simple limit\n\nThe simplest sequence we can think of is the constant sequence, e.g. $1, 1, 1, 1, 1, ...$.\nWe can generalise this to any real number $c$, and define the constant sequence $s_n = c, ∀ n : \\mathbb{N}$.\nSince we can choose $n$ as large as possible, without changing the value of $s_n$, this sequences clearly converges to its constant value $c$, i.e. $\\lim_{n \\to \\infty} s_n = c$."
     },
     {
       "type": "code",
-      "text": "Proof.\nExpand the definition of Un_cv.\nTake ε : ℝ. Assume ε_gt_0 : (ε > 0).\n Choose n1 such that H_large according to \n   (archimed_mod (/ε)).\n Choose N := n1.\n   Take n : ℕ.\n   Assume n_ge_n1 : (n ≥ n1)%nat.\n   Expand the definition of R_dist.\n   Apply Rabs_def1.\n   Expand the definition of n_to_1_over_n_plus_1.\n   Rewrite using (1 / (INR n + 1) - 0 = 1 / (INR n + 1)).\n   We need to show that (1 / (INR n+1) < ε ).\n     Rewrite using (ε = / / ε).\n       We need to show that (1 / (INR n+1) < / / ε ).\n         Rewrite using (1/(INR n+1) = /(INR n+1)).\n       We need to show that (/ (INR n+1) < / / ε ).\n       Apply (Rinv_lt_contravar : \n         for all r1 r2 : R, 0 < r1 * r2 -> r1 < r2 -> / r2 < / r1).\n       We need to show that (0 < / ε * (INR n + 1)).\n         This follows immediately.\n       \n       It holds that (/ ε < INR n1) (H2).\n       By le_INR it holds that (INR n1 ≤ INR n ) (H3).\n       It holds that (INR n < INR n + 1) (H4).\n       We need to show that (/ ε < INR n + 1 ).\n       This follows immediately.\n     Expand the definition of n_to_1_over_n_plus_1.\n     Rewrite using (1/(INR n + 1) - 0 = / (INR n + 1)).\n     It holds that (INR n + 1 > 0) (H5).\n     It holds that (/(INR n + 1) > 0) (H6).\n     This follows immediately.\nQed."
+      "text": "Definition constant_sequence (c : ℝ) := fun (n : ℕ) ↦ c.\nLemma lim_const_seq :\n  ∀ (c : ℝ), constant_sequence c ⟶ c."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake c : ℝ. \nDefine s := (constant_sequence c).\nTo show: (∀ ε : ℝ, ε > 0 ⇒ ∃ N : ℕ, ∀ n : ℕ, (n ≥ N)%nat ⇒ ｜(s n) - c｜ < ε).\n\nTake ε : ℝ; such that ε_gt_0 : (ε > 0).\nChoose N := O.\nTake n : ℕ; such that n_ge_N : (n ≥ N)%nat.\nIt holds that (s n = c) (H).\nIt holds that (｜c - c｜ = 0) (H1).\nRewrite (｜s n - c｜) = (｜c - c｜) < ε.\nQed."
+    },
+    {
+      "type": "text",
+      "text": "#### **Another simple limit**\n\nNext, we consider another rather simple sequence, namely $1, \\frac{1}{2}, \\frac{1}{3}, \\frac{1}{4}, ...$.\nWe can denote the sequence as follows:\n$$\n  d_n = \\frac{1}{n+1}.\n$$\nThis is a bit more involved than the constant sequence, since the value of our sequence now depends on $n$.\nStill, it is easy to see that when $n$ increases, the value of $d_n$ converges to $0$."
+    },
+    {
+      "type": "code",
+      "text": "Definition d := fun (n : ℕ) ↦ 1 / (n + 1).\n\nLemma lim_d_0 : Un_cv d 0."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nExpand the definition of d. \nExpand the definition of Un_cv.\nTake ε : ℝ. Assume ε_gt_0 : (ε > 0).\nChoose n1 such that H_large according to\n  (archimed_mod (/ε)).\nChoose N := n1. \nTake n : ℕ. Assume n_ge_n1 : (n ≥ n1)%nat.\nExpand the definition of R_dist.\nApply Rabs_def1.\nRewrite using (1 / (INR n + 1) - 0 = 1 / (INR n + 1)).\nWe need to show that (1 / (INR n+1) < ε ).\nRewrite using (ε = / / ε).\nWe need to show that (1 / (INR n+1) < / / ε ).\nRewrite using (1/(INR n+1) = /(INR n+1)).\nWe need to show that (/ (INR n+1) < / / ε ).\nApply (Rinv_lt_contravar :\n  for all r1 r2 : R, 0 < r1 * r2 -> r1 < r2 -> / r2 < / r1).\nWe need to show that (0 < / ε * (INR n + 1)).\nThis follows immediately.\n\nIt holds that (/ ε < INR n1) (H2).\nBy le_INR it holds that (INR n1 ≤ INR n ) (H3).\nIt holds that (INR n < INR n + 1) (H4).\nWe need to show that (/ ε < INR n + 1 ).\nThis follows immediately.\nRewrite using (1/(INR n + 1) - 0 = / (INR n + 1)).\nIt holds that (INR n + 1 > 0) (H5).\nIt holds that (/(INR n + 1) > 0) (H6).\nThis follows immediately.\nQed."
     },
     {
       "type": "code",
@@ -67,7 +115,7 @@
     },
     {
       "type": "code",
-      "text": "Proof.\nBy one_over_n_plus_1_to_0 it holds that (Un_cv n_to_1_over_n_plus_1 0) (H1).\nBy (CV_opp) it holds that (Un_cv (opp_seq n_to_1_over_n_plus_1) (-0)) (H2).\nRewrite using (-0 = 0) in H2.\nExpand the definition of opp_seq in H2.\nExpand the definition of n_to_1_over_n_plus_1 in H2.\nassumption.\nQed."
+      "text": "Proof.\nBy lim_d_0 it holds that (Un_cv d 0) (H1).\nBy (CV_opp) it holds that (Un_cv (opp_seq d) (-0)) (H2).\nRewrite using (-0 = 0) in H2.\nExpand the definition of opp_seq in H2.\nExpand the definition of d in H2.\nassumption.\nQed."
     },
     {
       "type": "text",
@@ -75,11 +123,11 @@
     },
     {
       "type": "code",
-      "text": "Theorem squeeze_theorem :\n  ∀ (a : ℕ → ℝ) (b : ℕ → ℝ) (c : ℕ → ℝ) (l : ℝ),\n    (∀ n : ℕ, a n ≤ b n ∧ b n ≤ c n) ⇒\n      Un_cv a l ⇒ Un_cv c l ⇒ Un_cv b l."
+      "text": "Theorem squeeze_theorem :\n  ∀ (a : ℕ → ℝ) (b : ℕ → ℝ) (c : ℕ → ℝ) (l : ℝ),\n    (∀ n : ℕ, a n ≤ b n ∧ b n ≤ c n) ⇒\n      a ⟶ l ⇒ c ⟶ l ⇒ b ⟶ l."
     },
     {
       "type": "code",
-      "text": "Proof.\nTake a : (ℕ → ℝ). Take b : (ℕ → ℝ).\nTake c : (ℕ → ℝ). Take l : ℝ.\nAssume b_squeezed : (∀ n : ℕ, a n ≤ b n ∧ b n ≤ c n).\nAssume a_cv_to_l. Assume c_cv_to_l.\nExpand the definition of Un_cv.\nTake ε : ℝ. Assume ε_gt_0. \nChoose Na such that a_close_to_l according to (a_cv_to_l ε ε_gt_0).\nChoose Nc such that c_close_to_l according to (c_cv_to_l ε ε_gt_0).\nChoose N := (Nat.max Na Nc).\nTake n : ℕ. Assume n_ge_N.\nIt holds that (n ≥ Na)%nat (n_ge_Na).\nIt holds that (R_dist (a n) l < ε) (d_an_l_lt_ε).\nExpand the definition of R_dist in d_an_l_lt_ε.\nRewrite using (Rabs( a n - l  ) = Rabs( l - a n)) in d_an_l_lt_ε.\nBy Rabs_def2 it holds that (l - a n < ε ∧- ε < l - a n) (H2).\nIt holds that (- ε < l - a n) (H3).\nIt holds that (n ≥ Nc)%nat (n_ge_Nc).\nIt holds that (R_dist (c n) l < ε) (d_cn_l_lt_ε).\nExpand the definition of R_dist in d_cn_l_lt_ε.\nBy Rabs_def2 it holds that (c n - l < ε ∧ - ε < c n - l) (H4).\nIt holds that (c n - l < ε) (H5).\nExpand the definition of R_dist.\nApply Rabs_def1. \nBy b_squeezed it holds that (a n ≤ b n ∧ b n ≤ c n) (H6).\nBy b_squeezed it holds that (a n ≤ b n) (H7). \nWe need to show that ( b n - l < ε).\nThis follows immediately.\nIt holds that (a n ≤ b n ∧ b n ≤ c n) (H6).\nBy b_squeezed it holds that (b n ≤ c n) (H8).\nWe need to show that (- ε < b n - l).\nThis follows immediately.\nQed."
+      "text": "Proof.\nTake a, b and c: (ℕ → ℝ). Take l : ℝ.\nAssume b_squeezed : (∀ n : ℕ, a n ≤ b n ∧ b n ≤ c n).\nAssume a_cv_to_l : (a ⟶ l) and c_cv_to_l : (c ⟶ l).\n\nTo show: (∀ ε : ℝ, ε > 0 ⇒ ∃ N : ℕ, ∀ n : ℕ, (n ≥ N)%nat ⇒ ｜b n - l｜ < ε).\nTake ε : ℝ; such that ε_gt_0 : (ε > 0). \nChoose Na such that a_close_to_l according to (a_cv_to_l ε ε_gt_0).\nChoose Nc such that c_close_to_l according to (c_cv_to_l ε ε_gt_0).\nChoose N := (Nat.max Na Nc).\n\nTake n : ℕ; such that n_ge_N : (n ≥ N)%nat.\n\nIt holds that (n ≥ Na)%nat (n_ge_Na).\nIt holds that (R_dist (a n) l < ε) (d_an_l_lt_ε).\nExpand the definition of R_dist in d_an_l_lt_ε.\nRewrite using (Rabs( a n - l  ) = Rabs( l - a n)) in d_an_l_lt_ε.\nBy Rabs_def2 it holds that (l - a n < ε ∧- ε < l - a n) (H2).\nIt holds that (- ε < l - a n) (H3).\nIt holds that (n ≥ Nc)%nat (n_ge_Nc).\nIt holds that (R_dist (c n) l < ε) (d_cn_l_lt_ε).\nExpand the definition of R_dist in d_cn_l_lt_ε.\nBy Rabs_def2 it holds that (c n - l < ε ∧ - ε < c n - l) (H4).\nIt holds that (c n - l < ε) (H5).\nExpand the definition of R_dist.\nApply Rabs_def1. \nBy b_squeezed it holds that (a n ≤ b n ∧ b n ≤ c n) (H6).\nBy b_squeezed it holds that (a n ≤ b n) (H7). \nWe need to show that ( b n - l < ε).\nThis follows immediately.\nIt holds that (a n ≤ b n ∧ b n ≤ c n) (H6).\nBy b_squeezed it holds that (b n ≤ c n) (H8).\nWe need to show that (- ε < b n - l).\nThis follows immediately.\nQed."
     },
     {
       "type": "code",

@@ -1,4 +1,5 @@
 import Notebook from '../../../src/io/notebook';
+import {COQ_SPECIAL_COMMENT_START} from '../../../src/io/notebook';
 
 const fs = require('fs');
 const chai = require('chai');
@@ -78,7 +79,8 @@ if (process.env.NODE_ENV !== 'coverage') {
       }).then(() => {
         const data = fs.readFileSync(writeFile, 'utf-8');
         fs.unlinkSync(writeFile);
-        expect(data).to.include('(*This is some sample text.*)');
+        expect(data).to.include(COQ_SPECIAL_COMMENT_START
+            + 'This is some sample text.*)');
         done();
       }).catch(done);
     });
@@ -91,7 +93,8 @@ if (process.env.NODE_ENV !== 'coverage') {
       }).then(() => {
         const data = fs.readFileSync(writeFile, 'utf-8');
         fs.unlinkSync(writeFile);
-        expect(data).to.include('(*It\'s really not that hard.*)');
+        expect(data).to.include(COQ_SPECIAL_COMMENT_START
+            + 'It\'s really not that hard.*)');
         done();
       }).catch(done);
     });
@@ -105,34 +108,12 @@ if (process.env.NODE_ENV !== 'coverage') {
           }).then(() => {
             const data = fs.readFileSync(writeFile, 'utf-8');
             fs.unlinkSync(writeFile);
-            expect(data).to.include('(*[Start of input area]*)');
-            expect(data).to.include('(*[End of input area]*)');
+            expect(data).to.include(COQ_SPECIAL_COMMENT_START
+                + '(* Start of input area *)*)');
+            expect(data).to.include(COQ_SPECIAL_COMMENT_START
+                + '(* End of input area *)*)');
             done();
           }).catch(done);
         });
-
-    it('should not include Coq comment indicators in text blocks', (done) => {
-      const block = {
-        type: 'text',
-        text: 'There is a (* Coq comment*) in this text block.',
-      };
-
-      notebook.exerciseSheet = false;
-      notebook.blocks = [block];
-
-      const name = notebookPath + 'save-test.temp';
-
-      exportToCoq(name).then(() => {
-        let text = fs.readFileSync(name, 'utf-8');
-
-        fs.unlinkSync(name);
-        expect(text).to.startWith('(*');
-        expect(text).to.endWith('*) ');
-        text = text.slice(2, text.length - 3);
-        expect(text).not.to.include('(*');
-        expect(text).not.to.include('*)');
-        done();
-      }).catch(done);
-    });
   });
 }

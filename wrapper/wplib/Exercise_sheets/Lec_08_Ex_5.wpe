@@ -62,6 +62,30 @@
       "text": "Hypothesis f_is_continuous :\n  continuity f."
     },
     {
+      "type": "code",
+      "text": "Print IVT_interv."
+    },
+    {
+      "type": "text",
+      "text": "## Hints\n\nIn the proof, you may want to make a case distinction with \n\n```\nLemma Rtotal_order : ∀ (a b : ℝ), a < b ∨ a = b ∨ a > b.\n```\n\nThe standard library contains the Intermediate Value Theorem in the form of the following lemma. The last line can just be read as *There exists $z : ℝ$ such that $(x ≤ z ∧ z ≤ y)$ and $f(z) = 0$*."
+    },
+    {
+      "type": "text",
+      "text": "```\nLemma IVT_interv : ∀ (f : ℝ → ℝ) (x y : ℝ),\n       (∀ a, x <= a <= y ⇒ continuity_pt f a) ⇒\n       x < y ⇒\n       f x < 0 ⇒\n       0 < f y ⇒\n       {z : ℝ | (x ≤ z ∧ z ≤ y) ∧ f z = 0}.\n```"
+    },
+    {
+      "type": "text",
+      "text": "In general, you can find many useful statements in the file:\n\nhttps://coq.inria.fr/library/Coq.Reals.Ranalysis1.html\n\nFinally, we will prove the following variant of the intermediate value theorem, which may be useful as well."
+    },
+    {
+      "type": "code",
+      "text": "Lemma IVT_interv_v2 :\n  ∀ (f : ℝ → ℝ) (x y : ℝ),\n  (∀ a, x ≤ a ∧ a ≤ y ⇒ continuity_pt f a) ⇒\n  x < y ⇒\n  f x > 0 ⇒\n  f y < 0 ⇒\n  {z : ℝ | x <= z <= y ∧ f z = 0 }."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake f : (ℝ → ℝ).\nTake x : ℝ. Take y : ℝ.\nDefine g := (- f).\nAssume f_cont :\n  (∀ a : ℝ, x ≤ a ∧ a ≤ y ⇒ continuity_pt f a).\nWe claim that \n  (∀ a : ℝ, x ≤ a ∧ a ≤ y ⇒ continuity_pt g a) (g_cont).\nTake a : ℝ.\nAssume a_betw_x_and_y : (x ≤ a ∧ a ≤ y).\nBy continuity_pt_opp it holds that\n  (continuity_pt g a) (H1).\nIt holds that (continuity_pt g a).\nAssume x_lt_y : (x < y).\nAssume f_x_gt_0 : (f x > 0).\nAssume f_y_lt_0 : (f y < 0).\nWe claim that (g x < 0) (g_x_lt_0).\n  We need to show that (- f x < 0).\n  It holds that (- f x < 0).\nWe claim that (g y > 0) (g_y_gt_0).\n  We need to show that (- f y > 0).\n  It holds that (-f y > 0).\nBy IVT_interv it holds that\n  {s : ℝ | (x ≤ s ∧ s ≤ y) ∧ g s = 0} (ex_s).\nChoose s such that g_s_0 according to ex_s.\nChoose z := s.\nsplit.\nWe need to show that (x ≤ s ∧ s ≤ y).\n  It holds that (x ≤ s ∧ s ≤ y).\nWe need to show that (f z = 0).\nIt holds that (g z = 0) (g_z_0).\nWrite g_z_0 as ((-f) z = 0).\nWrite g_z_0 as (- (f z) = 0)%R.\nIt holds that (f z = 0).\nQed."
+    },
+    {
       "type": "text",
       "text": "## Exercise\n\nWe are now ready for the exercise."
     },
@@ -77,6 +101,10 @@
     {
       "type": "text",
       "text": "Write your solution here..."
+    },
+    {
+      "type": "code",
+      "text": "\nAdmitted."
     },
     {
       "type": "input",
