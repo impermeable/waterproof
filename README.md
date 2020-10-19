@@ -55,7 +55,7 @@ eval `opam env`
 ##### On Windows:
 Install OCaml with
 ```
-opam switch create 4.07.1+mingw64c
+opam switch create 4.11.1+mingw64c
 eval `opam env`
 ```
 
@@ -67,7 +67,7 @@ opam repo add opam_ocaml_repository https://github.com/ocaml/opam-repository.git
 ##### On Linux or macOS:
 Install OCaml with
 ```
-opam switch create 4.07.1
+opam switch create 4.11.1
 eval `opam env`
 ```
 
