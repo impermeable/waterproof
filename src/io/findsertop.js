@@ -31,7 +31,8 @@ function findSertop(platform, remote=undefined) {
     const ocamlVariants =
         ['default',
           'ocaml-variants.4.07.1+mingw64c',
-          '4.07.1+mingw64c'];
+          '4.07.1+mingw64c',
+          '4.11.1+mingw64c'];
 
     const baseFolderVariants =
         [`C:\\OCaml64\\home\\${userName}\\.opam\\`,
