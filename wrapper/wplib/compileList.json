@@ -1,4 +1,5 @@
 [
+  "Tactics/AdditionalLemmas",
   "Notations/Notations",
   "Tactics/Databases",
   "Tactics/Tactics",

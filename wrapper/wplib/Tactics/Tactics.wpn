@@ -3,11 +3,15 @@
   "blocks": [
     {
       "type": "text",
-      "text": "# Tactics for Waterproof"
+      "text": "# Tactics for Waterproof\n\nThis file contains tactics that are better suited for readable mathematical proofs."
     },
     {
       "type": "code",
-      "text": "Require Import Rbase.\nRequire Import Rfunctions.\nRequire Import SeqSeries.\nRequire Import Rtrigo.\nRequire Import Ranalysis.\nRequire Import Integration.\nRequire Import micromega.Lra.\nRequire Import Omega.\nRequire Import Max.\n(* Require Import Unicode.Utf8. *)\n\nRequire Import wplib.Notations.Notations.\nRequire Import Sets.Ensembles.\nRequire Import Sets.Classical_sets."
+      "text": "Require Import Rbase.\nRequire Import Rfunctions.\nRequire Import SeqSeries.\nRequire Import Rtrigo.\nRequire Import Ranalysis.\nRequire Import Integration.\nRequire Import micromega.Lra.\nRequire Import Omega.\nRequire Import Max.\n\nRequire Import wplib.Notations.Notations.\nRequire Import Sets.Ensembles.\nRequire Import Sets.Classical_sets.\n\nRequire Import wplib.Tactics.AdditionalLemmas."
+    },
+    {
+      "type": "code",
+      "text": "Ltac help :=\n  match goal with\n  | [ |- forall _ : ?A, _ ] => idtac \"Try to define a variable of type \" A \" , or assume a hypothesis\"\n  | [ |- _ -> _ ] =>  idtac \"Try to define a variable, or assume a hypothesis\"\n  | [ |- exists _ : ?A, _ ] => idtac \"Choose a specific value of type \" A\n  end."
     },
     {
       "type": "text",
@@ -15,7 +19,7 @@
     },
     {
       "type": "text",
-      "text": "## **A powertool**\n\nTODO: in some cases, eauto has left some existentials.\nThis may be undesired, but eauto can be very powerful...\nOne option is to let waterproof check whether  existentials are created and block this behavior."
+      "text": "## **A powertool**\n\nThe following tactic is very powerful, and will be used to solve (trivial) arithmetic steps. Note that the exact behaviour of this tactic is not known. Also, it may be too powerful in some cases."
     },
     {
       "type": "code",
@@ -88,6 +92,14 @@
     {
       "type": "code",
       "text": "Tactic Notation \"such\" \"that\" ident(s1) \":\" constr(t1) :=\n  assume_strict s1 t1."
+    },
+    {
+      "type": "text",
+      "text": "## **If and only if**\nIf we have to prove two directions, we first have to say that we show both directions."
+    },
+    {
+      "type": "code",
+      "text": "Ltac iff :=\n  match goal with\n  | [|- _ <-> _ ] => split\n  | _ => fail \"This is not an if and only if, so try another tactic.\"\n  end.\n  \nTactic Notation \"We\" \"show\" \"both\" \"directions\" := iff.\nTactic Notation \"We\" \"prove\" \"both\" \"directions\" := iff."
     },
     {
       "type": "text",

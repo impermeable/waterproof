@@ -1,0 +1,13 @@
+{
+  "exerciseSheet": false,
+  "blocks": [
+    {
+      "type": "text",
+      "text": "# **Additional lemmas**\n\nThis file contains lemmas written to support the tactic library.\nWe will add these lemmas to a database called ```additional```"
+    },
+    {
+      "type": "code",
+      "text": "Require Import Coq.Logic.PropExtensionality.\nLemma base_same : forall C : Type,\n  forall P : C -> Prop,\n  forall x y : sig P, proj1_sig x = proj1_sig y -> x = y.\nProof.\nintros C P x y H.\napply eq_sig_hprop.\nintros.\napply proof_irrelevance.\napply H.\nQed.\n\nLemma same_base : forall C : Type,\n  forall P : C -> Prop,\n    forall x y : sig P, x = y -> proj1_sig x = proj1_sig x.\nProof.\nintros C P x y H.\nrewrite H.\ntrivial.\nQed.\n\n\nHint Resolve base_same : additional.\nHint Resolve same_base : additional."
+    }
+  ]
+}
