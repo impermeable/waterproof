@@ -62,7 +62,7 @@ export default {
           buttons: ['Yes', 'No'],
           message: `Would you like to save the notebook before exporting?`,
         };
-        if (dialog.showMessageBox(dialogOptions) === 0) {
+        if (dialog.showMessageBoxSync(dialogOptions) === 0) {
           this.saveFile();
         }
       }
