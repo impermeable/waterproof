@@ -27,7 +27,7 @@ export default {
       };
 
       const {dialog} = require('electron').remote;
-      const filePath = dialog.showSaveDialog(options);
+      const filePath = dialog.showSaveDialogSync(options);
 
       // Then, save the file like normal
       if (filePath) {
@@ -57,7 +57,8 @@ export default {
     saveDialogBeforeExport: function() {
       const {dialog} = require('electron').remote;
       if (this.notebook.unsavedChanges) {
-        const dialogOptions = {type: 'info', title: 'Waterproof',
+        const dialogOptions = {
+          type: 'info', title: 'Waterproof',
           buttons: ['Yes', 'No'],
           message: `Would you like to save the notebook before exporting?`,
         };
@@ -91,7 +92,7 @@ export default {
         ],
       };
 
-      const filename = dialog.showSaveDialog(options);
+      const filename = dialog.showSaveDialogSync(options);
       if (filename) {
         this.notebook.exportToCoq(filename);
       }
@@ -124,7 +125,7 @@ export default {
         ],
       };
 
-      const filename = dialog.showSaveDialog(options);
+      const filename = dialog.showSaveDialogSync(options);
       if (filename) {
         this.notebook.exportToExerciseSheet(filename);
       }

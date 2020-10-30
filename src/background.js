@@ -64,6 +64,7 @@ function createWindow() {
     title: 'Waterproof',
     webPreferences: {
       nodeIntegration: true,
+      enableRemoteModule: true,
     },
     icon: path.join(__static, 'icon.png'),
   });
