@@ -439,10 +439,67 @@ class Notebook {
 
     const copy = new Notebook();
     copy.blocks = JSON.parse(JSON.stringify(this.blocks));
+
+    copy.blocks = this.removeProofs(copy.blocks);
+
     copy.exerciseSheet = true;
     copy.commandBlacklist = DEFAULT_BLACKLIST;
     copy.setFilePath(filename);
     copy.write(onExported, onError);
+  }
+
+  
+  /**
+   * Remove the proofs of code blocks and create input blocks instead
+   * Require the Proof, Qed, and Admitted tactic to be on seperate lines.
+   * Does not require the code blocks to be consecutive.
+   *
+   * @param {Array} inputBlocks blocks to remove proofs from
+   * @returns {Array} of transformed blocks
+   */
+  removeProofs(inputBlocks) {
+    let inProof = false;
+    const blocks = [];
+    for (let i = 0; i < inputBlocks.length; i++) {
+      const block = inputBlocks[i];
+      if (block.type !== 'code') {
+        blocks.push(block);
+      } else {
+        const sentences = block.text.split('\n');
+        for (let j = 0; j < sentences.length; j++) {
+          if (inProof === true) {
+            if (sentences[j].match('^ *(Qed|Admitted) *.') !== null) {
+              inProof = false;
+            }
+            sentences.splice(j--, 1);
+            continue;
+          }
+
+          if (inProof === false) {
+            if (sentences[j].match('^ *Proof *.') !== null) {
+              const textBefore = sentences.splice(0, j+1).join('\n');
+              const lemmaDeclarationBlock = this.createCodeBlock(textBefore);
+              blocks.push(lemmaDeclarationBlock);
+
+              blocks.push(this.createInputBlock(0, true));
+              const admittedBlock = this.createCodeBlock('Admitted.');
+              blocks.push(admittedBlock);
+              blocks.push(this.createInputBlock(0, false));
+
+              j = -1;
+              inProof = true;
+              continue;
+            }
+          }
+        }
+        const finalText = sentences.join('\n');
+        if (finalText !== '') {
+          const endBlock = this.createCodeBlock(finalText);
+          blocks.push(endBlock);
+        }
+      }
+    }
+    return blocks;
   }
 
   /**
