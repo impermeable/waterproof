@@ -302,14 +302,6 @@ class SerapiContentProcessor extends SerapiProcessor {
       console.log('Unknown extra tag in SerapiContentProcessor');
     }
   }
-
-  /**
-   * Handle a serapi feedback
-   * @param {*} feedback the serapi feedback (parsed)
-   * @param {String} extraTag the extra identifying tag
-   */
-  handleSerapiFeedback(feedback, extraTag) {
-  }
 }
 
 export default SerapiContentProcessor;
