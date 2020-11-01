@@ -448,54 +448,88 @@ class Notebook {
     copy.write(onExported, onError);
   }
 
-  
+
   /**
    * Remove the proofs of code blocks and create input blocks instead
    * Require the Proof, Qed, and Admitted tactic to be on seperate lines.
    * Does not require the code blocks to be consecutive.
    *
    * @param {Array} inputBlocks blocks to remove proofs from
-   * @returns {Array} of transformed blocks
+   * @return {Array} of transformed blocks
    */
   removeProofs(inputBlocks) {
-    let inProof = false;
+    // We scan over the notebook once, and keep track of two states
+    let inInputBlock = false; // Whether we are in an input block
+    let inProof = false; // Whether we are in a proof
+
+    let inputBlockID = 0; // Also give each input block a different ID
+
+    // We create a new list of blocks that will form the exercise sheet
     const blocks = [];
     for (let i = 0; i < inputBlocks.length; i++) {
       const block = inputBlocks[i];
-      if (block.type !== 'code') {
+
+      // If we are in an input block, then we remove proofs.
+      // So, we keep track of whether we are in an input block.
+      if (block.type === 'input') {
+        // assert(block.start === (!inInputBlock)); or smthn would be nice.
+        inInputBlock = block.start;
+        continue;
+        // Notice that we do not add input blocks to the list (here).
+      }
+
+      // If we are not in an input block, we do not change anything.
+      if (inInputBlock === false) {
         blocks.push(block);
       } else {
-        const sentences = block.text.split('\n');
-        for (let j = 0; j < sentences.length; j++) {
-          if (inProof === true) {
-            if (sentences[j].match('^ *(Qed|Admitted) *.') !== null) {
-              inProof = false;
+        // If we are in an input block, we change only the code cells.
+        if (block.type !== 'code') {
+          blocks.push(block);
+        } else {
+          // We scan over the code blocks sentence by sentence.
+          // An assumption is made here, that the special tactics such as
+          // Lemma, Proof and Qed/Admitted are written on seperate sentences
+          const sentences = block.text.split('\n');
+          for (let j = 0; j < sentences.length; j++) {
+            if (inProof === true) {
+              // Qed. or Admitted. terminates the proof.
+              if (sentences[j].match('^ *(Qed|Admitted) *.') !== null) {
+                inProof = false;
+              }
+              // We throw away the sentence, because we are in a proof.
+              sentences.splice(j--, 1); // j-- because we splice a sentence
+            } else {
+              // Proof. starts the proof.
+              if (sentences[j].match('^ *Proof *.') !== null) {
+                inProof = true;
+                // At this point, we want to capture the lemma declaration and
+                // Proof. in a seperate code block, and insert an input block
+                // with Admitted after. Notice that there is no RE-matching
+                // on the sentences before Proof., as there may be something
+                // like Definition or Notation which we do not want to lose.
+
+                // This is the block with Lemma and Proof.
+                const textBefore = sentences.splice(0, j+1).join('\n');
+                const lemmaDeclarationBlock = this.createCodeBlock(textBefore);
+                blocks.push(lemmaDeclarationBlock);
+
+                // This is an admitted block, surrounded by input blocks.
+                blocks.push(this.createInputBlock(inputBlockID, true));
+                const admittedBlock = this.createCodeBlock('Admitted.');
+                blocks.push(admittedBlock);
+                blocks.push(this.createInputBlock(inputBlockID++, false));
+
+                j = -1; // Because we spliced everything, j=0 on next iteration
+              }
             }
-            sentences.splice(j--, 1);
-            continue;
           }
-
-          if (inProof === false) {
-            if (sentences[j].match('^ *Proof *.') !== null) {
-              const textBefore = sentences.splice(0, j+1).join('\n');
-              const lemmaDeclarationBlock = this.createCodeBlock(textBefore);
-              blocks.push(lemmaDeclarationBlock);
-
-              blocks.push(this.createInputBlock(0, true));
-              const admittedBlock = this.createCodeBlock('Admitted.');
-              blocks.push(admittedBlock);
-              blocks.push(this.createInputBlock(0, false));
-
-              j = -1;
-              inProof = true;
-              continue;
-            }
+          // If code remains in this code block (i.e. after a Proof)
+          // it should get added as a seperate code block (without input block)
+          const finalText = sentences.join('\n');
+          if (finalText !== '') {
+            const endBlock = this.createCodeBlock(finalText);
+            blocks.push(endBlock);
           }
-        }
-        const finalText = sentences.join('\n');
-        if (finalText !== '') {
-          const endBlock = this.createCodeBlock(finalText);
-          blocks.push(endBlock);
         }
       }
     }
