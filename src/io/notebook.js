@@ -471,15 +471,14 @@ class Notebook {
         inInputBlock = block.start;
 
         // If we entered an input block, we add the Admitted.
-        if (inInputBlock === true) {
+        if (inInputBlock) {
           const admittedBlock = this.createCodeBlock('Admitted.');
           blocks.push(admittedBlock);
         }
       } else {
-        // If we are not in an input block, we add everything
-        if (inInputBlock === false) {
+        if (!inInputBlock) {
           blocks.push(block);
-        } // if we are in an input block, we dont add anything
+        }
       }
     }
     return blocks;
