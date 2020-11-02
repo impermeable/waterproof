@@ -16,6 +16,9 @@
                 </span>
             </div>
             <div class="message highlight"
+                 style="animation-name: blinkColors;"
+                 @animationend="removeAnimation"
+                 ref="messageElts"
                  v-for="(message, index) in messages"
                  :key="message.text + index" >
                 <span :class="{'messageText': true,
@@ -76,6 +79,9 @@ export default {
     this.eventBus.$on('coqNext', this.forceAddError);
   },
   methods: {
+    removeAnimation: function(e) {
+      e.target.style.animationName = '';
+    },
     clear: function() {
       this.messages = [];
     },
@@ -85,8 +91,12 @@ export default {
           const oldMessage = this.messages[i];
           if (oldMessage.id === message.id) {
             if (oldMessage.text === message.text) {
-              oldMessage.deprecated = true;
-              break;
+              this.$refs.messageElts[i].scrollIntoView({
+                behavior: 'smooth',
+                block: 'start',
+              });
+              this.$refs.messageElts[i].style.animationName = 'blinkColors';
+              return;
             }
           }
         }
@@ -230,25 +240,27 @@ export default {
 
     .highlight {
       background: transparent;
-      animation-name: fadeInOpacity;
+      //animation-name: blinkColors;
       animation-iteration-count: 1;
       animation-timing-function: ease-in;
       animation-duration: 1s;
-    }
-
-    @keyframes fadeInOpacity {
-      0% {
-        background: $color-primary-light;
-        color: $color-on-primary;
-      }
-      100% {
-        background: transparent;
-        color: inherit;
-      }
     }
 
     .repeated-message {
       text-decoration: line-through;
     }
 
+</style>
+
+<style lang="scss">
+@keyframes blinkColors {
+  0% {
+    background: $color-primary-light;
+    color: $color-on-primary;
+  }
+  100% {
+    background: transparent;
+    color: inherit;
+  }
+}
 </style>
