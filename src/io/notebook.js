@@ -452,7 +452,7 @@ class Notebook {
   /**
    * Remove the proofs of code blocks in input blocks.
    * Require the Proof, Qed, and Admitted tactic to be on seperate lines.
-   * Requires that the end of a code block in an input block is an 
+   * Requires that the end of a code block in an input block is an
    * Admitted or Qed, else the code is not removed.
    *
    * @param {Array} inputBlocks blocks to remove proofs from
