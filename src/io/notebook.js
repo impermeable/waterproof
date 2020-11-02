@@ -450,17 +450,18 @@ class Notebook {
 
 
   /**
-   * Remove the proofs of code blocks and create input blocks instead
+   * Remove the proofs of code blocks in input blocks.
    * Require the Proof, Qed, and Admitted tactic to be on seperate lines.
-   * Does not require the code blocks to be consecutive.
+   * Requires that the end of a code block in an input block is an 
+   * Admitted or Qed, else the code is not removed.
    *
    * @param {Array} inputBlocks blocks to remove proofs from
    * @return {Array} of transformed blocks
    */
   removeProofs(inputBlocks) {
-    // We scan over the notebook once, and keep track of two states
-    let inInputBlock = false; // Whether we are in an input block
-    let inProof = false; // Whether we are in a proof
+    // We scan over the notebook once, and keep track of
+    // whether we are in an input block
+    let inInputBlock = false;
 
     let inputBlockID = 0; // Also give each input block a different ID
 
@@ -491,40 +492,34 @@ class Notebook {
           // Lemma, Proof and Qed/Admitted are written on seperate sentences
           const sentences = block.text.split('\n');
           for (let j = 0; j < sentences.length; j++) {
-            if (inProof === true) {
+            if (sentences[j].match('^ *(Qed|Admitted) *.') !== null) {
               // Qed. or Admitted. terminates the proof.
-              if (sentences[j].match('^ *(Qed|Admitted) *.') !== null) {
-                inProof = false;
-              }
+              // We want to delete this proof, because we are in an input block
+              sentences.splice(0, j+1);
+              j = -1; // Because we spliced everything, j=0 on next iteration
+
+              // This is an admitted block, surrounded by input blocks.
+              blocks.push(this.createInputBlock(inputBlockID, true));
+              const admittedBlock = this.createCodeBlock('Admitted.');
+              blocks.push(admittedBlock);
+              blocks.push(this.createInputBlock(inputBlockID++, false));
+
               // We throw away the sentence, because we are in a proof.
               sentences.splice(j--, 1); // j-- because we splice a sentence
-            } else {
+            } else if (sentences[j].match('^ *Proof *.') !== null) {
               // Proof. starts the proof.
-              if (sentences[j].match('^ *Proof *.') !== null) {
-                inProof = true;
-                // At this point, we want to capture the lemma declaration and
-                // Proof. in a seperate code block, and insert an input block
-                // with Admitted after. Notice that there is no RE-matching
-                // on the sentences before Proof., as there may be something
-                // like Definition or Notation which we do not want to lose.
 
-                // This is the block with Lemma and Proof.
-                const textBefore = sentences.splice(0, j+1).join('\n');
-                const lemmaDeclarationBlock = this.createCodeBlock(textBefore);
-                blocks.push(lemmaDeclarationBlock);
+              // At this point, we want to capture the lemma
+              // This is the block with Lemma and Proof.
+              const textBefore = sentences.splice(0, j+1).join('\n');
+              j = -1; // Because we spliced everything, j=0 on next iteration
 
-                // This is an admitted block, surrounded by input blocks.
-                blocks.push(this.createInputBlock(inputBlockID, true));
-                const admittedBlock = this.createCodeBlock('Admitted.');
-                blocks.push(admittedBlock);
-                blocks.push(this.createInputBlock(inputBlockID++, false));
-
-                j = -1; // Because we spliced everything, j=0 on next iteration
-              }
+              const lemmaDeclarationBlock = this.createCodeBlock(textBefore);
+              blocks.push(lemmaDeclarationBlock);
             }
           }
-          // If code remains in this code block (i.e. after a Proof)
-          // it should get added as a seperate code block (without input block)
+          // If code remains in this code block, it is undefined what should
+          // happen, so we will add it as a code block outside of an input.
           const finalText = sentences.join('\n');
           if (finalText !== '') {
             const endBlock = this.createCodeBlock(finalText);
