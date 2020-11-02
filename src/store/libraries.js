@@ -29,6 +29,7 @@ export default {
       state.message = message;
     },
     setConfig(state, result) {
+      console.log('Setting config ', JSON.parse(JSON.stringify(result)));
       state.sertopPath = result['sertopPath'];
       state.serapiVersion = result['serapiVersion'];
     },
@@ -97,10 +98,13 @@ export default {
     async loadSerapi(store) {
       const release = await store.state.lock.acquire();
       if (store.state.done) {
+        console.log('Already loaded serapi');
         release();
         return;
       }
+      console.log('Loading serapi...');
       store.dispatch('readConfig').then(async () => {
+        console.log('readConfig');
         store.commit('setLoadingMessage', 'Reading serapi location');
         if (store.state.sertopPath === '' || store.state.sertopPath == null) {
           let result = findSertop(process.platform);

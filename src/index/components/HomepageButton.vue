@@ -47,7 +47,7 @@ export default {
         properties: ['openFile'],
       };
 
-      const filePaths = dialog.showOpenDialog(options);
+      const filePaths = dialog.showOpenDialogSync(options);
       let filePath;
       if (filePaths) {
         filePath = filePaths[0];

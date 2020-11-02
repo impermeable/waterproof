@@ -51,7 +51,8 @@
     "nyc": "^14.1.1",
     "sinon": "^7.5.0",
     "vue-router": "^3.4.8",
-    "webpack-chain": "^6.5.1"
+    "webpack-chain": "^6.5.1",
+    "@vue/compiler-sfc": "3.0.2"
   },
   "dependencies": {
     "@iktakahiro/markdown-it-katex": "^3.1.0",
@@ -59,7 +60,7 @@
     "async-mutex": "^0.1.4",
     "bootstrap-vue": "^2.18.1",
     "codemirror": "^5.58.2",
-    "electron": "^5.0.13",
+    "electron": "10.1.5",
     "electron-builder": "^20.44.4",
     "jquery": "^3.5.1",
     "lodash.debounce": "^4.0.8",
