@@ -450,12 +450,9 @@ class Notebook {
 
 
   /**
-   * Remove the proofs of code blocks in input blocks.
-   * Require the Proof, Qed, and Admitted tactic to be on seperate lines.
-   * Requires that the end of a code block in an input block is an
-   * Admitted or Qed, else the code is not removed.
+   * In an input block: remove code blocks, and places one admitted
    *
-   * @param {Array} inputBlocks blocks to remove proofs from
+   * @param {Array} inputBlocks blocks to remove sections from
    * @return {Array} of transformed blocks
    */
   removeProofs(inputBlocks) {
@@ -463,69 +460,26 @@ class Notebook {
     // whether we are in an input block
     let inInputBlock = false;
 
-    let inputBlockID = 0; // Also give each input block a different ID
-
     // We create a new list of blocks that will form the exercise sheet
     const blocks = [];
     for (let i = 0; i < inputBlocks.length; i++) {
       const block = inputBlocks[i];
 
-      // If we are in an input block, then we remove proofs.
-      // So, we keep track of whether we are in an input block.
+      // Keep track of whether we are in an input block
       if (block.type === 'input') {
-        // assert(block.start === (!inInputBlock)); or smthn would be nice.
-        inInputBlock = block.start;
-        continue;
-        // Notice that we do not add input blocks to the list (here).
-      }
-
-      // If we are not in an input block, we do not change anything.
-      if (inInputBlock === false) {
         blocks.push(block);
-      } else {
-        // If we are in an input block, we change only the code cells.
-        if (block.type !== 'code') {
-          blocks.push(block);
-        } else {
-          // We scan over the code blocks sentence by sentence.
-          // An assumption is made here, that the special tactics such as
-          // Lemma, Proof and Qed/Admitted are written on seperate sentences
-          const sentences = block.text.split('\n');
-          for (let j = 0; j < sentences.length; j++) {
-            if (sentences[j].match('^ *(Qed|Admitted) *.') !== null) {
-              // Qed. or Admitted. terminates the proof.
-              // We want to delete this proof, because we are in an input block
-              sentences.splice(0, j+1);
-              j = -1; // Because we spliced everything, j=0 on next iteration
+        inInputBlock = block.start;
 
-              // This is an admitted block, surrounded by input blocks.
-              blocks.push(this.createInputBlock(inputBlockID, true));
-              const admittedBlock = this.createCodeBlock('Admitted.');
-              blocks.push(admittedBlock);
-              blocks.push(this.createInputBlock(inputBlockID++, false));
-
-              // We throw away the sentence, because we are in a proof.
-              sentences.splice(j--, 1); // j-- because we splice a sentence
-            } else if (sentences[j].match('^ *Proof *.') !== null) {
-              // Proof. starts the proof.
-
-              // At this point, we want to capture the lemma
-              // This is the block with Lemma and Proof.
-              const textBefore = sentences.splice(0, j+1).join('\n');
-              j = -1; // Because we spliced everything, j=0 on next iteration
-
-              const lemmaDeclarationBlock = this.createCodeBlock(textBefore);
-              blocks.push(lemmaDeclarationBlock);
-            }
-          }
-          // If code remains in this code block, it is undefined what should
-          // happen, so we will add it as a code block outside of an input.
-          const finalText = sentences.join('\n');
-          if (finalText !== '') {
-            const endBlock = this.createCodeBlock(finalText);
-            blocks.push(endBlock);
-          }
+        // If we entered an input block, we add the Admitted.
+        if (inInputBlock === true) {
+          const admittedBlock = this.createCodeBlock('Admitted.');
+          blocks.push(admittedBlock);
         }
+      } else {
+        // If we are not in an input block, we add everything
+        if (inInputBlock === false) {
+          blocks.push(block);
+        } // if we are in an input block, we dont add anything
       }
     }
     return blocks;
