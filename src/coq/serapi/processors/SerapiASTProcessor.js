@@ -65,15 +65,6 @@ class SerapiASTProcessor extends SerapiProcessor {
       };
     }
   }
-
-  /**
-   * Handle a serapi feedback
-   * @param {*} feedback the serapi feedback (parsed)
-   * @param {String} extraTag the extra identifying tag
-   */
-  handleSerapiFeedback(feedback, extraTag) {
-    console.log('should not get any feedback');
-  }
 }
 
 

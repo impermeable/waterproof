@@ -310,9 +310,11 @@ export default {
      * Adds a message to the messages panel
      *
      * @param {string} message  The message to be added
+     * @param {Number} sentenceId The associated sentence id of the
+     *    message or null
      */
-    message: function(message) {
-      this.eventBus.$emit('on-coq-message', message);
+    message: function(message, sentenceId) {
+      this.eventBus.$emit('on-coq-message', {text: message, id: sentenceId});
     },
 
     findAndReplace: function() {

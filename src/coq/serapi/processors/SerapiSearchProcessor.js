@@ -137,6 +137,38 @@ class SerapiSearchProcessor extends SerapiProcessor {
   }
 
   /**
+   * Handle a serapi feedback
+   * @param {*} feedback the serapi feedback (parsed)
+   * @return {*} partial of this command
+   */
+  handleResultFeedback(feedback) {
+    const feedbackText = feedback.string;
+
+    let resultName = feedbackText.split(' ', 1)[0];
+
+    if (resultName === 'Error:' || resultName.indexOf('?') > -1) {
+      return;
+    }
+
+    if (resultName.endsWith(':')) {
+      resultName = resultName.substr(0, resultName.length - 1);
+    }
+
+    let resultData = feedbackText.substring(resultName.length + 1).trim();
+    if (resultData[0] === ':') {
+      resultData = resultData.substring(1).trim();
+    }
+    // TODO: do onResult call here?
+
+    return {
+      [resultName]: {
+        name: resultName,
+        content: resultData,
+      },
+    };
+  }
+
+  /**
    * Send the check query
    * @param {String} query the search query
    * @param {Function} onResult function to be called with every result
@@ -145,7 +177,8 @@ class SerapiSearchProcessor extends SerapiProcessor {
    * @private
    */
   async _checkQuery(query, onResult, ignored) {
-    return this.sendCommand(createCheckCommand(query), 'c')
+    return this.sendCommand(createCheckCommand(query), 'c',
+        this.handleResultFeedback)
         .then((result) => _processResults(result, onResult, ignored));
   }
 
@@ -158,7 +191,8 @@ class SerapiSearchProcessor extends SerapiProcessor {
    * @private
    */
   async _searchQuery(query, onResult, ignored) {
-    return this.sendCommand(createSearchCommand('(' + query + ')'), 'q')
+    return this.sendCommand(createSearchCommand('(' + query + ')'), 'q',
+        this.handleResultFeedback)
         .then((result) => _processResults(result, onResult, ignored));
   }
 
@@ -171,7 +205,8 @@ class SerapiSearchProcessor extends SerapiProcessor {
    * @private
    */
   async _searchStringQuery(query, onResult, ignored) {
-    return this.sendCommand(createSearchCommand('"' + query + '"'), 't')
+    return this.sendCommand(createSearchCommand('"' + query + '"'), 't',
+        this.handleResultFeedback)
         .then((result) => _processResults(result, onResult, ignored));
   }
 
@@ -182,7 +217,12 @@ class SerapiSearchProcessor extends SerapiProcessor {
    * @private
    */
   async _queryCommand(command) {
-    return this.sendCommand(createQueryVernacCommand(command), 'raw')
+    return this.sendCommand(createQueryVernacCommand(command), 'raw',
+        (feedback) => {
+          return {
+            result: feedback.string,
+          };
+        })
         .then((result) => {
           if (result.hasOwnProperty('result')) {
             this.editor.message(result.result);
@@ -208,45 +248,6 @@ class SerapiSearchProcessor extends SerapiProcessor {
         errorMessage: parseErrorResponse(data).message,
       };
     }
-  }
-
-  /**
-   * Handle a serapi feedback
-   * @param {*} feedback the serapi feedback (parsed)
-   * @param {String} extraTag the extra identifying tag
-   * @return {*} partial of this command
-   */
-  handleSerapiFeedback(feedback, extraTag) {
-    const feedbackText = feedback.string;
-
-    if (extraTag === 'raw') {
-      return {
-        result: feedbackText,
-      };
-    }
-
-    let resultName = feedbackText.split(' ', 1)[0];
-
-    if (resultName === 'Error:' || resultName.indexOf('?') > -1) {
-      return;
-    }
-
-    if (resultName.endsWith(':')) {
-      resultName = resultName.substr(0, resultName.length - 1);
-    }
-
-    let resultData = feedbackText.substring(resultName.length + 1).trim();
-    if (resultData[0] === ':') {
-      resultData = resultData.substring(1).trim();
-    }
-    // TODO: do onResult call here?
-
-    return {
-      [resultName]: {
-        name: resultName,
-        content: resultData,
-      },
-    };
   }
 }
 
