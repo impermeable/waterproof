@@ -7,7 +7,7 @@
     },
     {
       "type": "code",
-      "text": "Require Import Qreals.\nRequire Import Reals.\nRequire Import Rbase.\nRequire Import Rfunctions.\nRequire Import SeqSeries.\nRequire Import Rtrigo.\nRequire Import Ranalysis.\nRequire Import Integration.\nRequire Import micromega.Lra.\nRequire Import Omega.\nRequire Import Max."
+      "text": "Require Import Qreals.\nRequire Import Reals.\nRequire Import Rbase.\nRequire Import Rfunctions.\nRequire Import SeqSeries.\nRequire Import Rtrigo.\nRequire Import Ranalysis.\nRequire Import Integration.\nRequire Import micromega.Lra.\nRequire Import Omega.\nRequire Import Max.\n\nOpen Scope nat_scope.\nOpen Scope R_scope."
     },
     {
       "type": "text",
@@ -31,7 +31,7 @@
     },
     {
       "type": "code",
-      "text": "Notation \"[ x , y ]\" := (fun r : R => x <= r <= y).\nNotation \"[ x , y )\" := (fun r : R => x <= r < y).\nNotation \"( x , y ]\" := (fun r : R => x < r <= y).\nNotation \"( x , y )\" := (fun r : R => x < r < y)."
+      "text": "Notation \"[ x , y ]\" := (fun r : R => x <= r <= y).\nNotation \"[ x , y )\" := (fun r : R => x <= r < y).\nNotation \"( x , y ]\" := (fun r : R => x < r <= y).\nNotation \"( x , y )\" := (fun r : R => x < r < y).\n\nDefinition A := [0, 5]."
     },
     {
       "type": "text",
@@ -47,7 +47,7 @@
     },
     {
       "type": "code",
-      "text": "Open Scope nat_scope.\nOpen Scope R_scope.\n\nNotation \"'ℕ'\" := (nat).\nNotation \"'ℤ'\" := (Z).\nNotation \"'ℚ'\" := (Q).\nNotation \"'ℝ'\" := (R).\n\n(** We use coercions to get around writing INR and IZR *)\nCoercion INR: nat >-> R.\nCoercion IZR: Z >-> R.\nCoercion Q2R: Q >-> R.\n\n(** Add field and lra to tactics to try automatically *)\nHint Extern 3 ( _ = _ ) => field : real.\nHint Extern 3 ( _ <= _ ) => lra : real.\nHint Extern 3 ( _ >= _ ) => lra : real.\nHint Extern 3 ( _ < _ ) => lra : real.\nHint Extern 3 ( _ > _ ) => lra : real."
+      "text": "Notation \"'ℕ'\" := (nat).\nNotation \"'ℤ'\" := (Z).\nNotation \"'ℚ'\" := (Q).\nNotation \"'ℝ'\" := (R).\n\n(** We use coercions to get around writing INR and IZR *)\nCoercion INR: nat >-> R.\nCoercion IZR: Z >-> R.\nCoercion Q2R: Q >-> R.\n\n(** Add field and lra to tactics to try automatically *)\nHint Extern 3 ( _ = _ ) => field : real.\nHint Extern 3 ( _ <= _ ) => lra : real.\nHint Extern 3 ( _ >= _ ) => lra : real.\nHint Extern 3 ( _ < _ ) => lra : real.\nHint Extern 3 ( _ > _ ) => lra : real."
     },
     {
       "type": "text",
@@ -63,7 +63,7 @@
     },
     {
       "type": "code",
-      "text": "Notation \"｜ x ｜\" := (Rabs x) (at level 69, x at level 200).\nNotation \"｜ x - y ｜\" := (R_dist x y) (at level 69, x at level 48, y at level 48)."
+      "text": "Notation \"| x |\" := (Rabs x) (at level 69, x at level 200).\nNotation \"｜ x - y ｜\" := (R_dist x y) (at level 69, x at level 48, y at level 48)."
     },
     {
       "type": "text",

@@ -9,7 +9,5 @@
   "Lib/subsequences",
   "Lib/sequential_accumulation_points",
   "Notations/SetNotations",
-  "Lib/series",
-  "Lib/sets",
-  "Lib/measure_theory"
+  "Lib/series"
 ]
