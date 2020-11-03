@@ -183,10 +183,12 @@ export default {
         fileURI: fileURI,
         id: this.tabIdCounter++,
       });
-      this.switchToTab(newId, false);
-      if (fileURI !== null) {
-        this.recents.addFileListEntry(fileURI);
-      }
+      this.$nextTick(() => {
+        this.switchToTab(newId, false);
+        if (fileURI !== null) {
+          this.recents.addFileListEntry(fileURI);
+        }
+      });
     },
 
     /**
@@ -226,7 +228,7 @@ export default {
         };
 
         // index in buttons
-        const result = dialog.showMessageBox(dialogOptions);
+        const result = dialog.showMessageBoxSync(dialogOptions);
         if (result === 1) {
           return false;
         }
@@ -296,7 +298,7 @@ export default {
       };
 
       const {dialog} = require('electron').remote;
-      const filePaths = dialog.showOpenDialog(options);
+      const filePaths = dialog.showOpenDialogSync(options);
 
       if (filePaths) {
         for (const file of filePaths) {
@@ -327,7 +329,7 @@ export default {
       };
 
       const {dialog} = require('electron').remote;
-      const filename = dialog.showOpenDialog(options);
+      const filename = dialog.showOpenDialogSync(options);
       if (filename) {
         this.tabs[this.currentTab].fileURI = null;
         this.$nextTick(() => {
@@ -427,7 +429,7 @@ export default {
             };
 
             // index of button
-            const result = dialog.showMessageBox(dialogOptions);
+            const result = dialog.showMessageBoxSync(dialogOptions);
             if (result === 1) {
               return;
             }

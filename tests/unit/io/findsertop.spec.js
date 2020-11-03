@@ -42,10 +42,10 @@ function remoteGen( userPath, chosenSertopPaths, acceptMessage=true ) {
       }
     }},
     dialog: {
-      showOpenDialog: function() {
+      showOpenDialogSync: function() {
         return chosenSertopPaths;
       },
-      showMessageBox: function() {
+      showMessageBoxSync: function() {
         return acceptMessage ? 0 : 1;
       },
     },

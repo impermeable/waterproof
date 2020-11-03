@@ -144,18 +144,30 @@ class SerapiExecutionProcessor extends SerapiProcessor {
         this.editor.executeStarted(
             this.state.endIndexOfSentence(this.state.target));
         const nextSentence = this.state.lastExecuted + 1;
-        const executionFailed =
-            await this._executeSentence(this.state.idOfSentence(nextSentence));
+        const sentenceId = this.state.idOfSentence(nextSentence);
+        const execResult = await this._executeSentence(sentenceId);
 
         stateRelease = await this.state.stateLock.acquire();
 
-        if (executionFailed != null) {
+        if (execResult.error != null) {
           this.state.target = this.state.lastExecuted;
-          error = this._parseError(executionFailed);
+          error = this._parseError(execResult.error);
+        } else {
+          const previousMessages =
+              this.state.getSentenceByIndex(nextSentence).messages;
+
+          if (previousMessages != null) {
+            for (const message of previousMessages) {
+              this.editor.message(message, sentenceId);
+            }
+          } else {
+            this.state.getSentenceByIndex(nextSentence).messages =
+                execResult.messages;
+          }
         }
 
         targetValue = this.state.target;
-        if (!executionFailed && targetValue !== nextSentence) {
+        if (!execResult.error && targetValue !== nextSentence) {
           this.editor.executeSuccess(null,
               this.state.endIndexOfSentence(nextSentence), false);
         }
@@ -210,13 +222,26 @@ class SerapiExecutionProcessor extends SerapiProcessor {
    * @private
    */
   async _executeSentence(sentenceId) {
-    return this.sendCommand(createExecuteCommand(sentenceId), 'e')
+    const messages = [];
+    return this.sendCommand(createExecuteCommand(sentenceId), 'e',
+        (feedback) => {
+          if (!feedback.errorFlag) {
+            messages.push(feedback.string);
+            this.editor.message(feedback.string, sentenceId);
+          }
+        })
         .then((result) => {
           if (result.hasOwnProperty('error')) {
-            return result.error;
+            return {
+              error: result.error,
+              messages: messages,
+            };
           } else {
             this.state.lastExecuted++;
-            return null;
+            return {
+              error: null,
+              messages: messages,
+            };
           }
         });
   }
@@ -252,17 +277,6 @@ class SerapiExecutionProcessor extends SerapiProcessor {
           error: parseErrorResponse(data),
         };
       }
-    }
-  }
-
-  /**
-   * Handle a serapi feedback
-   * @param {*} feedback the serapi feedback (parsed)
-   * @param {String} extraTag the extra identifying tag
-   */
-  handleSerapiFeedback(feedback, extraTag) {
-    if (!feedback.errorFlag && extraTag === 'e') {
-      this.editor.message(feedback.string);
     }
   }
 }

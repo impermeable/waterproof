@@ -31,10 +31,12 @@ class SerapiProcessor extends SerapiCallbacks {
    * Send command to serapi with an optional tag
    * @param {String} command the command
    * @param {String} extraTag an extra identifying tag
+   * @param {Function} feedbackHandler callback for feedback messages
+   *  Params: feedback, Tag
    * @return {Promise<*|Promise<unknown>>} a promise which resolves
    *   when the command is complete
    */
-  async sendCommand(command, extraTag=null) {
+  async sendCommand(command, extraTag=null, feedbackHandler= () => {}) {
     if (this.commandStatus.resolver != null) {
       console.log('message send before last message resolved');
     }
@@ -48,7 +50,8 @@ class SerapiProcessor extends SerapiCallbacks {
           (m, t) => this.handleMessage(m, t),
           (f, raw) => {
             if (!raw) {
-              this.handleFeedback(f);
+              this._addToResult(
+                  feedbackHandler(f, this.commandStatus.extraTag));
             }
           }, extraTag);
     }));
@@ -98,16 +101,6 @@ class SerapiProcessor extends SerapiCallbacks {
       // command completed resolve promise
       this._resolveCommand();
     }
-  }
-
-  /**
-   * Handle serapi feedback
-   * Passes through to handleSerapiFeedback
-   * @param {*} data the feedback
-   */
-  handleFeedback(data) {
-    this._addToResult(
-        this.handleSerapiFeedback(data, this.commandStatus.extraTag));
   }
 }
 

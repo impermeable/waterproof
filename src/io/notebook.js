@@ -439,10 +439,49 @@ class Notebook {
 
     const copy = new Notebook();
     copy.blocks = JSON.parse(JSON.stringify(this.blocks));
+
+    copy.blocks = this.removeProofs(copy.blocks);
+
     copy.exerciseSheet = true;
     copy.commandBlacklist = DEFAULT_BLACKLIST;
     copy.setFilePath(filename);
     copy.write(onExported, onError);
+  }
+
+
+  /**
+   * In an input block: remove code blocks, and places one admitted
+   *
+   * @param {Array} inputBlocks blocks to remove sections from
+   * @return {Array} of transformed blocks
+   */
+  removeProofs(inputBlocks) {
+    // We scan over the notebook once, and keep track of
+    // whether we are in an input block
+    let inInputBlock = false;
+
+    // We create a new list of blocks that will form the exercise sheet
+    const blocks = [];
+    for (let i = 0; i < inputBlocks.length; i++) {
+      const block = inputBlocks[i];
+
+      // Keep track of whether we are in an input block
+      if (block.type === 'input') {
+        blocks.push(block);
+        inInputBlock = block.start;
+
+        // If we entered an input block, we add the Admitted.
+        if (inInputBlock) {
+          const admittedBlock = this.createCodeBlock('Admitted.');
+          blocks.push(admittedBlock);
+        }
+      } else {
+        if (!inInputBlock) {
+          blocks.push(block);
+        }
+      }
+    }
+    return blocks;
   }
 
   /**

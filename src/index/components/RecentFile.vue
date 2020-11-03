@@ -50,7 +50,7 @@ export default {
               `recent files list?`,
           };
         }
-        if (dialog.showMessageBox(dialogOptions) === 0) {
+        if (dialog.showMessageBoxSync(dialogOptions) === 0) {
           this.$parent.recents.removeFileListEntry(fileInfo.location);
         }
       });

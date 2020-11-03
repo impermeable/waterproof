@@ -59,8 +59,9 @@ class EditorInterface {
   /**
    * When coq gives some message
    * @param {String} message the message
+   * @param {Number} sentenceId the id of the sentence or null
    */
-  message(message) {
+  message(message, sentenceId=null) {
   }
 
   /**

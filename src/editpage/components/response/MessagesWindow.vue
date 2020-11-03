@@ -7,16 +7,22 @@
                      alt="Clear all" class="trash-icon">
             </span>
         </div>
-        <div class="messages" v-if="ready">
+        <div class="messages" v-if="ready"
+             ref="messagesBox">
             <div class="message message-error"
                  v-if="haveAddError && showingAddError">
                 <span class="messageText">
                     {{addErrorText}}
                 </span>
             </div>
-            <div class="message"
-                 v-for="(message, index) in messages" :key="message + index">
-                <span class="messageText">
+            <div class="message highlight"
+                 style="animation-name: blinkColors;"
+                 @animationend="removeAnimation"
+                 ref="messageElts"
+                 v-for="(message, index) in messages"
+                 :key="message.text + index" >
+                <span :class="{'messageText': true,
+                'repeated-message': message.deprecated}">
                     {{message.text}}
                 </span>
                 <a @click="removeMessage(index)" title="Remove message">
@@ -73,13 +79,46 @@ export default {
     this.eventBus.$on('coqNext', this.forceAddError);
   },
   methods: {
+    removeAnimation: function(e) {
+      e.target.style.animationName = '';
+    },
     clear: function() {
       this.messages = [];
     },
     addMessage: function(message) {
-      this.messages.push({
-        text: message,
-      });
+      if (message.hasOwnProperty('text')) {
+        for (let i = this.messages.length - 1; i >= 0; --i) {
+          const oldMessage = this.messages[i];
+          if (oldMessage.id === message.id) {
+            if (oldMessage.text === message.text) {
+              this.$refs.messageElts[i].scrollIntoView({
+                behavior: 'smooth',
+                block: 'start',
+              });
+              this.$refs.messageElts[i].style.animationName = 'blinkColors';
+              return;
+            }
+          }
+        }
+        this.messages.push({
+          text: message.text,
+          id: message.id,
+          deprecated: false,
+        });
+      } else {
+        // Assume old style message
+        this.messages.push({
+          text: message,
+          id: null,
+          deprecated: false,
+        });
+      }
+      if (typeof(requestAnimationFrame) !== 'undefined') {
+        requestAnimationFrame(() => {
+          this.$refs.messagesBox.scrollTop =
+              this.$refs.messagesBox.scrollHeight;
+        });
+      }
     },
     removeMessage: function(index) {
       this.messages.splice(index, 1);
@@ -202,4 +241,29 @@ export default {
         }
     }
 
+    .highlight {
+      background: transparent;
+      //animation-name: blinkColors;
+      animation-iteration-count: 1;
+      animation-timing-function: ease-in;
+      animation-duration: 1s;
+    }
+
+    .repeated-message {
+      text-decoration: line-through;
+    }
+
+</style>
+
+<style lang="scss">
+@keyframes blinkColors {
+  0% {
+    background: $color-primary-light;
+    color: $color-on-primary;
+  }
+  100% {
+    background: transparent;
+    color: inherit;
+  }
+}
 </style>

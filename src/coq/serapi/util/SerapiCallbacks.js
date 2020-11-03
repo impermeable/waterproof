@@ -10,14 +10,6 @@ class SerapiCallbacks {
    */
   handleSerapiMessage(data, extraTag) {
   }
-
-  /**
-   * Called when feedback is received from serapi
-   * @param {*} feedback the already parsed response from serapi
-   * @param {String} extraTag the extra identifying tag
-   */
-  handleSerapiFeedback(feedback, extraTag) {
-  }
 }
 
 export default SerapiCallbacks;

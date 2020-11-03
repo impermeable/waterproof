@@ -4,8 +4,9 @@ const path = require('path');
 const defaultConfigData = {
   sertopPath: '',
   serapiVersion: '',
+  libraryVersion: '',
 };
-const possibleKeys = ['sertopPath', 'serapiVersion'];
+const possibleKeys = ['sertopPath', 'serapiVersion', 'libraryVersion'];
 
 /**
  * Read in the configuration file. The function looks for the file
@@ -23,6 +24,7 @@ function readConfiguration(remote) {
     console.log(`Looking for configuration file at ${configPath}`);
 
     fs.readFile(configPath, (err, data) => {
+      console.log('Read config file:', String(data), ' error: ', err);
       if (err && (err['code'] === 'ENOENT')) {
         console.log('No configuration file found');
         // Write default configuration file
@@ -31,9 +33,11 @@ function readConfiguration(remote) {
             () => {
               console.error('Could not create new configuration file');
             });
+        console.log('(Tried to) Write configuration file');
       } else {
         try {
-          configData = JSON.parse(data);
+          configData = JSON.parse(String(data));
+          console.log('Read configuration file');
         } catch ( err ) {
           console.log('error when parsing json file:');
           console.log(err);

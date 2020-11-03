@@ -3,15 +3,15 @@
   "blocks": [
     {
       "type": "text",
-      "text": "# **Definitions and Notations for Waterproof**"
+      "text": "# **Definitions and Notations for Waterproof**\n\nThis file contains a list of additional notation that can be used in writing mathematical proofs."
     },
     {
       "type": "code",
-      "text": "Require Import Reals.\nRequire Import Rbase.\nRequire Import Rfunctions.\nRequire Import SeqSeries.\nRequire Import Rtrigo.\nRequire Import Ranalysis.\nRequire Import Integration.\nRequire Import micromega.Lra.\nRequire Import Omega.\nRequire Import Max.\n\n"
+      "text": "Require Import Qreals.\nRequire Import Reals.\nRequire Import Rbase.\nRequire Import Rfunctions.\nRequire Import SeqSeries.\nRequire Import Rtrigo.\nRequire Import Ranalysis.\nRequire Import Integration.\nRequire Import micromega.Lra.\nRequire Import Omega.\nRequire Import Max."
     },
     {
       "type": "text",
-      "text": "## Reals\n\n#### Quantifiers\nAllow unicode characters ∀ and ∃ for readability."
+      "text": "## **Quantifiers**\nAllow unicode characters ∀ and ∃ for readability."
     },
     {
       "type": "code",
@@ -19,7 +19,7 @@
     },
     {
       "type": "text",
-      "text": "### Mathematical symbols"
+      "text": "## **Set symbols, implications**\nThe following notations deal with sets."
     },
     {
       "type": "code",
@@ -27,7 +27,15 @@
     },
     {
       "type": "text",
-      "text": "### (In)equalities"
+      "text": "We also provide a way to write intervals (on the real line)."
+    },
+    {
+      "type": "code",
+      "text": "Notation \"[ x , y ]\" := (fun r : R => x <= r <= y).\nNotation \"[ x , y )\" := (fun r : R => x <= r < y).\nNotation \"( x , y ]\" := (fun r : R => x < r <= y).\nNotation \"( x , y )\" := (fun r : R => x < r < y)."
+    },
+    {
+      "type": "text",
+      "text": "## **(In)equalities**\nAllowing unicode characters for uniqualities."
     },
     {
       "type": "code",
@@ -35,15 +43,15 @@
     },
     {
       "type": "text",
-      "text": "### Scope, set notation and extending hint base"
+      "text": "## **Scopes and coercions**"
     },
     {
       "type": "code",
-      "text": "Open Scope nat_scope.\nOpen Scope R_scope.\n\n(* TODO: the below definition doesn't work very nicely *)\nNotation \"x ↦ y\" := (fun x => y) (at level 0).\n\nNotation \"'ℕ'\" := (nat).\nNotation \"'ℝ'\" := (R).\n\n(** We use coercions to get around writing INR and IZR *)\nCoercion INR: nat >-> R.\nCoercion IZR: Z >-> R.\n\n(** Add field and lra to tactics to try automatically *)\nHint Extern 3 ( _ = _ ) => field : real.\nHint Extern 3 ( _ <= _ ) => lra : real.\nHint Extern 3 ( _ >= _ ) => lra : real.\nHint Extern 3 ( _ < _ ) => lra : real.\nHint Extern 3 ( _ > _ ) => lra : real."
+      "text": "Open Scope nat_scope.\nOpen Scope R_scope.\n\nNotation \"'ℕ'\" := (nat).\nNotation \"'ℤ'\" := (Z).\nNotation \"'ℚ'\" := (Q).\nNotation \"'ℝ'\" := (R).\n\n(** We use coercions to get around writing INR and IZR *)\nCoercion INR: nat >-> R.\nCoercion IZR: Z >-> R.\nCoercion Q2R: Q >-> R.\n\n(** Add field and lra to tactics to try automatically *)\nHint Extern 3 ( _ = _ ) => field : real.\nHint Extern 3 ( _ <= _ ) => lra : real.\nHint Extern 3 ( _ >= _ ) => lra : real.\nHint Extern 3 ( _ < _ ) => lra : real.\nHint Extern 3 ( _ > _ ) => lra : real."
     },
     {
       "type": "text",
-      "text": "## Sequences"
+      "text": "## **Sequences**"
     },
     {
       "type": "code",
@@ -55,7 +63,7 @@
     },
     {
       "type": "code",
-      "text": "Notation \"｜ x ｜\" := (Rabs x) (at level 69, x at level 200).\n Notation \"｜ x - y ｜\" := (R_dist x y) (at level 69, x at level 48, y at level 48)."
+      "text": "Notation \"｜ x ｜\" := (Rabs x) (at level 69, x at level 200).\nNotation \"｜ x - y ｜\" := (R_dist x y) (at level 69, x at level 48, y at level 48)."
     },
     {
       "type": "text",
@@ -64,14 +72,6 @@
     {
       "type": "code",
       "text": "Notation is_sup := is_lub.\nNotation is_bdd_above := bound."
-    },
-    {
-      "type": "text",
-      "text": "## Sequences"
-    },
-    {
-      "type": "code",
-      "text": "(**Notation \"an 'converges' 'to' a\" := \n  (Un_cv an a) (at level 50).*) "
     },
     {
       "type": "text",

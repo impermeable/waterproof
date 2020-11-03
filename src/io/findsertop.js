@@ -44,7 +44,7 @@ function findSertop(platform, remote=undefined) {
           if (fs.existsSync(guess)) {
             const dialog = remote.dialog;
 
-            const useThisVersion =dialog.showMessageBox({
+            const useThisVersion =dialog.showMessageBoxSync({
               type: 'question',
               title: 'Found serapi version',
               message: `Waterproof makes use of a program called sertop.` +
@@ -80,7 +80,7 @@ function findSertop(platform, remote=undefined) {
 function userHelpFindSertop(remote, guess='') {
   const userPath = getAppdataPath();
   const configPath = path.join(userPath, 'wpconfig.json');
-  const result = remote.dialog.showOpenDialog({
+  const result = remote.dialog.showOpenDialogSync({
     title: 'Please select the program named sertop',
     message: 'Please select the program named sertop',
     defaultPath: guess,

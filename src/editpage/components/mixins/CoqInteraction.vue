@@ -32,7 +32,7 @@ export default {
   },
   methods: {
     startCoq: function() {
-      this.$store.dispatch('createCoqInstance', this).then((coq) => {
+      return this.$store.dispatch('createCoqInstance', this).then((coq) => {
         this.coq = coq;
         this.eventBus.$emit('clear-messages');
         this.goals = '';

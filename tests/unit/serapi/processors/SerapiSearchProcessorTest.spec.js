@@ -360,7 +360,7 @@ describe('serapi search processor', () => {
     expect(onDone.callCount).to.equal(1);
     expect(onResult.callCount).to.equal(3);
 
-    expect(onResult.args.flatMap(mapToNameContent)).to.have.deep.members([
+    expect(onResult.args.map(mapToNameContent)).to.have.deep.members([
       {
         name: 'plus_O_n',
         content: 'forall n : nat, 0 + n = n',
@@ -395,7 +395,7 @@ describe('serapi search processor', () => {
     expect(onDone.callCount).to.equal(1);
     expect(onResult.callCount).to.equal(4);
 
-    expect(onResult.args.flatMap(mapToNameContent)).to.have.deep.members([
+    expect(onResult.args.map(mapToNameContent)).to.have.deep.members([
       {
         name: 'plus_O_n',
         content: 'forall n : nat, 0 + n = n',
@@ -441,7 +441,7 @@ describe('serapi search processor', () => {
     expect(onDone.callCount).to.equal(1);
     expect(onResult.callCount).to.equal(6);
 
-    expect(onResult.args.flatMap(mapToNameContent)).to.have.deep.members([
+    expect(onResult.args.map(mapToNameContent)).to.have.deep.members([
       {
         name: 'Nat.add',
         content: 'nat -> nat -> nat',
@@ -506,7 +506,7 @@ describe('serapi search processor', () => {
     expect(onDone.callCount).to.equal(1);
     expect(onResult.callCount).to.equal(4);
 
-    expect(onResult.args.flatMap((res) => res[0].name)).to.have.members([
+    expect(onResult.args.map((res) => res[0].name)).to.have.members([
       'Nat.tail_add', 'Nat.add', 'Nat.tail_addmul', 'eq_add_S']);
   });
 });

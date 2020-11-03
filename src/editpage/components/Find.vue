@@ -75,7 +75,7 @@ export default {
         buttons: ['OK'], message: message,
       };
 
-      dialog.showMessageBox(dialogOptions);
+      dialog.showMessageBoxSync(dialogOptions);
     },
 
     findNextWord: function(direction, doReplace) {
