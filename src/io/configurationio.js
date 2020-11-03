@@ -4,8 +4,9 @@ const path = require('path');
 const defaultConfigData = {
   sertopPath: '',
   serapiVersion: '',
+  libraryVersion: '',
 };
-const possibleKeys = ['sertopPath', 'serapiVersion'];
+const possibleKeys = ['sertopPath', 'serapiVersion', 'libraryVersion'];
 
 /**
  * Read in the configuration file. The function looks for the file

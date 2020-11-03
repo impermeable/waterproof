@@ -17,6 +17,7 @@ export default {
     sertopPath: null,
     sercompPath: null,
     serapiVersion: null,
+    libraryVersion: null,
     socket: new TCPManager(),
   },
   mutations: {
@@ -32,6 +33,7 @@ export default {
       console.log('Setting config ', JSON.parse(JSON.stringify(result)));
       state.sertopPath = result['sertopPath'];
       state.serapiVersion = result['serapiVersion'];
+      state.libraryVersion = result['libraryVersion'];
     },
     setSercompPath(state, path) {
       state.sercompPath = path;
@@ -42,6 +44,9 @@ export default {
       }
       if (partial.hasOwnProperty('serapiVersion')) {
         state.serapiVersion = partial['serapiVersion'];
+      }
+      if (partial.hasOwnProperty('libraryVersion')) {
+        state.libraryVersion = partial['libraryVersion'];
       }
     },
   },
@@ -76,6 +81,24 @@ export default {
           } );
         }
       });
+    },
+    updateLibraries: async function(store) {
+      const release = await store.state.lock.acquire();
+
+      store.commit('setLoadingMessage', 'Getting serapi version');
+      const newVersion = await store.dispatch('getSerapiVersion');
+
+      store.commit('setLoadingMessage', 'Getting library version');
+      const appVersion = require('electron').remote.app.getVersion();
+      const libVersion = store.state.libraryVersion;
+
+      // If serapi has updated or waterproof itself -> force recompile
+      const forceRecompile = appVersion !== libVersion || newVersion;
+
+      store.commit('setLoadingMessage', 'Reading library list');
+      await store.dispatch('compileLibraries', forceRecompile);
+
+      release();
     },
     resolveSercompPath: async function(store) {
       if (store.state.sertopPath == null || store.state.sertopPath === '') {
@@ -130,14 +153,8 @@ export default {
           store.commit('setLoadingMessage', 'Could not find serapi');
           return;
         }
-        store.commit('setLoadingMessage', 'Getting serapi version');
-
-        const newVersion = await store.dispatch('getSerapiVersion');
-
-        store.commit('setLoadingMessage', 'Reading library list');
-
-        await store.dispatch('compileLibraries', newVersion);
         release();
+        store.dispatch('updateLibraries');
       });
     },
     async getSerapiVersion(store) {
@@ -173,6 +190,11 @@ export default {
         await compiler.compileLibrary(library);
         libDone++;
       }
+
+      // Also store the version of Waterproof of this lib compilation
+      const appVersion = require('electron').remote.app.getVersion();
+      await updateConfiguration(remote, {libraryVersion: appVersion});
+      store.commit('updateConfig', {libraryVersion: appVersion});
 
       store.commit('loadingDone');
     },
