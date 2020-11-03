@@ -17,6 +17,7 @@ export default {
     sertopPath: null,
     sercompPath: null,
     serapiVersion: null,
+    libraryVersion: null,
     socket: new TCPManager(),
   },
   mutations: {
@@ -32,6 +33,7 @@ export default {
       console.log('Setting config ', JSON.parse(JSON.stringify(result)));
       state.sertopPath = result['sertopPath'];
       state.serapiVersion = result['serapiVersion'];
+      state.libraryVersion = result['libraryVersion'];
     },
     setSercompPath(state, path) {
       state.sercompPath = path;
@@ -42,6 +44,9 @@ export default {
       }
       if (partial.hasOwnProperty('serapiVersion')) {
         state.serapiVersion = partial['serapiVersion'];
+      }
+      if (partial.hasOwnProperty('libraryVersion')) {
+        state.libraryVersion = partial['libraryVersion'];
       }
     },
   },
@@ -76,6 +81,18 @@ export default {
           } );
         }
       });
+    },
+    updateLibraries: async function(store) {
+      const release = await store.state.lock.acquire();
+      const appVersion = require('electron').remote.app.getVersion();
+      const libVersion = store.state.libraryVersion;
+      if (appVersion === libVersion) {
+        console.log('Libraries are already up to date');
+      } else {
+        console.log('Updating libraries');
+        await store.dispatch('compileLibraries', true);
+      }
+      release();
     },
     resolveSercompPath: async function(store) {
       if (store.state.sertopPath == null || store.state.sertopPath === '') {
@@ -173,6 +190,11 @@ export default {
         await compiler.compileLibrary(library);
         libDone++;
       }
+
+      // Also store the version of Waterproof of this lib compilation
+      const appVersion = require('electron').remote.app.getVersion();
+      await updateConfiguration(remote, {libraryVersion: appVersion});
+      store.commit('updateConfig', {libraryVersion: appVersion});
 
       store.commit('loadingDone');
     },

@@ -29,6 +29,7 @@ export default {
   },
   created() {
     this.$store.dispatch('loadSerapi');
+    this.$store.dispatch('updateLibraries');
   },
 };
 </script>
