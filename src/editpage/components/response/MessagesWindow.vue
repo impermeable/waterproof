@@ -113,9 +113,12 @@ export default {
           deprecated: false,
         });
       }
-      requestAnimationFrame(() => {
-        this.$refs.messagesBox.scrollTop = this.$refs.messagesBox.scrollHeight;
-      });
+      if (typeof(requestAnimationFrame) !== 'undefined') {
+        requestAnimationFrame(() => {
+          this.$refs.messagesBox.scrollTop =
+              this.$refs.messagesBox.scrollHeight;
+        });
+      }
     },
     removeMessage: function(index) {
       this.messages.splice(index, 1);

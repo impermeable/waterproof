@@ -151,19 +151,19 @@ class SerapiExecutionProcessor extends SerapiProcessor {
 
         if (execResult.error != null) {
           this.state.target = this.state.lastExecuted;
-          error = this._parseError(execResult);
-        }
-
-        const previousMessages =
-            this.state.getSentenceByIndex(nextSentence).messages;
-
-        if (previousMessages != null) {
-          for (const message of previousMessages) {
-            this.editor.message(message, sentenceId);
-          }
+          error = this._parseError(execResult.error);
         } else {
-          this.state.getSentenceByIndex(nextSentence).messages =
-              execResult.messages;
+          const previousMessages =
+              this.state.getSentenceByIndex(nextSentence).messages;
+
+          if (previousMessages != null) {
+            for (const message of previousMessages) {
+              this.editor.message(message, sentenceId);
+            }
+          } else {
+            this.state.getSentenceByIndex(nextSentence).messages =
+                execResult.messages;
+          }
         }
 
         targetValue = this.state.target;

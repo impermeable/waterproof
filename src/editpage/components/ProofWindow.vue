@@ -126,30 +126,30 @@ export default {
         this.coq.stop();
       }
 
-      this.startCoq();
+      this.startCoq().then(() => {
+        this.notebook = new Notebook;
+        this.notebook.filePath = this.uri;
 
-      this.notebook = new Notebook;
-      this.notebook.filePath = this.uri;
-
-      const notebookType = this.notebook.exerciseSheet ?
-          'exercise sheet' : 'notebook';
-      if (this.uri !== null) {
-        this.notebook.read(() => {
-          // When the notebook is loaded, update to enable the buttons for
-          // inserting blocks etc.
-          this.updateButtons();
-          this.coq.validate = (sentence) => {
-            for (const illegalTerm of this.notebook.commandBlacklist) {
-              if (sentence.startsWith(illegalTerm)) {
-                throw new Error(`the command "${illegalTerm}" is not allowed` +
-                    ` in this ${notebookType}`);
+        const notebookType = this.notebook.exerciseSheet ?
+            'exercise sheet' : 'notebook';
+        if (this.uri !== null) {
+          this.notebook.read(() => {
+            // When the notebook is loaded, update to enable the buttons for
+            // inserting blocks etc.
+            this.updateButtons();
+            this.coq.validate = (sentence) => {
+              for (const illegalTerm of this.notebook.commandBlacklist) {
+                if (sentence.startsWith(illegalTerm)) {
+                  throw new Error(`the command "${illegalTerm}" is` +
+                  `not allowed in this ${notebookType}`);
+                }
               }
-            }
-          };
-        });
-      }
+            };
+          });
+        }
 
-      this.undoRedo = new UndoRedo(this.notebook);
+        this.undoRedo = new UndoRedo(this.notebook);
+      });
     },
 
     /**

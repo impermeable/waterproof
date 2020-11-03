@@ -5,7 +5,7 @@ import {shallowMount} from '@vue/test-utils';
 import Vue from 'vue';
 
 describe('Response messages', () => {
-  it('should put a new message into the queue when event emitted', (done) => {
+  it('should put a new message into the queue when event emitted', async () => {
     const bus = new Vue;
     const wrapper = shallowMount(MessagesWindow, {
       propsData: {
@@ -23,9 +23,12 @@ describe('Response messages', () => {
     const messageText = 'New message from bus';
 
     bus.$emit('on-coq-message', messageText);
+
+    await Vue.nextTick();
+
     expect(wrapper.vm.messages).to.be.an('array').that.has.length(1);
+
     expect(wrapper.find('.messageText').text()).to.include(messageText);
-    done();
   });
 
   it('should clear the queue when clear is called', (done) => {
@@ -79,7 +82,7 @@ describe('Response messages', () => {
     done();
   });
 
-  it('should not have a message when there is an addError', (done) => {
+  it('should not have a message when there is an addError', async () => {
     const bus = new Vue;
     const wrapper = shallowMount(MessagesWindow, {
       propsData: {
@@ -97,7 +100,7 @@ describe('Response messages', () => {
 
     const errorMessage ='Add error occurred';
 
-    wrapper.setProps({
+    await wrapper.setProps({
       addError: {
         message: {
           message: errorMessage,
@@ -110,10 +113,9 @@ describe('Response messages', () => {
     expect(wrapper.find('.message-error').exists()).to.equal(true);
 
     expect(wrapper.find('.message-error').text()).to.include(errorMessage);
-    done();
   });
 
-  it('should not show messages until ready', (done) => {
+  it('should not show messages until ready', async () => {
     const bus = new Vue;
     const wrapper = shallowMount(MessagesWindow, {
       propsData: {
@@ -129,19 +131,20 @@ describe('Response messages', () => {
 
     const messageText = 'test message';
     bus.$emit('on-coq-message', messageText);
+
+    await Vue.nextTick();
+
     expect(wrapper.vm.messages).to.be.an('array').that.has.length(1);
 
     expect(wrapper.find('.messages').exists()).to.equal(false);
     expect(wrapper.find('.message').exists()).to.equal(false);
 
-    wrapper.setProps({
+    await wrapper.setProps({
       ready: true,
     });
 
     expect(wrapper.find('.messages').exists()).to.equal(true);
     expect(wrapper.find('.message').exists()).to.equal(true);
     expect(wrapper.find('.message').text()).to.include(messageText);
-
-    done();
   });
 });

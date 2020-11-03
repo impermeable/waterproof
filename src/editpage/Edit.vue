@@ -183,10 +183,12 @@ export default {
         fileURI: fileURI,
         id: this.tabIdCounter++,
       });
-      this.switchToTab(newId, false);
-      if (fileURI !== null) {
-        this.recents.addFileListEntry(fileURI);
-      }
+      this.$nextTick(() => {
+        this.switchToTab(newId, false);
+        if (fileURI !== null) {
+          this.recents.addFileListEntry(fileURI);
+        }
+      });
     },
 
     /**

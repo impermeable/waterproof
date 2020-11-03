@@ -581,6 +581,7 @@ describe('serapi execution processor', () => {
 
         expect(editor.executeStarted.callCount).to.be.at.least(1);
         expect(editor.executeError.callCount).to.equal(1);
+        console.log(editor.executeError.lastCall.args);
         expect(editor.executeError.lastCall.args[0]).to.equal(errorString);
         expect(editor.executeError.lastCall.args[1]).to.include({
           start: sentenceBaseIndex + bp,
