@@ -84,14 +84,20 @@ export default {
     },
     updateLibraries: async function(store) {
       const release = await store.state.lock.acquire();
+
+      store.commit('setLoadingMessage', 'Getting serapi version');
+      const newVersion = await store.dispatch('getSerapiVersion');
+
+      store.commit('setLoadingMessage', 'Getting library version');
       const appVersion = require('electron').remote.app.getVersion();
       const libVersion = store.state.libraryVersion;
-      if (appVersion === libVersion) {
-        console.log('Libraries are already up to date');
-      } else {
-        console.log('Updating libraries');
-        await store.dispatch('compileLibraries', true);
-      }
+
+      // If serapi has updated or waterproof itself -> force recompile
+      const forceRecompile = appVersion !== libVersion || newVersion;
+
+      store.commit('setLoadingMessage', 'Reading library list');
+      await store.dispatch('compileLibraries', forceRecompile);
+
       release();
     },
     resolveSercompPath: async function(store) {
@@ -147,14 +153,8 @@ export default {
           store.commit('setLoadingMessage', 'Could not find serapi');
           return;
         }
-        store.commit('setLoadingMessage', 'Getting serapi version');
-
-        const newVersion = await store.dispatch('getSerapiVersion');
-
-        store.commit('setLoadingMessage', 'Reading library list');
-
-        await store.dispatch('compileLibraries', newVersion);
         release();
+        store.dispatch('updateLibraries');
       });
     },
     async getSerapiVersion(store) {
