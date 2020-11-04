@@ -55,7 +55,7 @@
     },
     {
       "type": "code",
-      "text": "Definition converges_to (a : ℕ → ℝ) (c : ℝ) :=\n  ∀ ε : ℝ, ε > 0 ⇒ \n    ∃ N : ℕ, ∀ n : ℕ, (n ≥ N)%nat ⇒\n      R_dist (a n) c < ε.\n      \nNotation \"a ⟶ l\" := (converges_to a l) (at level 20)."
+      "text": "Definition converges_to (a : ℕ → ℝ) (c : ℝ) :=\n  ∀ ε : ℝ, ε > 0 ⇒ \n    ∃ N : ℕ, ∀ n : ℕ, (n ≥ N)%nat ⇒\n      R_dist (a n) c < ε.\n\nDefinition convergence {M : Metric_Space} (a : ℕ → Base M) (c : Base M) :=\n  ∀ ε : ℝ, ε > 0 ⇒\n    ∃ N : ℕ, ∀ n : ℕ, (n ≥ N)%nat ⇒\n      dist M (a n) c < ε.\n      \nNotation \"a ⟶ c\" := (converges_to a c) (at level 20)."
     },
     {
       "type": "text",
