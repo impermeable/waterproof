@@ -24,8 +24,9 @@ The following steps (1.a, 1.b and 1.c) describe how to install SerAPI.
 ##### On Windows:
 Install "OCaml for Windows" by following the steps:
 * Download the _graphical installer_ from https://fdopen.github.io/opam-repository-mingw/installation/.
-* Windows could complain that the software is not used by many people. To use the software anyway, choose _keep_.
-* *Run the installer as administrator*. This also installs a cygwin terminal that you will need to use in the steps below.
+* Windows could indicate that the software is not used by many people. To use the software anyway, choose _keep_.
+* Right click on the exe file, and choose *Run the installer as administrator*. This also installs a cygwin terminal that you will need to use in the steps below.
+* Windows could still block the installer from running. To run the installer anyway, choose _More info_, and then _Run anyway_.
 
 ##### On MacOS: 
 Install opam by running the following commands in the terminal (taken from https://opam.ocaml.org/doc/Install.html#OSX)
@@ -42,7 +43,7 @@ apt update
 apt install opam
 ```
 
-#### Step 1.b Install OCaml
+#### Step 1.b Install an OCaml compiler
 
 In the terminal, execute the following commands (corresponding to instructions on https://ocaml.org/docs/install.html). **Note:** On Windows, use the cygwin terminal that installed in the previous step.
 
