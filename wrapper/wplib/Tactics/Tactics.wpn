@@ -35,7 +35,15 @@
     },
     {
       "type": "code",
-      "text": "Ltac intro_strict s t :=\n  match goal with\n    | [ |- forall _ : t, _ ] => intro s\n  end.\n\nLtac assume_strict s t :=\n  match goal with\n    | [ |- ?u -> _ ] => (change u with t; intro s)\n  end.\n"
+      "text": "Ltac intro_strict s t :=\n  match goal with\n    | [ |- forall _ : t, _ ] => intro s\n  end.\n"
+    },
+    {
+      "type": "code",
+      "text": ""
+    },
+    {
+      "type": "code",
+      "text": "\nLtac assume_strict s t :=\n  match goal with\n    | [ |- ?u -> _ ] => (change u with t; intro s)\n  end.\n"
     },
     {
       "type": "text",
@@ -55,7 +63,19 @@
     },
     {
       "type": "code",
-      "text": "Tactic Notation \"Take\" ident(s1) \",\" ident(s2) \":\" constr(t):=\n  intro_strict s1 t; intro_strict s2 t.\n\nTactic Notation \"Take\" ident(s1) \"and\" ident(s2) \":\" constr(t):=\n  intro_strict s1 t; intro_strict s2 t.\n  \nTactic Notation \"Take\" ident(s1) \":\" constr(t1) \",\" ident(s2) \":\" constr(t2):=\n  intro_strict s1 t1; intro_strict s2 t2.\n\nTactic Notation \"Take\" ident(s1) \":\" constr(t1) \"and\" ident(s2) \":\" constr(t2):=\n  intro_strict s1 t1; intro_strict s2 t2."
+      "text": "Tactic Notation \"Take\" ident(s1) \",\" ident(s2) \":\" constr(t):=\n  intro_strict s1 t; intro_strict s2 t.\n"
+    },
+    {
+      "type": "code",
+      "text": "\nTactic Notation \"Take\" ident(s1) \"and\" ident(s2) \":\" constr(t):=\n  intro_strict s1 t; intro_strict s2 t."
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"Take\" ident(s1) \":\" constr(t1) \",\" ident(s2) \":\" constr(t2):=\n  intro_strict s1 t1; intro_strict s2 t2.\n"
+    },
+    {
+      "type": "code",
+      "text": "\nTactic Notation \"Take\" ident(s1) \":\" constr(t1) \"and\" ident(s2) \":\" constr(t2):=\n  intro_strict s1 t1; intro_strict s2 t2."
     },
     {
       "type": "text",
@@ -131,7 +151,7 @@
     },
     {
       "type": "code",
-      "text": "Tactic Notation \"Choose\" constr(t):=\n  exists t.\n\nTactic Notation \"Choose\" ident(s) \":=\" constr(t) :=\n  pose (s := t);\n  exists s; unfold s;\n  try rewrite plus_INR; try rewrite mult_INR;\n  try rewrite Q2R_plus; try rewrite Q2R_mult."
+      "text": "Tactic Notation \"Choose\" constr(t):=\n  exists t.\n\nTactic Notation \"Choose\" ident(s) \":=\" constr(t) :=\n  pose (s := t);\n  exists s."
     },
     {
       "type": "text",
@@ -187,7 +207,7 @@
     },
     {
       "type": "code",
-      "text": "Tactic Notation \"Either\" constr(t1) \"or\" constr(t2) :=\n  first [\n    assert (u : {t1} + {t2}) by auto with decidability nocore;\n      destruct u |\n    assert (u : {t2} + {t1}) by auto with decidability nocore;\n      destruct u\n    ]."
+      "text": "Tactic Notation \"Either\" constr(t1) \"or\" constr(t2) :=\n  idtac \"Please use comments to indicate the case you are in after writing this line. This helps to keep the proof readable.\";\n  first [\n    assert (u : {t1} + {t2}) by auto with decidability nocore;\n      destruct u |\n    assert (u : {t2} + {t1}) by auto with decidability nocore;\n      destruct u\n    ]."
     },
     {
       "type": "text",
@@ -195,7 +215,7 @@
     },
     {
       "type": "code",
-      "text": "(** Apply with goal check\n    The next tactics verify whether certain steps have the desired effect. *)\nLtac new_goal_verified_apply s t :=\n  apply s;\n  match goal with \n  | [|- t] => idtac \"Expected goal was produced\"\n  | _ => fail \"Lemma did not produce expected outcome\"\n  end.\n\n(*Tactic Notation \"By\" constr(s) \n  \"it\" \"suffices\" \"to\" \"show\" \"that\"\n  constr(t) :=\n  new_goal_verified_apply s t.*)\n\n(** A powerful forward reasoning tactic. \n    The sequential trying of auto and eauto \n    is there because eauto can be much slower. \n    TODO: is this what we want? *)\nLtac new_hyp_verified_pose_proof s t u:=\n  assert (u : t) by timeout 60 (first [ solve [auto using s with *]\n                          | solve [eauto using s with *]\n                          | solve [firstorder using s]\n                          | solve [firstorder (eauto with *) using s]\n                          | idtac \"Waterproof could not find a proof. If you believe the statement should hold, try making a smaller step\"]).\n\nLtac new_hyp_verified_pose_proof_no_name s t:=\n  assert t by timeout 60 (first [ solve [auto using s with *]\n                          | solve [eauto using s with *]\n                          | solve [firstorder using s]\n                          | solve [firstorder (eauto with *) using s]\n                          | idtac \"Waterproof could not find a proof. If you believe the statement should hold, try making a smaller step\"]).\n\nTactic Notation \"By\" constr(s)\n  \"it\" \"holds\" \"that\" constr(t) \"(\"ident(u)\")\"\n  := new_hyp_verified_pose_proof s t u.\n\nTactic Notation \"By\" constr(s)\n  \"it\" \"holds\" \"that\" constr(t)\n  := new_hyp_verified_pose_proof_no_name s t.\n\n(*Tactic Notation \"By\" constr(s0) \",\" constr(s1)\n  \"it\" \"holds\" \"that\" constr(t) \"(\"ident(u)\")\"\n  :=*)\n\n(* TODO: align syntax with \"By ... it holds that\" *)\nTactic Notation \"It\" \"holds\" \"that\"\n  constr(t) \"(\" ident(u) \")\" :=\n  assert (u : t) by first [ wp_power\n                          | idtac \"Waterproof could not find a proof. If you believe the statement should hold, try making a smaller step\"].\n\nLtac conclude_proof t :=\n  match goal with\n  | [|-t] => idtac\n  | _ => (idtac \"Warning: The statement you provided does not exactly correspond to the current goal. This can make your proof less readable.\"; change t || fail \"The provided statement cannot be converted to the current goal. If you are trying to prove an intermediate step, add a name to your hypothesis between brackets at the end of the sentence.\")\n  end; first [wp_power | fail \"Waterproof could not find a proof. Try making a smaller step.\"].\n\nTactic Notation \"It\" \"holds\" \"that\" constr(t) :=\n  conclude_proof t.\n\nTactic Notation \"It\" \"follows\" \"that\" constr(t) :=\n  conclude_proof t."
+      "text": "(** Apply with goal check\n    The next tactics verify whether certain steps have the desired effect. *)\nLtac new_goal_verified_apply s t :=\n  apply s;\n  match goal with \n  | [|- t] => idtac \"Expected goal was produced\"\n  | _ => fail \"Lemma did not produce expected outcome\"\n  end.\n\n(*Tactic Notation \"By\" constr(s) \n  \"it\" \"suffices\" \"to\" \"show\" \"that\"\n  constr(t) :=\n  new_goal_verified_apply s t.*)\n\n(** A powerful forward reasoning tactic. \n    The sequential trying of auto and eauto \n    is there because eauto can be much slower. \n    TODO: is this what we want? *)\nLtac new_hyp_verified_pose_proof s t u:=\n  assert (u : t) by timeout 60 (first [ solve [auto using s with *]\n                          | solve [eauto using s with *]\n                          | solve [firstorder using s]\n                          | solve [firstorder (eauto with *) using s]\n                          | idtac \"Waterproof could not find a proof. If you believe the statement should hold, try making a smaller step\"]).\n\nLtac new_hyp_verified_pose_proof_no_name s t:=\n  (*assert t by *) timeout 60 (first [ solve [auto using s with *]\n                          | solve [eauto using s with *]\n                          | solve [firstorder using s]\n                          | solve [firstorder (eauto with *) using s]\n                          | idtac \"Waterproof could not find a proof. If you believe the statement should hold, try making a smaller step\"]).\n\nTactic Notation \"By\" constr(s)\n  \"it\" \"holds\" \"that\" constr(t) \"(\"ident(u)\")\"\n  := new_hyp_verified_pose_proof s t u.\n\nTactic Notation \"By\" constr(s)\n  \"it\" \"holds\" \"that\" constr(t)\n  := new_hyp_verified_pose_proof_no_name s t.\n\n(*Tactic Notation \"By\" constr(s0) \",\" constr(s1)\n  \"it\" \"holds\" \"that\" constr(t) \"(\"ident(u)\")\"\n  :=*)\n\n(* TODO: align syntax with \"By ... it holds that\" *)\nTactic Notation \"It\" \"holds\" \"that\"\n  constr(t) \"(\" ident(u) \")\" :=\n  assert (u : t) by first [ wp_power\n                          | idtac \"Waterproof could not find a proof. If you believe the statement should hold, try making a smaller step\"].\n\nLtac conclude_proof t :=\n  match goal with\n  | [|-t] => idtac\n  | _ => (idtac \"Warning: The statement you provided does not exactly correspond to what you need to show. This can make your proof less readable.\";\n    change t || fail \"The statement you provided is not what you needed to show. If you are trying to prove an intermediate step, add a name to your hypothesis between brackets at the end of the sentence.\")\n  end; first [wp_power | fail \"Waterproof could not find a proof. Try making a smaller step.\"].\n\nTactic Notation \"It\" \"holds\" \"that\" constr(t) :=\n  conclude_proof t.\n\nTactic Notation \"It\" \"follows\" \"that\" constr(t) :=\n  conclude_proof t."
     },
     {
       "type": "text",
