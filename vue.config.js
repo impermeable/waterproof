@@ -31,6 +31,7 @@ module.exports = {
     electronBuilder: {
       // Sandboxing interferes with running the app on the GitLab runners.
       mainProcessArgs: ['--no-sandbox'],
+      nodeIntegration: true,
     },
   },
 };

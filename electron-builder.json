@@ -1,6 +1,10 @@
 {
   "productName": "Waterproof",
   "remoteBuild": true,
+  "directories": {
+    "output": "dist_electron",
+    "app": "dist_electron/bundled"
+  },
   "extraFiles": ["wrapper/assistance", "wrapper/wplib"],
   "win": {
     "extraFiles": ["wrapper/win"]
