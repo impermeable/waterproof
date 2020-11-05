@@ -3,11 +3,11 @@
     <div v-bind:class="{ 'hide-assistance-buttons': isSearchOpen }"
          class="assistance-buttons" >
       <img src="../../../../assets/images/commandButton.svg"
-        class="sidewindow-button" @click="showCommands" />
+        class="sidewindow-button" @click="showCommands" title="Commands" />
       <img src="../../../../assets/images/symbolButton.svg"
-        class="sidewindow-button" @click="showSymbols" />
+        class="sidewindow-button" @click="showSymbols" title="Symbols" />
       <img src="../../../../assets/images/tacticButton.svg"
-        class="sidewindow-button" @click="showTactics" />
+        class="sidewindow-button" @click="showTactics" title="Tactics" />
     </div>
     <div v-bind:class="{ 'hide-assistance-buttons': !isSearchOpen }"
          class="search-container">

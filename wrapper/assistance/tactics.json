@@ -6,7 +6,7 @@
     },
     {
         "name": "Assume (*name*) : ((*statement*)).",
-        "description": "If you need to prove (*statement*) ⇒ B, this allows you to assume that A holds, giving this assumption the name (*name*).",
+        "description": "If you need to prove (*statement*) ⇒ B, this allows you to assume that (*statement*) holds, giving this assumption the name (*name*).",
         "example": "Lemma A_impl_A : forall A : Prop, A ⇒ A.\nProof.\nTake A : Prop.\nAssume H_A.\nApply H_A.Qed."
     },
     {
@@ -57,7 +57,8 @@
     {
         "name": "Apply (*lemma or assumption*).",
         "description": "Apply a lemma or an assumption.",
-        "example": "Lemma a: forall A B: Prop, (A -> B) -> A -> B.\nProof.\n  intros.\n  apply H.\n  apply H0.\nQed."
+        "example": "Lemma a: forall A B: Prop, (A -> B) -> A -> B.\nProof.\n  intros.\n  apply H.\n  apply H0.\nQed.",
+        "advanced": true
     },
     {
         "name": "Write goal using ((*equality*)) as ((*new goal*)).",
@@ -65,24 +66,45 @@
         "example": "Write goal using (2 + 3 = 5) as (5 = 5)."
     },
     {
+        "name": "Write (*name_hyp*) as ((*expression*)).",
+        "description": "Checks that the hypothesis with name (*name_hyp*) can be converted to (*expression*), and then replaces it by (*expression*). This is in general a more readable alternative to \"Expand the definition\"",
+        "example": "Write x_in_A as (x ∈ A)."
+    },
+    {
         "name": "Write (*name_hyp*) using ((*equality*)) as ((*new_hyp*)).",
         "description": "First attempts to automatically find a proof of the provided equality, and if it succeeds it uses it to replace in the hypothesis with name (*name_hyp*) the lhs of the equality by the rhs.",
         "example": "Rewrite H0 using (2 + 3 = 5) as (5 = 5)."
     },
     {
+        "name": "Either ((*case_1*)) or ((*case_2*)).",
+        "description": "Case distinction when always precisely one of (*case_1*) or (*case_2*) occurs."
+    },
+    {
+        "name": "Rewrite ((*statement_1*)) (*sign_1*) ((*statement_2*)) (*sign_2*) ((*statement_3*))",
+        "description": "Here (sign) is one of '=', '<', '>', '≤' or '≥'. Sometimes, you want to conclude something by concatenating a number of (in)equalities. For example, when you know that $a < b$ and $b < c$ and need to show that $a < c$, you could write $a < b < c$.",
+        "example": ""
+    },
+    {
         "name": "Expand the definition of (*name_kw*).",
         "description": "Expands the definition of the keyword (*name_kw*) in the current goal.",
-        "example": "Expand the definition of is_upper_bound."
+        "example": "Expand the definition of is_upper_bound.",
+        "advanced": true
     },
     {
         "name": "Expand the definition of (*name_kw*) in (*name_hyp*).",
         "description": "Expands the definition of the keyword (*name_kw*) in hypothesis (*name_hyp*).",
-        "example": "Expand the definition of is_upper_bound in H0."
+        "example": "Expand the definition of is_upper_bound in H0.",
+        "advanced": true
     },
     {
-        "name": "split",
-        "description": "splits the goal in two separate goals, if it is of the form A ∧ B",
-        "example": "Lemma ex_split : forall A B: Prop, A ⇒ (B ⇒ A ∧ B).\nProof.\n Take A : Prop. Take B : Prop.\nAssume H_A. Assume H_B.\n(*We*) split (*the goal*).\nApply H_A. Apply H_B. Qed."
+        "name": "We show both statements.",
+        "description": "Splits the goal in two separate goals, if it is of the form A ∧ B",
+        "example": "Lemma ex_split : forall A B: Prop, A ⇒ (B ⇒ A ∧ B).\nProof.\n Take A : Prop. Take B : Prop.\nAssume H_A. Assume H_B.\nWe show both statements.\nApply H_A. Apply H_B. Qed."
+    },
+    {
+        "name": "We show both directions.",
+        "description": "Splits a goal of the form A ⇔ B, into the goals (A ⇒ B) and (B ⇒ A)",
+        "example": ""
     },
     {
         "name": "We need to show that ((*(alternative) formulation of current goal*)).",
@@ -90,8 +112,22 @@
         "example": "Lemma example_reflexivity : 0 = 0.\nProof.\nWe need to show that (0=0)."
     },
     {
-        "name": "Write (*name_hyp*) as ((*expression*)).",
-        "description": "Checks that the hypothesis with name (*name_hyp*) can be converted to (*expression*), and then replaces it by (*expression*). This is in general a more readable alternative to \"Expand the definition\"",
-        "example": "Write x_in_A as (x ∈ A)."
+        "name": "We prove by induction on (*name_1*), calling the induction hypothesis (*name_2*).",
+        "description": "Prove a statement by induction on the variable with (*name_1*), calling the induction hypothesis (*name_2*)."
+    },
+    {
+        "name": "By ((*lemma or assumption*)) it holds that ((*statement*)).",
+        "description": "Tries to directly prove the goal using (*lemma or assumption*) when the goal corresponds to (*statement*).",
+        "advanced": true
+    },
+    {
+        "name": "It suffices to show that ((*statement*)).",
+        "description": "Waterproof tries to verify automatically whether it is indeed enough to show (*statement*) to prove the current goal. If so, (*statement*) becomes the new goal.",
+        "advanced": true
+    },
+    {
+        "name": "Define (*name*) := ((*expression*)).",
+        "description": "Temporarily give the name (*name*) to the expression (*expression*)",
+        "advanced": true
     }
 ]

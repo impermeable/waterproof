@@ -1,5 +1,6 @@
 <template>
     <div class="assistance-item">
+      <hr v-if="hasPrevious">
       <div class="content-and-copy">
         <div>
           <span class="title" @click="toggleFold">
@@ -25,7 +26,6 @@
             @click="copyToClipboard(item.name)"/>
         </div>
       </div>
-      <hr v-if="!isLast">
     </div>
 </template>
 

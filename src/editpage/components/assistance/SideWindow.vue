@@ -33,13 +33,23 @@
     </div>
     <hr>
     <div :class="{'search-results': windowIndex === 0}">
-      <component :is="component"
-        v-for="(item, index) in items"
-        v-bind:item="item"
-        v-bind:isLast="index === (items.length - 1)"
-                :event-bus="eventBus"
-        v-bind:key="'assistanceItem' + index" />
+      <template v-for="(item, index) in sortedItems">
+        <component :is="component"
+                   :item="item" :hasPrevious="index > 0"
+                   :showAdvanced="showAdvanced"
+                   :event-bus="eventBus" :key="'assistanceItem' + index" />
+      </template>
+
     </div>
+    <template v-if="!showAdvanced && hasAdvanced">
+      <div style="text-align: center">
+        <hr>
+        <a @click="showAdvanced = true" href="#">
+          See more advanced {{ title.replace('Common', '') }}
+        </a>
+        <hr>
+      </div>
+    </template>
   </div>
 </template>
 
@@ -49,6 +59,7 @@ import Command from './commands/Command.vue';
 import SymbolCategory from './symbols/SymbolCategory.vue';
 import Tactic from './tactics/Tactic.vue';
 import PulseLoader from 'vue-spinner/src/PulseLoader.vue';
+import orderBy from 'lodash.orderby';
 
 export default {
   name: 'SideWindow',
@@ -92,9 +103,24 @@ export default {
         return this.$store.state.assistanceItems[this.windowIndex - 1];
       }
     },
+    hasAdvanced() {
+      if (this.items.length === 0) {
+        return false;
+      }
+      for (const item of this.items) {
+        if (item.hasOwnProperty('advanced') && item.advanced) {
+          return true;
+        }
+      }
+      return false;
+    },
+    sortedItems() {
+      return orderBy(this.items, [(item) => item.advanced || false], ['dsc']);
+    },
   },
   watch: {
     windowIndex: function(newValue) {
+      this.showAdvanced = false;
       switch (newValue) {
         case 0:
           this.title = 'Search Results';
@@ -121,6 +147,7 @@ export default {
       component: '',
       isShowingLemmas: true,
       isShowingDefinitions: true,
+      showAdvanced: false,
     };
   },
   methods: {
