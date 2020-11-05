@@ -13,16 +13,21 @@ The easiest way to get started with Waterproof is to follow the steps:
 * Step 1. Install SerAPI following the steps below
 * Step 2. Install Waterproof using the installer from the [release page](http://github.com/impermeable/waterproof/releases)
 
-### Step 1. Installation of SerAPI
+### Step 1 for Windows. Installation of SerAPI.
 
-Waterproof communicates with the interactive theorem prover CoQ through the SerAPI library.
+* Download the _graphical installer_ for Ocaml for Windows from https://fdopen.github.io/opam-repository-mingw/installation/.
+* Windows could indicate that the software is not used by many people. To use the software anyway, choose _keep_.
+* Select the .exe file, then right click on the .exe file, and choose *Run as administrator*. This also installs a cygwin terminal that you will need to use in the steps below.
+* Windows could still block the installer from running. To run the installer anyway, choose _More info_, and then _Run anyway_.
+* Run as administrator the cygwin terminal you just installed. In the terminal, type ```opam install coq-serapi``` and press enter. Choose 'Y'. This step could take up to an hour.
 
-The following steps (1.a, 1.b and 1.c) describe how to install SerAPI.
+If this worked, you can continue with Step 2.
 
-#### Step 1.a Install opam
+### Step 1 for MacOS and Linux. Installation of SerAPI.
 
-##### On Windows:
-Install OCaml for Windows using the graphical installer on https://fdopen.github.io/opam-repository-mingw/installation/. This also installs a cygwin terminal that you will need to use in the steps below.
+The following steps (1.a, 1.b and 1.c) describe how to install SerAPI on MacOS or Linux.
+
+#### Step 1.a for MacOS and Linux: Install opam
 
 ##### On MacOS: 
 Install opam by running the following commands in the terminal (taken from https://opam.ocaml.org/doc/Install.html#OSX)
@@ -39,9 +44,9 @@ apt update
 apt install opam
 ```
 
-#### Step 1.b Install OCaml
+#### Step 1.b for MacOS and Linux: Install an OCaml compiler
 
-In the terminal, execute the following commands (corresponding to instructions on https://ocaml.org/docs/install.html). **Note:** On Windows, use the cygwin terminal that installed in the previous step.
+In the terminal, execute the following commands (corresponding to instructions on https://ocaml.org/docs/install.html). **Note:** On Windows, run the cygwin terminal that was installed as administrator, and execute the next commands in the terminal.
 
 The first steps are common to all operating systems. First initialize the environment with
 ```
@@ -52,18 +57,6 @@ This may take a few minutes. In the meantime, opam will likely ask two questions
 eval `opam env`
 ```
 
-##### On Windows:
-Install OCaml with
-```
-opam switch create 4.11.1+mingw64c
-eval `opam env`
-```
-
-In some cases, you may also need to add an extra repository:
-```
-opam repo add opam_ocaml_repository https://github.com/ocaml/opam-repository.git
-```
-
 ##### On Linux or macOS:
 Install OCaml with
 ```
@@ -71,7 +64,7 @@ opam switch create 4.11.1
 eval `opam env`
 ```
 
-#### Step 1.c Install SerAPI with opam
+#### Step 1.c for MacOS and Linux: Install SerAPI with opam
 
 After installing OCaml, run the following command in the terminal:
 
