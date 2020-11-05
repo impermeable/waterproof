@@ -411,7 +411,7 @@
     },
     {
       "type": "code",
-      "text": "Tactic Notation \"We\" \"prove\" \"by\" \"induction\" \"on\" ident(x) := \n  induction x. "
+      "text": "Tactic Notation \"We\" \"prove\" \"by\" \"induction\" \"on\" ident(x) \",\" \"calling\" \"the\" \"induction\" \"hypothesis\" ident(y) := \n  induction x. "
     },
     {
       "type": "text",

@@ -110,5 +110,24 @@
         "name": "We need to show that ((*(alternative) formulation of current goal*)).",
         "description": "Generally makes a proof more readable. Has the additional functionality that you can write a slightly different but equivalent formulation of the goal: you can for instance change names of certain variables.",
         "example": "Lemma example_reflexivity : 0 = 0.\nProof.\nWe need to show that (0=0)."
+    },
+    {
+        "name": "We prove by induction on (*name_1*), calling the induction hypothesis (*name_2*).",
+        "description": "Prove a statement by induction on the variable with (*name_1*), calling the induction hypothesis (*name_2*)."
+    },
+    {
+        "name": "By ((*lemma or assumption*)) it holds that ((*statement*)).",
+        "description": "Tries to directly prove the goal using (*lemma or assumption*) when the goal corresponds to (*statement*).",
+        "advanced": true
+    },
+    {
+        "name": "It suffices to show that ((*statement*)).",
+        "description": "Waterproof tries to verify automatically whether it is indeed enough to show (*statement*) to prove the current goal. If so, (*statement*) becomes the new goal.",
+        "advanced": true
+    },
+    {
+        "name": "Define (*name*) := ((*expression*)).",
+        "description": "Temporarily give the name (*name*) to the expression (*expression*)",
+        "advanced": true
     }
 ]
