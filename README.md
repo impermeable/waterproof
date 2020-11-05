@@ -29,7 +29,7 @@ If this worked, you can continue with Step 2.
 
 The following steps (1.a, 1.b and 1.c) describe how to install SerAPI on MacOS or Linux.
 
-#### Step 1.a Install opam
+#### Step 1.a for MacOS and Linux: Install opam
 
 ##### On MacOS: 
 Install opam by running the following commands in the terminal (taken from https://opam.ocaml.org/doc/Install.html#OSX)
@@ -46,7 +46,7 @@ apt update
 apt install opam
 ```
 
-#### Step 1.b Install an OCaml compiler
+#### Step 1.b for MacOS and Linux: Install an OCaml compiler
 
 In the terminal, execute the following commands (corresponding to instructions on https://ocaml.org/docs/install.html). **Note:** On Windows, run the cygwin terminal that was installed as administrator, and execute the next commands in the terminal.
 
@@ -66,7 +66,7 @@ opam switch create 4.11.1
 eval `opam env`
 ```
 
-#### Step 1.c Install SerAPI with opam
+#### Step 1.c for MacOS and Linux: Install SerAPI with opam
 
 After installing OCaml, run the following command in the terminal:
 
