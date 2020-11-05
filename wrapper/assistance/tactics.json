@@ -93,5 +93,11 @@
         "name": "Write (*name_hyp*) as ((*expression*)).",
         "description": "Checks that the hypothesis with name (*name_hyp*) can be converted to (*expression*), and then replaces it by (*expression*). This is in general a more readable alternative to \"Expand the definition\"",
         "example": "Write x_in_A as (x ∈ A)."
+    },
+    {
+        "name": "This tactic is so advanced that it should not be shown to mere mortals",
+        "description": "Not yet understood",
+        "example": "Please find one",
+        "advanced": true
     }
 ]

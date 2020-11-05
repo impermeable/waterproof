@@ -1,5 +1,6 @@
 <template>
-    <div class="assistance-item">
+    <div class="assistance-item" v-if="!isAdvanced || showAdvanced">
+      <hr v-if="hasPrevious">
       <div class="content-and-copy">
         <div>
           <span class="title" @click="toggleFold">
@@ -23,7 +24,6 @@
             @click="insertAtCursor(item.name)"/>
         </div>
       </div>
-      <hr v-if="!isLast">
     </div>
 </template>
 
@@ -42,6 +42,11 @@ export default {
   methods: {
     toggleFold: function() {
       this.unfolded = !this.unfolded;
+    },
+  },
+  computed: {
+    isAdvanced() {
+      return this.item.hasOwnProperty('advanced') && this.item.advanced;
     },
   },
 };

@@ -2,8 +2,9 @@
 export default {
   props: {
     item: Object,
-    isLast: Boolean,
+    hasPrevious: Boolean,
     eventBus: Object,
+    showAdvanced: Boolean,
   },
   methods: {
     copyToClipboard: function(toCopy) {
