@@ -15,18 +15,21 @@ The easiest way to get started with Waterproof is to follow the steps:
 
 ### Step 1. Installation of SerAPI
 
-Waterproof communicates with the interactive theorem prover CoQ through the SerAPI library.
+#### Step 1 for Windows.
 
-The following steps (1.a, 1.b and 1.c) describe how to install SerAPI.
-
-#### Step 1.a Install opam
-
-##### On Windows:
-Install "OCaml for Windows" by following the steps:
-* Download the _graphical installer_ from https://fdopen.github.io/opam-repository-mingw/installation/.
+* Download the _graphical installer_ for Ocaml for Windows from https://fdopen.github.io/opam-repository-mingw/installation/.
 * Windows could indicate that the software is not used by many people. To use the software anyway, choose _keep_.
 * Select the .exe file, then right click on the .exe file, and choose *Run as administrator*. This also installs a cygwin terminal that you will need to use in the steps below.
 * Windows could still block the installer from running. To run the installer anyway, choose _More info_, and then _Run anyway_.
+* Run as administrator the cygwin terminal you just installed. In the terminal, type ```opam install coq-serapi``` and press enter. Choose 'Y'. This step could take up to an hour.
+
+If this worked, you can continue with Step 2.
+
+#### Step 1 for MacOS and Linux
+
+The following steps (1.a, 1.b and 1.c) describe how to install SerAPI on MacOS or Linux.
+
+#### Step 1.a Install opam
 
 ##### On MacOS: 
 Install opam by running the following commands in the terminal (taken from https://opam.ocaml.org/doc/Install.html#OSX)
@@ -53,13 +56,6 @@ opam init
 ```
 This may take a few minutes. In the meantime, opam will likely ask two questions. We recommend choosing 'y' to both, i.e. to opam modifying the `.bash_profile` and to opam adding a hook to the init scripts. Now execute the following line
 ```
-eval `opam env`
-```
-
-##### On Windows:
-Install OCaml with
-```
-opam switch create 4.11.1+mingw64c
 eval `opam env`
 ```
 
