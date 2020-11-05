@@ -7,7 +7,11 @@
     },
     {
       "type": "code",
-      "text": "Require Import Coq.Logic.PropExtensionality.\nLemma base_same : forall C : Type,\n  forall P : C -> Prop,\n  forall x y : sig P, proj1_sig x = proj1_sig y -> x = y.\nProof.\nintros C P x y H.\napply eq_sig_hprop.\nintros.\napply proof_irrelevance.\napply H.\nQed.\n\nLemma same_base : forall C : Type,\n  forall P : C -> Prop,\n    forall x y : sig P, x = y -> proj1_sig x = proj1_sig x.\nProof.\nintros C P x y H.\nrewrite H.\ntrivial.\nQed.\n\n\nHint Resolve base_same : additional.\nHint Resolve same_base : additional."
+      "text": "Require Import Coq.Logic.PropExtensionality.\nLemma base_same : forall C : Type,\n  forall P : C -> Prop,\n  forall x y : sig P, proj1_sig x = proj1_sig y -> x = y.\nProof.\nintros C P x y H.\napply eq_sig_hprop.\nintros.\napply proof_irrelevance.\napply H.\nQed.\n\nLemma same_base : forall C : Type,\n  forall P : C -> Prop,\n    forall x y : sig P, x = y -> proj1_sig x = proj1_sig y.\nProof.\nintros C P x y H.\nrewrite H.\ntrivial.\nQed.\n\n\nHint Resolve base_same : additional.\nHint Resolve same_base : additional."
+    },
+    {
+      "type": "code",
+      "text": "Require Import Reals.\nRequire Import Reals.ROrderedType.\n\nLemma Req_true : forall x y : R, x = y -> Reqb x y = true.\nProof.\nintros. destruct (Reqb_eq x y). apply (H1 H).\nQed.\n\nLemma true_Req : forall x y : R, Reqb x y = true -> x = y.\nProof.\nintros. destruct (Reqb_eq x y). apply (H0 H).\nQed.\n\nLemma Req_false : forall x y : R, x <> y -> Reqb x y = false.\nProof.\nintros. unfold Reqb. destruct Req_dec. contradiction. trivial.\nQed.\n\nLemma false_Req : forall x y : R, Reqb x y = false -> x <> y.\nProof.\nintros. destruct (Req_dec x y). rewrite (Req_true x y e) in H. \nassert (H1 : true <> false). auto with *. contradiction.\napply n.\nQed.\n\nRequire Import Coq.micromega.Lra.\nHint Resolve (eq_sym) : reals.\nHint Resolve false_Req : reals.\nHint Resolve true_Req : reals."
     }
   ]
 }
