@@ -13,9 +13,7 @@ The easiest way to get started with Waterproof is to follow the steps:
 * Step 1. Install SerAPI following the steps below
 * Step 2. Install Waterproof using the installer from the [release page](http://github.com/impermeable/waterproof/releases)
 
-### Step 1. Installation of SerAPI
-
-#### Step 1 for Windows.
+### Step 1 for Windows. Installation of SerAPI.
 
 * Download the _graphical installer_ for Ocaml for Windows from https://fdopen.github.io/opam-repository-mingw/installation/.
 * Windows could indicate that the software is not used by many people. To use the software anyway, choose _keep_.
@@ -25,7 +23,7 @@ The easiest way to get started with Waterproof is to follow the steps:
 
 If this worked, you can continue with Step 2.
 
-#### Step 1 for MacOS and Linux
+### Step 1 for MacOS and Linux. Installation of SerAPI.
 
 The following steps (1.a, 1.b and 1.c) describe how to install SerAPI on MacOS or Linux.
 
