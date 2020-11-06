@@ -12,6 +12,22 @@
     {
       "type": "code",
       "text": "Require Import Reals.\nRequire Import Reals.ROrderedType.\n\nLemma Req_true : forall x y : R, x = y -> Reqb x y = true.\nProof.\nintros. destruct (Reqb_eq x y). apply (H1 H).\nQed.\n\nLemma true_Req : forall x y : R, Reqb x y = true -> x = y.\nProof.\nintros. destruct (Reqb_eq x y). apply (H0 H).\nQed.\n\nLemma Req_false : forall x y : R, x <> y -> Reqb x y = false.\nProof.\nintros. unfold Reqb. destruct Req_dec. contradiction. trivial.\nQed.\n\nLemma false_Req : forall x y : R, Reqb x y = false -> x <> y.\nProof.\nintros. destruct (Req_dec x y). rewrite (Req_true x y e) in H. \nassert (H1 : true <> false). auto with *. contradiction.\napply n.\nQed.\n\nRequire Import Coq.micromega.Lra.\nHint Resolve (eq_sym) : reals.\nHint Resolve false_Req : reals.\nHint Resolve true_Req : reals."
+    },
+    {
+      "type": "text",
+      "text": "### **Intervals**"
+    },
+    {
+      "type": "code",
+      "text": "\nRequire Import wplib.Notations.Notations."
+    },
+    {
+      "type": "code",
+      "text": "\nDefinition int_cc_prop1 {x y : R} : forall r : [x,y], x <= r\n  := (fun r => proj1 (proj2_sig r)).\nDefinition int_cc_prop2 {x y : R} : forall r : [x,y], r <= y \n  := (fun r => proj2 (proj2_sig r)).\nDefinition int_co_prop1 {x y : R} : forall r : [x,y), x <= r\n  := (fun r => proj1 (proj2_sig r)).\n Definition int_co_prop2 {x y : R} : forall r : [x,y), r < y\n  := (fun r => proj2 (proj2_sig r)).\nDefinition int_oc_prop1 {x y : R} : forall r : (x,y], x < r\n  := (fun r => proj1 (proj2_sig r)).\nDefinition int_oc_prop2 {x y : R} : forall r : (x,y], r <= y\n  := (fun r => proj2 (proj2_sig r)).\nDefinition int_oo_prop1 {x y : R} : forall r : (x,y), x < r\n  := (fun r => proj1 (proj2_sig r)).\nDefinition int_oo_prop2 {x y : R} : forall r : (x,y), r < y\n  := (fun r => proj2 (proj2_sig r)).\n\nHint Resolve int_cc_prop1 : additional.\nHint Resolve int_cc_prop2 : additional.\nHint Resolve int_co_prop1 : additional.\nHint Resolve int_co_prop2 : additional.\nHint Resolve int_oc_prop1 : additional.\nHint Resolve int_oc_prop2 : additional.\nHint Resolve int_oo_prop1 : additional.\nHint Resolve int_oo_prop2 : additional."
+    },
+    {
+      "type": "code",
+      "text": ""
     }
   ]
 }

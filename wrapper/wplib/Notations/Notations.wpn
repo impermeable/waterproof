@@ -31,7 +31,7 @@
     },
     {
       "type": "code",
-      "text": "Notation \"[ x , y ]\" := (fun r : R => x <= r <= y).\nNotation \"[ x , y )\" := (fun r : R => x <= r < y).\nNotation \"( x , y ]\" := (fun r : R => x < r <= y).\nNotation \"( x , y )\" := (fun r : R => x < r < y).\n\nDefinition A := [0, 5]."
+      "text": "Definition subsetR (in_A : R -> Prop):= { r : R | in_A r }.\nDefinition subsetR2R {in_A : R -> Prop} (r : subsetR in_A) := (proj1_sig r).\nCoercion subsetR2R : subsetR >-> R.\n\nNotation \"[ x , y ]\" := (subsetR (fun (r : R) => (x <= r <= y))).\nNotation \"[ x , y )\" := (subsetR (fun (r : R) => (x <= r <  y))).\nNotation \"( x , y ]\" := (subsetR (fun (r : R) => (x <  r <= y))).\nNotation \"( x , y )\" := (subsetR (fun (r : R) => (x <  r <  y)))."
     },
     {
       "type": "text",
