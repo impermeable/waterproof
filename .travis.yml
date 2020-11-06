@@ -49,7 +49,7 @@ jobs:
 
     language: node_js
     node_js: node
-    script: mkdir -p dist_electron/bundled && npm run apostinstall && npm run electron:generate-icons && npx vue-cli-service electron:build --config electron-builder.json --publish never -m
+    script: mkdir -p dist_electron/bundled && npm ci && npm run apostinstall && npm run electron:generate-icons && npx vue-cli-service electron:build --config electron-builder.json --publish never -m
 
 cache:
   npm: true
