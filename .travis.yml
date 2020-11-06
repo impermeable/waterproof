@@ -37,7 +37,7 @@ jobs:
         -v ~/.cache/electron-builder:/root/.cache/electron-builder \
         -v ~/dist_electron/:/root/dist_electron \
         electronuserland/builder:wine \
-        /bin/bash -c "mkdir dist_electron/bundled && npm ci && npm run electron:generate-icons && npx vue-cli-service electron:build --config electron-builder.json --publish never -lw"
+        /bin/bash -c "mkdir -p dist_electron/bundled && npm ci && npm run electron:generate-icons && npx vue-cli-service electron:build --config electron-builder.json --publish never -lw"
 
   - stage: deploy
     if: tag IS present
@@ -49,7 +49,7 @@ jobs:
 
     language: node_js
     node_js: node
-    script: mkdir dist_electron/bundled && npm ci && npm run electron:generate-icons && npx vue-cli-service electron:build --config electron-builder.json --publish never -m
+    script: mkdir -p dist_electron/bundled && npm ci && npm run electron:generate-icons && npx vue-cli-service electron:build --config electron-builder.json --publish never -m
 
 cache:
   npm: true
