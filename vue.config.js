@@ -32,6 +32,30 @@ module.exports = {
       // Sandboxing interferes with running the app on the GitLab runners.
       mainProcessArgs: ['--no-sandbox'],
       nodeIntegration: true,
+      builderOptions: {
+        productName: 'Waterproof',
+        remoteBuild: true,
+        extraFiles: ['wrapper/assistance', 'wrapper/wplib'],
+        win: {
+          extraFiles: ['wrapper/win'],
+        },
+        mac: {
+          extraFiles: ['wrapper/mac'],
+        },
+        linux: {
+          extraFiles: ['wrapper/lin'],
+        },
+        fileAssociations: [
+          {
+            ext: 'wpn',
+            name: 'Waterproof notebook',
+          },
+          {
+            ext: 'wpe',
+            name: 'Waterproof exercise',
+          },
+        ],
+      },
     },
   },
 };
