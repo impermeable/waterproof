@@ -6,7 +6,7 @@ os:
 #  - windows
 
 node_js:
-  - node
+  - 12
 
 stages:
   - lint/unit
@@ -48,7 +48,6 @@ jobs:
       - ELECTRON_BUILDER_CACHE=$HOME/.cache/electron-builder
 
     language: node_js
-    node_js: "10"
     script: npm run electron:generate-icons && travis_wait 30 npx vue-cli-service electron:build --publish never -m
 
 cache:
