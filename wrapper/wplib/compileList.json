@@ -1,4 +1,5 @@
 [
+  "Definitions/SetDefinitions",
   "Notations/Notations",
   "Tactics/AdditionalLemmas",
   "Tactics/Databases",

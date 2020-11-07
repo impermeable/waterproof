@@ -15,6 +15,26 @@
     },
     {
       "type": "text",
+      "text": "** Subsets"
+    },
+    {
+      "type": "code",
+      "text": "Require Import wplib.Definitions.SetDefinitions."
+    },
+    {
+      "type": "code",
+      "text": "Lemma subset_elements_satisfy_predicate :\n  forall V : subset_R,\n    forall x : V,\n      @subset_predicate V x."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nintros V.\ninduction x.\nassumption.\nQed."
+    },
+    {
+      "type": "code",
+      "text": "Hint Resolve subset_elements_satisfy_predicate : additional."
+    },
+    {
+      "type": "text",
       "text": "### **Intervals**"
     },
     {
@@ -23,7 +43,55 @@
     },
     {
       "type": "code",
-      "text": "\nDefinition int_cc_prop1 {x y : R} : forall r : [x,y], x <= r\n  := (fun r => proj1 (proj2_sig r)).\nDefinition int_cc_prop2 {x y : R} : forall r : [x,y], r <= y \n  := (fun r => proj2 (proj2_sig r)).\nDefinition int_co_prop1 {x y : R} : forall r : [x,y), x <= r\n  := (fun r => proj1 (proj2_sig r)).\n Definition int_co_prop2 {x y : R} : forall r : [x,y), r < y\n  := (fun r => proj2 (proj2_sig r)).\nDefinition int_oc_prop1 {x y : R} : forall r : (x,y], x < r\n  := (fun r => proj1 (proj2_sig r)).\nDefinition int_oc_prop2 {x y : R} : forall r : (x,y], r <= y\n  := (fun r => proj2 (proj2_sig r)).\nDefinition int_oo_prop1 {x y : R} : forall r : (x,y), x < r\n  := (fun r => proj1 (proj2_sig r)).\nDefinition int_oo_prop2 {x y : R} : forall r : (x,y), r < y\n  := (fun r => proj2 (proj2_sig r)).\n\nHint Resolve int_cc_prop1 : additional.\nHint Resolve int_cc_prop2 : additional.\nHint Resolve int_co_prop1 : additional.\nHint Resolve int_co_prop2 : additional.\nHint Resolve int_oc_prop1 : additional.\nHint Resolve int_oc_prop2 : additional.\nHint Resolve int_oo_prop1 : additional.\nHint Resolve int_oo_prop2 : additional."
+      "text": "Definition int_cc_prop {x y : R} :\n  forall r : [x, y], x <= r <= y.\n  apply subset_elements_satisfy_predicate with (V := interval_cl_cl x y).\n  Defined."
+    },
+    {
+      "type": "code",
+      "text": "Definition int_co_prop {x y : R} :\n  forall r : [x, y), x <= r < y.\n  apply subset_elements_satisfy_predicate with (V := interval_cl_op x y).\n  Defined."
+    },
+    {
+      "type": "code",
+      "text": "Definition int_oc_prop {x y : R}:\n  forall r : (x, y], x < r <= y.\n  apply subset_elements_satisfy_predicate with (V := interval_op_cl x y).\n  Defined."
+    },
+    {
+      "type": "code",
+      "text": "Definition int_oo_prop {x y : R}:\n  forall r : (x, y), x < r < y.\n  apply subset_elements_satisfy_predicate with (V := interval_op_op x y).\n  Defined."
+    },
+    {
+      "type": "code",
+      "text": "Definition int_cc_prop1 {x y : R} : forall r : [x,y], x <= r.\n  intro r.\n  pose proof int_cc_prop r as H.\n  destruct H as [H H1].\n  assumption.\n  Defined."
+    },
+    {
+      "type": "code",
+      "text": "Definition int_cc_prop2 {x y : R} : forall r : [x, y], r <= y.\n  intro r.\n  pose proof int_cc_prop r as H.\n  destruct H as [H_left H_right].\n  assumption.\n  Defined."
+    },
+    {
+      "type": "code",
+      "text": "Definition int_co_prop1 {x y : R} : forall r : [x,y), x <= r.\n  intro r.\n  pose proof int_co_prop r as H.\n  destruct H as [H_left H_right].\n  assumption.\n  Defined."
+    },
+    {
+      "type": "code",
+      "text": "Definition int_co_prop2 {x y : R} : forall r : [x,y), r < y.\n  intro r.\n  pose proof int_co_prop r as H.\n  destruct H as [H_left H_right].\n  assumption.\n  Defined."
+    },
+    {
+      "type": "code",
+      "text": "Definition int_oc_prop1 {x y : R} : forall r : (x,y], x < r.\n  intro r.\n  pose proof int_oc_prop r as H.\n  destruct H as [H_left H_right].\n  assumption.\n  Defined."
+    },
+    {
+      "type": "code",
+      "text": "Definition int_oc_prop2 {x y : R} : forall r : (x,y], r <= y.\n  intro r.\n  pose proof int_oc_prop r as H.\n  destruct H as [H_left H_right].\n  assumption.\n  Defined."
+    },
+    {
+      "type": "code",
+      "text": "Definition int_oo_prop1 {x y : R} : forall r : (x,y), x < r.\n  intro r.\n  pose proof int_oo_prop r as H.\n  destruct H as [H_left H_right].\n  assumption.\n  Defined."
+    },
+    {
+      "type": "code",
+      "text": "Definition int_oo_prop2 {x y : R} : forall r : (x,y), r < y.\n  intro r.\n  pose proof int_oo_prop r as H.\n  destruct H as [H_left H_right].\n  assumption.\n  Defined."
+    },
+    {
+      "type": "code",
+      "text": "Hint Resolve int_cc_prop : additional.\nHint Resolve int_co_prop : additional.\nHint Resolve int_oc_prop : additional.\nHint Resolve int_oo_prop : additional.\n\nHint Resolve int_cc_prop1 : additional.\nHint Resolve int_cc_prop2 : additional.\nHint Resolve int_co_prop1 : additional.\nHint Resolve int_co_prop2 : additional.\nHint Resolve int_oc_prop1 : additional.\nHint Resolve int_oc_prop2 : additional.\nHint Resolve int_oo_prop1 : additional.\nHint Resolve int_oo_prop2 : additional."
     },
     {
       "type": "code",

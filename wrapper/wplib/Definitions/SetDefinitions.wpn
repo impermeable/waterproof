@@ -1,0 +1,61 @@
+{
+  "exerciseSheet": false,
+  "blocks": [
+    {
+      "type": "text",
+      "text": "* Definitions for sets"
+    },
+    {
+      "type": "code",
+      "text": "Require Import Reals.\nOpen Scope R_scope."
+    },
+    {
+      "type": "text",
+      "text": "The following line automatically generates induction schemes for Records."
+    },
+    {
+      "type": "code",
+      "text": "Set Nonrecursive Elimination Schemes."
+    },
+    {
+      "type": "code",
+      "text": "Record subset_R_element {pred : R -> Prop}\n  := mk_element {\n  element : R;\n  witness : pred element;\n}.\n"
+    },
+    {
+      "type": "text",
+      "text": "Create a coercion from subset_R_element to R."
+    },
+    {
+      "type": "code",
+      "text": "\nCoercion subset_R_to_R {pred : R -> Prop} := @element pred."
+    },
+    {
+      "type": "code",
+      "text": "Record subset_R :=\n  mk_subset {\n  subset_predicate : R -> Prop;\n  elements := @subset_R_element subset_predicate;\n}."
+    },
+    {
+      "type": "code",
+      "text": "Coercion subset_R_to_elements :=\n  (fun s : subset_R => @elements s).\n"
+    },
+    {
+      "type": "text",
+      "text": "TODO: reavaluate the line below as it can cause a lot of confusion."
+    },
+    {
+      "type": "code",
+      "text": "Notation \"x\" :=\n  (subset_R_to_elements x) (at level 20, only printing)."
+    },
+    {
+      "type": "code",
+      "text": "Definition interval_cl_cl (a b : R)\n  := mk_subset (fun x : R => a <= x <= b).\nDefinition interval_cl_op (a b : R)\n  := mk_subset (fun x : R => a <= x < b).\nDefinition interval_op_cl (a b : R)\n  := mk_subset (fun x : R => a < x <= b).\nDefinition interval_op_op (a b : R)\n  := mk_subset (fun x : R => a < x < b)."
+    },
+    {
+      "type": "code",
+      "text": ""
+    },
+    {
+      "type": "code",
+      "text": ""
+    }
+  ]
+}
