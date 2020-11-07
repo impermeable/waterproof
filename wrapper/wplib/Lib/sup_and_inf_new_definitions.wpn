@@ -39,7 +39,7 @@
     },
     {
       "type": "code",
-      "text": "Proof.\nTake A : subset_R.\nTake L : ℝ.\nWe show both directions.\nAssume L_upp_bd : (is_upper_bound A L).\nExpand the definition of Raxioms.is_upper_bound.\nExpand the definition of is_upper_bound in L_upp_bd.\nTake x : ℝ.\nAssume w : (@subset_predicate A x).\nDefine b := (mk_element (@subset_predicate A) x w).\nBy L_upp_bd it holds that (b ≤ L) (H).\nApply H.\n\nAssume L_is_upp_bd : (Raxioms.is_upper_bound (@subset_predicate A) L).\nExpand the definition of is_upper_bound.\nExpand the definition of Raxioms.is_upper_bound in L_is_upp_bd.\nTake a : A.\nBy subset_elements_satisfy_predicate it holds that\n  (@subset_predicate A a) (H1).\nBy L_is_upp_bd it holds that (a ≤ L).\nQed."
+      "text": "Proof.\nTake A : subset_R.\nTake L : ℝ.\nWe show both directions.\nAssume L_upp_bd : (is_upper_bound A L).\nExpand the definition of Raxioms.is_upper_bound.\nExpand the definition of is_upper_bound in L_upp_bd.\nTake x : ℝ.\nAssume w : (subset_predicate A x).\nDefine b := (mk_element (@subset_predicate A) x w).\nBy L_upp_bd it holds that (b ≤ L) (H).\nApply H.\n\nAssume L_is_upp_bd : (Raxioms.is_upper_bound (@subset_predicate A) L).\nExpand the definition of is_upper_bound.\nExpand the definition of Raxioms.is_upper_bound in L_is_upp_bd.\nTake a : A.\nBy subset_elements_satisfy_predicate it holds that\n  (@subset_predicate A a) (H1).\nBy L_is_upp_bd it holds that (a ≤ L).\nQed."
     },
     {
       "type": "code",
@@ -47,7 +47,7 @@
     },
     {
       "type": "code",
-      "text": "Proof.\nAdmitted."
+      "text": "Proof.\nTake A : subset_R.\nTake M : ℝ.\nWe show both directions.\n\nAssume M_is_sup_A : (Notations.is_sup (subset_predicate A) M).\nExpand the definition of is_sup.\nExpand the definition of Notations.is_sup in M_is_sup_A.\nWe show both statements.\n  It holds that (is_upper_bound A M).\n  Take M0 : ℝ.\n  Assume M_is_ub_A : (is_upper_bound A M0).\n  destruct M_is_sup_A as [M_is_R_ub_A M_is_R_lub_A].\n  destruct (equivalence_upper_bounds A M0). apply (M_is_R_lub_A M0 (H M_is_ub_A)).\n\nAssume M_is_sup_A : (is_sup A M).\nExpand the definition of Notations.is_sup.\nExpand the definition of is_sup in M_is_sup_A.\nWe show both statements.\n  Expand the definition of Raxioms.is_upper_bound.\n  destruct M_is_sup_A. Expand the definition of is_upper_bound in H.\n  Take x : ℝ. Assume x_in_A : (subset_predicate A x). \n  Define b := (mk_element (@subset_predicate A) x x_in_A).\n  By H it holds that (b ≤ M) (H1).\n  Apply H1.\n  \n  Take b : ℝ.\n  Assume M_is_R_lub_A : (Raxioms.is_upper_bound (subset_predicate A) b).\n  destruct M_is_sup_A as [M_is_ub_A M_is_lub_A].\n  Apply (M_is_lub_A b).\n  destruct (equivalence_upper_bounds A b). apply (H0 M_is_R_lub_A).\nQed."
     },
     {
       "type": "text",
@@ -55,7 +55,7 @@
     },
     {
       "type": "code",
-      "text": "Lemma R_complete : ∀ (A : subset_R) (x : A),\n  is_bounded_above A ⇒ mk_subset (fun M : ℝ => is_sup A M).\nProof.\nTake A : subset_R.\nTake x : A.\nAssume A_bdd_above : (is_bounded_above A).\nWe claim that ({M : ℝ | is_lub (@subset_predicate A) M}) (H).\n  Apply completeness.\n  unfold is_bounded_above in A_bdd_above.\n  unfold is_upper_bound in A_bdd_above.\n  unfold is_bdd_above.\n  Choose M such that A_bdd_by_M according to A_bdd_above.\n  Choose m := M.\n  We need to show that\n    (∀ a : ℝ, subset_predicate a ⇒ a ≤ M).\n  Take a : ℝ.\n  Assume w : (subset_predicate a).\n  Define b := (mk_element (@subset_predicate A) a w).\n  pose proof (A_bdd_by_M b).\n  assumption.\n  Choose y := x.\n  induction y.\n  assumption.\n  Choose M such that M_upp_bd according to H.\n  We claim that (is_sup A M) (H2).\n  unfold is_sup.\n  split.\n  \n  Define c :=\n    (mk_element subset_predicate ).\nBy completeness it holds that\n  (sig (fun M : ℝ => is_lub (@subset_predicate A) M)) (H)."
+      "text": "Lemma R_complete : ∀ (A : subset_R) (x : A),\n  is_bounded_above A ⇒ mk_subset (fun M : ℝ => is_sup A M).\nProof.\nTake A : subset_R.\nTake x : A.\nAssume A_bdd_above : (is_bounded_above A).\nWe claim that ({M : ℝ | is_lub (@subset_predicate A) M}) (H).\n  Apply completeness.\n  unfold is_bounded_above in A_bdd_above.\n  unfold is_upper_bound in A_bdd_above.\n  unfold is_bdd_above.\n  Choose M such that A_bdd_by_M according to A_bdd_above.\n  Choose m := M.\n  We need to show that\n    (∀ a : ℝ, subset_predicate A a ⇒ a ≤ M).\n  Take a : ℝ.\n  Assume w : (subset_predicate A a).\n  Define b := (mk_element (@subset_predicate A) a w).\n  pose proof (A_bdd_by_M b).\n  assumption.\n  Choose y := x.\n  induction y.\n  assumption.\n  Choose M such that M_upp_bd according to H.\n  \n  destruct (equivalence_sup_lub A M) as [M_is_sup_A H2]. specialize (M_is_sup_A M_upp_bd).\n  exists M. exact M_is_sup_A.\nQed."
     },
     {
       "type": "text",
