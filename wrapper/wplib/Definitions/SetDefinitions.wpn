@@ -1,0 +1,41 @@
+{
+  "exerciseSheet": false,
+  "blocks": [
+    {
+      "type": "text",
+      "text": "* Definitions for sets"
+    },
+    {
+      "type": "code",
+      "text": "Require Import Reals.\nOpen Scope R_scope."
+    },
+    {
+      "type": "text",
+      "text": "The following line automatically generates induction schemes for Records."
+    },
+    {
+      "type": "code",
+      "text": "Set Nonrecursive Elimination Schemes."
+    },
+    {
+      "type": "code",
+      "text": "Record elements_R_satisfying (pred : R -> Prop)\n  := mk_element_R {\n  element :> R;\n  witness : pred element;\n}."
+    },
+    {
+      "type": "code",
+      "text": "Record subsets_R :=\n  mk_subset_R {\n  is_in : R -> Prop;\n  elements := elements_R_satisfying is_in;\n}."
+    },
+    {
+      "type": "code",
+      "text": "Coercion subsets_R_to_elements :=\n  (fun A : subsets_R => elements A).\n"
+    },
+    {
+      "type": "code",
+      "text": ""
+    },
+    {
+      "type": "code",
+      "text": ""
+    }
+  ]
+}

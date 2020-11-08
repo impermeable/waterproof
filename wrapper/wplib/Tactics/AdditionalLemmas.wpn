@@ -12,6 +12,90 @@
     {
       "type": "code",
       "text": "Require Import Reals.\nRequire Import Reals.ROrderedType.\n\nLemma Req_true : forall x y : R, x = y -> Reqb x y = true.\nProof.\nintros. destruct (Reqb_eq x y). apply (H1 H).\nQed.\n\nLemma true_Req : forall x y : R, Reqb x y = true -> x = y.\nProof.\nintros. destruct (Reqb_eq x y). apply (H0 H).\nQed.\n\nLemma Req_false : forall x y : R, x <> y -> Reqb x y = false.\nProof.\nintros. unfold Reqb. destruct Req_dec. contradiction. trivial.\nQed.\n\nLemma false_Req : forall x y : R, Reqb x y = false -> x <> y.\nProof.\nintros. destruct (Req_dec x y). rewrite (Req_true x y e) in H. \nassert (H1 : true <> false). auto with *. contradiction.\napply n.\nQed.\n\nRequire Import Coq.micromega.Lra.\nHint Resolve (eq_sym) : reals.\nHint Resolve false_Req : reals.\nHint Resolve true_Req : reals."
+    },
+    {
+      "type": "text",
+      "text": "** Subsets"
+    },
+    {
+      "type": "code",
+      "text": "Require Import wplib.Definitions.SetDefinitions."
+    },
+    {
+      "type": "code",
+      "text": "Lemma subset_elements_satisfy_predicate :\n  forall V : subsets_R,\n    forall x : V,\n      is_in V x."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nintro V.\ninduction x.\nassumption.\nQed."
+    },
+    {
+      "type": "code",
+      "text": "Hint Resolve subset_elements_satisfy_predicate : additional."
+    },
+    {
+      "type": "text",
+      "text": "\n### Intervals"
+    },
+    {
+      "type": "code",
+      "text": "Require Import wplib.Notations.Notations."
+    },
+    {
+      "type": "code",
+      "text": "Definition int_cc_prop {x y : R} :\n  forall r : [x, y], x <= r <= y\n  := subset_elements_satisfy_predicate [x,y]."
+    },
+    {
+      "type": "code",
+      "text": "Definition int_co_prop {x y : R} :\n  forall r : [x, y), x <= r < y\n  := subset_elements_satisfy_predicate [x,y)."
+    },
+    {
+      "type": "code",
+      "text": "Definition int_oc_prop {x y : R}:\n  forall r : (x, y], x < r <= y\n  := subset_elements_satisfy_predicate (x,y]."
+    },
+    {
+      "type": "code",
+      "text": "Definition int_oo_prop {x y : R}:\n  forall r : (x, y), x < r < y\n  := subset_elements_satisfy_predicate (x,y)."
+    },
+    {
+      "type": "code",
+      "text": "Definition int_cc_prop1 {x y : R} : forall r : [x,y], x <= r.\n  intro r. \n  apply (subset_elements_satisfy_predicate [x,y]).\nQed."
+    },
+    {
+      "type": "code",
+      "text": "Definition int_cc_prop2 {x y : R} : forall r : [x, y], r <= y.\n  intro r.\n  apply (subset_elements_satisfy_predicate [x,y]).\nQed."
+    },
+    {
+      "type": "code",
+      "text": "Definition int_co_prop1 {x y : R} : forall r : [x,y), x <= r.\n  intro r.\n  apply (subset_elements_satisfy_predicate [x,y)).\nQed."
+    },
+    {
+      "type": "code",
+      "text": "Definition int_co_prop2 {x y : R} : forall r : [x,y), r < y.\n  intro r.\n  apply (subset_elements_satisfy_predicate [x,y)).\nQed."
+    },
+    {
+      "type": "code",
+      "text": "Definition int_oc_prop1 {x y : R} : forall r : (x,y], x < r.\n  intro r.\n  apply (subset_elements_satisfy_predicate (x,y]).\nQed."
+    },
+    {
+      "type": "code",
+      "text": "Definition int_oc_prop2 {x y : R} : forall r : (x,y], r <= y.\n  intro r.\n  apply (subset_elements_satisfy_predicate (x,y]).\nQed."
+    },
+    {
+      "type": "code",
+      "text": "Definition int_oo_prop1 {x y : R} : forall r : (x,y), x < r.\n  intro r.\n  apply (subset_elements_satisfy_predicate (x,y)).\nQed."
+    },
+    {
+      "type": "code",
+      "text": "Definition int_oo_prop2 {x y : R} : forall r : (x,y), r < y.\n  intro r.\n  apply (subset_elements_satisfy_predicate (x,y)).\nQed."
+    },
+    {
+      "type": "code",
+      "text": "Hint Resolve int_cc_prop : additional.\nHint Resolve int_co_prop : additional.\nHint Resolve int_oc_prop : additional.\nHint Resolve int_oo_prop : additional.\n\nHint Resolve int_cc_prop1 : additional.\nHint Resolve int_cc_prop2 : additional.\nHint Resolve int_co_prop1 : additional.\nHint Resolve int_co_prop2 : additional.\nHint Resolve int_oc_prop1 : additional.\nHint Resolve int_oc_prop2 : additional.\nHint Resolve int_oo_prop1 : additional.\nHint Resolve int_oo_prop2 : additional."
+    },
+    {
+      "type": "code",
+      "text": ""
     }
   ]
 }

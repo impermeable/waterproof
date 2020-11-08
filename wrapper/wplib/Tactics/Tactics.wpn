@@ -35,7 +35,11 @@
     },
     {
       "type": "code",
-      "text": "Ltac intro_strict s t :=\n  match goal with\n    | [ |- forall _ : t, _ ] => intro s\n  end.\n"
+      "text": "Ltac intro_strict s t :=\n  match goal with\n    | [ |- forall _ : ?u, _ ] => \n      match u with\n      | t => intro s\n      | (subsets_R_to_elements _) => intro s\n      end\n  end."
+    },
+    {
+      "type": "code",
+      "text": ""
     },
     {
       "type": "code",

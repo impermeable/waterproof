@@ -7,7 +7,7 @@
     },
     {
       "type": "code",
-      "text": "Require Import Qreals.\nRequire Import Reals.\nRequire Import Rbase.\nRequire Import Rfunctions.\nRequire Import SeqSeries.\nRequire Import Rtrigo.\nRequire Import Ranalysis.\nRequire Import Integration.\nRequire Import micromega.Lra.\nRequire Import Omega.\nRequire Import Max.\n\nOpen Scope nat_scope.\nOpen Scope R_scope."
+      "text": "Require Import Qreals.\nRequire Import Reals.\nRequire Import Rbase.\nRequire Import Rfunctions.\nRequire Import SeqSeries.\nRequire Import Rtrigo.\nRequire Import Ranalysis.\nRequire Import Integration.\nRequire Import micromega.Lra.\nRequire Import Omega.\nRequire Import Max.\n\nRequire Export wplib.Definitions.SetDefinitions.\n\nOpen Scope nat_scope.\nOpen Scope R_scope."
     },
     {
       "type": "text",
@@ -24,14 +24,6 @@
     {
       "type": "code",
       "text": "Notation \"x ∨ y\" := (x \\/ y) (at level 85, right associativity) : type_scope.\nNotation \"x ∧ y\" := (x /\\ y) (at level 80, right associativity) : type_scope.\nNotation \"x → y\" := (x -> y)\n  (at level 99, y at level 200, right associativity,\n   only parsing): type_scope.\nNotation \"x ⇒ y\" := (x -> y)\n  (at level 99, y at level 200, right associativity,\n   only parsing): type_scope.\n(* the notation below is fun, but is no good for functions *)\n(* need to see if this can be adapted so it only uses \n   this notation for propositions *)\n(*Notation \"'if' x 'then' y\" := (x -> y)\n  (at level 99, y at level 200, right associativity): prop_scope.*)\nNotation \"x ⇨ y\" := (x -> y)\n  (at level 99, y at level 200, right associativity): type_scope.\n\nNotation \"x ↔ y\" := (x <-> y) (at level 95, no associativity): type_scope.\nNotation \"x ⇔ y\" := (x <-> y) (at level 95, no associativity): type_scope.\nNotation \"¬ x\" := (~x) (at level 75, right associativity) : type_scope.\n(* TODO: the below definition doesn't work very nicely *)\nNotation \"x ↦ y\" := (fun x => y) (at level 0)."
-    },
-    {
-      "type": "text",
-      "text": "We also provide a way to write intervals (on the real line)."
-    },
-    {
-      "type": "code",
-      "text": "Notation \"[ x , y ]\" := (fun r : R => x <= r <= y).\nNotation \"[ x , y )\" := (fun r : R => x <= r < y).\nNotation \"( x , y ]\" := (fun r : R => x < r <= y).\nNotation \"( x , y )\" := (fun r : R => x < r < y).\n\nDefinition A := [0, 5]."
     },
     {
       "type": "text",
@@ -64,6 +56,18 @@
     {
       "type": "code",
       "text": "Notation \"| x |\" := (Rabs x) (at level 69, x at level 200).\nNotation \"｜ x - y ｜\" := (R_dist x y) (at level 69, x at level 48, y at level 48)."
+    },
+    {
+      "type": "text",
+      "text": "## Subsets and intervals"
+    },
+    {
+      "type": "code",
+      "text": "Notation \"{ x : R | P }\" := (mk_subset_R (fun x : R => P)).\n\nNotation \"[ x , y ]\" := { r : R | x <= r <= y }.\nNotation \"[ x , y )\" := { r : R | x <= r <  y }.\nNotation \"( x , y ]\" := { r : R | x <  r <= y }.\nNotation \"( x , y )\" := { r : R | x <  r <  y }."
+    },
+    {
+      "type": "code",
+      "text": ""
     },
     {
       "type": "text",

@@ -1,6 +1,6 @@
 {
   "name": "waterproof",
-  "version": "0.4.2",
+  "version": "0.5.0",
   "private": true,
   "description": "The Waterproof proof assistant.",
   "main": "background.js",
@@ -9,7 +9,7 @@
     "lint": "vue-cli-service lint",
     "test:unit": "vue-cli-service test:unit",
     "test-start": "mocha \"tests/e2e/*.e2e.js\" --timeout 100000 --bail",
-    "electron:build": "vue-cli-service electron:build --config electron-builder.json --publish never",
+    "electron:build": "vue-cli-service electron:build --publish never",
     "electron:serve": "vue-cli-service electron:serve",
     "postinstall": "electron-builder install-app-deps",
     "postuninstall": "electron-builder install-app-deps",
@@ -41,6 +41,7 @@
     "chai-string": "^1.5.0",
     "cross-env": "^5.2.1",
     "electron-debug": "^3.1.0",
+    "electron-devtools-installer": "^3.1.0",
     "electron-icon-builder": "^1.0.2",
     "eslint": "^5.16.0",
     "eslint-config-google": "^0.13.0",
@@ -55,6 +56,7 @@
     "@vue/compiler-sfc": "3.0.2",
     "electron": "9.3.3",
     "vue-cli-plugin-electron-builder": "2.0.0-rc.5",
+    "electron-builder": "^22.2.0",
     "@vue/cli-service": "^4.5.8"
   },
   "dependencies": {
