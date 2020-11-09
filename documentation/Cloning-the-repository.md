@@ -39,11 +39,6 @@ npm run electron:serve
 
 To build the Electron app run:
 ```
-npm run build-release
+npm run electron:build
 ```
 An installer will be produced in the folder `dist_electron`.
-
-Finally, to start the application run:
-```
-npm start
-```
