@@ -19,35 +19,15 @@
     },
     {
       "type": "code",
-      "text": "Record subset_R_element {pred : R -> Prop}\n  := mk_element {\n  element : R;\n  witness : pred element;\n}.\n"
-    },
-    {
-      "type": "text",
-      "text": "Create a coercion from subset_R_element to R."
+      "text": "Record elements_R_satisfying (pred : R -> Prop)\n  := mk_element_R {\n  element :> R;\n  witness : pred element;\n}."
     },
     {
       "type": "code",
-      "text": "\nCoercion subset_R_to_R {pred : R -> Prop} := @element pred."
+      "text": "Record subsets_R :=\n  mk_subset_R {\n  is_in : R -> Prop;\n  elements := elements_R_satisfying is_in;\n}."
     },
     {
       "type": "code",
-      "text": "Record subset_R :=\n  mk_subset {\n  subset_predicate : R -> Prop;\n  elements := @subset_R_element subset_predicate;\n}."
-    },
-    {
-      "type": "code",
-      "text": "Coercion subset_R_to_elements :=\n  (fun s : subset_R => @elements s).\n"
-    },
-    {
-      "type": "text",
-      "text": "TODO: reavaluate the line below as it can cause a lot of confusion."
-    },
-    {
-      "type": "code",
-      "text": "Notation \"x\" :=\n  (subset_R_to_elements x) (at level 20, only printing)."
-    },
-    {
-      "type": "code",
-      "text": "Definition interval_cl_cl (a b : R)\n  := mk_subset (fun x : R => a <= x <= b).\nDefinition interval_cl_op (a b : R)\n  := mk_subset (fun x : R => a <= x < b).\nDefinition interval_op_cl (a b : R)\n  := mk_subset (fun x : R => a < x <= b).\nDefinition interval_op_op (a b : R)\n  := mk_subset (fun x : R => a < x < b)."
+      "text": "Coercion subsets_R_to_elements :=\n  (fun A : subsets_R => elements A).\n"
     },
     {
       "type": "code",

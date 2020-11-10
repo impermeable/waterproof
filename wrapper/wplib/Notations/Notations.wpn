@@ -27,14 +27,6 @@
     },
     {
       "type": "text",
-      "text": "We also provide a way to write intervals (on the real line)."
-    },
-    {
-      "type": "code",
-      "text": "Notation \"[ x , y ]\" := (interval_cl_cl x y).\nNotation \"[ x , y )\" := (interval_cl_op x y).\nNotation \"( x , y ]\" := (interval_op_cl x y).\nNotation \"( x , y )\" := (interval_op_op x y)."
-    },
-    {
-      "type": "text",
       "text": "## **(In)equalities**\nAllowing unicode characters for uniqualities."
     },
     {
@@ -64,6 +56,18 @@
     {
       "type": "code",
       "text": "Notation \"| x |\" := (Rabs x) (at level 69, x at level 200).\nNotation \"｜ x - y ｜\" := (R_dist x y) (at level 69, x at level 48, y at level 48)."
+    },
+    {
+      "type": "text",
+      "text": "## Subsets and intervals"
+    },
+    {
+      "type": "code",
+      "text": "Notation \"{ x : R | P }\" := (mk_subset_R (fun x : R => P)).\n\nNotation \"[ x , y ]\" := { r : R | x <= r <= y }.\nNotation \"[ x , y )\" := { r : R | x <= r <  y }.\nNotation \"( x , y ]\" := { r : R | x <  r <= y }.\nNotation \"( x , y )\" := { r : R | x <  r <  y }."
+    },
+    {
+      "type": "code",
+      "text": ""
     },
     {
       "type": "text",
