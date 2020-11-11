@@ -183,11 +183,11 @@
     },
     {
       "type": "code",
-      "text": "Lemma sup_is_upp_bd :\n  ∀ A : ℝ → Prop,\n    ∀ M : ℝ,\n      is_sup A M ⇒ is_upper_bound A M."
+      "text": "Lemma sup_is_upp_bd :\n  ∀ A : (subsets_R),\n    ∀ M : ℝ,\n      is_sup A M ⇒ is_upper_bound A M."
     },
     {
       "type": "code",
-      "text": "Proof.\nTake A : (ℝ → Prop). Take M : ℝ. Assume M_is_sup_A : (is_sup A M).\nWrite M_is_sup_A as (is_upper_bound A M ∧ (∀ b: ℝ, is_upper_bound A b ⇒ M ≤ b) ).\nIt follows that (is_upper_bound A M). Qed."
+      "text": "Proof.\nTake A : (subsets_R). Take M : ℝ. Assume M_is_sup_A : (is_sup A M).\nWrite M_is_sup_A as (is_upper_bound A M ∧ (∀ b: ℝ, is_upper_bound A b ⇒ M ≤ b) ).\nIt follows that (is_upper_bound A M). Qed."
     },
     {
       "type": "text",
@@ -195,11 +195,11 @@
     },
     {
       "type": "code",
-      "text": "Lemma any_upp_bd_ge_sup :\n  ∀ A : ℝ → Prop,\n    ∀ M L : ℝ,\n      is_sup A M ⇒ (is_upper_bound A L ⇒ M ≤ L)."
+      "text": "Lemma any_upp_bd_ge_sup :\n  ∀ A : (subsets_R),\n    ∀ M L : ℝ,\n      is_sup A M ⇒ (is_upper_bound A L ⇒ M ≤ L)."
     },
     {
       "type": "code",
-      "text": "Proof.\nTake A : (ℝ → Prop). Take M : ℝ. Take L : ℝ. \nAssume A_is_sup_M : (is_sup A M)."
+      "text": "Proof.\nTake A : (subsets_R). Take M : ℝ. Take L : ℝ. \nAssume A_is_sup_M : (is_sup A M)."
     },
     {
       "type": "code",
@@ -215,7 +215,7 @@
     },
     {
       "type": "code",
-      "text": "This follows immediately. Qed."
+      "text": "It holds that (M ≤ L). Qed."
     },
     {
       "type": "text",
@@ -227,11 +227,11 @@
     },
     {
       "type": "code",
-      "text": "Lemma inf_is_low_bd :\n  ∀ A : ℝ → Prop,\n    ∀ m : ℝ,\n      is_inf A m ⇒ is_lower_bound A m."
+      "text": "Lemma inf_is_low_bd :\n  ∀ A : (subsets_R),\n    ∀ m : ℝ,\n      is_inf A m ⇒ is_lower_bound A m."
     },
     {
       "type": "code",
-      "text": "Proof.\nTake A : (R -> Prop).\nTake m : R.\nAssume m_is_inf_A.\nBecause m_is_inf_A both m_is_low_bd and any_low_bd_ge_m."
+      "text": "Proof.\nTake A : (subsets_R).\nTake m : R.\nAssume m_is_inf_A.\nBecause m_is_inf_A both m_is_low_bd and any_low_bd_ge_m."
     },
     {
       "type": "text",
@@ -255,11 +255,11 @@
     },
     {
       "type": "code",
-      "text": "Lemma any_low_bd_ge_inf :\n  forall A : R -> Prop,\n    forall m l : R,\n      is_inf A m -> is_lower_bound A l -> l <= m."
+      "text": "Lemma any_low_bd_ge_inf :\n  forall A : (subsets_R),\n    forall m l : R,\n      is_inf A m ⇒ is_lower_bound A l ⇒ l <= m."
     },
     {
       "type": "code",
-      "text": "Proof.\nTake A : (R -> Prop).\nTake m : R. Take l : R."
+      "text": "Proof.\nTake A : (subsets_R).\nTake m : R. Take l : R."
     },
     {
       "type": "code",
@@ -295,7 +295,7 @@
     },
     {
       "type": "code",
-      "text": "This follows immediately. Qed."
+      "text": "It holds that (l ≤m). Qed."
     },
     {
       "type": "text",
@@ -303,27 +303,27 @@
     },
     {
       "type": "code",
-      "text": "Lemma exists_almost_maximizer :\n  ∀ (A : ℝ → Prop) (M : ℝ),\n    is_sup A M ⇒\n      ∀ (L : ℝ), L < M ⇒ \n        ∃ a : ℝ, A a ∧ L < a."
+      "text": "Lemma exists_almost_maximizer :\n  ∀ (A : subsets_R) (M : ℝ),\n    is_sup A M ⇒\n      ∀ (L : ℝ), L < M ⇒ \n        ∃ a : A, L < a."
     },
     {
       "type": "code",
-      "text": "Proof.\nTake A : (ℝ → Prop). Take M : ℝ.\nAssume M_is_sup_A. Take L : ℝ. Assume L_lt_M.\nWe argue by contradiction. \nWe claim that \n  (∀ x : ℝ, A x ⇒ x ≤ L) (H1).\n  Take x : ℝ. Assume x_in_A. \n  It holds that (¬(L < x)) (H2).\n  We need to show that (x ≤ L). This follows immediately.\nIt holds that (is_upper_bound A L) (H3).\nBy any_upp_bd_ge_sup it holds that (M ≤ L) (H4).\nIt holds that (¬(M ≤ L)) (H5).\ncontradiction.\nQed."
+      "text": "Proof.\nTake A : (subsets_R). Take M : ℝ.\nAssume M_is_sup_A. Take L : ℝ. Assume L_lt_M.\nWe argue by contradiction. \nWe claim that \n  (∀ x : A, x ≤ L) (H1).\n  Take x : A.\n  It holds that (¬(L < x)) (H2).\n  We need to show that (x ≤ L).\n  It holds that (x ≤ L).\nIt holds that (is_upper_bound A L) (H3).\nBy any_upp_bd_ge_sup it holds that (M ≤ L) (H4).\nIt holds that (¬(M ≤ L)) (H5).\ncontradiction.\nQed."
     },
     {
       "type": "code",
-      "text": "Lemma exists_almost_maximizer_ε :\n  ∀ (A : ℝ → Prop) (M : ℝ),\n    is_sup A M ⇒\n      ∀ (ε : ℝ), ε > 0 ⇒ \n        ∃ a : ℝ, A a ∧ M - ε < a."
+      "text": "Lemma exists_almost_maximizer_ε :\n  ∀ (A : subsets_R) (M : ℝ),\n    is_sup A M ⇒\n      ∀ (ε : ℝ), ε > 0 ⇒ \n        ∃ a : A, M - ε < a."
     },
     {
       "type": "code",
-      "text": "Proof.\nTake A : (ℝ → Prop). Take M : ℝ.\nAssume M_is_sup_A. Take ε : ℝ. Assume ε_gt_0.\nIt holds that (M - ε < M) (H1). \napply exists_almost_maximizer with (L := M- ε) (M := M); assumption.\nQed."
+      "text": "Proof.\nTake A : (subsets_R). Take M : ℝ.\nAssume M_is_sup_A. Take ε : ℝ. Assume ε_gt_0.\nIt holds that (M - ε < M) (H1). \napply exists_almost_maximizer with (L := M- ε) (M := M); assumption.\nQed."
     },
     {
       "type": "code",
-      "text": "Lemma max_or_strict :\n  ∀ (A : ℝ → Prop) (M : ℝ),\n    is_sup A M ⇒ \n      (A M) ∨ (∀ a : ℝ, A a ⇒ a < M)."
+      "text": "Lemma max_or_strict :\n  ∀ (A : subsets_R) (M : ℝ),\n    is_sup A M ⇒ \n      (is_in A M) ∨ (∀ a : A, a < M)."
     },
     {
       "type": "code",
-      "text": "Proof.\nTake A : (ℝ → Prop). Take M : ℝ. \nAssume M_is_sup_A. We argue by contradiction. \nBy not_or_and it holds that ((¬ (A M)) ∧ \n  ¬(∀ a : ℝ, A a ⇒ a < M) ) (H1).\nBecause H1 both H2 and H3."
+      "text": "Proof.\nTake A : (subsets_R). Take M : ℝ. \nAssume M_is_sup_A. We argue by contradiction. \nBy not_or_and it holds that ((¬ (is_in A M)) ∧ \n  ¬(∀ a : A, a < M) ) (H1).\nBecause H1 both H2 and H3."
     },
     {
       "type": "text",
@@ -343,51 +343,7 @@
     },
     {
       "type": "code",
-      "text": "Take a : ℝ. Assume a_in_A.\nBy sup_is_upp_bd it holds that (is_upper_bound A M) (M_upp_bd).\nIt holds that (a ≤ M) (a_le_M).\nWe claim that (¬(a = M)) (a_is_not_M).\nWe argue by contradiction.\nAssume a_eq_M.\nWe claim that (A M) (M_in_A).\nRewrite using (M=a).\nassumption. contradiction. This follows immediately.\nQed."
-    },
-    {
-      "type": "text",
-      "text": "## Suprema and sequences"
-    },
-    {
-      "type": "code",
-      "text": "Lemma seq_ex_almost_maximizer_ε :\n  ∀ (a : ℕ → ℝ) (pr : has_ub a) (ε : ℝ), \n    ε > 0 ⇒ ∃ k : ℕ, a k > lub a pr - ε."
-    },
-    {
-      "type": "code",
-      "text": "Proof.\nTake a : (ℕ → ℝ). Take pr : (has_ub a). \nExpand the definition of lub.\nDefine sup_with_proof := (ub_to_lub a pr).\nChoose l such that l_is_sup according to sup_with_proof.\nTake ε : ℝ. Assume ε_gt_0.\nBy exists_almost_maximizer_ε it holds that (∃ y : ℝ, (EUn a) y ∧ y > l - ε) (H1).\nChoose y such that H2 according to H1.\nBecause H2 both y_in_range and y_gt_l_min_ε.\nExpand the definition of EUn in y_in_range.\nChoose i such that ai_is_y according to y_in_range.\nChoose k := i.\nWe need to show that (a i > l - ε).\nRewrite using (a i = y).\nApply y_gt_l_min_ε.\nQed."
-    },
-    {
-      "type": "code",
-      "text": "Lemma seq_ex_almost_maximizer_m :\n  ∀ (a : ℕ → ℝ) (pr : has_ub a) (m : ℕ), \n    ∃ k : ℕ, a k > lub a pr - 1 / (INR(m) + 1)."
-    },
-    {
-      "type": "code",
-      "text": "Proof.\nTake a : (ℕ → ℝ). Take pr : (has_ub a). Take m : ℕ.\nApply seq_ex_almost_maximizer_ε."
-    },
-    {
-      "type": "text",
-      "text": "We need to show that $1/(m+1) > 0$."
-    },
-    {
-      "type": "code",
-      "text": " Rewrite using (1 / (INR m + 1) = / (INR m + 1)). "
-    },
-    {
-      "type": "text",
-      "text": "We need to show that $(m+1) > 0$. "
-    },
-    {
-      "type": "code",
-      "text": "This follows immediately. Qed."
-    },
-    {
-      "type": "code",
-      "text": "Lemma exists_almost_lim_sup_aux :\n  ∀ (a : ℕ → ℝ) (pr : has_ub a) (m : ℕ) (N : ℕ),\n    ∃ k : ℕ, (k ≥ N)%nat ∧ a k > sequence_ub a pr N - 1 / (INR(m) + 1)."
-    },
-    {
-      "type": "code",
-      "text": "Proof.\nTake a : (ℕ → ℝ). Take pr : (has_ub a). Take m : ℕ. Take N : ℕ.\nWe claim that (∃ i : ℕ, a (N + i)%nat > sequence_ub a pr N - 1 / (INR m + 1)) (H1).\nApply seq_ex_almost_maximizer_m.\nChoose i such that i_good according to H1.\nChoose k := (N+i)%nat.\nThis follows immediately.\nQed."
+      "text": "Take a : A.\nBy sup_is_upp_bd it holds that (is_upper_bound A M) (M_upp_bd).\nIt holds that (a ≤ M) (a_le_M).\nWe claim that (¬(element _ a = M)) (a_is_not_M).\nWe argue by contradiction.\nAssume a_eq_M.\nWe claim that (is_in A M) (M_in_A).\nRewrite using (M=a).\nIt holds that (is_in A a). contradiction. It holds that (a < M).\nQed."
     }
   ]
 }
