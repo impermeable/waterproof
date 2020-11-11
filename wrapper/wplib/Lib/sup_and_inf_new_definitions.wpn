@@ -83,7 +83,7 @@
     },
     {
       "type": "code",
-      "text": "Definition is_bdd_below (A : subsets_R) :=\n  ∃ m : ℝ, is_lower_bound A m."
+      "text": "Definition is_bounded_below (A : subsets_R) :=\n  ∃ m : ℝ, is_lower_bound A m."
     },
     {
       "type": "text",
@@ -135,47 +135,47 @@
     },
     {
       "type": "code",
-      "text": "Lemma low_bd_set_opp_to_upp_bd_set :\n  ∀ (A : ℝ → Prop) (m : ℝ),\n    is_lower_bound (set_opp A) m ⇒ \n      is_upper_bound A (-m)."
+      "text": "Lemma low_bd_set_opp_to_upp_bd_set :\n  ∀ (A : subsets_R) (m : ℝ),\n    is_lower_bound (set_opp A) m ⇒ \n      is_upper_bound A (-m)."
     },
     {
       "type": "code",
-      "text": "Proof.\nTake A : (ℝ → Prop). Take m : ℝ.\nAssume m_low_bd : (is_lower_bound (set_opp A) m).\nWe need to show that\n  (∀ a : ℝ, a ∈ A ⇒ a ≤ -m).\nTake a : ℝ. Assume a_in_A : (a ∈ A).\nWrite m_low_bd as\n  (∀ a : ℝ, (-a) ∈ A ⇒ m ≤ a).\nWe claim that (--a ∈ A) (minmin_a_in_A).\n  Write goal using (--a = a) as\n    (a ∈ A).\n  It holds that (a ∈ A).\nBy m_low_bd it holds that (m ≤ -a) (m_le_min_a).\nIt holds that (a ≤ -m).\nQed."
+      "text": "Proof.\nTake A : (subsets_R). Take m : ℝ.\nAssume m_low_bd : (is_lower_bound (set_opp A) m).\nWe need to show that\n  (∀ a : A, a ≤ -m).\nTake a : A.\nWrite m_low_bd as\n  (∀ b : (set_opp A), m ≤ b).\nWe claim that (is_in A (--a)) (minmin_a_in_A).\n  Write goal using (--a = a) as\n    (is_in A a).\n  It holds that (is_in A a).\nIt holds that (is_in (set_opp A) (-a)) (min_a_in_set_opp_A).\n(*By m_low_bd it holds that (m ≤ -a) (m_le_min_a).*)\nDefine c := (mk_element_R _ (-a) min_a_in_set_opp_A).\nWe claim that (m ≤ c) (m_le_c).\nApply m_low_bd.\nIt holds that (m ≤ -a) (m_le_min_a).\nIt holds that (a ≤ -m).\nQed."
     },
     {
       "type": "code",
-      "text": "Lemma upp_bd_set_opp_to_low_bd_set :\n  ∀ (A : ℝ → Prop) (M : ℝ),\n    is_upper_bound (set_opp A) M ⇒\n      is_lower_bound A (-M)."
+      "text": "Lemma upp_bd_set_opp_to_low_bd_set :\n  ∀ (A : subsets_R) (M : ℝ),\n    is_upper_bound (set_opp A) M ⇒\n      is_lower_bound A (-M)."
     },
     {
       "type": "code",
-      "text": "Proof.\nTake A : (ℝ → Prop). Take M : ℝ.\nAssume M_upp_bd : (is_upper_bound (set_opp A) M).\nWe need to show that\n  (∀ a : ℝ, a ∈ A ⇒ -M ≤ a).\nTake a : ℝ. Assume a_in_A : (a ∈ A).\nWe claim that (--a ∈ A) (minmin_a_in_A).\n  Write goal using (--a = a) as\n    (a ∈ A).\n  It holds that (a ∈ A).\nBy M_upp_bd it holds that (-a ≤ M) (mina_le_M).\nIt holds that (-M ≤ a).\nQed."
+      "text": "Proof.\nTake A : (subsets_R). Take M : ℝ.\nAssume M_upp_bd : (is_upper_bound (set_opp A) M).\nWe need to show that\n  (∀ a : A, -M ≤ a).\nTake a : A.\nWe claim that (is_in A (--a)) (minmin_a_in_A).\n  Write goal using (--a = a) as\n    (is_in A a).\n  It holds that (is_in A a).\nIt holds that (is_in (set_opp A) (-a)) (min_a_in_set_opp_A).\nDefine c := (mk_element_R _ (-a) (min_a_in_set_opp_A)).\nBy M_upp_bd it holds that (c ≤ M) (mina_le_M).\nIt holds that (-a ≤ M) (min_a_le_M).\nIt holds that (-M ≤ a).\nQed."
     },
     {
       "type": "code",
-      "text": "Lemma bdd_below_to_bdd_above_set_opp :\n  ∀ (A : ℝ → Prop),\n    is_bdd_below A ⇒ is_bdd_above (set_opp A)."
+      "text": "Lemma bdd_below_to_bdd_above_set_opp :\n  ∀ (A : subsets_R),\n    is_bounded_below A ⇒ is_bounded_above (set_opp A)."
     },
     {
       "type": "code",
-      "text": "Proof.\nTake A : (ℝ → Prop). Assume A_bdd_below : (is_bdd_below A).\nWe need to show that\n  (∃ M : ℝ, is_upper_bound (set_opp A) M).\nWrite A_bdd_below as\n  (∃ m : ℝ, is_lower_bound A m).\nChoose m such that m_low_bd according to A_bdd_below.\nChoose M := (-m).\nWe need to show that (is_upper_bound (set_opp A) (-m)).\nBy low_bd_set_to_upp_bd_set_opp it holds that\n  (is_upper_bound (set_opp A) (-m)) (H_con).\nIt holds that (is_upper_bound (set_opp A) (-m)).\nQed."
+      "text": "Proof.\nTake A : (subsets_R). Assume A_bdd_below : (is_bounded_below A).\nWe need to show that\n  (∃ M : ℝ, is_upper_bound (set_opp A) M).\nWrite A_bdd_below as\n  (∃ m : ℝ, is_lower_bound A m).\nChoose m such that m_low_bd according to A_bdd_below.\nChoose M := (-m).\nWe need to show that (is_upper_bound (set_opp A) (-m)).\nBy low_bd_set_to_upp_bd_set_opp it holds that\n  (is_upper_bound (set_opp A) (-m)) (H_con).\nIt holds that (is_upper_bound (set_opp A) (-m)).\nQed."
     },
     {
       "type": "code",
-      "text": "Lemma sup_set_opp_is_inf_set :\n  ∀ (A : ℝ → Prop) (M : ℝ),\n    is_sup (set_opp A) M ⇒ is_inf A (-M)."
+      "text": "Lemma sup_set_opp_is_inf_set :\n  ∀ (A : subsets_R) (M : ℝ),\n    is_sup (set_opp A) M ⇒ is_inf A (-M)."
     },
     {
       "type": "code",
-      "text": "Proof.\nTake A : (ℝ → Prop). Take M : ℝ.\nAssume M_is_sup : (is_sup (set_opp A) M).\nExpand the definition of is_inf.\nWe need to show that\n  (is_lower_bound A (-M) ∧\n   ∀ l : ℝ, is_lower_bound A l ⇒ \n     l ≤ -M).\nsplit.\nBy upp_bd_set_opp_to_low_bd_set it holds that\n  (is_lower_bound A (-M)) (H1).\nIt holds that (is_lower_bound A (-M)).\nWe need to show that\n  (∀ l : ℝ, is_lower_bound A l ⇒\n    l ≤ -M).\nTake l : ℝ. \nAssume l_low_bd : (is_lower_bound A l).\nExpand the definition of is_sup in M_is_sup.\nBy M_is_sup it holds that\n  (∀ b : ℝ, is_upper_bound (set_opp A) b ⇒ M ≤ b) (H1).\nBy low_bd_set_to_upp_bd_set_opp \n  it holds that\n  (is_upper_bound (set_opp A) (-l)) (H2).\nBy H1 it holds that (M ≤ -l) (H3).\nIt holds that (l ≤ -M).\nQed."
+      "text": "Proof.\nTake A : (subsets_R). Take M : ℝ.\nAssume M_is_sup : (is_sup (set_opp A) M).\nExpand the definition of is_inf.\nWe need to show that\n  (is_lower_bound A (-M) ∧\n   ∀ l : ℝ, is_lower_bound A l ⇒ \n     l ≤ -M).\nsplit.\nBy upp_bd_set_opp_to_low_bd_set it holds that\n  (is_lower_bound A (-M)) (H1).\nIt holds that (is_lower_bound A (-M)).\nWe need to show that\n  (∀ l : ℝ, is_lower_bound A l ⇒\n    l ≤ -M).\nTake l : ℝ. \nAssume l_low_bd : (is_lower_bound A l).\nExpand the definition of is_sup in M_is_sup.\nBy M_is_sup it holds that\n  (∀ b : ℝ, is_upper_bound (set_opp A) b ⇒ M ≤ b) (H1).\nBy low_bd_set_to_upp_bd_set_opp \n  it holds that\n  (is_upper_bound (set_opp A) (-l)) (H2).\nBy H1 it holds that (M ≤ -l) (H3).\nIt holds that (l ≤ -M).\nQed."
     },
     {
       "type": "code",
-      "text": "Lemma exists_inf :\n  ∀ A : (ℝ →  Prop), is_bdd_below A ⇒\n    ((∃ x : ℝ, x ∈ A) ⇒ { m : ℝ | is_inf A m })."
+      "text": "Lemma exists_inf :\n  ∀ (A : (subsets_R)) (x : A), is_bounded_below A ⇒\n    mk_subset_R (fun m : ℝ => is_inf A m)."
     },
     {
       "type": "code",
-      "text": "Proof.\nTake A : (ℝ → Prop). Assume A_bdd_below : (is_bdd_below A).\nAssume ex_x : (∃ x : ℝ, x ∈ A)."
+      "text": "Proof.\nTake A : (subsets_R).\nTake z : A.\nAssume A_bdd_below : (is_bounded_below A).\n(*Assume ex_x : (∃ x : ℝ, x ∈ A).*)"
     },
     {
       "type": "code",
-      "text": "Define B := (set_opp A).\nBy bdd_below_to_bdd_above_set_opp \n  it holds that (is_bdd_above B) (B_bdd_above).\nWe claim that (∃ y : ℝ, y ∈ B) (ex_y_in_B).\n  Choose x such that x_in_A according to ex_x.\n  Choose y:= (-x).\n  We need to show that ((-(-x)) ∈ A).\n  Write goal using (--x = x) as\n    (x ∈ A).\n  It holds that (x ∈ A).\nBy completeness it holds that\n  ({L | is_sup B L}) (exists_sup).\nChoose L such that L_is_sup according to exists_sup.\nChoose m := (-L).\nBy sup_set_opp_is_inf_set \n  it holds that (is_inf A (-L)) (minL_is_inf_A).\nIt holds that (is_inf A m).\nQed."
+      "text": "Define B := (set_opp A).\nBy bdd_below_to_bdd_above_set_opp \n  it holds that (is_bounded_above B) (B_bdd_above).\nWe claim that (is_in A (--z)) (min_min_z_in_A).\n  Write goal using (--z = z) as (is_in A z).\n  It holds that (is_in A z).\nIt holds that (is_in (set_opp A) (-z)) (min_z_in_B).\nDefine c := (mk_element_R _ (-z) (min_z_in_B)).\n(*We claim that (∃ y : ℝ, y ∈ B) (ex_y_in_B).\n  Choose x such that x_in_A according to ex_x.\n  Choose y:= (-x).\n  We need to show that ((-(-x)) ∈ A).\n  Write goal using (--x = x) as\n    (x ∈ A).\n  It holds that (x ∈ A).*)\nDefine L := (R_complete B c B_bdd_above).\n\n(*We claim that\n  ({L | is_sup B L}) (exists_sup).\n\nChoose L such that L_is_sup according to exists_sup.*)\nChoose m := (-L).\nWe claim that (is_sup B L) (L_is_sup_B).\n  destruct L.\n  apply witness.\nBy sup_set_opp_is_inf_set \n  it holds that (is_inf A (-L)) (minL_is_inf_A).\nIt holds that (is_inf A m).\nQed."
     },
     {
       "type": "text",
