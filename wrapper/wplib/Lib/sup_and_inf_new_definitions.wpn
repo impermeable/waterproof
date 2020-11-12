@@ -364,6 +364,14 @@
     {
       "type": "code",
       "text": "Proof.\nTake A : subsets_R. Take m : ℝ. Take b: ℝ.\nAssume m_low_bd : (is_lower_bound A m).\nAssume b_in_A : (is_in A b).\nDefine c := (mk_element_R (is_in A) b b_in_A).\nExpand the definition of is_lower_bound in m_low_bd.\nBy m_low_bd it holds that (m ≤ c) (m_le_c).\nIt holds that (m ≤ b).\nQed.\n\nHint Resolve bounded_by_upper_bound_propform : additional.\nHint Resolve bounded_by_lower_bound_propform : additional."
+    },
+    {
+      "type": "text",
+      "text": "### **Hints**"
+    },
+    {
+      "type": "code",
+      "text": "Hint Extern 1 => (unfold is_sup) : unfolds.\nHint Extern 1 => (unfold is_inf) : unfolds."
     }
   ]
 }

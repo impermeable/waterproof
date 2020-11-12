@@ -179,6 +179,14 @@
     },
     {
       "type": "text",
+      "text": "Another version is the following, requiring the user to explicitly mention the two cases:"
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"We\" \"show\" \"both\" constr(s) \"and\" constr(t) :=\n  try auto with nocore unfolds;\n  match goal with\n  | [|- s ∧ t] => split\n  | [|- t ∧ s] => split\n  | [|- ?x ∧ t] => fail \"You need to show \" x \" instead of\" s\n  | [|- t ∧ ?x] => fail \"You need to show \" x \" instead of\" s\n  | [|- s ∧ ?x] => fail \"You need to show \" x \" instead of\" t\n  | [|- ?x ∧ s] => fail \"You need to show \" x \" instead of\" t\n  end."
+    },
+    {
+      "type": "text",
       "text": "## **Checking the context**\n\nThe following tactics let the user record in the proof script various aspects of the current context.\nIn particular, users can state or manipulate the exact goal, and rename or add existing hypotheses.\\\n**TODO**\n- More precisely specify how much rephrasing is possible.\n- Add more feedback for when a tactic fails."
     },
     {
@@ -756,6 +764,22 @@
     {
       "type": "code",
       "text": "Tactic Notation \"This\" \"equality\" \"is\" \"trivial\" := \n   trivial_set_equality."
+    },
+    {
+      "type": "text",
+      "text": "### Tactics for new set definitions"
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"lift_element\" constr(A) ident(x) :=\n  let u := fresh in\n    assert (u : A) by wp_power;\n  rewrite u in x;\n  clear u."
+    },
+    {
+      "type": "text",
+      "text": "\n"
+    },
+    {
+      "type": "text",
+      "text": ""
     },
     {
       "type": "text",

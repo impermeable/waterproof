@@ -112,6 +112,10 @@
     {
       "type": "code",
       "text": "Hint Extern 1 => (rewrite ln_exp) : eq_general eq_exp. (* ln (exp a)) = a *)\nHint Extern 1 => (rewrite exp_Ropp) : eq_general eq_exp. (* exp (-a) = / exp a*)\nHint Extern 1 => (rewrite exp_plus) : eq_general eq_exp. (* exp(a+b) = exp(a) * exp(b) *)\nHint Extern 1 => (rewrite ln_exp) : eq_general eq_exp. (* ln (exp a)) = a *)"
+    },
+    {
+      "type": "code",
+      "text": ""
     }
   ]
 }

@@ -104,6 +104,14 @@
     {
       "type": "code",
       "text": "Definition is_in {D : Set} := fun (A : (D → Prop)) ↦ (fun (x : D) ↦ A x).\nNotation \"x ∈ A\" := (@is_in _ A x) (at level 50) : analysis_scope."
+    },
+    {
+      "type": "code",
+      "text": "Notation \"b 'seen' 'as' 'element' 'of' A 'by' u\" := \n  (mk_element_R (is_in A) b u) (at level 50).\n"
+    },
+    {
+      "type": "code",
+      "text": "\n(* We might want a notation like the following to clean \n   up the environment after using previous notation:\nNotation \"'element' 'of' 'ℝ' 'that' 'is' 'in' A\" := \n  (elements_R_satisfying (is_in A)) (at level 50).\n  (*only to clean up environment*)\n*)  "
     }
   ]
 }
