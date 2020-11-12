@@ -579,103 +579,103 @@
     },
     {
       "type": "code",
-      "text": "Tactic Notation \"Rewrite\" constr(t) := string_of_ineqs t."
+      "text": "Tactic Notation \"Rewrite\" constr(t) \n  := string_of_ineqs t."
     },
     {
       "type": "code",
-      "text": "Tactic Notation \"Rewrite\" constr(t1) constr(t2) := string_of_ineqs t1; string_of_ineqs t2."
+      "text": "Tactic Notation \"Rewrite\" constr(t1) constr(t2)\n  := string_of_ineqs t1; string_of_ineqs t2."
     },
     {
       "type": "code",
-      "text": "Tactic Notation \"Rewrite\" constr(t1) constr(t2) constr(t3) := string_of_ineqs t1; string_of_ineqs t2; string_of_ineqs t3."
+      "text": "Tactic Notation \"Rewrite\" constr(t1) constr(t2) constr(t3) \n  := string_of_ineqs t1; string_of_ineqs t2; string_of_ineqs t3."
     },
     {
       "type": "code",
-      "text": "Tactic Notation \"Rewrite\" constr(t1) \"<\" constr(t2) := string_of_ineqs (t1 < t2)."
+      "text": "Tactic Notation \"Rewrite\" constr(t1) \"<\" constr(t2)\n  := string_of_ineqs (t1 < t2)."
     },
     {
       "type": "code",
-      "text": "Tactic Notation \"Rewrite\" constr(t1) \">\" constr(t2) := string_of_ineqs (t1 > t2)."
+      "text": "Tactic Notation \"Rewrite\" constr(t1) \">\" constr(t2)\n  := string_of_ineqs (t1 > t2)."
     },
     {
       "type": "code",
-      "text": "Tactic Notation \"Rewrite\" constr(t1) \"≤\" constr(t2) := string_of_ineqs (t1 <= t2)."
+      "text": "Tactic Notation \"Rewrite\" constr(t1) \"≤\" constr(t2)\n  := string_of_ineqs (t1 <= t2)."
     },
     {
       "type": "code",
-      "text": "Tactic Notation \"Rewrite\" constr(t1) \"≥\" constr(t2) := string_of_ineqs (t1 >= t2)."
+      "text": "Tactic Notation \"Rewrite\" constr(t1) \"≥\" constr(t2)\n  := string_of_ineqs (t1 >= t2)."
     },
     {
       "type": "code",
-      "text": "Tactic Notation \"Rewrite\" constr(t1) \"=\" constr(t2) := string_of_ineqs (t1 = t2)."
+      "text": "Tactic Notation \"Rewrite\" constr(t1) \"=\" constr(t2)\n  := string_of_ineqs (t1 = t2)."
     },
     {
       "type": "code",
-      "text": "Tactic Notation \"Rewrite\" constr(t1) \"<\" constr(t2) \"<\" constr(t3) := string_of_ineqs (t1 < t2); string_of_ineqs (t2 < t3)."
+      "text": "Tactic Notation \"Rewrite\" constr(t1) \"<\" constr(t2) \"<\" constr(t3)\n  := string_of_ineqs (t1 < t2); string_of_ineqs (t2 < t3)."
     },
     {
       "type": "code",
-      "text": "Tactic Notation \"Rewrite\" constr(t1) \"<\" constr(t2) \"≤\" constr(t3) := string_of_ineqs (t1 < t2); string_of_ineqs (t2 <= t3)."
+      "text": "Tactic Notation \"Rewrite\" constr(t1) \"<\" constr(t2) \"≤\" constr(t3)\n  := string_of_ineqs (t1 < t2); string_of_ineqs (t2 <= t3)."
     },
     {
       "type": "code",
-      "text": "Tactic Notation \"Rewrite\" constr(t1) \"<\" constr(t2) \"=\" constr(t3) := string_of_ineqs (t1 < t2); string_of_ineqs (t2 = t3)."
+      "text": "Tactic Notation \"Rewrite\" constr(t1) \"<\" constr(t2) \"=\" constr(t3)\n  := string_of_ineqs (t1 < t2); string_of_ineqs (t2 = t3)."
     },
     {
       "type": "code",
-      "text": "Tactic Notation \"Rewrite\" constr(t1) \">\" constr(t2) \">\" constr(t3) := string_of_ineqs (t1 > t2); string_of_ineqs (t2 > t3)."
+      "text": "Tactic Notation \"Rewrite\" constr(t1) \">\" constr(t2) \">\" constr(t3)\n  := string_of_ineqs (t1 > t2); string_of_ineqs (t2 > t3)."
     },
     {
       "type": "code",
-      "text": "Tactic Notation \"Rewrite\" constr(t1) \">\" constr(t2) \"≥\" constr(t3) := string_of_ineqs (t1 > t2); string_of_ineqs (t2 >= t3)."
+      "text": "Tactic Notation \"Rewrite\" constr(t1) \">\" constr(t2) \"≥\" constr(t3)\n  := string_of_ineqs (t1 > t2); string_of_ineqs (t2 >= t3)."
     },
     {
       "type": "code",
-      "text": "Tactic Notation \"Rewrite\" constr(t1) \">\" constr(t2) \"=\" constr(t3) := string_of_ineqs (t1 > t2); string_of_ineqs (t2 = t3)."
+      "text": "Tactic Notation \"Rewrite\" constr(t1) \">\" constr(t2) \"=\" constr(t3)\n  := string_of_ineqs (t1 > t2); string_of_ineqs (t2 = t3)."
     },
     {
       "type": "code",
-      "text": "Tactic Notation \"Rewrite\" constr(t1) \"≤\" constr(t2) \"<\" constr(t3) := string_of_ineqs (t1 <= t2); string_of_ineqs (t2 < t3)."
+      "text": "Tactic Notation \"Rewrite\" constr(t1) \"≤\" constr(t2) \"<\" constr(t3)\n  := string_of_ineqs (t1 <= t2); string_of_ineqs (t2 < t3)."
     },
     {
       "type": "code",
-      "text": "Tactic Notation \"Rewrite\" constr(t1) \"≤\" constr(t2) \"≤\" constr(t3) := string_of_ineqs (t1 <= t2); string_of_ineqs (t2 <= t3)."
+      "text": "Tactic Notation \"Rewrite\" constr(t1) \"≤\" constr(t2) \"≤\" constr(t3)\n  := string_of_ineqs (t1 <= t2); string_of_ineqs (t2 <= t3)."
     },
     {
       "type": "code",
-      "text": "Tactic Notation \"Rewrite\" constr(t1) \"≤\" constr(t2) \"=\" constr(t3) := string_of_ineqs (t1 <= t2); string_of_ineqs (t2 = t3)."
+      "text": "Tactic Notation \"Rewrite\" constr(t1) \"≤\" constr(t2) \"=\" constr(t3)\n  := string_of_ineqs (t1 <= t2); string_of_ineqs (t2 = t3)."
     },
     {
       "type": "code",
-      "text": "Tactic Notation \"Rewrite\" constr(t1) \"≥\" constr(t2) \">\" constr(t3) := string_of_ineqs (t1 >= t2); string_of_ineqs (t2 > t3)."
+      "text": "Tactic Notation \"Rewrite\" constr(t1) \"≥\" constr(t2) \">\" constr(t3)\n  := string_of_ineqs (t1 >= t2); string_of_ineqs (t2 > t3)."
     },
     {
       "type": "code",
-      "text": "Tactic Notation \"Rewrite\" constr(t1) \"≥\" constr(t2) \"≥\" constr(t3) := string_of_ineqs (t1 >= t2); string_of_ineqs (t2 >= t3)."
+      "text": "Tactic Notation \"Rewrite\" constr(t1) \"≥\" constr(t2) \"≥\" constr(t3)\n  := string_of_ineqs (t1 >= t2); string_of_ineqs (t2 >= t3)."
     },
     {
       "type": "code",
-      "text": "Tactic Notation \"Rewrite\" constr(t1) \"≥\" constr(t2) \"=\" constr(t3) := string_of_ineqs (t1 >= t2); string_of_ineqs (t2 = t3)."
+      "text": "Tactic Notation \"Rewrite\" constr(t1) \"≥\" constr(t2) \"=\" constr(t3)\n  := string_of_ineqs (t1 >= t2); string_of_ineqs (t2 = t3)."
     },
     {
       "type": "code",
-      "text": "Tactic Notation \"Rewrite\" constr(t1) \"=\" constr(t2) \"<\" constr(t3) := string_of_ineqs (t1 = t2); string_of_ineqs (t2 < t3)."
+      "text": "Tactic Notation \"Rewrite\" constr(t1) \"=\" constr(t2) \"<\" constr(t3)\n  := string_of_ineqs (t1 = t2); string_of_ineqs (t2 < t3)."
     },
     {
       "type": "code",
-      "text": "Tactic Notation \"Rewrite\" constr(t1) \"=\" constr(t2) \">\" constr(t3) := string_of_ineqs (t1 = t2); string_of_ineqs (t2 > t3)."
+      "text": "Tactic Notation \"Rewrite\" constr(t1) \"=\" constr(t2) \">\" constr(t3)\n  := string_of_ineqs (t1 = t2); string_of_ineqs (t2 > t3)."
     },
     {
       "type": "code",
-      "text": "Tactic Notation \"Rewrite\" constr(t1) \"=\" constr(t2) \"≤\" constr(t3) := string_of_ineqs (t1 = t2); string_of_ineqs (t2 <= t3)."
+      "text": "Tactic Notation \"Rewrite\" constr(t1) \"=\" constr(t2) \"≤\" constr(t3)\n  := string_of_ineqs (t1 = t2); string_of_ineqs (t2 <= t3)."
     },
     {
       "type": "code",
-      "text": "Tactic Notation \"Rewrite\" constr(t1) \"=\" constr(t2) \"≥\" constr(t3) := string_of_ineqs (t1 = t2); string_of_ineqs (t2 >= t3)."
+      "text": "Tactic Notation \"Rewrite\" constr(t1) \"=\" constr(t2) \"≥\" constr(t3)\n  := string_of_ineqs (t1 = t2); string_of_ineqs (t2 >= t3)."
     },
     {
       "type": "code",
-      "text": "Tactic Notation \"Rewrite\" constr(t1) \"=\" constr(t2) \"=\" constr(t3) := string_of_ineqs (t1 = t2); string_of_ineqs (t2 = t3)."
+      "text": "Tactic Notation \"Rewrite\" constr(t1) \"=\" constr(t2) \"=\" constr(t3)\n  := string_of_ineqs (t1 = t2); string_of_ineqs (t2 = t3)."
     },
     {
       "type": "text",
