@@ -43,15 +43,7 @@
     },
     {
       "type": "code",
-      "text": ""
-    },
-    {
-      "type": "code",
-      "text": ""
-    },
-    {
-      "type": "code",
-      "text": "\nLtac assume_strict s t :=\n  match goal with\n    | [ |- ?u -> _ ] => (change u with t; intro s)\n  end.\n"
+      "text": "Ltac assume_strict s t :=\n  match goal with\n    | [ |- ?u -> _ ] => (change u with t; intro s)\n  end."
     },
     {
       "type": "text",
@@ -71,19 +63,19 @@
     },
     {
       "type": "code",
-      "text": "Tactic Notation \"Take\" ident(s1) \",\" ident(s2) \":\" constr(t):=\n  intro_strict s1 t; intro_strict s2 t.\n"
+      "text": "Tactic Notation \"Take\" ident(s1) \",\" ident(s2) \":\" constr(t):=\n  intro_strict s1 t; intro_strict s2 t."
     },
     {
       "type": "code",
-      "text": "\nTactic Notation \"Take\" ident(s1) \"and\" ident(s2) \":\" constr(t):=\n  intro_strict s1 t; intro_strict s2 t."
+      "text": "Tactic Notation \"Take\" ident(s1) \"and\" ident(s2) \":\" constr(t):=\n  intro_strict s1 t; intro_strict s2 t."
     },
     {
       "type": "code",
-      "text": "Tactic Notation \"Take\" ident(s1) \":\" constr(t1) \",\" ident(s2) \":\" constr(t2):=\n  intro_strict s1 t1; intro_strict s2 t2.\n"
+      "text": "Tactic Notation \"Take\" ident(s1) \":\" constr(t1) \",\" ident(s2) \":\" constr(t2):=\n  intro_strict s1 t1; intro_strict s2 t2."
     },
     {
       "type": "code",
-      "text": "\nTactic Notation \"Take\" ident(s1) \":\" constr(t1) \"and\" ident(s2) \":\" constr(t2):=\n  intro_strict s1 t1; intro_strict s2 t2."
+      "text": "Tactic Notation \"Take\" ident(s1) \":\" constr(t1) \"and\" ident(s2) \":\" constr(t2):=\n  intro_strict s1 t1; intro_strict s2 t2."
     },
     {
       "type": "text",
@@ -91,7 +83,35 @@
     },
     {
       "type": "code",
-      "text": "Tactic Notation \"Take\" ident(s1) \",\" ident(s2) \",\" ident(s3) \":\" constr(t) :=\n  intro_strict s1 t; intro_strict s2 t; intro_strict s3 t.\n\nTactic Notation \"Take\" ident(s1) \",\" ident(s2) \"and\" ident(s3) \":\" constr(t) :=\n  intro_strict s1 t; intro_strict s2 t; intro_strict s3 t.\n  \nTactic Notation \"Take\" ident(s1) \",\" ident(s2) \":\" constr(t1) \",\" ident(s3) \":\" constr(t2) :=\n  intro_strict s1 t1; intro_strict s2 t1; intro_strict s3 t2.\nTactic Notation \"Take\" ident(s1) \",\" ident(s2) \":\" constr(t1) \"and\" ident(s3) \":\" constr(t2) :=\n  intro_strict s1 t1; intro_strict s2 t1; intro_strict s3 t2.\n  \nTactic Notation \"Take\" ident(s1) \":\" constr(t1) \",\" ident(s2) \",\" ident(s3) \":\" constr(t2) :=\n  intro_strict s1 t1; intro_strict s2 t2; intro_strict s3 t2.\nTactic Notation \"Take\" ident(s1) \":\" constr(t1) \"and\" ident(s2) \",\" ident(s3) \":\" constr(t2) :=\n  intro_strict s1 t1; intro_strict s2 t2; intro_strict s3 t2.\n  \nTactic Notation \"Take\" ident(s1) \":\" constr(t1) \",\" ident(s2) \":\" constr(t2) \",\" ident(s3) \":\" constr(t3) :=\n  intro_strict s1 t1; intro_strict s2 t2; intro_strict s3 t3.\nTactic Notation \"Take\" ident(s1) \":\" constr(t1) \",\" ident(s2) \":\" constr(t2) \"and\" ident(s3) \":\" constr(t3) :=\n  intro_strict s1 t1; intro_strict s2 t2; intro_strict s3 t3."
+      "text": "Tactic Notation \"Take\" ident(s1) \",\" ident(s2) \",\" ident(s3) \":\" constr(t) :=\n  intro_strict s1 t; intro_strict s2 t; intro_strict s3 t."
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"Take\" ident(s1) \",\" ident(s2) \"and\" ident(s3) \":\" constr(t) :=\n  intro_strict s1 t; intro_strict s2 t; intro_strict s3 t."
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"Take\" ident(s1) \",\" ident(s2) \":\" constr(t1) \",\" ident(s3) \":\" constr(t2) :=\n  intro_strict s1 t1; intro_strict s2 t1; intro_strict s3 t2."
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"Take\" ident(s1) \",\" ident(s2) \":\" constr(t1) \"and\" ident(s3) \":\" constr(t2) :=\n  intro_strict s1 t1; intro_strict s2 t1; intro_strict s3 t2."
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"Take\" ident(s1) \":\" constr(t1) \",\" ident(s2) \",\" ident(s3) \":\" constr(t2) :=\n  intro_strict s1 t1; intro_strict s2 t2; intro_strict s3 t2."
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"Take\" ident(s1) \":\" constr(t1) \"and\" ident(s2) \",\" ident(s3) \":\" constr(t2) :=\n  intro_strict s1 t1; intro_strict s2 t2; intro_strict s3 t2."
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"Take\" ident(s1) \":\" constr(t1) \",\" ident(s2) \":\" constr(t2) \",\" ident(s3) \":\" constr(t3) :=\n  intro_strict s1 t1; intro_strict s2 t2; intro_strict s3 t3."
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"Take\" ident(s1) \":\" constr(t1) \",\" ident(s2) \":\" constr(t2) \"and\" ident(s3) \":\" constr(t3) :=\n  intro_strict s1 t1; intro_strict s2 t2; intro_strict s3 t3."
     },
     {
       "type": "text",
@@ -107,7 +127,19 @@
     },
     {
       "type": "code",
-      "text": "Tactic Notation \"Assume\" ident(s) :=\n  intro s.\n \nTactic Notation \"Assume\" ident(s1) \"and\" ident(s2) :=\n  match goal with\n  | [ |- _ -> _ -> _ ] => intros s1 s2\n  | [ |- _ /\\ _ -> _ ] => intro s1; destruct s1 as [s1 s2]\n  end.\n\nTactic Notation \"Assume\" ident(s) \":\" constr(t) :=\n  assume_strict s t.\n\nTactic Notation \"Assume\" ident(s1) \":\" constr(t1) \"and\" ident(s2) \":\" constr(t2) :=\n  match goal with\n  | [ |- _ -> _ -> _ ] => assume_strict s1 t1; assume_strict s2 t2\n  | [ |- _ /\\ _ -> _ ] => idtac \"Not yet supported\"\n  end."
+      "text": "Tactic Notation \"Assume\" ident(s) :=\n  intro s."
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"Assume\" ident(s1) \"and\" ident(s2) :=\n  match goal with\n  | [ |- _ -> _ -> _ ] => intros s1 s2\n  | [ |- _ /\\ _ -> _ ] => intro s1; destruct s1 as [s1 s2]\n  end."
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"Assume\" ident(s) \":\" constr(t) :=\n  assume_strict s t."
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"Assume\" ident(s1) \":\" constr(t1) \"and\" ident(s2) \":\" constr(t2) :=\n  match goal with\n  | [ |- _ -> _ -> _ ] => assume_strict s1 t1; assume_strict s2 t2\n  | [ |- _ /\\ _ -> _ ] => idtac \"Not yet supported\"\n  end."
     },
     {
       "type": "text",
@@ -123,7 +155,27 @@
     },
     {
       "type": "code",
-      "text": "Ltac iff :=\n  match goal with\n  | [|- _ <-> _ ] => split\n  | _ => fail \"This is not an if and only if, so try another tactic.\"\n  end.\nLtac and :=\n  match goal with\n  | [|- _ /\\ _ ] => split\n  | [|- _ <-> _ ] => split\n  | _ => fail \"You can not split this into two different goals.\"\n  end.\n  \nTactic Notation \"We\" \"show\" \"both\" \"directions\" := iff.\nTactic Notation \"We\" \"prove\" \"both\" \"directions\" := iff.\nTactic Notation \"We\" \"show\" \"both\" \"statements\" := and.\nTactic Notation \"We\" \"prove\" \"both\" \"statements\" := and."
+      "text": "Ltac iff :=\n  match goal with\n  | [|- _ <-> _ ] => split\n  | _ => fail \"This is not an if and only if, so try another tactic.\"\n  end."
+    },
+    {
+      "type": "code",
+      "text": "Ltac and :=\n  match goal with\n  | [|- _ /\\ _ ] => split\n  | [|- _ <-> _ ] => split\n  | _ => fail \"You can not split this into two different goals.\"\n  end."
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"We\" \"show\" \"both\" \"directions\" := iff."
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"We\" \"prove\" \"both\" \"directions\" := iff."
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"We\" \"show\" \"both\" \"statements\" := and."
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"We\" \"prove\" \"both\" \"statements\" := and."
     },
     {
       "type": "text",
@@ -135,7 +187,15 @@
     },
     {
       "type": "code",
-      "text": "Ltac goal_check t :=\n  tryif (change t) \n    then (idtac \"We indeed need to show that\" t)\n    else fail \"This is not the current goal\".\n\nTactic Notation \"We\" \"need\" \"to\" \"show\" \"that\" constr(t) :=\n  goal_check t.\n\nTactic Notation \"To\" \"show\" \":\" constr(t) :=\n  goal_check t.\n"
+      "text": "Ltac goal_check t :=\n  tryif (change t) \n    then (idtac \"We indeed need to show that\" t)\n    else fail \"This is not the current goal\"."
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"We\" \"need\" \"to\" \"show\" \"that\" constr(t) :=\n  goal_check t."
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"To\" \"show\" \":\" constr(t) :=\n  goal_check t."
     },
     {
       "type": "text",
@@ -143,7 +203,15 @@
     },
     {
       "type": "code",
-      "text": "Ltac hypo_check s t:=\nmatch goal with \n| [H : t |- _] => rename H into s\n| _ => fail\nend.\n\nTactic Notation \"We\" \"know\" ident(s) \":\" constr(t) :=\n  hypo_check s t.\n\nTactic Notation \"By\" constr(t) \"we\" \"know\" ident(s) :=\n  pose proof t as s."
+      "text": "Ltac hypo_check s t:=\nmatch goal with \n| [H : t |- _] => rename H into s\n| _ => fail\nend."
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"We\" \"know\" ident(s) \":\" constr(t) :=\n  hypo_check s t."
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"By\" constr(t) \"we\" \"know\" ident(s) :=\n  pose proof t as s."
     },
     {
       "type": "text",
@@ -159,7 +227,11 @@
     },
     {
       "type": "code",
-      "text": "Tactic Notation \"Choose\" constr(t):=\n  exists t.\n\nTactic Notation \"Choose\" ident(s) \":=\" constr(t) :=\n  pose (s := t);\n  exists s."
+      "text": "Tactic Notation \"Choose\" constr(t):=\n  exists t."
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"Choose\" ident(s) \":=\" constr(t) :=\n  pose (s := t);\n  exists s."
     },
     {
       "type": "text",
@@ -171,7 +243,15 @@
     },
     {
       "type": "code",
-      "text": "Tactic Notation \"Choose\" ident(s) \n                \"such\" \"that\" ident(u)\n                \"according\" \"to\" constr(v) (*\":\" constr(t)*):=\n  destruct v as [s u].\n\n(*Tactic Notation \"Choose\" ident(s)\n                \"such\" \"that\" ident(u)\n                \"according\" \"to\" ident(v)\n                \"with\" constr(t) :=\n  destruct v with t as [s u]. *)\n\nTactic Notation \"Choose\" ident(s)\n                \"such\" \"that\" ident(u)\n                \"according\" \"to\" constr(v)\n                \"with\" constr(t) :=\n  destruct v with t as [s u]."
+      "text": "Tactic Notation \"Choose\" ident(s) \n                \"such\" \"that\" ident(u)\n                \"according\" \"to\" constr(v) (*\":\" constr(t)*):=\n  destruct v as [s u].\n\n(*"
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"Choose\" ident(s)\n                \"such\" \"that\" ident(u)\n                \"according\" \"to\" ident(v)\n                \"with\" constr(t) :=\n  destruct v with t as [s u]. *)"
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"Choose\" ident(s)\n                \"such\" \"that\" ident(u)\n                \"according\" \"to\" constr(v)\n                \"with\" constr(t) :=\n  destruct v with t as [s u]."
     },
     {
       "type": "text",
@@ -183,7 +263,15 @@
     },
     {
       "type": "code",
-      "text": "Tactic Notation \"Because\" ident(s) \n  \"both\" ident(u) \"and\" ident(v) :=\n  destruct s as [u v].\n\nTactic Notation \"Because\" ident(s) \n  \"both\" ident(u) \":\" constr(t_u)\n  \"and\"  ident(v) \":\" constr(t_v):=\n  destruct s as [u v].\n\nTactic Notation \"Because\" ident(s)\n  \"either\" ident(u) \"or\" ident(v) :=\n  destruct s as [u | v]."
+      "text": "Tactic Notation \"Because\" ident(s) \n  \"both\" ident(u) \"and\" ident(v) :=\n  destruct s as [u v]."
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"Because\" ident(s) \n  \"both\" ident(u) \":\" constr(t_u)\n  \"and\"  ident(v) \":\" constr(t_v):=\n  destruct s as [u v]."
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"Because\" ident(s)\n  \"either\" ident(u) \"or\" ident(v) :=\n  destruct s as [u | v]."
     },
     {
       "type": "text",
@@ -191,7 +279,7 @@
     },
     {
       "type": "code",
-      "text": "Create HintDb decidability.\nHint Resolve Req_EM_T : decidability.\nHint Resolve Rlt_dec Rle_dec Rgt_dec Rge_dec : decidability.\nHint Resolve Rlt_le_dec Rle_lt_dec Rgt_ge_dec Rge_gt_dec : decidability.\n"
+      "text": "Create HintDb decidability.\nHint Resolve Req_EM_T : decidability.\nHint Resolve Rlt_dec Rle_dec Rgt_dec Rge_dec : decidability.\nHint Resolve Rlt_le_dec Rle_lt_dec Rgt_ge_dec Rge_gt_dec : decidability."
     },
     {
       "type": "text",
@@ -199,7 +287,19 @@
     },
     {
       "type": "code",
-      "text": "Lemma Rlt_ge_dec : forall r1 r2, {r1 < r2} + {r1 >= r2}.\nProof.\n  intros.\n  destruct (total_order_T r1 r2). destruct s. \n    apply (left r).\n    apply (right (Req_ge r1 r2 e)). \n    apply (right (Rle_ge r2 r1 (Rlt_le r2 r1 r))).\nQed.\n\nLemma Rgt_le_dec : forall r1 r2, {r1 > r2} + {r1 <= r2}.\nProof.\n  intros.\n  destruct (total_order_T r1 r2). destruct s. \n    apply (right (Rlt_le r1 r2 r)).\n    apply (right (Req_le r1 r2 e)). \n    apply (left r).\nQed.\n\nHint Resolve Rlt_ge_dec Rgt_le_dec : decidability."
+      "text": "Lemma Rlt_ge_dec : forall r1 r2, {r1 < r2} + {r1 >= r2}."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\n  intros.\n  destruct (total_order_T r1 r2). destruct s. \n    apply (left r).\n    apply (right (Req_ge r1 r2 e)). \n    apply (right (Rle_ge r2 r1 (Rlt_le r2 r1 r))).\nQed."
+    },
+    {
+      "type": "code",
+      "text": "Lemma Rgt_le_dec : forall r1 r2, {r1 > r2} + {r1 <= r2}."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\n  intros.\n  destruct (total_order_T r1 r2). destruct s. \n    apply (right (Rlt_le r1 r2 r)).\n    apply (right (Req_le r1 r2 e)). \n    apply (left r).\nQed.\n\nHint Resolve Rlt_ge_dec Rgt_le_dec : decidability."
     },
     {
       "type": "text",
@@ -207,7 +307,35 @@
     },
     {
       "type": "code",
-      "text": "Lemma Rlt_gt_dec : forall r1 r2, {r1 < r2} + {~ r2 > r1}.\nProof.\n  intros.\n  destruct (total_order_T r1 r2). destruct s.\n    apply (left r).\n    apply (right (Rge_not_gt r2 r1 (Req_ge r1 r2 e))).\n    apply (right (Rgt_asym r1 r2 r)).\nQed.\n\nLemma Rgt_lt_dec : forall r1 r2, {r1 > r2} + {~ r2 < r1}.\nProof.\n  intros.\n  destruct (total_order_T r1 r2). destruct s.\n    apply (right (Rlt_asym r1 r2 r)).\n    apply (right (Rle_not_gt r1 r2 (Req_le r1 r2 e))).\n    apply (left r).\nQed.\n\nLemma Rle_ge_dec : forall r1 r2, {r1 <= r2} + {~ r2 >= r1}.\nProof.\n  intros.\n  destruct (total_order_T r1 r2). destruct s.\n    apply (left (Rlt_le r1 r2 r)).\n    apply (left (Req_le r1 r2 e)).\n    apply (right (Rlt_not_ge r2 r1 r)).\nQed.\n\nLemma Rge_le_dec : forall r1 r2, {r1 >= r2} + {~ r2 <= r1}.\nProof.\n  intros.\n  destruct (total_order_T r1 r2). destruct s.\n    apply (right (Rlt_not_le r2 r1 r)).\n    apply (left (Req_ge r1 r2 e)).\n    apply (left (Rgt_ge r1 r2 r)).\nQed.\n\nHint Resolve Rlt_gt_dec Rgt_lt_dec Rle_ge_dec Rge_le_dec : decidability."
+      "text": "Lemma Rlt_gt_dec : forall r1 r2, {r1 < r2} + {~ r2 > r1}."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\n  intros.\n  destruct (total_order_T r1 r2). destruct s.\n    apply (left r).\n    apply (right (Rge_not_gt r2 r1 (Req_ge r1 r2 e))).\n    apply (right (Rgt_asym r1 r2 r)).\nQed."
+    },
+    {
+      "type": "code",
+      "text": "Lemma Rgt_lt_dec : forall r1 r2, {r1 > r2} + {~ r2 < r1}."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\n  intros.\n  destruct (total_order_T r1 r2). destruct s.\n    apply (right (Rlt_asym r1 r2 r)).\n    apply (right (Rle_not_gt r1 r2 (Req_le r1 r2 e))).\n    apply (left r).\nQed."
+    },
+    {
+      "type": "code",
+      "text": "Lemma Rle_ge_dec : forall r1 r2, {r1 <= r2} + {~ r2 >= r1}."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\n  intros.\n  destruct (total_order_T r1 r2). destruct s.\n    apply (left (Rlt_le r1 r2 r)).\n    apply (left (Req_le r1 r2 e)).\n    apply (right (Rlt_not_ge r2 r1 r)).\nQed."
+    },
+    {
+      "type": "code",
+      "text": "Lemma Rge_le_dec : forall r1 r2, {r1 >= r2} + {~ r2 <= r1}."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\n  intros.\n  destruct (total_order_T r1 r2). destruct s.\n    apply (right (Rlt_not_le r2 r1 r)).\n    apply (left (Req_ge r1 r2 e)).\n    apply (left (Rgt_ge r1 r2 r)).\nQed.\n\nHint Resolve Rlt_gt_dec Rgt_lt_dec Rle_ge_dec Rge_le_dec : decidability."
     },
     {
       "type": "text",
@@ -222,8 +350,52 @@
       "text": "## **Forward reasoning by automation**\nThe following tactics try to automatically reduce the goal by doing trivial substeps.\\\n**TODO**\n- Formalise the amount of automation\n- Uniform notation"
     },
     {
+      "type": "text",
+      "text": "Apply with goal check\n    The next tactics verify whether certain steps have the desired effect. "
+    },
+    {
       "type": "code",
-      "text": "(** Apply with goal check\n    The next tactics verify whether certain steps have the desired effect. *)\nLtac new_goal_verified_apply s t :=\n  apply s;\n  match goal with \n  | [|- t] => idtac \"Expected goal was produced\"\n  | _ => fail \"Lemma did not produce expected outcome\"\n  end.\n\n(*Tactic Notation \"By\" constr(s) \n  \"it\" \"suffices\" \"to\" \"show\" \"that\"\n  constr(t) :=\n  new_goal_verified_apply s t.*)\n\n(** A powerful forward reasoning tactic. \n    The sequential trying of auto and eauto \n    is there because eauto can be much slower. \n    TODO: is this what we want? *)\nLtac new_hyp_verified_pose_proof s t u:=\n  assert (u : t) by (first [ wp_power s\n                          | idtac \"Waterproof could not find a proof. If you believe the statement should hold, try making a smaller step\"]).\n\nLtac new_hyp_verified_pose_proof_no_name s t:=\n  ( wp_power s || fail \"Waterproof could not find a proof. If you believe the statement should hold, try making a smaller step\").\n\nTactic Notation \"By\" constr(s)\n  \"it\" \"holds\" \"that\" constr(t) \"(\"ident(u)\")\"\n  := new_hyp_verified_pose_proof s t u.\n\nTactic Notation \"By\" constr(s)\n  \"it\" \"holds\" \"that\" constr(t)\n  := new_hyp_verified_pose_proof_no_name s t.\n\n(*Tactic Notation \"By\" constr(s0) \",\" constr(s1)\n  \"it\" \"holds\" \"that\" constr(t) \"(\"ident(u)\")\"\n  :=*)\n\n(* TODO: align syntax with \"By ... it holds that\" *)\nTactic Notation \"It\" \"holds\" \"that\"\n  constr(t) \"(\" ident(u) \")\" :=\n  assert (u : t) by first [ wp_power dum\n                          | idtac \"Waterproof could not find a proof. If you believe the statement should hold, try making a smaller step\"].\n\nLtac conclude_proof t :=\n  match goal with\n  | [|-t] => idtac\n  | _ => (idtac \"Warning: The statement you provided does not exactly correspond to what you need to show. This can make your proof less readable.\";\n    change t || fail \"The statement you provided is not what you needed to show. If you are trying to prove an intermediate step, add a name to your hypothesis between brackets at the end of the sentence.\")\n  end; first [wp_power dum | fail \"Waterproof could not find a proof. Try making a smaller step.\"].\n\nTactic Notation \"It\" \"holds\" \"that\" constr(t) :=\n  conclude_proof t.\n\nTactic Notation \"It\" \"follows\" \"that\" constr(t) :=\n  conclude_proof t."
+      "text": "Ltac new_goal_verified_apply s t :=\n  apply s;\n  match goal with \n  | [|- t] => idtac \"Expected goal was produced\"\n  | _ => fail \"Lemma did not produce expected outcome\"\n  end."
+    },
+    {
+      "type": "text",
+      "text": "A powerful forward reasoning tactic. \n    The sequential trying of auto and eauto \n    is there because eauto can be much slower. \n    TODO: is this what we want? "
+    },
+    {
+      "type": "code",
+      "text": "Ltac new_hyp_verified_pose_proof s t u:=\n  assert (u : t) by (first [ wp_power s\n                          | idtac \"Waterproof could not find a proof. If you believe the statement should hold, try making a smaller step\"])."
+    },
+    {
+      "type": "code",
+      "text": "Ltac new_hyp_verified_pose_proof_no_name s t:=\n  ( wp_power s || fail \"Waterproof could not find a proof. If you believe the statement should hold, try making a smaller step\")."
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"By\" constr(s)\n  \"it\" \"holds\" \"that\" constr(t) \"(\"ident(u)\")\"\n  := new_hyp_verified_pose_proof s t u."
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"By\" constr(s)\n  \"it\" \"holds\" \"that\" constr(t)\n  := new_hyp_verified_pose_proof_no_name s t.\n\n(*"
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"By\" constr(s0) \",\" constr(s1)\n  \"it\" \"holds\" \"that\" constr(t) \"(\"ident(u)\")\"\n  :=*)\n\n(* TODO: align syntax with \"By ... it holds that\" *)"
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"It\" \"holds\" \"that\"\n  constr(t) \"(\" ident(u) \")\" :=\n  assert (u : t) by first [ wp_power dum\n                          | idtac \"Waterproof could not find a proof. If you believe the statement should hold, try making a smaller step\"]."
+    },
+    {
+      "type": "code",
+      "text": "Ltac conclude_proof t :=\n  match goal with\n  | [|-t] => idtac\n  | _ => (idtac \"Warning: The statement you provided does not exactly correspond to what you need to show. This can make your proof less readable.\";\n    change t || fail \"The statement you provided is not what you needed to show. If you are trying to prove an intermediate step, add a name to your hypothesis between brackets at the end of the sentence.\")\n  end; first [wp_power dum | fail \"Waterproof could not find a proof. Try making a smaller step.\"]."
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"It\" \"holds\" \"that\" constr(t) :=\n  conclude_proof t."
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"It\" \"follows\" \"that\" constr(t) :=\n  conclude_proof t."
     },
     {
       "type": "text",
@@ -235,7 +407,11 @@
     },
     {
       "type": "code",
-      "text": "(*Tactic Notation \"By\" constr(u) \"it\" \"holds\" \"that\" constr(t) := \n  match goal with\n  | [|- t] => By u it holds that t; try assumption\n  | _ => By u it holds that t\n  end.*) "
+      "text": "(*"
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"By\" constr(u) \"it\" \"holds\" \"that\" constr(t) := \n  match goal with\n  | [|- t] => By u it holds that t; try assumption\n  | _ => By u it holds that t\n  end.*)"
     },
     {
       "type": "text",
@@ -243,7 +419,11 @@
     },
     {
       "type": "code",
-      "text": "Tactic Notation \"This\" \"follows\" \"immediately\" :=\n  wp_power dum.\n\nTactic Notation \"follows\" \"immediately\" := \n  wp_power dum."
+      "text": "Tactic Notation \"This\" \"follows\" \"immediately\" :=\n  wp_power dum."
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"follows\" \"immediately\" := \n  wp_power dum."
     },
     {
       "type": "code",
@@ -260,22 +440,6 @@
     {
       "type": "code",
       "text": "Tactic Notation \"Write\" ident(H) \"using\" constr(t) \"as\"\n  constr(s) :=\n  let u := fresh in\n    assert (u : t) by wp_power dum;\n  rewrite u in H;\n  clear u."
-    },
-    {
-      "type": "code",
-      "text": ""
-    },
-    {
-      "type": "code",
-      "text": ""
-    },
-    {
-      "type": "code",
-      "text": ""
-    },
-    {
-      "type": "code",
-      "text": ""
     },
     {
       "type": "text",
@@ -303,7 +467,23 @@
     },
     {
       "type": "code",
-      "text": "Tactic Notation \"Rewrite\" \"using\" constr(t) :=\n  let u := fresh in\n    assert (u : t) by wp_power dum;\n  rewrite u;\n  clear u.\n\nTactic Notation \"rewrite\" \"using\" constr(t) :=\n  let u := fresh in\n    assert (u : t) by wp_power dum;\n  rewrite u;\n  clear u.\n\nTactic Notation \"Rewrite\" \"using\" constr(t) \"in\" ident(s):=\n  let u := fresh in\n    assert (u : t) by wp_power dum;\n  rewrite u in s;\n  clear u.\n\nTactic Notation \"rewrite\" \"using\" constr(t) \"in\" ident(s):=\n  let u := fresh in\n    assert (u : t) by wp_power dum;\n  rewrite u in s;\n  clear u.\n\nTactic Notation \"Rewrite\" \"<-\" \"using\" constr(t) :=\n  let u := fresh in \n    assert (u : t) by wp_power dum;\n  rewrite<-u;\n  clear u."
+      "text": "Tactic Notation \"Rewrite\" \"using\" constr(t) :=\n  let u := fresh in\n    assert (u : t) by wp_power dum;\n  rewrite u;\n  clear u."
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"rewrite\" \"using\" constr(t) :=\n  let u := fresh in\n    assert (u : t) by wp_power dum;\n  rewrite u;\n  clear u."
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"Rewrite\" \"using\" constr(t) \"in\" ident(s):=\n  let u := fresh in\n    assert (u : t) by wp_power dum;\n  rewrite u in s;\n  clear u."
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"rewrite\" \"using\" constr(t) \"in\" ident(s):=\n  let u := fresh in\n    assert (u : t) by wp_power dum;\n  rewrite u in s;\n  clear u."
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"Rewrite\" \"<-\" \"using\" constr(t) :=\n  let u := fresh in \n    assert (u : t) by wp_power dum;\n  rewrite<-u;\n  clear u."
     },
     {
       "type": "text",
@@ -331,15 +511,23 @@
     },
     {
       "type": "code",
-      "text": "Tactic Notation \"Unfold\" constr(t) :=\n  unfold t.\n\nTactic Notation \"Unfold\" constr(t) \"in\" ident(s):=\n  unfold t in s.\n\nTactic Notation \"Expand\" \"the\" \"definition\" \"of\" reference(t) :=\n  unfold t.\n\nTactic Notation \"Expand\" \"the\" \"definition\" \"of\" \n  reference(t) \"in\" ident(s) :=\n  unfold t in s."
+      "text": "Tactic Notation \"Unfold\" constr(t) :=\n  unfold t."
     },
     {
       "type": "code",
-      "text": "\nTactic Notation \"Write\" ident(s) \"as\" constr(t) :=\n  change t in s."
+      "text": "Tactic Notation \"Unfold\" constr(t) \"in\" ident(s):=\n  unfold t in s."
     },
     {
       "type": "code",
-      "text": ""
+      "text": "Tactic Notation \"Expand\" \"the\" \"definition\" \"of\" reference(t) :=\n  unfold t."
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"Expand\" \"the\" \"definition\" \"of\" \n  reference(t) \"in\" ident(s) :=\n  unfold t in s."
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"Write\" ident(s) \"as\" constr(t) :=\n  change t in s."
     },
     {
       "type": "text",
@@ -355,7 +543,19 @@
     },
     {
       "type": "code",
-      "text": "Ltac extended_reflexivity :=\n  try reflexivity;\n  try apply Rle_refl;\n  try apply Rge_refl.\n\nLtac extended_assumption :=\n  try assumption;\n  try (apply Rlt_le; assumption);\n  try (apply Rgt_ge; assumption).\n\nLtac rewrite_all_tac :=\n  match goal with\n  |[ H : _ = _  |- _] => try rewrite H; extended_reflexivity\n  end.\n\nLtac prove_step step :=\n  try auto with *;\n  try rewrite_all_tac;\n  try extended_assumption.\n"
+      "text": "Ltac extended_reflexivity :=\n  try reflexivity;\n  try apply Rle_refl;\n  try apply Rge_refl."
+    },
+    {
+      "type": "code",
+      "text": "Ltac extended_assumption :=\n  try assumption;\n  try (apply Rlt_le; assumption);\n  try (apply Rgt_ge; assumption)."
+    },
+    {
+      "type": "code",
+      "text": "Ltac rewrite_all_tac :=\n  match goal with\n  |[ H : _ = _  |- _] => try rewrite H; extended_reflexivity\n  end."
+    },
+    {
+      "type": "code",
+      "text": "Ltac prove_step step :=\n  try auto with *;\n  try rewrite_all_tac;\n  try extended_assumption."
     },
     {
       "type": "text",
@@ -370,16 +570,112 @@
       "text": "#### **String of (in)equalities**\nHere, the actual tactic is implemented.\nCurrently works as follows on call ``Rewrite (a ≤ b) (b ≤ c)``:\n- Two subcalls to ``string_of_ineqs``, once with ``(a ≤ b)``, once with ``(b ≤ c)``.\n- In subcall, first prove that step ``a ≤ b`` actually holds.\n- If the goal is the same as the step, we finish the proof.\n- If the goal is of the form `a ≤ c`, use transitivity to change the goal to `b ≤ c`. "
     },
     {
-      "type": "code",
-      "text": ""
-    },
-    {
       "type": "text",
       "text": ""
     },
     {
       "type": "code",
-      "text": "Ltac string_of_ineqs step_form := \n  let step := fresh in\n    assert (step : step_form);\n      [> prove_step step; fail \"Could not find proof for\" step_form\".\" | ];\n  match goal with\n  | [|- ?symbol ?x ?z ] => \n    match (type of step) with\n    | (symbol x z) => exact step\n    | (?symbol2 x ?y) => trans_ineq x y z step symbol2\n    | _ => fail \"Rewrite only works if the first statement is \" x\n    end\n  end;\n  try extended_reflexivity.\n\nTactic Notation \"Rewrite\" constr(t) := string_of_ineqs t.\nTactic Notation \"Rewrite\" constr(t1) constr(t2) := string_of_ineqs t1; string_of_ineqs t2.\nTactic Notation \"Rewrite\" constr(t1) constr(t2) constr(t3) := string_of_ineqs t1; string_of_ineqs t2; string_of_ineqs t3.\n\nTactic Notation \"Rewrite\" constr(t1) \"<\" constr(t2) := string_of_ineqs (t1 < t2).\nTactic Notation \"Rewrite\" constr(t1) \">\" constr(t2) := string_of_ineqs (t1 > t2).\nTactic Notation \"Rewrite\" constr(t1) \"≤\" constr(t2) := string_of_ineqs (t1 <= t2).\nTactic Notation \"Rewrite\" constr(t1) \"≥\" constr(t2) := string_of_ineqs (t1 >= t2).\nTactic Notation \"Rewrite\" constr(t1) \"=\" constr(t2) := string_of_ineqs (t1 = t2).\n\nTactic Notation \"Rewrite\" constr(t1) \"<\" constr(t2) \"<\" constr(t3) := string_of_ineqs (t1 < t2); string_of_ineqs (t2 < t3).\nTactic Notation \"Rewrite\" constr(t1) \"<\" constr(t2) \"≤\" constr(t3) := string_of_ineqs (t1 < t2); string_of_ineqs (t2 <= t3).\nTactic Notation \"Rewrite\" constr(t1) \"<\" constr(t2) \"=\" constr(t3) := string_of_ineqs (t1 < t2); string_of_ineqs (t2 = t3).\n\nTactic Notation \"Rewrite\" constr(t1) \">\" constr(t2) \">\" constr(t3) := string_of_ineqs (t1 > t2); string_of_ineqs (t2 > t3). \nTactic Notation \"Rewrite\" constr(t1) \">\" constr(t2) \"≥\" constr(t3) := string_of_ineqs (t1 > t2); string_of_ineqs (t2 >= t3). \nTactic Notation \"Rewrite\" constr(t1) \">\" constr(t2) \"=\" constr(t3) := string_of_ineqs (t1 > t2); string_of_ineqs (t2 = t3). \n\nTactic Notation \"Rewrite\" constr(t1) \"≤\" constr(t2) \"<\" constr(t3) := string_of_ineqs (t1 <= t2); string_of_ineqs (t2 < t3).\nTactic Notation \"Rewrite\" constr(t1) \"≤\" constr(t2) \"≤\" constr(t3) := string_of_ineqs (t1 <= t2); string_of_ineqs (t2 <= t3).\nTactic Notation \"Rewrite\" constr(t1) \"≤\" constr(t2) \"=\" constr(t3) := string_of_ineqs (t1 <= t2); string_of_ineqs (t2 = t3).\n\nTactic Notation \"Rewrite\" constr(t1) \"≥\" constr(t2) \">\" constr(t3) := string_of_ineqs (t1 >= t2); string_of_ineqs (t2 > t3).\nTactic Notation \"Rewrite\" constr(t1) \"≥\" constr(t2) \"≥\" constr(t3) := string_of_ineqs (t1 >= t2); string_of_ineqs (t2 >= t3).\nTactic Notation \"Rewrite\" constr(t1) \"≥\" constr(t2) \"=\" constr(t3) := string_of_ineqs (t1 >= t2); string_of_ineqs (t2 = t3).\n\nTactic Notation \"Rewrite\" constr(t1) \"=\" constr(t2) \"<\" constr(t3) := string_of_ineqs (t1 = t2); string_of_ineqs (t2 < t3).\nTactic Notation \"Rewrite\" constr(t1) \"=\" constr(t2) \">\" constr(t3) := string_of_ineqs (t1 = t2); string_of_ineqs (t2 > t3).\nTactic Notation \"Rewrite\" constr(t1) \"=\" constr(t2) \"≤\" constr(t3) := string_of_ineqs (t1 = t2); string_of_ineqs (t2 <= t3).\nTactic Notation \"Rewrite\" constr(t1) \"=\" constr(t2) \"≥\" constr(t3) := string_of_ineqs (t1 = t2); string_of_ineqs (t2 >= t3).\nTactic Notation \"Rewrite\" constr(t1) \"=\" constr(t2) \"=\" constr(t3) := string_of_ineqs (t1 = t2); string_of_ineqs (t2 = t3)."
+      "text": "Ltac string_of_ineqs step_form := \n  let step := fresh in\n    assert (step : step_form);\n      [> prove_step step; fail \"Could not find proof for\" step_form\".\" | ];\n  match goal with\n  | [|- ?symbol ?x ?z ] => \n    match (type of step) with\n    | (symbol x z) => exact step\n    | (?symbol2 x ?y) => trans_ineq x y z step symbol2\n    | _ => fail \"Rewrite only works if the first statement is \" x\n    end\n  end;\n  try extended_reflexivity."
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"Rewrite\" constr(t) := string_of_ineqs t."
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"Rewrite\" constr(t1) constr(t2) := string_of_ineqs t1; string_of_ineqs t2."
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"Rewrite\" constr(t1) constr(t2) constr(t3) := string_of_ineqs t1; string_of_ineqs t2; string_of_ineqs t3."
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"Rewrite\" constr(t1) \"<\" constr(t2) := string_of_ineqs (t1 < t2)."
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"Rewrite\" constr(t1) \">\" constr(t2) := string_of_ineqs (t1 > t2)."
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"Rewrite\" constr(t1) \"≤\" constr(t2) := string_of_ineqs (t1 <= t2)."
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"Rewrite\" constr(t1) \"≥\" constr(t2) := string_of_ineqs (t1 >= t2)."
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"Rewrite\" constr(t1) \"=\" constr(t2) := string_of_ineqs (t1 = t2)."
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"Rewrite\" constr(t1) \"<\" constr(t2) \"<\" constr(t3) := string_of_ineqs (t1 < t2); string_of_ineqs (t2 < t3)."
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"Rewrite\" constr(t1) \"<\" constr(t2) \"≤\" constr(t3) := string_of_ineqs (t1 < t2); string_of_ineqs (t2 <= t3)."
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"Rewrite\" constr(t1) \"<\" constr(t2) \"=\" constr(t3) := string_of_ineqs (t1 < t2); string_of_ineqs (t2 = t3)."
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"Rewrite\" constr(t1) \">\" constr(t2) \">\" constr(t3) := string_of_ineqs (t1 > t2); string_of_ineqs (t2 > t3)."
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"Rewrite\" constr(t1) \">\" constr(t2) \"≥\" constr(t3) := string_of_ineqs (t1 > t2); string_of_ineqs (t2 >= t3)."
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"Rewrite\" constr(t1) \">\" constr(t2) \"=\" constr(t3) := string_of_ineqs (t1 > t2); string_of_ineqs (t2 = t3)."
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"Rewrite\" constr(t1) \"≤\" constr(t2) \"<\" constr(t3) := string_of_ineqs (t1 <= t2); string_of_ineqs (t2 < t3)."
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"Rewrite\" constr(t1) \"≤\" constr(t2) \"≤\" constr(t3) := string_of_ineqs (t1 <= t2); string_of_ineqs (t2 <= t3)."
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"Rewrite\" constr(t1) \"≤\" constr(t2) \"=\" constr(t3) := string_of_ineqs (t1 <= t2); string_of_ineqs (t2 = t3)."
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"Rewrite\" constr(t1) \"≥\" constr(t2) \">\" constr(t3) := string_of_ineqs (t1 >= t2); string_of_ineqs (t2 > t3)."
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"Rewrite\" constr(t1) \"≥\" constr(t2) \"≥\" constr(t3) := string_of_ineqs (t1 >= t2); string_of_ineqs (t2 >= t3)."
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"Rewrite\" constr(t1) \"≥\" constr(t2) \"=\" constr(t3) := string_of_ineqs (t1 >= t2); string_of_ineqs (t2 = t3)."
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"Rewrite\" constr(t1) \"=\" constr(t2) \"<\" constr(t3) := string_of_ineqs (t1 = t2); string_of_ineqs (t2 < t3)."
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"Rewrite\" constr(t1) \"=\" constr(t2) \">\" constr(t3) := string_of_ineqs (t1 = t2); string_of_ineqs (t2 > t3)."
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"Rewrite\" constr(t1) \"=\" constr(t2) \"≤\" constr(t3) := string_of_ineqs (t1 = t2); string_of_ineqs (t2 <= t3)."
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"Rewrite\" constr(t1) \"=\" constr(t2) \"≥\" constr(t3) := string_of_ineqs (t1 = t2); string_of_ineqs (t2 >= t3)."
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"Rewrite\" constr(t1) \"=\" constr(t2) \"=\" constr(t3) := string_of_ineqs (t1 = t2); string_of_ineqs (t2 = t3)."
     },
     {
       "type": "text",
@@ -403,7 +699,19 @@
     },
     {
       "type": "code",
-      "text": "Tactic Notation \"This\" \"follows\" \"by\" \"reflexivity\" :=\n  reflexivity.\n \nTactic Notation \"This\" \"concludes\" \"the\" \"proof\" :=\n  try reflexivity; try trivial.\n \nTactic Notation \"This\" \"follows\" \"by\" \"assumption\" :=\n  assumption.\n  \nTactic Notation \"Then\" constr(t) \"holds\" \"by\" \"assumption\" :=\n  conclude_proof t."
+      "text": "Tactic Notation \"This\" \"follows\" \"by\" \"reflexivity\" :=\n  reflexivity."
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"This\" \"concludes\" \"the\" \"proof\" :=\n  try reflexivity; try trivial."
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"This\" \"follows\" \"by\" \"assumption\" :=\n  assumption."
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"Then\" constr(t) \"holds\" \"by\" \"assumption\" :=\n  conclude_proof t."
     },
     {
       "type": "text",
@@ -419,7 +727,7 @@
     },
     {
       "type": "code",
-      "text": "Tactic Notation \"We\" \"prove\" \"by\" \"induction\" \"on\" ident(x) \",\" \"calling\" \"the\" \"induction\" \"hypothesis\" ident(y) := \n  induction x. "
+      "text": "Tactic Notation \"We\" \"prove\" \"by\" \"induction\" \"on\" ident(x) \",\" \"calling\" \"the\" \"induction\" \"hypothesis\" ident(y) := \n  induction x."
     },
     {
       "type": "text",
@@ -431,7 +739,23 @@
     },
     {
       "type": "code",
-      "text": "Ltac set_power :=\n  timeout 1 (first [ solve [auto with sets]\n        | solve [eauto with sets]\n        | solve [firstorder (auto with sets)]\n        | solve [firstorder (eauto with sets)]]).\n\nLtac destruct_sets :=\n  match goal with \n    | [H : In _ (Intersection _ _ _) _ |- _] => destruct H\n    | [H : In _ (Union _ _ _) _  |- _] => destruct H; try set_power\n  end.\n\nLtac trivial_set_inclusion := \n  try intro x;\n  try intro H;\n  try destruct_sets;\n  try contradiction;\n  try set_power.\n\nLtac trivial_set_equality := \n  try intros A;\n  try intros B;\n  try apply Extensionality_Ensembles;\n  try unfold Same_set;\n  try unfold Included;\n  split;\n  trivial_set_inclusion;\n  trivial_set_inclusion.\n\n\nTactic Notation \"This\" \"equality\" \"is\" \"trivial\" := \n   trivial_set_equality."
+      "text": "Ltac set_power :=\n  timeout 1 (first [ solve [auto with sets]\n        | solve [eauto with sets]\n        | solve [firstorder (auto with sets)]\n        | solve [firstorder (eauto with sets)]])."
+    },
+    {
+      "type": "code",
+      "text": "Ltac destruct_sets :=\n  match goal with \n    | [H : In _ (Intersection _ _ _) _ |- _] => destruct H\n    | [H : In _ (Union _ _ _) _  |- _] => destruct H; try set_power\n  end."
+    },
+    {
+      "type": "code",
+      "text": "Ltac trivial_set_inclusion := \n  try intro x;\n  try intro H;\n  try destruct_sets;\n  try contradiction;\n  try set_power."
+    },
+    {
+      "type": "code",
+      "text": "Ltac trivial_set_equality := \n  try intros A;\n  try intros B;\n  try apply Extensionality_Ensembles;\n  try unfold Same_set;\n  try unfold Included;\n  split;\n  trivial_set_inclusion;\n  trivial_set_inclusion."
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"This\" \"equality\" \"is\" \"trivial\" := \n   trivial_set_equality."
     },
     {
       "type": "text",

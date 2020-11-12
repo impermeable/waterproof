@@ -518,7 +518,7 @@ class Notebook {
    * @return {Array} An array with the pieces of the cut up string
    */
   cutStringBetweenKeywords(string,
-      keywords=/Lemma|Theorem|Proof|Definition|Notation/) {
+      keywords=/Lemma|Theorem|Proof|Definition|Tactic|Ltac/) {
     const stringPieces = [];
 
     let stringLeft = string;
