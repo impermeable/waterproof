@@ -27,7 +27,11 @@
     },
     {
       "type": "code",
-      "text": "Ltac wp_power s :=\n  timeout 60 (first [ solve [auto using s with *]\n        | solve [eauto using s with *]\n        | solve [firstorder (auto using s with *)]\n        | solve [firstorder (eauto using s with *)]])."
+      "text": "Ltac check_status t :=\nmatch t with\n| ( forall _ : ?A, _ ) => idtac \"You may need to introduce an arbitrary variable (Take ... : ...) or make an assumption (Assume ... : ...).\"\n| ( exists _ : ?A, _ ) => idtac \"You may need to choose a specific value of type \" A\n| _ => idtac\nend."
+    },
+    {
+      "type": "code",
+      "text": "Ltac wp_power t s :=\n  check_status t;\n  timeout 60 (first [ solve [auto using s with *]\n        | solve [eauto using s with *]\n        | solve [intuition (auto using s with * )]\n        | solve [intuition (eauto using s with * )]\n        | idtac \"Waterproof could not find a proof of \" t])."
     },
     {
       "type": "text",
@@ -371,11 +375,11 @@
     },
     {
       "type": "code",
-      "text": "Ltac new_hyp_verified_pose_proof s t u:=\n  assert (u : t) by (first [ wp_power s\n                          | idtac \"Waterproof could not find a proof. If you believe the statement should hold, try making a smaller step\"])."
+      "text": "Ltac new_hyp_verified_pose_proof s t u:=\n  assert (u : t) by (first [ wp_power t s\n                          | idtac \"Waterproof could not find a proof. If you believe the statement should hold, try making a smaller step\"])."
     },
     {
       "type": "code",
-      "text": "Ltac new_hyp_verified_pose_proof_no_name s t:=\n  ( wp_power s || fail \"Waterproof could not find a proof. If you believe the statement should hold, try making a smaller step\")."
+      "text": "Ltac new_hyp_verified_pose_proof_no_name s t:=\n  ( wp_power t s || fail \"Waterproof could not find a proof. If you believe the statement should hold, try making a smaller step\")."
     },
     {
       "type": "code",
@@ -391,11 +395,11 @@
     },
     {
       "type": "code",
-      "text": "Tactic Notation \"It\" \"holds\" \"that\"\n  constr(t) \"(\" ident(u) \")\" :=\n  assert (u : t) by first [ wp_power dum\n                          | idtac \"Waterproof could not find a proof. If you believe the statement should hold, try making a smaller step\"]."
+      "text": "Tactic Notation \"It\" \"holds\" \"that\"\n  constr(t) \"(\" ident(u) \")\" :=\n  assert (u : t) by first [ wp_power t dum\n                          | idtac \"Waterproof could not find a proof. If you believe the statement should hold, try making a smaller step\"]."
     },
     {
       "type": "code",
-      "text": "Ltac conclude_proof t :=\n  match goal with\n  | [|-t] => idtac\n  | _ => (idtac \"Warning: The statement you provided does not exactly correspond to what you need to show. This can make your proof less readable.\";\n    change t || fail \"The statement you provided is not what you needed to show. If you are trying to prove an intermediate step, add a name to your hypothesis between brackets at the end of the sentence.\")\n  end; first [wp_power dum | fail \"Waterproof could not find a proof. Try making a smaller step.\"]."
+      "text": "Ltac conclude_proof t :=\n  match goal with\n  | [|-t] => idtac\n  | _ => (idtac \"Warning: The statement you provided does not exactly correspond to what you need to show. This can make your proof less readable.\";\n    change t || fail \"The statement you provided is not what you needed to show. If you are trying to prove an intermediate step, add a name to your hypothesis between brackets at the end of the sentence.\")\n  end; wp_power t dum || fail \"Waterproof could not find a proof. Try making a smaller step.\"."
     },
     {
       "type": "code",
@@ -427,15 +431,15 @@
     },
     {
       "type": "code",
-      "text": "Tactic Notation \"This\" \"follows\" \"immediately\" :=\n  wp_power dum."
+      "text": "Tactic Notation \"This\" \"follows\" \"immediately\" :=\n  match goal with\n  | [ |- ?t ] =>   wp_power t dum\n  end."
     },
     {
       "type": "code",
-      "text": "Tactic Notation \"follows\" \"immediately\" := \n  wp_power dum."
+      "text": "Tactic Notation \"follows\" \"immediately\" := \n  match goal with\n  | [ |- ?t ] =>   wp_power t dum\n  end."
     },
     {
       "type": "code",
-      "text": "Tactic Notation \"It\" \"suffices\" \"to\" \"show\" \"that\"\n  constr(t) :=\n  enough t by ( wp_power dum || fail \"Waterproof could not confirm that proving the statement would be enough.\")."
+      "text": "Tactic Notation \"It\" \"suffices\" \"to\" \"show\" \"that\"\n  constr(t) :=\n  match goal with \n  | [ |- ?u ] => enough t by ( wp_power u dum || fail \"Waterproof could not confirm that proving the statement would be enough.\")\n  end."
     },
     {
       "type": "code",
@@ -443,11 +447,11 @@
     },
     {
       "type": "code",
-      "text": "Tactic Notation \"Write\" \"goal\" \"using\" constr(t) \"as\" \n  constr(s) :=\n  let u := fresh in\n    assert (u : t) by wp_power dum;\n  rewrite u;\n  enough s by wp_power dum;\n  clear u."
+      "text": "Tactic Notation \"Write\" \"goal\" \"using\" constr(t) \"as\" \n  constr(s) :=\n  let u := fresh in\n    assert (u : t) by wp_power t dum;\n  rewrite u;\n  match goal with\n  | [ |- ?v ] => enough s by wp_power v dum\n  end;\n  clear u."
     },
     {
       "type": "code",
-      "text": "Tactic Notation \"Write\" ident(H) \"using\" constr(t) \"as\"\n  constr(s) :=\n  let u := fresh in\n    assert (u : t) by wp_power dum;\n  rewrite u in H;\n  clear u."
+      "text": "Tactic Notation \"Write\" ident(H) \"using\" constr(t) \"as\"\n  constr(s) :=\n  let u := fresh in\n    assert (u : t) by wp_power t dum;\n  rewrite u in H;\n  clear u."
     },
     {
       "type": "text",
@@ -475,23 +479,23 @@
     },
     {
       "type": "code",
-      "text": "Tactic Notation \"Rewrite\" \"using\" constr(t) :=\n  let u := fresh in\n    assert (u : t) by wp_power dum;\n  rewrite u;\n  clear u."
+      "text": "Tactic Notation \"Rewrite\" \"using\" constr(t) :=\n  let u := fresh in\n    assert (u : t) by wp_power t dum;\n  rewrite u;\n  clear u."
     },
     {
       "type": "code",
-      "text": "Tactic Notation \"rewrite\" \"using\" constr(t) :=\n  let u := fresh in\n    assert (u : t) by wp_power dum;\n  rewrite u;\n  clear u."
+      "text": "Tactic Notation \"rewrite\" \"using\" constr(t) :=\n  let u := fresh in\n    assert (u : t) by wp_power t dum;\n  rewrite u;\n  clear u."
     },
     {
       "type": "code",
-      "text": "Tactic Notation \"Rewrite\" \"using\" constr(t) \"in\" ident(s):=\n  let u := fresh in\n    assert (u : t) by wp_power dum;\n  rewrite u in s;\n  clear u."
+      "text": "Tactic Notation \"Rewrite\" \"using\" constr(t) \"in\" ident(s):=\n  let u := fresh in\n    assert (u : t) by wp_power t dum;\n  rewrite u in s;\n  clear u."
     },
     {
       "type": "code",
-      "text": "Tactic Notation \"rewrite\" \"using\" constr(t) \"in\" ident(s):=\n  let u := fresh in\n    assert (u : t) by wp_power dum;\n  rewrite u in s;\n  clear u."
+      "text": "Tactic Notation \"rewrite\" \"using\" constr(t) \"in\" ident(s):=\n  let u := fresh in\n    assert (u : t) by wp_power t dum;\n  rewrite u in s;\n  clear u."
     },
     {
       "type": "code",
-      "text": "Tactic Notation \"Rewrite\" \"<-\" \"using\" constr(t) :=\n  let u := fresh in \n    assert (u : t) by wp_power dum;\n  rewrite<-u;\n  clear u."
+      "text": "Tactic Notation \"Rewrite\" \"<-\" \"using\" constr(t) :=\n  let u := fresh in \n    assert (u : t) by wp_power t dum;\n  rewrite<-u;\n  clear u."
     },
     {
       "type": "text",
@@ -499,7 +503,7 @@
     },
     {
       "type": "code",
-      "text": "Tactic Notation \"replacing\" constr(s) \"with\" constr(t) :=\n  replace s with t by wp_power dum."
+      "text": "Tactic Notation \"replacing\" constr(s) \"with\" constr(t) :=\n  replace s with t by wp_power (s=t) dum."
     },
     {
       "type": "text",
