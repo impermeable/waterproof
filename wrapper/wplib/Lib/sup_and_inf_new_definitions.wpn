@@ -344,6 +344,26 @@
     {
       "type": "code",
       "text": "Take a : A.\nBy sup_is_upp_bd it holds that (is_upper_bound A M) (M_upp_bd).\nIt holds that (a ≤ M) (a_le_M).\nWe claim that (¬(element _ a = M)) (a_is_not_M).\nWe argue by contradiction.\nAssume a_eq_M.\nWe claim that (is_in A M) (M_in_A).\nRewrite using (M=a).\nIt holds that (is_in A a). contradiction. It holds that (a < M).\nQed."
+    },
+    {
+      "type": "text",
+      "text": "* Lemmas for convenience"
+    },
+    {
+      "type": "code",
+      "text": "Lemma bounded_by_upper_bound_propform :\n  ∀ (A : subsets_R) (M : ℝ) (b : ℝ),\n    is_upper_bound A M ⇒ is_in A b ⇒ b ≤ M."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake A : subsets_R. Take M : ℝ. Take b : ℝ.\nAssume M_upp_bd : (is_upper_bound A M).\nAssume b_in_A : (is_in A b).\nDefine c := (mk_element_R (is_in A) b b_in_A).\nExpand the definition of is_upper_bound in M_upp_bd.\nBy M_upp_bd it holds that (c ≤ M) (c_le_M).\nIt holds that (b ≤ M).\nQed."
+    },
+    {
+      "type": "code",
+      "text": "Lemma bounded_by_lower_bound_propform :\n  ∀ (A : subsets_R) (m : ℝ) (b : ℝ),\n    is_lower_bound A m ⇒ is_in A b ⇒ m ≤ b."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake A : subsets_R. Take m : ℝ. Take b: ℝ.\nAssume m_low_bd : (is_lower_bound A m).\nAssume b_in_A : (is_in A b).\nDefine c := (mk_element_R (is_in A) b b_in_A).\nExpand the definition of is_lower_bound in m_low_bd.\nBy m_low_bd it holds that (m ≤ c) (m_le_c).\nIt holds that (m ≤ b).\nQed.\n\nHint Resolve bounded_by_upper_bound_propform : additional.\nHint Resolve bounded_by_lower_bound_propform : additional."
     }
   ]
 }
