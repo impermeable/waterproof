@@ -7,7 +7,7 @@
     },
     {
       "type": "code",
-      "text": "Require Import Rbase.\nRequire Import Qreals.\nRequire Import Rfunctions.\nRequire Import SeqSeries.\nRequire Import Rtrigo.\nRequire Import Ranalysis.\nRequire Import Integration.\nRequire Import micromega.Lra.\nRequire Import Omega.\nRequire Import Max.\n\nRequire Import wplib.Notations.Notations.\nRequire Import Sets.Ensembles.\nRequire Import Sets.Classical_sets.\n\nRequire Import wplib.Tactics.AdditionalLemmas."
+      "text": "Require Import Rbase.\nRequire Import Qreals.\nRequire Import Rfunctions.\nRequire Import SeqSeries.\nRequire Import Rtrigo.\nRequire Import Ranalysis.\nRequire Import Integration.\nRequire Import micromega.Lra.\nRequire Import Omega.\nRequire Import Max.\n\nRequire Import wplib.Notations.Notations.\nRequire Import Sets.Ensembles.\nRequire Import Sets.Classical_sets.\n\nRequire Import wplib.Tactics.AdditionalLemmas.\nRequire Import wplib.Tactics.Waterprove."
     },
     {
       "type": "code",
@@ -16,22 +16,6 @@
     {
       "type": "text",
       "text": ""
-    },
-    {
-      "type": "text",
-      "text": "## **A powertool**\n\nThe following tactic is very powerful, and will be used to solve (trivial) arithmetic steps. Note that the exact behaviour of this tactic is not known. Also, it may be too powerful in some cases."
-    },
-    {
-      "type": "code",
-      "text": "Lemma dum : 0 < 1.\nlra.\nQed."
-    },
-    {
-      "type": "code",
-      "text": "Ltac check_status t :=\nmatch t with\n| ( forall _ : ?A, _ ) => idtac \"You may need to introduce an arbitrary variable (Take ... : ...) or make an assumption (Assume ... : ...).\"\n| ( exists _ : ?A, _ ) => idtac \"You may need to choose a specific value of type \" A\n| _ => idtac\nend."
-    },
-    {
-      "type": "code",
-      "text": "Ltac wp_power t s :=\n  check_status t;\n  timeout 60 (first [ solve [auto using s with *]\n        | solve [eauto using s with *]\n        | solve [intuition (auto using s with * )]\n        | solve [intuition (eauto using s with * )]\n        | idtac \"Waterproof could not find a proof of \" t])."
     },
     {
       "type": "text",
@@ -371,7 +355,23 @@
     },
     {
       "type": "text",
-      "text": "A powerful forward reasoning tactic. \n    The sequential trying of auto and eauto \n    is there because eauto can be much slower. \n    TODO: is this what we want? "
+      "text": "** Wrapping the waterprove automation tactic\n\nThe following tactic is very powerful, and will be used to solve (trivial) arithmetic steps. Note that the exact behaviour of this tactic is not known. Also, it may be too powerful in some cases."
+    },
+    {
+      "type": "code",
+      "text": "Lemma dum : 0 < 1.\nlra.\nQed."
+    },
+    {
+      "type": "code",
+      "text": "Ltac check_status t :=\nmatch t with\n| ( forall _ : ?A, _ ) => idtac \"You may need to introduce an arbitrary variable (Take ... : ...) or make an assumption (Assume ... : ...).\"\n| ( exists _ : ?A, _ ) => idtac \"You may need to choose a specific value of type \" A\n| _ => idtac\nend."
+    },
+    {
+      "type": "code",
+      "text": "Ltac wp_power t s :=\n  check_status t;\n  waterprove t s."
+    },
+    {
+      "type": "text",
+      "text": "** Automation for forward reasoning\n\nA powerful forward reasoning tactic. \n    The sequential trying of auto and eauto \n    is there because eauto can be much slower. \n    TODO: is this what we want? "
     },
     {
       "type": "code",

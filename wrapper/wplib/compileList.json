@@ -3,6 +3,7 @@
   "Notations/Notations",
   "Tactics/AdditionalLemmas",
   "Tactics/Databases",
+  "Tactics/Waterprove",
   "Tactics/Tactics",
   "Tactics/TacticsContra",
   "Lib/sup_and_inf",
