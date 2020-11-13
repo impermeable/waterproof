@@ -147,11 +147,11 @@
     },
     {
       "type": "code",
-      "text": "Ltac and :=\n  match goal with\n  | [|- _ /\\ _ ] => split\n  | [|- _ <-> _ ] => split\n  | _ => fail \"You can not split this into two different goals.\"\n  end."
+      "text": "Ltac and :=\n  match goal with\n  | [|- _ /\\ _ ] => split\n  | [|- _ <-> _ ] => split\n  | _ => fail \"You can not split this into two different goals.\"\n  end;\n  idtac \"Recommendation: For clarity of your proof, it is helpful to remind the reader of what you need to show when you start to show each of the statements.\"."
     },
     {
       "type": "code",
-      "text": "Tactic Notation \"We\" \"show\" \"both\" \"directions\" := iff."
+      "text": "Tactic Notation \"We\" \"show\" \"both\" \"directions\" :=\n  iff."
     },
     {
       "type": "code",
@@ -335,7 +335,7 @@
     },
     {
       "type": "code",
-      "text": "Tactic Notation \"Either\" constr(t1) \"or\" constr(t2) :=\n  idtac \"Please use comments to indicate the case you are in after writing this line. This helps to keep the proof readable.\";\n  first [\n    assert (u : {t1} + {t2}) by auto with decidability nocore;\n      destruct u |\n    assert (u : {t2} + {t1}) by auto with decidability nocore;\n      destruct u\n    ]."
+      "text": "Tactic Notation \"Either\" constr(t1) \"or\" constr(t2) :=\n  idtac \"Recommendation: Please use comments to indicate the case you are in after writing this line. This helps to keep the proof readable.\";\n  first [\n    assert (u : {t1} + {t2}) by auto with decidability nocore;\n      destruct u |\n    assert (u : {t2} + {t1}) by auto with decidability nocore;\n      destruct u\n    ]."
     },
     {
       "type": "text",
@@ -511,11 +511,11 @@
     },
     {
       "type": "code",
-      "text": "Tactic Notation \"Expand\" \"the\" \"definition\" \"of\" reference(t) :=\n  unfold t."
+      "text": "Tactic Notation \"Expand\" \"the\" \"definition\" \"of\" reference(t) :=\n  match goal with\n  | [|- ?u] =>\n  unfold t;\n  idtac \"Recommendation: please remind the reader of what you need to show now that you expanded the definition of \"\n        t\n        \". You can do so by writing 'We need to show that \"\n        u\n        \"'\"\n  end."
     },
     {
       "type": "code",
-      "text": "Tactic Notation \"Expand\" \"the\" \"definition\" \"of\" \n  reference(t) \"in\" ident(s) :=\n  unfold t in s."
+      "text": "Tactic Notation \"Expand\" \"the\" \"definition\" \"of\" \n  reference(t) \"in\" ident(s) :=\n  unfold t in s;\n  idtac \"Recommendation: please tell the reader the current form of \" s \" after expanding the definition of \" t \n    \". You can do so by writing 'Write \" s \" as ...\"."
     },
     {
       "type": "code",
