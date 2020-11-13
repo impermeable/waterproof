@@ -239,11 +239,7 @@
     },
     {
       "type": "code",
-      "text": "Tactic Notation \"Choose\" ident(s) \n                \"such\" \"that\" ident(u)\n                \"according\" \"to\" constr(v) (*\":\" constr(t)*):=\n  destruct v as [s u].\n\n(*"
-    },
-    {
-      "type": "code",
-      "text": "Tactic Notation \"Choose\" ident(s)\n                \"such\" \"that\" ident(u)\n                \"according\" \"to\" ident(v)\n                \"with\" constr(t) :=\n  destruct v with t as [s u]. *)"
+      "text": "Tactic Notation \"Choose\" ident(s) \n                \"such\" \"that\" ident(u)\n                \"according\" \"to\" constr(v) (*\":\" constr(t)*):=\n  destruct v as [s u]."
     },
     {
       "type": "code",
@@ -387,43 +383,27 @@
     },
     {
       "type": "code",
-      "text": "Tactic Notation \"By\" constr(s)\n  \"it\" \"holds\" \"that\" constr(t)\n  := new_hyp_verified_pose_proof_no_name s t.\n\n(*"
-    },
-    {
-      "type": "code",
-      "text": "Tactic Notation \"By\" constr(s0) \",\" constr(s1)\n  \"it\" \"holds\" \"that\" constr(t) \"(\"ident(u)\")\"\n  :=*)\n\n(* TODO: align syntax with \"By ... it holds that\" *)"
-    },
-    {
-      "type": "code",
       "text": "Tactic Notation \"It\" \"holds\" \"that\"\n  constr(t) \"(\" ident(u) \")\" :=\n  assert (u : t) by first [ wp_power t dum\n                          | idtac \"Waterproof could not find a proof. If you believe the statement should hold, try making a smaller step\"]."
     },
     {
       "type": "code",
-      "text": "Ltac conclude_proof t :=\n  match goal with\n  | [|-t] => idtac\n  | _ => (idtac \"Warning: The statement you provided does not exactly correspond to what you need to show. This can make your proof less readable.\";\n    change t || fail \"The statement you provided is not what you needed to show. If you are trying to prove an intermediate step, add a name to your hypothesis between brackets at the end of the sentence.\")\n  end; wp_power t dum || fail \"Waterproof could not find a proof. Try making a smaller step.\"."
+      "text": "Ltac conclude_proof t s :=\n  match goal with\n  | [|-t] => idtac\n  | _ => (idtac \"Warning: The statement you provided does not exactly correspond to what you need to show. This can make your proof less readable.\";\n    change t || fail \"The statement you provided is not what you needed to show. If you are trying to prove an intermediate step, add a name to your hypothesis between brackets at the end of the sentence.\")\n  end; wp_power t s || fail \"Waterproof could not find a proof. Try making a smaller step.\"."
     },
     {
       "type": "code",
-      "text": "Tactic Notation \"It\" \"holds\" \"that\" constr(t) :=\n  conclude_proof t."
+      "text": "Tactic Notation \"It\" \"holds\" \"that\" constr(t) :=\n  conclude_proof t dum."
     },
     {
       "type": "code",
-      "text": "Tactic Notation \"It\" \"follows\" \"that\" constr(t) :=\n  conclude_proof t."
+      "text": "Tactic Notation \"By\" constr(s)\n  \"it\" \"holds\" \"that\" constr(t)\n  := conclude_proof t s."
+    },
+    {
+      "type": "code",
+      "text": "Tactic Notation \"It\" \"follows\" \"that\" constr(t) :=\n  conclude_proof t dum."
     },
     {
       "type": "text",
       "text": ""
-    },
-    {
-      "type": "text",
-      "text": "Now a somewhat experimental and non-standard notation to resolve a goal using another assumption/lemma. The usual `By ... it holds that ...` does not do this, even without adding a name."
-    },
-    {
-      "type": "code",
-      "text": "(*"
-    },
-    {
-      "type": "code",
-      "text": "Tactic Notation \"By\" constr(u) \"it\" \"holds\" \"that\" constr(t) := \n  match goal with\n  | [|- t] => By u it holds that t; try assumption\n  | _ => By u it holds that t\n  end.*)"
     },
     {
       "type": "text",
@@ -723,7 +703,7 @@
     },
     {
       "type": "code",
-      "text": "Tactic Notation \"Then\" constr(t) \"holds\" \"by\" \"assumption\" :=\n  conclude_proof t."
+      "text": "Tactic Notation \"Then\" constr(t) \"holds\" \"by\" \"assumption\" :=\n  conclude_proof t dum."
     },
     {
       "type": "text",
