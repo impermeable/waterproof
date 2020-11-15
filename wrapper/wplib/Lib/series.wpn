@@ -51,7 +51,7 @@
     },
     {
       "type": "code",
-      "text": "Proof.\nTake a : (ℕ → ℝ). Take k : ℕ.\nTake l : ℕ. Take L : ℝ. Assume k_lt_l.\nsplit.\nAssume sigma_l_cv.\nBy lim_const_seq it holds that\n  (Un_cv (fun N ↦ sigma a k (l-1)%nat) (sigma a k (l-1)%nat)) (H1).\nBy CV_plus it holds that \n  (Un_cv (fun N ↦ sigma a k (l-1)%nat \n                  + \n                  sigma a l N)\n         (sigma a k (l-1)%nat + L) ) (H2).\nWe claim that\n  (∃ M : ℕ, \n    ∀ n : ℕ, (n ≥ M)%nat ⇒\n      sigma a k n = sigma a k (l - 1)%nat + sigma a l n ) (H3).\nChoose M := l%nat.\nTake n : ℕ. Assume n_ge_l. Apply sigma_split_v2. assumption. assumption."
+      "text": "Proof.\nTake a : (ℕ → ℝ). Take k : ℕ.\nTake l : ℕ. Take L : ℝ. Assume k_lt_l.\nsplit.\nAssume sigma_l_cv.\nWe claim that\n  (Un_cv (fun N ↦ sigma a k (l-1)%nat) (sigma a k (l-1)%nat)) (H1).\n  Apply lim_const_seq.\nBy CV_plus it holds that \n  (Un_cv (fun N ↦ sigma a k (l-1)%nat \n                  + \n                  sigma a l N)\n         (sigma a k (l-1)%nat + L) ) (H2).\nWe claim that\n  (∃ M : ℕ, \n    ∀ n : ℕ, (n ≥ M)%nat ⇒\n      sigma a k n = sigma a k (l - 1)%nat + sigma a l n ) (H3).\nChoose M := l%nat.\nTake n : ℕ. Assume n_ge_l. Apply sigma_split_v2. assumption. assumption."
     },
     {
       "type": "code",
@@ -59,7 +59,7 @@
     },
     {
       "type": "code",
-      "text": "Assume sigma_k_cv.\nBy lim_const_seq it holds that\n  (Un_cv (fun N ↦ sigma a k (l-1)) (sigma a k (l-1))) (H7).\nBy CV_minus it holds that\n  (Un_cv (fun N ↦ sigma a k N - (sigma a k (l-1)))\n         (sigma a k (l-1) + L - (sigma a k (l-1)))) (H8).\nWe claim that\n  (∃ M : ℕ, \n    ∀ n : ℕ, (n ≥ M)%nat ⇒\n      sigma a k n - sigma a k (l - 1)%nat = sigma a l n ) (H9).\nChoose M := l.\nTake n : ℕ. Assume n_ge_l : (n ≥ l)%nat. \nBy sigma_split_v2 it holds that \n  (sigma a k n = sigma a k (l - 1)%nat + sigma a l n) (H10).\nWe need to show that (sigma a k n - sigma a k (l-1) = sigma a l n).\nIt follows that (sigma a k n - sigma a k (l - 1) =\nsigma a l n).\n\nRewrite using (L = sigma a k (l-1) + L - sigma a k (l-1)).\napply conv_evt_eq_seq\n  with (a := fun n ↦ sigma a k n - sigma a k (l-1))\n       (b := fun n ↦ sigma a l n).\nChoose M such that H11 according to H9.\nChoose k0 := M.\nApply H11.\nApply H8.\nQed."
+      "text": "Assume sigma_k_cv.\nWe claim that\n  (Un_cv (fun N ↦ sigma a k (l-1)) (sigma a k (l-1))) (H7).\n  Apply lim_const_seq.\nBy CV_minus it holds that\n  (Un_cv (fun N ↦ sigma a k N - (sigma a k (l-1)))\n         (sigma a k (l-1) + L - (sigma a k (l-1)))) (H8).\nWe claim that\n  (∃ M : ℕ, \n    ∀ n : ℕ, (n ≥ M)%nat ⇒\n      sigma a k n - sigma a k (l - 1)%nat = sigma a l n ) (H9).\nChoose M := l.\nTake n : ℕ. Assume n_ge_l : (n ≥ l)%nat. \nBy sigma_split_v2 it holds that \n  (sigma a k n = sigma a k (l - 1)%nat + sigma a l n) (H10).\nWe need to show that (sigma a k n - sigma a k (l-1) = sigma a l n).\nIt follows that (sigma a k n - sigma a k (l - 1) =\nsigma a l n).\n\nRewrite using (L = sigma a k (l-1) + L - sigma a k (l-1)).\napply conv_evt_eq_seq\n  with (a := fun n ↦ sigma a k n - sigma a k (l-1))\n       (b := fun n ↦ sigma a l n).\nChoose M such that H11 according to H9.\nChoose k0 := M.\nApply H11.\nApply H8.\nQed."
     },
     {
       "type": "code",

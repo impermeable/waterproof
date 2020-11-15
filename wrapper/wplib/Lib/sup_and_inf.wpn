@@ -91,7 +91,7 @@
     },
     {
       "type": "code",
-      "text": "Proof.\nTake A : (ℝ → Prop). Take M : ℝ.\nAssume M_is_sup : (is_sup (set_opp A) M).\nExpand the definition of is_inf.\nWe need to show that\n  (is_lower_bound A (-M) ∧\n   ∀ l : ℝ, is_lower_bound A l ⇒ \n     l ≤ -M).\nsplit.\nBy upp_bd_set_opp_to_low_bd_set it holds that\n  (is_lower_bound A (-M)) (H1).\nIt holds that (is_lower_bound A (-M)).\nWe need to show that\n  (∀ l : ℝ, is_lower_bound A l ⇒\n    l ≤ -M).\nTake l : ℝ. \nAssume l_low_bd : (is_lower_bound A l).\nExpand the definition of is_sup in M_is_sup.\nBy M_is_sup it holds that\n  (∀ b : ℝ, is_upper_bound (set_opp A) b ⇒ M ≤ b) (H1).\nBy low_bd_set_to_upp_bd_set_opp \n  it holds that\n  (is_upper_bound (set_opp A) (-l)) (H2).\nBy H1 it holds that (M ≤ -l) (H3).\nIt holds that (l ≤ -M).\nQed."
+      "text": "Proof.\nTake A : (ℝ → Prop). Take M : ℝ.\nAssume M_is_sup : (is_sup (set_opp A) M).\nExpand the definition of is_inf.\nWe need to show that\n  (is_lower_bound A (-M) ∧\n   ∀ l : ℝ, is_lower_bound A l ⇒ \n     l ≤ -M).\nsplit.\nExpand the definition of is_sup in M_is_sup.\nBy M_is_sup it holds that (is_upper_bound (set_opp A) M) (M_upp_bd).\nBy upp_bd_set_opp_to_low_bd_set it holds that\n  (is_lower_bound A (-M)) (H1).\nIt holds that (is_lower_bound A (-M)).\nWe need to show that\n  (∀ l : ℝ, is_lower_bound A l ⇒\n    l ≤ -M).\nTake l : ℝ. \nAssume l_low_bd : (is_lower_bound A l).\nExpand the definition of is_sup in M_is_sup.\nBy M_is_sup it holds that (∀ b : ℝ, is_upper_bound (set_opp A) b ⇒ M ≤ b) (H1).\nBy low_bd_set_to_upp_bd_set_opp \n  it holds that\n  (is_upper_bound (set_opp A) (-l)) (H2).\nBy H1 it holds that (M ≤ -l) (H3).\nIt holds that (l ≤ -M).\nQed."
     },
     {
       "type": "code",

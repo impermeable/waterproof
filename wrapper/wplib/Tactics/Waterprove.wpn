@@ -1,0 +1,17 @@
+{
+  "exerciseSheet": false,
+  "blocks": [
+    {
+      "type": "text",
+      "text": "* Waterprove: Tactic automation for Waterproof"
+    },
+    {
+      "type": "code",
+      "text": "Require Import Reals."
+    },
+    {
+      "type": "code",
+      "text": "Ltac waterprove t s :=\n  timeout 60 (first [ solve [auto using s with *]\n        | solve [eauto using s with *]\n        | solve [intuition (auto using s with * )]\n        | solve [intuition (eauto using s with * )]\n        | idtac \"Waterproof could not find a proof of \" t])."
+    }
+  ]
+}

@@ -7,7 +7,7 @@
     },
     {
       "type": "code",
-      "text": "Require Import Coq.Logic.PropExtensionality.\nLemma base_same : forall C : Type,\n  forall P : C -> Prop,\n  forall x y : sig P, proj1_sig x = proj1_sig y -> x = y.\nProof.\nintros C P x y H.\napply eq_sig_hprop.\nintros.\napply proof_irrelevance.\napply H.\nQed.\n\nLemma same_base : forall C : Type,\n  forall P : C -> Prop,\n    forall x y : sig P, x = y -> proj1_sig x = proj1_sig y.\nProof.\nintros C P x y H.\nrewrite H.\ntrivial.\nQed.\n\n\nHint Resolve base_same : additional.\nHint Resolve same_base : additional."
+      "text": "Require Import Coq.Logic.PropExtensionality.\nRequire Import wplib.Definitions.SetDefinitions.\nRequire Import wplib.Notations.Notations.\nLemma base_same : forall C : Type,\n  forall P : C -> Prop,\n  forall x y : sig P, proj1_sig x = proj1_sig y -> x = y.\nProof.\nintros C P x y H.\napply eq_sig_hprop.\nintros.\napply proof_irrelevance.\napply H.\nQed.\n\nLemma same_base : forall C : Type,\n  forall P : C -> Prop,\n    forall x y : sig P, x = y -> proj1_sig x = proj1_sig y.\nProof.\nintros C P x y H.\nrewrite H.\ntrivial.\nQed.\n\n\nHint Resolve base_same : additional.\nHint Resolve same_base : additional."
     },
     {
       "type": "code",
@@ -32,6 +32,14 @@
     {
       "type": "code",
       "text": "Hint Resolve subset_elements_satisfy_predicate : additional."
+    },
+    {
+      "type": "code",
+      "text": "\nLemma elements_satisfy_other_pred :\n  ∀ (A : subsets_R) (pred : ℝ → Prop),\n    (∀ a : A, pred a) ⇒\n      ∀ b : ℝ, is_in A b ⇒ pred b.\n  "
+    },
+    {
+      "type": "code",
+      "text": "    \nProof.\nintros A pred A_satisfies b b_in_A.\nset (c := (mk_element_R (is_in A) b b_in_A)).\nassert (pred_c : (pred c)) by eauto using A_satisfies with *.\neauto with *.\nQed."
     },
     {
       "type": "text",
