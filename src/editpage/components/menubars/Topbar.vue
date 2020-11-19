@@ -174,6 +174,13 @@ export default {
             event: 'findAndReplace',
             eventType: 'on-proof-window',
             shortkeyTag: 'findAndReplace',
+            requires: ['notebook'],
+          },
+          {
+            text: 'Highlight inputs',
+            event: 'toggleFocusInputs',
+            eventType: 'on-proof-window',
+            shortkeyTag: 'toggleFocusInputs',
             line: 'true',
             requires: ['notebook'],
           },
