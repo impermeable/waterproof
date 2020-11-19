@@ -78,6 +78,7 @@ export default {
       undoRedo: new UndoRedo(null),
       lastSearch: null,
       showFind: false,
+      focusInputs: false,
       cursorPos: {
         block: -1,
       },
@@ -331,6 +332,24 @@ export default {
       }
     },
 
+    toggleFocusInputs: function() {
+      // Toggle grading mode
+      if (this.notebook.exerciseSheet === true) {
+        this.focusInputs = !this.focusInputs;
+
+        const editables=document.getElementsByClassName('edit-block');
+        const len=editables.length;
+
+        for (let i=0; i<len; i++) {
+          if (this.focusInputs) {
+            editables[i].classList.add('highlight-mode');
+          } else {
+            editables[i].classList.remove('highlight-mode');
+          }
+        }
+      }
+    },
+
     clearErrors: function(cm, index) {
       let checkIndex = 0;
       for (const block of this.notebook.blocks) {
@@ -392,7 +411,7 @@ export default {
     this.eventBus.$on('insertAtCursor', this.insertAtCursor);
     this.eventBus.$on('changeInput', this.changeInput);
     this.eventBus.$on('setCursorPos', this.setCursorPos);
-    this.eventBus.$on('findAndReplace', this.findAndReplace);
+    this.eventBus.$on('toggleFocusInputs', this.toggleFocusInputs);
     this.eventBus.$on('saveFile', this.saveFile);
     this.eventBus.$on('saveAsFile', this.saveAsFile);
     this.eventBus.$on('exportToCoq', this.exportToCoq);
@@ -434,6 +453,10 @@ export default {
         flex-direction: column;
       }
     }
+  }
+
+  .highlight-mode {
+    background-color: #fff6bf;
   }
 
   .executeError {
