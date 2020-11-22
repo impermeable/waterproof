@@ -31,7 +31,7 @@
     },
     {
       "type": "code",
-      "text": "Ltac assume_strict s t :=\n  match goal with\n    | [ |- ?u -> _ ] => (change u with t; intro s)\n  end."
+      "text": "Ltac assume_strict s t :=\n  match goal with    \n    | [ |- ?u -> _ ] =>\n      match u with\n      | (_ /\\ _) => (change u with t; intro s; destruct s)\n      | _ => (change u with t; intro s)\n      end\n  end."
     },
     {
       "type": "text",
