@@ -47,7 +47,7 @@
     },
     {
       "type": "code",
-      "text": "Definition converges_to (a : ℕ → ℝ) (c : ℝ) :=\n  ∀ ε : ℝ, ε > 0 ⇒ \n    ∃ N : ℕ, ∀ n : ℕ, (n ≥ N)%nat ⇒\n      R_dist (a n) c < ε.\n      \nNotation \"a ⟶ c\" := (converges_to a c) (at level 20).\n\nDefinition convergence {M : Metric_Space} (a : ℕ → Base M) (c : Base M) :=\n  ∀ ε : ℝ, ε > 0 ⇒\n    ∃ N : ℕ, ∀ n : ℕ, (n ≥ N)%nat ⇒\n      dist M (a n) c < ε.\n      \n \nDefinition bounded {X : Metric_Space} (a : ℕ → Base X) :=\n  ∃ q : Base X,\n    ∃ M : ℝ, M > 0 ⇒\n      ∀ n : ℕ, dist X (a n) q ≤ M.\n\nNotation \"a ⟶ c\" := (convergence a c) (at level 20) : metric_scope."
+      "text": "Definition converges_to (a : ℕ → ℝ) (c : ℝ) :=\n  ∀ ε : ℝ, ε > 0 ⇒ \n    ∃ N : ℕ, ∀ n : ℕ, (n ≥ N)%nat ⇒\n      R_dist (a n) c < ε.\n      \nNotation \"a ⟶ c\" := (converges_to a c) (at level 20).\n\nDefinition convergence {M : Metric_Space} (a : ℕ → Base M) (c : Base M) :=\n  ∀ ε : ℝ, ε > 0 ⇒\n    ∃ N : ℕ, ∀ n : ℕ, (n ≥ N)%nat ⇒\n      dist M (a n) c < ε.\n      \n \nDefinition bounded {X : Metric_Space} (a : ℕ → Base X) :=\n  ∃ q : Base X,\n    ∃ M : ℝ, M > 0 ⇒\n      ∀ n : ℕ, dist X (a n) q ≤ M.\n\nNotation \"a ⟶ c\" := (convergence a c) (at level 20) : metric_scope.\n\nDefinition cv_implies_cv_abs_to_l_abs := \n  cv_cvabs."
     },
     {
       "type": "text",
@@ -83,7 +83,7 @@
     },
     {
       "type": "code",
-      "text": "Notation \"'Σ' Cn 'equals' x\" := \n  (infinite_sum Cn x) (at level 50).\n  \n(*Notation \"'Σ' 'of' Cn 'up' 'to' n\" := \n  (sum_f_R0 Cn n) (at level 50). \n (*Sum and series also defined in series.wpn. What to adapt?*)*)"
+      "text": "Notation \"'Σ' Cn 'equals' x\" := \n  (infinite_sum Cn x) (at level 50).\n  \n(*Notation \"'Σ' 'of' Cn 'up' 'to' n\" := \n  (sum_f_R0 Cn n) (at level 50). \n (*Sum and series also defined in series.wpn. What to adapt?*)*)\n \nDefinition finite_triangle_inequalty := \n  sum_f_R0_triangle."
     },
     {
       "type": "text",
