@@ -72,7 +72,7 @@ export default {
         },
         {
           text: 'Next input',
-          icon: require('../../../assets/images/arrowDoubleRight.svg'),
+          icon: require('../../../assets/images/nextInput.svg'),
           event: 'nextInput',
           eventType: 'on-proof-window',
           requires: ['notebook'],
@@ -80,7 +80,7 @@ export default {
         },
         {
           text: 'Previous input',
-          icon: require('../../../assets/images/arrowDoubleRight.svg'),
+          icon: require('../../../assets/images/previousInput.svg'),
           event: 'previousInput',
           line: 'true',
           eventType: 'on-proof-window',
