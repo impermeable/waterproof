@@ -317,6 +317,26 @@ export default {
       this.eventBus.$emit('on-coq-message', {text: message, id: sentenceId});
     },
 
+    zoomIn: function() {
+      this.zoomMultiply(1.08);
+    },
+
+    zoomOut: function() {
+      this.zoomMultiply(0.92);
+    },
+
+    zoomMultiply: function(x) {
+      const level = document.body.style.zoom;
+      console.log('hi');
+      if (/\d%/.test(level)) {
+        const levelFloat = parseFloat(level.slice(0, -1)) * x;
+        document.body.style.zoom = levelFloat.toFixed(3) + '%';
+      } else {
+        console.log('hi2');
+        document.body.style.zoom = '100.000%';
+      }
+    },
+
     findAndReplace: function() {
       this.showFind = !this.showFind;
       if (this.showFind) {
@@ -388,6 +408,8 @@ export default {
     this.eventBus.$on('changeInput', this.changeInput);
     this.eventBus.$on('setCursorPos', this.setCursorPos);
     this.eventBus.$on('findAndReplace', this.findAndReplace);
+    this.eventBus.$on('zoomIn', this.zoomIn);
+    this.eventBus.$on('zoomOut', this.zoomOut);
     this.eventBus.$on('saveFile', this.saveFile);
     this.eventBus.$on('saveAsFile', this.saveAsFile);
     this.eventBus.$on('exportToCoq', this.exportToCoq);

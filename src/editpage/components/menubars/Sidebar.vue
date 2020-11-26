@@ -71,6 +71,23 @@ export default {
           shortkeyTag: 'executeAll',
         },
         {
+          text: 'Zoom in',
+          icon: require('../../../assets/images/looking_glass_grey.svg'),
+          shortkeyTag: 'zoomIn',
+          event: 'zoomIn',
+          eventType: 'on-proof-window',
+          requires: ['notebook'],
+        },
+        {
+          text: 'Zoom out',
+          icon: require('../../../assets/images/looking_glass_grey.svg'),
+          shortkeyTag: 'zoomOut',
+          event: 'zoomOut',
+          eventType: 'on-proof-window',
+          requires: ['notebook'],
+          line: true,
+        },
+        {
           text: 'Insert code',
           icon: require('../../../assets/images/codeButton.svg'),
           event: 'insertCode',
