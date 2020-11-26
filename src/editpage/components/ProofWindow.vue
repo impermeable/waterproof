@@ -296,7 +296,13 @@ export default {
           };
         }
         if (blockEnd >= errorEndIndex) {
-          block.state.error.message = error;
+          if (/In environment[\s\S]*Unable to unify /.test(error)) {
+            block.state.error.message =
+                error.replace(/In environment[\s\S]*Unable to unify /,
+                    'Unable to unify ');
+          } else {
+            block.state.error.message = error;
+          }
           break;
         }
         index += block.text.length + 1;
