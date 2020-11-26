@@ -185,6 +185,21 @@ export default {
             requires: ['notebook'],
           },
           {
+            text: 'Next input',
+            event: 'nextInput',
+            eventType: 'on-proof-window',
+            shortkeyTag: 'nextInput',
+            requires: ['notebook'],
+          },
+          {
+            text: 'Previous input',
+            event: 'previousInput',
+            eventType: 'on-proof-window',
+            shortkeyTag: 'previousInput',
+            line: 'true',
+            requires: ['notebook'],
+          },
+          {
             text: 'Insert text block',
             event: 'insertText',
             eventType: 'on-proof-window',
