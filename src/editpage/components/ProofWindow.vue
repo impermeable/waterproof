@@ -318,23 +318,19 @@ export default {
     },
 
     zoomIn: function() {
-      this.zoomMultiply(1.08);
+      this.zoomChange(.1);
     },
 
     zoomOut: function() {
-      this.zoomMultiply(0.92);
+      this.zoomChange(-.1);
     },
 
-    zoomMultiply: function(x) {
-      const level = document.body.style.zoom;
-      console.log('hi');
-      if (/\d%/.test(level)) {
-        const levelFloat = parseFloat(level.slice(0, -1)) * x;
-        document.body.style.zoom = levelFloat.toFixed(3) + '%';
-      } else {
-        console.log('hi2');
-        document.body.style.zoom = '100.000%';
-      }
+    zoomChange: function(factor) {
+      const wf = require('electron').webFrame;
+      const newZoom = wf.getZoomFactor() + factor;
+
+      const boundedZoom = Math.max(0.3, Math.min(newZoom, 3.0));
+      wf.setZoomFactor(boundedZoom);
     },
 
     findAndReplace: function() {
