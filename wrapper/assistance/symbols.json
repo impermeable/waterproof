@@ -78,7 +78,8 @@
             { "symbol": "≠", "name": "not-equal" },
             { "symbol": "¬", "name": "not" },
             { "symbol": "⊕", "name": "circle-plus"},
-            { "symbol": "⊗", "name": "circle-times"}
+            { "symbol": "⊗", "name": "circle-times"},
+            { "symbol": "◦", "name": "comp"}
         ]
     },
     {
