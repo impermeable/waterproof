@@ -78,6 +78,7 @@ export default {
       undoRedo: new UndoRedo(null),
       lastSearch: null,
       showFind: false,
+      focusInputs: false,
       cursorPos: {
         block: -1,
       },
@@ -296,6 +297,11 @@ export default {
           };
         }
         if (blockEnd >= errorEndIndex) {
+          const longError =
+              error.match(/In environment[\s\S]*Unable to unify([\s\S]*)$/);
+          if (longError != null) {
+            error = 'Unable to unify ' + longError[1];
+          }
           block.state.error.message = error;
           break;
         }
@@ -339,6 +345,64 @@ export default {
         this.$nextTick(()=> {
           this.$refs.editWindow.$refs.find.$refs.findInput.focus();
         });
+      }
+    },
+
+    toggleFocusInputs: function() {
+      // Toggle grading mode
+      if (this.notebook.exerciseSheet === true) {
+        this.focusInputs = !this.focusInputs;
+
+        const editables=document.getElementsByClassName('edit-block');
+        const len=editables.length;
+
+        for (let i=0; i<len; i++) {
+          if (this.focusInputs) {
+            editables[i].classList.add('highlight-mode');
+          } else {
+            editables[i].classList.remove('highlight-mode');
+          }
+        }
+      }
+    },
+
+    nextInput: function() {
+      const currentScroll = this.$refs.editWindow.$el.scrollTop;
+      const inputs =
+          this.$refs.editWindow.$el.getElementsByClassName('input-start-block');
+
+      if (inputs.length > 0) {
+        for (let i = 0; i < inputs.length; i++) {
+          const offset = inputs[i].offsetTop;
+          // Need this offset, as setting scroll to x changes it to x-epsilon
+          if (currentScroll + 1.0 < offset) {
+            this.$refs.editWindow.$el.scrollTop = offset;
+            return;
+          }
+        }
+
+        // By deduction if we get here we are past the last input block
+        // this.$refs.editWindow.$el.scrollTop = inputs[0].offsetTop;
+      }
+    },
+
+    previousInput: function() {
+      const currentScroll = this.$refs.editWindow.$el.scrollTop;
+      const inputs =
+          this.$refs.editWindow.$el.getElementsByClassName('input-start-block');
+
+      if (inputs.length > 0) {
+        for (let i = inputs.length-1; i >= 0; i--) {
+          const offset = inputs[i].offsetTop;
+          if (currentScroll > offset) {
+            this.$refs.editWindow.$el.scrollTop = offset;
+            return;
+          }
+        }
+
+        // By deduction if we get here we are past the first input block
+        // this.$refs.editWindow.$el.scrollTop =
+        //     inputs[inputs.length-1].offsetTop;
       }
     },
 
@@ -403,6 +467,9 @@ export default {
     this.eventBus.$on('insertAtCursor', this.insertAtCursor);
     this.eventBus.$on('changeInput', this.changeInput);
     this.eventBus.$on('setCursorPos', this.setCursorPos);
+    this.eventBus.$on('toggleFocusInputs', this.toggleFocusInputs);
+    this.eventBus.$on('nextInput', this.nextInput);
+    this.eventBus.$on('previousInput', this.previousInput);
     this.eventBus.$on('findAndReplace', this.findAndReplace);
     this.eventBus.$on('zoomIn', this.zoomIn);
     this.eventBus.$on('zoomOut', this.zoomOut);
@@ -447,6 +514,10 @@ export default {
         flex-direction: column;
       }
     }
+  }
+
+  .highlight-mode {
+    background-color: #fff6bf;
   }
 
   .executeError {

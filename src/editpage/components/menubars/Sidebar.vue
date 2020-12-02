@@ -88,6 +88,23 @@ export default {
           line: true,
         },
         {
+          text: 'Next input',
+          icon: require('../../../assets/images/nextInput.svg'),
+          event: 'nextInput',
+          eventType: 'on-proof-window',
+          requires: ['notebook'],
+          shortkeyTag: 'nextInput',
+        },
+        {
+          text: 'Previous input',
+          icon: require('../../../assets/images/previousInput.svg'),
+          event: 'previousInput',
+          line: 'true',
+          eventType: 'on-proof-window',
+          requires: ['notebook'],
+          shortkeyTag: 'previousInput',
+        },
+        {
           text: 'Insert code',
           icon: require('../../../assets/images/codeButton.svg'),
           event: 'insertCode',

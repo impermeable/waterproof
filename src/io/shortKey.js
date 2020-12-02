@@ -24,6 +24,7 @@ if (process.platform === 'darwin') {
     undo: ['meta', 'z'],
     redo: ['meta', 'y'],
     findAndReplace: ['meta', 'f'],
+    toggleFocusInputs: ['ctrl', 'g'],
 
     zoomIn: ['meta', 'plus'],
     zoomOut: ['meta', 'minus'],
@@ -65,6 +66,7 @@ if (process.platform === 'darwin') {
     undo: ['ctrl', 'z'],
     redo: ['ctrl', 'y'],
     findAndReplace: ['ctrl', 'f'],
+    toggleFocusInputs: ['ctrl', 'g'],
 
     zoomIn: ['ctrl', 'plus'],
     zoomOut: ['ctrl', 'minus'],
