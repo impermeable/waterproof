@@ -7,7 +7,7 @@
     },
     {
       "type": "code",
-      "text": "Require Import Coq.Logic.PropExtensionality.\nRequire Import wplib.Definitions.SetDefinitions.\nRequire Import wplib.Notations.Notations.\nLemma base_same : forall C : Type,\n  forall P : C -> Prop,\n  forall x y : sig P, proj1_sig x = proj1_sig y -> x = y.\nProof.\nintros C P x y H.\napply eq_sig_hprop.\nintros.\napply proof_irrelevance.\napply H.\nQed.\n\nLemma same_base : forall C : Type,\n  forall P : C -> Prop,\n    forall x y : sig P, x = y -> proj1_sig x = proj1_sig y.\nProof.\nintros C P x y H.\nrewrite H.\ntrivial.\nQed.\n\n\nHint Resolve base_same : additional.\nHint Resolve same_base : additional."
+      "text": "Require Import Coq.Logic.PropExtensionality.\nRequire Import wplib.Definitions.SetDefinitions.\nRequire Import wplib.Definitions.Subsequences.\nRequire Import wplib.Notations.Notations.\nLemma base_same : forall C : Type,\n  forall P : C -> Prop,\n  forall x y : sig P, proj1_sig x = proj1_sig y -> x = y.\nProof.\nintros C P x y H.\napply eq_sig_hprop.\nintros.\napply proof_irrelevance.\napply H.\nQed.\n\nLemma same_base : forall C : Type,\n  forall P : C -> Prop,\n    forall x y : sig P, x = y -> proj1_sig x = proj1_sig y.\nProof.\nintros C P x y H.\nrewrite H.\ntrivial.\nQed.\n\n\nHint Resolve base_same : additional.\nHint Resolve same_base : additional."
     },
     {
       "type": "code",
@@ -108,6 +108,10 @@
     {
       "type": "code",
       "text": "Lemma div_sign_flip : forall r1 r2 : R, r1 > 0 -> r2 > 0 -> r1 > 1 / r2 -> 1 / r1 < r2.\nProof.\nintros.\nunfold Rdiv in *.\nrewrite Rmult_1_l in *.\nrewrite <- (Rinv_involutive r2).\napply (Rinv_lt_contravar (/ r2) r1).\napply Rmult_lt_0_compat. apply Rinv_0_lt_compat. apply H0. apply H.\napply H1. apply Rgt_not_eq. apply H0.\nQed.\n\nLemma div_pos : forall r1 r2 : R, r1 > 0 ->1 / r1 > 0.\nProof.\nintros. unfold Rdiv. rewrite Rmult_1_l. apply Rinv_0_lt_compat. apply H.\nQed.\n\nLemma Rabs_zero : forall r : R, Rabs (r - 0) = Rabs r.\nProof.\nintros. rewrite Rminus_0_r. trivial.\nQed.\n\nLemma inv_remove : forall r1 r2 : R, 0 < r1 -> 0 < r2 -> 1 / r1 < 1 / r2 -> r1 > r2.\nProof.\nintros.\nunfold Rdiv in *. rewrite Rmult_1_l in *.\nrewrite <- (Rinv_involutive r1), <- (Rinv_involutive r2).\napply (Rinv_lt_contravar (/ r1) (/ r2)). apply Rmult_lt_0_compat. apply Rinv_0_lt_compat. apply H.\napply Rinv_0_lt_compat. apply H0. rewrite Rmult_1_l in *. apply H1.\nall: apply Rgt_not_eq; assumption.\nQed.\n\nLemma Rle_abs_min : forall x : R, -x <= Rabs x.\nProof.\nintros. rewrite <- (Rabs_Ropp (x)). apply Rle_abs.\nQed.\n\nLemma Rge_min_abs : forall x : R, x >= -Rabs x.\nProof.\nintros. rewrite <- (Ropp_involutive x). apply Ropp_le_ge_contravar.\nrewrite (Rabs_Ropp (- x)). apply Rle_abs.\nQed.\n\nLemma Rmax_abs : forall a b : R, Rmax (Rabs a) (Rabs b) >= 0.\nProof.\nintros.\napply (Rge_trans _ (Rabs a) _).\napply Rle_ge.\napply Rmax_l.\napply (Rle_ge 0 (Rabs a)).\napply Rabs_pos.\nQed.\n\n\nHint Resolve div_sign_flip : reals.\nHint Resolve div_pos : reals.\nHint Resolve inv_remove : reals.\nHint Resolve Rabs_left : reals.\nHint Resolve Rabs_right : reals.\nHint Resolve Rabs_left1 : reals.\nHint Resolve Rabs_pos_lt : reals.\nHint Resolve Rabs_zero : reals.\nHint Resolve Rle_abs : reals.\nHint Resolve Rabs_pos : reals.\nHint Resolve Rle_abs_min : reals.\nHint Resolve Rge_min_abs : reals.\nHint Resolve Rmax_abs : reals.\n\n\nHint Extern 1 => rewrite Rabs_zero : reals."
+    },
+    {
+      "type": "text",
+      "text": "## Subsequences"
     },
     {
       "type": "code",

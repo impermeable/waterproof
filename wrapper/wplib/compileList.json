@@ -1,6 +1,7 @@
 [
   "Definitions/SetDefinitions",
   "Notations/Notations",
+  "Definitions/Subsequences",
   "Tactics/AdditionalLemmas",
   "Tactics/Databases",
   "Tactics/Waterprove",

@@ -1,0 +1,33 @@
+{
+  "exerciseSheet": false,
+  "blocks": [
+    {
+      "type": "text",
+      "text": "## Subsequences definitions"
+    },
+    {
+      "type": "code",
+      "text": "Require Import Reals.\nRequire Import wplib.Notations.Notations.\nOpen Scope metric_scope."
+    },
+    {
+      "type": "code",
+      "text": "Definition is_index_sequence  (n : ℕ → ℕ) := \n  ∀ k : ℕ,\n    (n k < n (k + 1))%nat."
+    },
+    {
+      "type": "code",
+      "text": "Variable M : Metric_Space.\nDefinition X := Base M.\nDefinition dist := dist M.\n"
+    },
+    {
+      "type": "code",
+      "text": "Notation \"a ◦ n\" := (fun (k : nat) => a (n k)) (right associativity, at level 20).\nNotation \"a ◦ n ◦ m\" := (fun (k : nat) => a (n (m k))) (right associativity, at level 21).\nDefinition is_subsequence (b : ℕ → X) (a : ℕ → X) := \n  ∃ n : (ℕ → ℕ),\n    is_index_sequence n ∧ ∀ k : ℕ,\n      b k = (a ◦ n) k."
+    },
+    {
+      "type": "code",
+      "text": "Definition is_accumulation_point (p : X) (a : ℕ → X) :=\n  ∃ n : (ℕ → ℕ),\n    is_index_sequence n ∧ (a ◦ n) ⟶ p.\n"
+    },
+    {
+      "type": "code",
+      "text": "Lemma index_sequence_property (n : ℕ → ℕ) :\n  is_index_sequence n ⇒ \n    ∀ k : ℕ,\n      (n k ≥ k)%nat.\nProof.\nintros. unfold is_index_sequence in H. induction k.\nspecialize (H 0%nat). unfold ge. apply Nat.le_0_l.\nspecialize (H k). unfold ge. apply lt_le_S. rewrite Nat.add_1_r in H.\napply (Nat.le_lt_trans k (n k) _). apply IHk. apply H.\nQed.\n\nHint Resolve index_sequence_property : reals.\nHint Extern 1 => (unfold ge) : reals.\n"
+    }
+  ]
+}
