@@ -296,6 +296,11 @@ export default {
           };
         }
         if (blockEnd >= errorEndIndex) {
+          const longError =
+              error.match(/In environment[\s\S]*Unable to unify([\s\S]*)$/);
+          if (longError != null) {
+            error = 'Unable to unify ' + longError[1];
+          }
           block.state.error.message = error;
           break;
         }
