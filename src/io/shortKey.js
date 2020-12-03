@@ -26,6 +26,9 @@ if (process.platform === 'darwin') {
     findAndReplace: ['meta', 'f'],
     toggleFocusInputs: ['ctrl', 'g'],
 
+    zoomIn: ['meta', 'plus'],
+    zoomOut: ['meta', 'minus'],
+
     commonCommands: {},
     commonSymbols: {},
     commonTactics: {},
@@ -64,6 +67,9 @@ if (process.platform === 'darwin') {
     redo: ['ctrl', 'y'],
     findAndReplace: ['ctrl', 'f'],
     toggleFocusInputs: ['ctrl', 'g'],
+
+    zoomIn: ['ctrl', 'plus'],
+    zoomOut: ['ctrl', 'minus'],
 
     commonCommands: {},
     commonSymbols: {},
