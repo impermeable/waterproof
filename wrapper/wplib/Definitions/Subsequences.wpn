@@ -7,7 +7,7 @@
     },
     {
       "type": "code",
-      "text": "Require Import Reals.\nRequire Import wplib.Notations.Notations.\nOpen Scope metric_scope."
+      "text": "Require Import Reals.\nRequire Import wplib.Notations.Notations.\nRequire Import wplib.Lib.subsequences.\nRequire Import wplib.Tactics.Tactics.\nOpen Scope metric_scope."
     },
     {
       "type": "code",
@@ -19,15 +19,27 @@
     },
     {
       "type": "code",
-      "text": "Notation \"a ◦ n\" := (fun (k : nat) => a (n k)) (right associativity, at level 20).\nNotation \"a ◦ n ◦ m\" := (fun (k : nat) => a (n (m k))) (right associativity, at level 21).\nDefinition is_subsequence (b : ℕ → X) (a : ℕ → X) := \n  ∃ n : (ℕ → ℕ),\n    is_index_sequence n ∧ ∀ k : ℕ,\n      b k = (a ◦ n) k."
+      "text": "Notation \"a ◦ n\" := (fun (k : nat) => a (n k)) (right associativity, at level 20).\nNotation \"a ◦ n ◦ m\" := (fun (k : nat) => a (n (m k))) (right associativity, at level 21).\nDefinition is_subsequence (b : ℕ → X) (a : ℕ → X) := \n  ∃ m : (ℕ → ℕ),\n    is_index_sequence m ∧ ∀ k : ℕ,\n      b k = (a ◦ m) k."
     },
     {
       "type": "code",
-      "text": "Definition is_accumulation_point (p : X) (a : ℕ → X) :=\n  ∃ n : (ℕ → ℕ),\n    is_index_sequence n ∧ (a ◦ n) ⟶ p.\n"
+      "text": "Definition is_accumulation_point (p : X) (a : ℕ → X) :=\n  ∃ l : (ℕ → ℕ),\n    is_index_sequence l ∧ (a ◦ l) ⟶ p.\n"
     },
     {
       "type": "code",
       "text": "Lemma index_sequence_property (n : ℕ → ℕ) :\n  is_index_sequence n ⇒ \n    ∀ k : ℕ,\n      (n k ≥ k)%nat.\nProof.\nintros. unfold is_index_sequence in H. induction k.\nspecialize (H 0%nat). unfold ge. apply Nat.le_0_l.\nspecialize (H k). unfold ge. apply lt_le_S. rewrite Nat.add_1_r in H.\napply (Nat.le_lt_trans k (n k) _). apply IHk. apply H.\nQed.\n\nHint Resolve index_sequence_property : reals.\nHint Extern 1 => (unfold ge) : reals.\n"
+    },
+    {
+      "type": "code",
+      "text": "Lemma index_seq_equiv (n : ℕ → ℕ) : is_index_seq n ⇔ is_index_sequence n.\nProof. \nWe show both directions.\nintro.\nunfold is_index_sequence. \nTake k : ℕ. \nunfold is_index_seq in H. \nIt holds that ((k + 1)%nat = S k) (H1).\nWrite goal using ((k + 1)%nat = S k)\n  as ((n k < n (S k))%nat). \nApply H.\n\nintro.\nunfold is_index_seq. \nTake k : ℕ. \nunfold is_index_sequence in H. \nIt holds that (S k = (k + 1)%nat) (H1).\nWrite goal using (S k = (k + 1)%nat)\n  as ((n k < n (k + 1))%nat). \nApply H.\nQed."
+    },
+    {
+      "type": "code",
+      "text": "Lemma index_sequence_property2 (n : ℕ → ℕ) : \n  is_index_sequence n ⇒ \n    ∀ k1 k2 : ℕ, \n      (k1 ≥ k2)%nat ⇒ \n        (n k1 ≥ n k2)%nat.\nProof.\nAssume H : (is_index_sequence n).\nTake k1 and k2 : ℕ.\nAssume k1_ge_k2 : (k1 ≥ k2)%nat.\nWe need to show that (n k1 ≥ n k2)%nat.\n\npose proof (incr_loc_to_glob n).\nWe claim that (is_increasing n) (n_is_increasing).\nExpand the definition of is_increasing.\nTake k : ℕ.\nIt holds that (n k ≤ n (k+1))%nat (temp).\nIt holds that (k+1 = S k)%nat (temp2).\nWrite goal using (S k = (k + 1)%nat) as ((n k ≤ n (k + 1))%nat).\nApply temp.\nApply H0. Apply n_is_increasing. Apply k1_ge_k2.\nQed.\n\nHint Resolve index_sequence_property2 : reals."
+    },
+    {
+      "type": "code",
+      "text": "Lemma double_is_even : forall n : nat, Nat.even (2 * n) = true.\nProof.\nTake n : nat.\nRewrite (Nat.even (2*n)) = (Nat.even (0 + 2 * n)).\nrewrite Nat.even_add_mul_2. auto.\nQed.\nHint Resolve double_is_even : reals."
     }
   ]
 }

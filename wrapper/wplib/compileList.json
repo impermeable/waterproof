@@ -1,7 +1,6 @@
 [
   "Definitions/SetDefinitions",
   "Notations/Notations",
-  "Definitions/Subsequences",
   "Tactics/AdditionalLemmas",
   "Tactics/Databases",
   "Tactics/Waterprove",
@@ -11,7 +10,8 @@
   "Lib/sup_and_inf_new_definitions",
   "Lib/sequences",
   "Lib/subsequences",
+  "Definitions/Subsequences",
   "Lib/sequential_accumulation_points",
   "Notations/SetNotations",
-  "Lib/series"
+  "Lib/series"  
 ]
