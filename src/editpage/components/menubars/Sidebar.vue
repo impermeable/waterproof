@@ -154,6 +154,14 @@ export default {
           tooltip: true,
           findAndReplace: 'find',
         },
+        {
+          text: 'Settings',
+          icon: require('../../../assets/images/findButton.svg'),
+          event: 'openSettingsModal',
+          eventType: 'on-edit',
+          requires: [],
+          tooltip: true,
+        },
       ],
     };
   },
