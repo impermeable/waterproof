@@ -99,9 +99,13 @@ class SerapiTagger {
       return;
     }
 
-    const data = message.replace(/ ,\)/g, ' ",")')
-        .replace(/'\)/g, ' "\'")');
+    const data = message.replace(/,\)/g, ' ",")');
     const parsedData = parse(data);
+    if (parsedData instanceof Error) {
+      console.log('Could not parse: ', data);
+      console.warn(parsedData);
+      return;
+    }
 
     if (parsedData[0] !== 'Feedback') {
       const tag = parsedData[1];

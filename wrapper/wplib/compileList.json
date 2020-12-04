@@ -10,7 +10,8 @@
   "Lib/sup_and_inf_new_definitions",
   "Lib/sequences",
   "Lib/subsequences",
+  "Definitions/Subsequences",
   "Lib/sequential_accumulation_points",
   "Notations/SetNotations",
-  "Lib/series"
+  "Lib/series"  
 ]
