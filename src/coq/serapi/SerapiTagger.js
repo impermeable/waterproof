@@ -104,7 +104,6 @@ class SerapiTagger {
     if (parsedData instanceof Error) {
       console.log('Could not parse: ', data);
       console.warn(parsedData);
-      alert('Could not parse message: ' + message);
       return;
     }
 
