@@ -1,20 +1,8 @@
 <template>
   <div class="container-fluid" id="app">
-    <!-- The Modal -->
-    <div id="settingsModal" class="modal">
-
-      <!-- Modal content -->
-      <div id="settingsModalContent">
-        <button id="closeSettingsModalButton" @click="closeSettingsModal">
-          &times;
-        </button>
-        <button @click="changeSettingX">
-          Toggle setting X
-        </button>
-        <p>Some text in the Modal..</p>
-      </div>
-
-    </div>
+    <settings-modal
+      ref="settingsModal">
+    </settings-modal>
     <topbar v-bind:shortKeys="shortKeys" :eventBus="mainBus" :recents="recents">
     </topbar>
     <div class="content">
@@ -75,6 +63,7 @@ import 'bootstrap-vue/dist/bootstrap-vue.css';
 import {TabsPlugin, ModalPlugin} from 'bootstrap-vue';
 
 import Recents from '../io/recents';
+import SettingsModal from './components/assistance/SettingsModal.vue';
 
 Vue.use(TabsPlugin);
 Vue.use(ModalPlugin);
@@ -86,6 +75,7 @@ export default {
     ProofWindow,
     Sidebar,
     Topbar,
+    SettingsModal,
   },
   data: function() {
     return {
@@ -220,23 +210,6 @@ export default {
      */
     openTutorial: function() {
       this.openTab('Tutorial');
-    },
-
-    closeSettingsModal: function() {
-      document.getElementById('settingsModal').style.display = 'none';
-    },
-
-    openSettingsModal: function() {
-      document.getElementById('settingsModal').style.display = 'block';
-      // const release = await store.state.lock.acquire();
-
-      // release();
-    },
-
-    changeSettingX: function() {
-      // const release = await store.state.lock.acquire();
-      console.log('setting hi');
-      // release();
     },
 
     /**
@@ -494,6 +467,7 @@ export default {
     this.mainBus.$on('on-edit', this.doOnEdit);
     this.mainBus.$on('on-proof-window', this.doOnActiveProofWindow);
     this.mainBus.$on('goto-homescreen', this.homeScreen);
+    this.mainBus.$on('settings', this.$refs.settingsModal.forwardEvent);
 
     window.onresize = this.refreshExecGutters;
 
@@ -522,44 +496,6 @@ export default {
 
   .about-content {
     font-size: 14px;
-  }
-
-  /* The Modal (background) */
-  #settingsModal {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
-    left: 0;
-    top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-  }
-
-  /* Modal Content/Box */
-  #settingsModalContent {
-    background-color: #fefefe;
-    margin: 15% auto; /* 15% from the top and centered */
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%; /* Could be more or less, depending on screen size */
-  }
-
-  /* The Close Button */
-  #closeSettingsModalButton {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-  }
-
-  #closeSettingsModalButton:hover,
-  #closeSettingsModalButton:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
   }
 
 </style>

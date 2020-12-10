@@ -2,7 +2,7 @@ const remote = require('electron').remote;
 const path = require('path');
 
 import readFile from '../io/readfile';
-import {readConfiguration} from '../io/configurationio';
+import {readConfiguration, updateConfiguration} from '../io/configurationio';
 import createTexInputHints from '../codemirror/tex-input';
 
 import libraries from './libraries';
@@ -20,6 +20,10 @@ export default {
 
     assistanceItems: [],
     configLoaded: false,
+
+    settings: {
+      zoom: 1.0,
+    },
   },
   mutations: {
     onSearchStarted: function(state) {
@@ -60,8 +64,24 @@ export default {
     setAssistanceItems: function(state, {index, result}) {
       state.assistanceItems[index] = result;
     },
-    setConfig: function(state) {
+    setConfig: function(state, result) {
+      if (result.hasOwnProperty('zoom')) {
+        state.settings.zoom = result['zoom'];
+      }
+      if (state.settings.zoom == null || state.settings.zoom == 0.0) {
+        state.settings.zoom = 1.0;
+      }
+      const wf = require('electron').webFrame;
+      wf.setZoomFactor(state.settings.zoom);
+
       state.configLoaded = true;
+    },
+    setZoom: function(state, factor) {
+      state.settings.zoom = factor;
+      const wf = require('electron').webFrame;
+      wf.setZoomFactor(factor);
+
+      updateConfiguration(remote, state.settings);
     },
   },
   actions: {
