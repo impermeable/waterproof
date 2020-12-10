@@ -18,7 +18,6 @@ export default {
     sercompPath: null,
     serapiVersion: null,
     libraryVersion: null,
-    zoomLevel: null,
     socket: new TCPManager(),
   },
   mutations: {
@@ -35,7 +34,6 @@ export default {
       state.sertopPath = result['sertopPath'];
       state.serapiVersion = result['serapiVersion'];
       state.libraryVersion = result['libraryVersion'];
-      state.zoomLevel = result['zoomLevel'];
     },
     setSercompPath(state, path) {
       state.sercompPath = path;
@@ -49,9 +47,6 @@ export default {
       }
       if (partial.hasOwnProperty('libraryVersion')) {
         state.libraryVersion = partial['libraryVersion'];
-      }
-      if (partial.hasOwnProperty('zoomLevel')) {
-        state.zoomLevel = partial['zoomLevel'];
       }
     },
   },
