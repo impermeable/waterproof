@@ -199,7 +199,7 @@ export default {
 @import "../../../assets/sass/pages/_edit";
 
   .sidebar {
-    background-color: #2b3990;
+    @include theme(background-color, color-primary);
     padding-top: $tab-height-large;
     min-width: 40px;
     position: relative;

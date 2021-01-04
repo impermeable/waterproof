@@ -1,0 +1,12 @@
+@import '/abstracts/_mixins.scss';
+
+/** this section generates a theme map for each theme **/
+$themes: ();
+$themeValues: ();
+
+@import '/abstracts/_light.scss';
+@include generateThemeMappings(light, $light);
+
+@import '/abstracts/_dark.scss';
+@include generateThemeMappings(dark, $dark);
+/** end theme generation **/

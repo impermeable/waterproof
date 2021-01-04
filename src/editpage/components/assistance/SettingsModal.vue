@@ -2,21 +2,50 @@
     <div id="settingsModal" class="modal">
         <!-- Modal content -->
         <div id="settingsModalContent">
-        <button id="closeSettingsModalButton" @click="closeSettingsModal">
+          <button id="closeSettingsModalButton" @click="closeSettingsModal">
             &times;
         </button>
-        <div class="slidecontainer">
+          <!-- <h1>
+            Settings
+          </h1> -->
+          <h3>
+            Configuration
+          </h3>
+          <p id="settingsOverview">
+          </p>
+          <h3>
+            View Settings
+          </h3>
+        <!-- <div class="slidecontainer">
             <input v-model="zoomSliderValue" type="range" min="0.3" max="3"
             step="0.1"
             value="50" class="slider" id="myRange" @change="zoomSliderChanged">
-        </div>
-        <button @click="zoomIn">
-            Zoom in
-        </button>
-        <button @click="zoomOut">
-            Zoom out
-        </button>
-        <p>Some text in the Modal..</p>
+        </div> -->
+        <table class='padding-table-columns'>
+          <tr>
+            <th><h5>Change the zoom level</h5></th>
+            <th>
+              <button class='settings-modal-button' @click="zoomIn">
+                Zoom in
+              </button>
+              &nbsp;
+              <button class='settings-modal-button' @click="zoomOut">
+                Zoom out
+              </button>
+            </th>
+          </tr>
+          <tr>
+            <th>
+              <h5 style='padding-right: 50px;'>Toggle light and dark mode</h5>
+            </th>
+            <th>
+              <button class='settings-modal-button' @click="toggleTheme">
+                Toggle
+              </button>
+            </th>
+          </tr>
+
+        </table>
         </div>
     </div>
 </template>
@@ -49,6 +78,7 @@ export default {
 
     openSettingsModal: function() {
       document.getElementById('settingsModal').style.display = 'block';
+      this.updateConfigurationString();
       // const release = await store.state.lock.acquire();
 
       // release();
@@ -63,7 +93,8 @@ export default {
     },
 
     zoomSliderChanged: function() {
-      this.$store.commit('setZoom', this.zoomSliderValue);
+      const val = parseFloat(this.zoomSliderValue);
+      this.$store.commit('setZoom', val);
     },
 
     zoomChange: function(factor) {
@@ -71,6 +102,28 @@ export default {
 
       const boundedZoom = Math.max(0.3, Math.min(newZoom, 3.0));
       this.$store.commit('setZoom', boundedZoom);
+      this.updateConfigurationString();
+    },
+
+    toggleTheme: function() {
+      const currClass = document.getElementsByTagName('HTML')[0]
+          .getAttribute('class');
+      if (currClass === 'dark') {
+        this.$store.commit('setTheme', 'light');
+      } else {
+        this.$store.commit('setTheme', 'dark');
+      }
+      this.updateConfigurationString();
+    },
+
+    updateConfigurationString: function() {
+      const libs = this.$store.state.libraries;
+      const settings = this.$store.state.settings;
+      document.getElementById('settingsOverview').innerHTML =
+          'Sertop path: ' + libs.sertopPath + '<br /> Serapi Version: '
+          + libs.serapiVersion + '<br /> Library Version: '
+          + libs.libraryVersion + '<br /> Zoom: ' + settings.zoom
+          + '<br /> Theme: ' + settings.theme;
     },
   },
   mounted: function() {
@@ -95,22 +148,24 @@ export default {
     width: 100%; /* Full width */
     height: 100%; /* Full height */
     overflow: auto; /* Enable scroll if needed */
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
   }
 
   /* Modal Content/Box */
   #settingsModalContent {
-    background-color: #fefefe;
+    @include theme(background-color, color-background);
     margin: 15% auto; /* 15% from the top and centered */
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%; /* Could be more or less, depending on screen size */
+    padding: 25px;
+    @include theme(border, color-gray-darkest, 2px solid);
+    width: 60%; /* Could be more or less, depending on screen size */
+    word-wrap: normal;
+    font-size: small;
   }
 
   /* The Close Button */
   #closeSettingsModalButton {
-    color: #aaa;
+    @include theme(background-color, color-white);
+    @include theme(color, color-black);
+    @include theme(border-color, color-black);
     float: right;
     font-size: 28px;
     font-weight: bold;
@@ -118,9 +173,20 @@ export default {
 
   #closeSettingsModalButton:hover,
   #closeSettingsModalButton:focus {
-    color: black;
+    @include theme(color, color-black);
     text-decoration: none;
     cursor: pointer;
+  }
+
+  .settings-modal-button {
+    @include theme(background-color, color-white);
+    @include theme(border, color-black, 2px solid);
+    @include theme(color, color-black);
+  }
+
+  .padding-table-columns td
+  {
+    padding:0 115px 0 0; /* Only right padding*/
   }
 
 </style>

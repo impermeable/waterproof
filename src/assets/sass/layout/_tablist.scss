@@ -1,6 +1,7 @@
 $close-cross-height-large: 16px;
 $close-cross-height-small: 10px;
 
+@import '../colors.scss';
 /** The bar containing the 'tab'-buttons */
 .nav {
   flex-wrap: nowrap;
@@ -9,7 +10,7 @@ $close-cross-height-small: 10px;
   margin: 0;
   padding: 0;
   border: none;
-  background-color: $color-primary;
+  @include theme(background-color, color-primary);
   overflow-x: hidden;
   overflow-y: hidden;
 
@@ -27,11 +28,11 @@ $close-cross-height-small: 10px;
   }
 
   &::-webkit-scrollbar-track {
-    background: $color-gray-dark;
+    @include theme(background-color, color-gray-dark);
   }
 
   &::-webkit-scrollbar-thumb {
-    background: $color-primary;
+    @include theme(background-color, color-primary);
   }
 
   /** Individual elements of the bar, so single 'tab'-buttons */
@@ -41,11 +42,11 @@ $close-cross-height-small: 10px;
     height: calc(#{$tab-height-large} - 1px);
     margin-right: 1px;
     padding: 3px 10px 4px 10px;
-    background-color: $color-gray-dark;
-    color: $color-on-background;
+    @include theme(background-color, color-gray-dark);
+    @include theme(color, color-on-background);
 
     &:hover {
-      background-color: $color-gray-light;
+      @include theme(background-color, color-gray-light);
     }
 
     @include respond-to(sm-lower) {
@@ -64,7 +65,7 @@ $close-cross-height-small: 10px;
   }
 
   .tab-active {
-    background-color: $color-on-primary;
+    @include theme(background-color, color-on-primary);
     padding: 3px 10px 5px 10px;
     height: $tab-height-large;
 
@@ -74,7 +75,7 @@ $close-cross-height-small: 10px;
     }
 
     &:hover {
-      background-color: $color-on-primary;
+      @include theme(background-color, color-on-primary);
     }
   }
 
@@ -84,7 +85,7 @@ $close-cross-height-small: 10px;
     height: $tab-height-large - 1px;
     width: $tab-height-large - 1px;
     border: none;
-    background-color: $color-gray-dark;
+    @include theme(background-color, color-gray-dark);
     font-size: 25px;
 
     @include respond-to(sm-lower) {
@@ -94,7 +95,7 @@ $close-cross-height-small: 10px;
     }
 
     &:hover, &:active {
-      background-color: $color-gray-light;
+      @include theme(background-color, color-gray-light);
     }
   }
 }

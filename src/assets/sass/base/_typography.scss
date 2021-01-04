@@ -1,6 +1,8 @@
 /** Basic typography styles */
+@import '../_colors.scss';
+
 body {
-  color: $color-on-surface;
+  @include theme(color, color-on-surface);
   font: normal 125% / 1.4 $font-stack-body;
 }
 

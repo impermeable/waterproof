@@ -422,7 +422,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '../../../assets/sass/_colors.scss';
   .v-context {
-    background-color: $color-gray-light;
+    @include theme(background-color, color-gray-light);
   }
 </style>

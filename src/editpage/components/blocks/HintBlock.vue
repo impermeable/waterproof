@@ -98,6 +98,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  @import "/../../../assets/sass/_colors.scss";
+
   .hint-base {
     position: relative;
     min-height: 1em;
@@ -105,8 +107,8 @@ export default {
     margin-top: 0.5em;
     margin-bottom: 0.5em;
 
-    background: $color-on-primary;
-    border: 5px solid $color-primary;
+    @include theme(background-color, color-on-primary);
+    @include theme(border, color-primary, 5px solid);
   }
 
   .hint-block {
@@ -123,7 +125,7 @@ export default {
   }
 
   .hint-image-holder {
-    background: $color-primary-light;
+    @include theme(background-color, color-primary-light);
     position: absolute;
     right: 0;
     top: 0;
@@ -132,8 +134,8 @@ export default {
   }
 
   .hint-error {
-    color: $color-on-primary;
-    background: red;
+    @include theme(color, color-error-text);
+    @include theme(background-color, color-error);
     padding: 5px 5px 5px 5px;
     position: center;
 

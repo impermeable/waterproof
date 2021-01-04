@@ -16,9 +16,10 @@ export default {
 </script>
 
 <style lang="scss">
+  @import '../../../assets/sass/_colors.scss';
   .assistance-button {
-    background-color: $color-primary-light;
-    color: $color-on-primary;
+    @include theme(background-color, color-primary-light);
+    @include theme(color, color-button-on-primary);
     cursor: pointer;
     // border: 0.5px solid black;
     flex: 1 0 20%;
@@ -34,7 +35,7 @@ export default {
       text-overflow: ellipsis
     }
     &:hover {
-      background-color: $color-primary;
+      @include theme(background-color, color-primary);
     }
 
     .button-icon {

@@ -27,6 +27,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  @import "../../../assets/sass/_colors.scss";
     .button-info {
         max-width: 250px;
         overflow: hidden;
@@ -36,7 +37,7 @@ export default {
     .topbar-shortcut {
         padding-top: 3px;
         font-family: monospace;
-        color: gray;
+        @include theme(color, color-gray);
         padding-left: 10px;
     }
 </style>

@@ -79,13 +79,14 @@ export default {
 </script>
 
 <style lang="scss">
+@import '../../assets/sass/_colors.scss';
 /**
  * (1) Ensure padding does not interfere with icon size.
  * (2) Allow explicit sizing of inline element.
  */
 .homepage-button {
   box-sizing: content-box; /* 1 */
-  color: $color-primary;
+  @include theme(color, color-primary);
   display: block; /* 2 */
   padding: 10px; /* 1 */
   text-align: center;
@@ -103,6 +104,7 @@ export default {
    * Ensure text is vertically centered.
    */
   &-text {
+    @include theme(color, color-text-on-primary);
     display: flex;
     justify-content: center;
   }
@@ -111,7 +113,7 @@ export default {
    * EXPERIMENTAL: Alternate hover effect: Colored, rounded background box.
    */
   &:hover {
-    background: $color-primary;
+    @include theme(background-color, color-primary);
     border-radius: 10px;
 
     > * {

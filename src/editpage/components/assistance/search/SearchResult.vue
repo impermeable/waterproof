@@ -40,7 +40,8 @@ export default {
 </script>
 
 <style lang="scss">
+  @import "../../../../assets/sass/_colors.scss";
   .result-object {
-    color: $color-primary;
+    @include theme(color, color-primary);
   }
 </style>

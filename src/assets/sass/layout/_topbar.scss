@@ -1,4 +1,5 @@
 $font-to-use: Century Gothic;
+@import '../colors.scss';
 
 /**
   The topbar is build up as follows:
@@ -18,7 +19,7 @@ $font-to-use: Century Gothic;
   display: flex;
   flex-direction: row;
   height: $topbar-height-large;
-  background-color: $color-primary;
+  @include theme(background-color, color-primary);
 
   @include respond-to(sm-lower) {
     height: $topbar-height-small;
@@ -37,7 +38,7 @@ $font-to-use: Century Gothic;
       float: left;
       height: 100%;
       padding: 9px 5px 9px 6px;
-      background-color: $color-primary !important;
+      @include theme(background-color, color-primary, null, !important);
       cursor: pointer;
     }
   }
