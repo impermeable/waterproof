@@ -19,6 +19,7 @@ export default {
 </script>
 
 <style lang="scss">
+@import '../../../assets/sass/_colors.scss';
   .assistance-item {
     overflow-wrap: break-word;
 
@@ -45,7 +46,7 @@ export default {
           height: 34px;
 
           &:hover {
-            background-color: $color-gray-dark;
+            @include theme(background-color, color-gray-dark);
             border-radius: 10px;
           }
         }

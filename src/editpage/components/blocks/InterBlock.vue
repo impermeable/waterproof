@@ -54,16 +54,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '../../../assets/sass/_colors.scss';
   .start-blinking {
     animation: 1s start-blink step-end infinite;
   }
 
   @keyframes start-blink {
     from, to {
-      background-color: transparent;
+      @include theme(background-color, color-transparent);
     }
     50% {
-      background-color: $color-primary-light;
+      @include theme(background-color, color-primary-light);
     }
   }
 
@@ -73,7 +74,7 @@ export default {
     padding: 2px 0;
 
     &:hover {
-      background-color: $color-primary-light;
+      @include theme(background-color, color-primary-light);
       cursor: pointer;
     }
   }
@@ -94,11 +95,11 @@ export default {
   .interblock {
     margin-left: -4px;
     display: inline-block;
-    color: transparent;
+    @include theme(color, color-transparent);
     user-select: none;
 
     &:hover {
-      color: $color-primary;
+      @include theme(color, color-primary);
       cursor: pointer;
     }
   }

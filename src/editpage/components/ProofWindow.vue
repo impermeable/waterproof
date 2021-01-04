@@ -480,6 +480,8 @@ export default {
 
 
 <style lang="scss">
+  @import '../../assets/sass/_colors.scss';
+
   .proof-and-side-window {
     width: 100%;
     display: flex;
@@ -496,10 +498,10 @@ export default {
         flex-direction: column;
       }
     }
-  }
 
-  .highlight-mode {
-    background-color: #fff6bf;
+    .side-window {
+      @include theme(background-color, color-gray-light);
+    }
   }
 
   .executeError {
@@ -507,7 +509,7 @@ export default {
   }
 
   .error-message {
-    background-color: #FF6060;
+    @include theme(background-color, color-error-message);
     padding: 5px;
   }
 

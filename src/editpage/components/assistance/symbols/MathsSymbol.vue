@@ -15,6 +15,7 @@ export default {
 </script>
 
 <style lang="scss">
+@import '/../../../../assets/sass/_colors.scss';
   .symbol-button {
     height: 40px;
     width: 40px;
@@ -24,7 +25,7 @@ export default {
     font-size: larger;
 
     &:hover {
-      background-color: $color-gray-dark;
+      @include theme(background-color, color-gray-dark);
       font-weight: bold;
     }
   }

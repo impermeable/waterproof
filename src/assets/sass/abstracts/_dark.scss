@@ -1,0 +1,45 @@
+@import './_functions';
+
+$dark: (
+  // Primary brand color and variants.
+    // TODO: These colors are very similar, and used interchangeably for navigation
+    //  items. Should probably merge these.
+    color-primary: #11184d,
+    color-primary-dark: #040613,
+    // TODO: Both of these colors are used for hover effects, it would be better to
+    //  just stick to one color. Should probably use the dark variant on light
+    //  surfaces and vice versa.
+    color-primary-light: #060b25,
+    color-primary-extra-light: #aab0d3,
+    color-primary-ultra-light: #eceeff,
+
+    // Surface colors, for elements that are not typically styled using our brand
+    // colors.
+    color-background: #121212,
+    color-surface: #121212,
+    color-error: #990000,
+    color-error-message: #FF6060,
+    color-error-text: #ffffff,
+
+    // Colors for typography and iconography. These colors are meant for elements
+    // that appear on top of elements styled using the primary/surface colors.
+    color-on-primary: #121212,
+    color-on-background: #ffffff,
+    color-on-surface: #ffffff,
+    color-on-error: #121212,
+
+    // Color for multiple areas in a notebook, like search interface,
+    // code blocks
+    color-gray-darkest: #8d8b8b,
+    color-gray-dark: #585555,
+    color-gray-light: #202020,
+    color-gray: #505050,
+    color-black: #ffffff,
+    color-red: red,
+    color-white: black,
+    color-text-in-primary: white, // meant for text in primary coloured buttons
+    color-transparent: transparent,
+
+    color-highlight-mode: #fff6bf,
+    color-highlight-mode-text: black
+);

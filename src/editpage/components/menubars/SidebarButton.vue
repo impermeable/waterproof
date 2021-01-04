@@ -27,12 +27,13 @@ export default {
 </script>
 
 <style lang="scss">
+  @import '../../../assets/sass/_colors.scss';
 
   .image-masks {
     display: flex;
     align-items: center;
     mask-type: alpha;
-    background-color: white;
+    @include theme(background-color, color-white);
     mask-repeat: no-repeat;
     -webkit-mask-repeat: no-repeat;
     -webkit-mask-position: center center;
@@ -46,6 +47,8 @@ export default {
     font-size: 12px;
     overflow: hidden;
     display: inline-block;
+
+    @include theme(color, color-text-in-primary);
   }
 
   .tooltip-image {
@@ -57,21 +60,27 @@ export default {
       width: 25px;
       height: 15px;
     }
+
+    @include theme(background-color, color-text-in-primary);
   }
 
   .disabled {
 
     .tooltip-image {
-      background-color: darkgray;
+      @include theme(background-color, color-gray-darkest, null, !important);
     }
 
-    color: darkgray !important;
+    .button-tooltip {
+      @include theme(color, color-gray-darkest, null, !important);
+    }
+
+    @include theme(color, color-gray-darkest, null, !important);
   }
 
   hr.button-separator {
      border: 0;
      height: 1px !important;
-     background: $color-primary-light;
+     @include theme(background-color, color-primary-light);
      width: 80%;
      margin-bottom: 3px;
      margin-top: 3px;

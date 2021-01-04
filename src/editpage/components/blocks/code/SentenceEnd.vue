@@ -41,6 +41,7 @@ export default {
 </script>
 
 <style lang="scss">
+@import '../../../../assets/sass/_colors.scss';
     .exec-inline-tick {
         height: 1em;
         width: 1em;
@@ -74,7 +75,7 @@ export default {
 
     .sentence-end-tag[data-special=""]:hover::after {
         cursor: pointer;
-        background-color: $color-primary;
+        @include theme(background-color, color-primary);
         mask-type: alpha;
         mask-repeat: no-repeat;
         -webkit-mask-repeat: no-repeat;
@@ -84,7 +85,7 @@ export default {
     }
 
     .sentence-end-tag[data-special=""]:hover::before {
-        background-color: $color-gray-light;
+        @include theme(background-color, color-gray-light);
     }
 
     .sentence-end-tag {

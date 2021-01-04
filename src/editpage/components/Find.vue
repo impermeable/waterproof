@@ -312,7 +312,7 @@ export default {
   display: flex;
   flex-flow: row wrap;
   z-index: 5;
-  background-color: $color-primary;
+  @include theme(background-color, color-primary);
   position: fixed;
   bottom: 5px;
   max-width: inherit;

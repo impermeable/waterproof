@@ -16,18 +16,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '../../../assets/sass/_colors.scss';
   .input-block {
     min-height: 1em;
   }
 
   .input-start-block {
-    border: 3px solid $color-primary-light;
+    @include theme(border, color-primary-light, 3px solid);
     border-bottom: 0;
     margin-bottom: 7px;
   }
 
   .input-end-block {
-    border: 3px solid $color-primary-light;
+    @include theme(border, color-primary-light, 3px solid);
     margin-top: 7px;
     border-top: 0;
   }

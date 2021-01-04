@@ -1,4 +1,3 @@
-
 /** Contains global variables used throughout the project In the future,
 we may want to override these values in theme-specific files. */
 
@@ -14,6 +13,20 @@ $font-stack-body: $font-stack-brand;
 
 // Fonts used for displaying code.
 $font-stack-code: 'Letter Gothic Std', monospace !default;
+
+// Height settings of the tab (responsiveness)
+$tab-height-small: 15px !default;
+$tab-height-large: 35px !default;
+
+// Height settings of the topbar
+$topbar-height-large: 40px;
+$topbar-height-small: 30px;
+
+// ======================= NOTE =======================
+// THE color-X variables are here for reference to the ORIGINAL color definitions. 
+// However, they should never be used. Instead, the themed variants should be used
+// These can be changed in ./light.scss or ./dark.scss
+// ====================================================
 
 // Primary brand color and variants.
 // TODO: These colors are very similar, and used interchangeably for navigation
@@ -46,11 +59,4 @@ $color-gray-dark: #e6e6e6 !default;
 $color-gray-light: #f2f2f2 !default;
 $color-gray: #e6e6e6 !default;
 
-
-// Height settings of the tab (responsiveness)
-$tab-height-small: 15px !default;
-$tab-height-large: 35px !default;
-
-// Height settings of the topbar
-$topbar-height-large: 40px;
-$topbar-height-small: 30px;
+$color-highlight-mode: #fff6bf;
