@@ -54,7 +54,7 @@
     "vue-router": "^3.4.8",
     "webpack-chain": "^6.5.1",
     "@vue/compiler-sfc": "3.0.2",
-    "electron": "9.3.3",
+    "electron": "9.4.0",
     "vue-cli-plugin-electron-builder": "2.0.0-rc.5",
     "electron-builder": "^22.2.0",
     "@vue/cli-service": "^4.5.8"
