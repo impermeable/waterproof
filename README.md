@@ -118,7 +118,7 @@ Common places to look for `.opam` and then `opam\[switch]\bin\sertop` are:
 
 ### Alternative installation
 
-The alternative installation works only on 64-bit OS's with at least 8 Gb free, but not really recommend. 
+The alternative installation works only on 64-bit OS's, but not really recommend as it requires a few gigabytes of disk space. 
 
 * Download and install ([Virtual Box](https://www.virtualbox.org/)) or similar VM software.
 * [Download the VM image](https://drive.google.com/file/d/1xo7wNrn7UfhYTh6eakgSqSB84nmHsntc/view?usp=sharing)
