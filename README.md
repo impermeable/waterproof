@@ -13,6 +13,8 @@ The easiest way to get started with Waterproof is to follow the steps:
 * Step 1. Install SerAPI following the steps below
 * Step 2. Install Waterproof using the installer from the [release page](http://github.com/impermeable/waterproof/releases)
 
+**Note**: If you cannot get the installation to work, see the bottom of this page for an alternative fool-proof installation, where we give a virtual disk image with waterproof and its dependencies preinstalled. However, we do not recommend doing this firstly, as it is slow solution and requires a lot more disk space.
+
 ### Step 1 for Windows. Installation of SerAPI.
 
 * Download the _graphical installer_ for Ocaml for Windows from https://fdopen.github.io/opam-repository-mingw/installation/.
@@ -113,3 +115,15 @@ killall Finder
 Common places to look for `.opam` and then `opam\[switch]\bin\sertop` are:
 * on Windows `C:\OCaml64\home\[your user]`
 * on Linux/MacOs: `\home\[your user]`
+
+### Alternative installation
+
+The alternative installation works only on 64-bit OS's with at least 8 Gb free, but not really recommend. 
+
+* Download and install ([Virtual Box](https://www.virtualbox.org/)) or similar VM software.
+* [Download the VM image](https://drive.google.com/file/d/1xo7wNrn7UfhYTh6eakgSqSB84nmHsntc/view?usp=sharing)
+* Open Virtual Box. Then, press File > Import Appliance > Choose file. Navigate to the extracted VM image called `Preinstalled_Waterproof.ova`. Choose this file, and press next. The settings should be fine, so just press Import. This may take a while...
+* You should be welcomed by a log in screen. The username and password is: `waterproof`. On the desktop, you can find a shortcut to Waterproof which you can double-click to execute.
+* You may want to change the monitor settings. For this, go to the bottom left menu button > Preferences > Monitor settings
+
+> **Note** In order to transfer files between the virtual machine and your own filesystem, you could use Google Drive or something similar. An more sleak alternative is creating a shared disk partition, but it defeats the purpose of a simple installation.
