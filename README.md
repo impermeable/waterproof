@@ -120,7 +120,7 @@ Common places to look for `.opam` and then `opam\[switch]\bin\sertop` are:
 
 The alternative installation works only on 64-bit OS's, but not really recommend as it requires a few gigabytes of disk space. 
 
-* Download and install ([Virtual Box](https://www.virtualbox.org/)) or similar VM software.
+* Download and install [Virtual Box](https://www.virtualbox.org/) or similar VM software.
 * [Download the VM image](https://drive.google.com/file/d/1xo7wNrn7UfhYTh6eakgSqSB84nmHsntc/view?usp=sharing)
 * Open Virtual Box. Then, press File > Import Appliance > Choose file. Navigate to the extracted VM image called `Preinstalled_Waterproof.ova`. Choose this file, and press next. The settings should be fine, so just press Import. This may take a while...
 * You should be welcomed by a log in screen. The username and password is: `waterproof`. On the desktop, you can find a shortcut to Waterproof which you can double-click to execute.
