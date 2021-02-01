@@ -80,6 +80,13 @@ Finally, execute again
 eval `opam env`
 ```
 
+#### Step 1 common errors
+When installing opam packages in linux, a common error is caused by missing system packages. You will have to check the error message to find out which package this is. For instance, it could be you are missing one of these packages: m4, build, dune-configurator. In which case, these can be installed using, for instance:
+
+```
+sudo apt-get install m4
+``` 
+
 ### Step 2. Install Waterproof with the installer from the release page
 
 After installing SerAPI, you are ready to install Waterproof using your preferred installer from the [release page](http://github.com/impermeable/waterproof/releases).
@@ -89,3 +96,20 @@ After installing SerAPI, you are ready to install Waterproof using your preferre
 ---
 
 If you rather build the application yourself, you can follow [these steps](documentation/Cloning-the-repository.md).
+
+#### Step 2 common errors
+Upon launch of Waterproof, a common fault yields a file viewer titled 'Please select the program named sertop'. Waterproof depends on `sertop` (which was installed with `coq-serapi` in Step 1), so we need to find it. It is installed in a switch (a folder called `4.11.1` perhaps) in opam. Opam packages are installed in a `.opam\[switch]\bin` folder, usually found under your user's base folder.
+
+Note that `.opam` is a hidden folder, so you will need to show hidden files, which is done differently per operating system. To show hidden folders:
+* on Windows: Open File Explorer, Select View > Options > Change folder and search options. Select the View tab and, in Advanced settings, select Show hidden files, folders, and drives and OK.
+* on Linux: From a GUI file manager, go to View and check the option Show Hidden Files
+* on Mac: Press Cmd + Space to open a Terminal. In here, type:
+```
+defaults write com.apple.Finder AppleShowAllFiles true
+killall Finder
+```
+> **Note for Mac users**: The latter setting can be undone by replacing `true` with `false`, should you want to hide your hidden folders again, but this is totally unnecessary. On Mac we recommend searching for Sertop in a separate file viewer (Finder) window instead of the pop-up, as hidden folders are not always shown here despite enabling the setting.
+
+Common places to look for `.opam` and then `opam\[switch]\bin\sertop` are:
+* on Windows `C:\OCaml64\home\[your user]`
+* on Linux/MacOs: `\home\[your user]`
