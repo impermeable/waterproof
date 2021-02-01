@@ -112,9 +112,11 @@ killall Finder
 ```
 > **Note for Mac users**: The latter setting can be undone by replacing `true` with `false`, should you want to hide your hidden folders again, but this is totally unnecessary. On Mac we recommend searching for Sertop in a separate file viewer (Finder) window instead of the pop-up, as hidden folders are not always shown here despite enabling the setting.
 
-Common places to look for `.opam` and then `opam\[switch]\bin\sertop` are:
+Common places to look for `.opam` and then `.opam\[switch]\bin\sertop` are:
 * on Windows `C:\OCaml64\home\[your user]`
 * on Linux/MacOs: `\home\[your user]`
+
+Finally, if you still cannot find sertop, but you can find `.opam\[switch]\bin`, then there was likely an error in Step 1 and the installation of coq-serapi was not completed.
 
 ### Alternative installation
 
