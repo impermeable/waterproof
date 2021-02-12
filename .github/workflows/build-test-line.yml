@@ -1,0 +1,32 @@
+name: build-test-lint
+on: [push]
+
+jobs:
+  lint-test-run:
+    runs-on: ubuntu-latest
+    name: Lint the sources and run unit tests
+    steps:
+      - uses: actions/checkout@v2
+      - name: Cache node modules
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: small-npm-deps-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: small-npm-deps-
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+      - run: npm ci
+      - name: Lint sources
+        run: npm run lint
+      - name: Run unit tests
+        run: npm run test:unit
+      - name: Can serve/start application
+        run: |
+          echo "::group::Building application"
+          scripts/checked-timeout 30 xvfb-run npm run electron:testserve
+          echo "::endgroup::"
+          echo "Application started succesfully!"
+
+
