@@ -75,7 +75,6 @@ function createWindow() {
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
     win.webContents.loadURL(process.env.WEBPACK_DEV_SERVER_URL).then(() => {
-      console.log('Successfully opened page! 1');
       if (process.argv.includes('--shutdown-on-pageload')) {
         app.quit();
         wrapper.kill('SIGTERM');
@@ -89,14 +88,12 @@ function createWindow() {
     if (process.argv.length > 1) {
       // TODO check on different platforms
       win.loadURL('app://./index.html?location=' + encodeURIComponent(process.argv[1])).then(() => {
-        console.log('Successfully opened page! 2');
         if (process.argv.includes('--shutdown-on-pageload')) {
           app.quit();
         }
       });
     } else {
       win.loadURL('app://./index.html').then(() => {
-        console.log('Successfully opened page! 3');
         if (process.argv.includes('--shutdown-on-pageload')) {
           app.quit();
         }
