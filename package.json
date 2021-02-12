@@ -11,6 +11,7 @@
     "test-start": "mocha \"tests/e2e/*.e2e.js\" --timeout 100000 --bail",
     "electron:build": "vue-cli-service electron:build --publish never",
     "electron:serve": "vue-cli-service electron:serve",
+    "electron:testserve": "vue-cli-service electron:serve --shutdown-on-pageload",
     "postinstall": "electron-builder install-app-deps",
     "postuninstall": "electron-builder install-app-deps",
     "prestart": "PowerShell scripts/install-if-missing.ps1",
