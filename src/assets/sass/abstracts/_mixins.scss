@@ -42,6 +42,9 @@
 /** To theme */
 @import './_functions';
 /*
+  EXPLANATION of the mixin
+  ------------------------
+
   @mixin theme($property, $key, $inlineExtra:null, $postExtra:null)
   Assigns a property a theme value for each defined theme.
 
