@@ -57,3 +57,59 @@ $base-font-url: './../fonts/';
   font-weight: 700;
   font-style: italic;
 }
+
+@font-face {
+  font-family: 'Roboto';
+  src: url($base-font-url + '/roboto-v20-latin/roboto-v20-latin-regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src: url($base-font-url + '/roboto-v20-latin/roboto-v20-latin-700.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src: url($base-font-url + '/roboto-v20-latin/roboto-v20-latin-italic.woff2') format('woff2');
+  font-weight: 400;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src: url($base-font-url + '/roboto-v20-latin/roboto-v20-latin-700italic.woff2') format('woff2');
+  font-weight: 700;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Roboto Mono';
+  src: url($base-font-url + '/roboto-mono-v13-latin/roboto-mono-v13-latin-regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Roboto Mono';
+  src: url($base-font-url + '/roboto-mono-v13-latin/roboto-mono-v13-latin-700.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Roboto Mono';
+  src: url($base-font-url + '/roboto-mono-v13-latin/roboto-mono-v13-latin-italic.woff2') format('woff2');
+  font-weight: 400;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Roboto Mono';
+  src: url($base-font-url + '/roboto-mono-v13-latin/roboto-mono-v13-latin-700italic.woff2') format('woff2');
+  font-weight: 700;
+  font-style: italic;
+}
