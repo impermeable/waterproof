@@ -19,7 +19,7 @@ export default {
   @import '../../../assets/sass/_colors.scss';
   .assistance-button {
     @include theme(background-color, color-primary-light);
-    @include theme(color, color-button-on-primary);
+    @include theme(color, color-text-in-primary);
     cursor: pointer;
     // border: 0.5px solid black;
     flex: 1 0 20%;

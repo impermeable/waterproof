@@ -2,7 +2,8 @@
     <div id="settingsModal" class="modal">
         <!-- Modal content -->
         <div id="settingsModalContent">
-          <button id="closeSettingsModalButton" @click="closeSettingsModal">
+          <button id="closeSettingsModalButton" class="settings-modal-button"
+              @click="closeSettingsModal">
             &times;
         </button>
           <!-- <h1>
@@ -23,7 +24,7 @@
         </div> -->
         <table class='padding-table-columns'>
           <tr>
-            <th><h5>Change the zoom level</h5></th>
+            <th><h5 style='padding-right: 50px;'>Change the zoom level</h5></th>
             <th>
               <button class='settings-modal-button' @click="zoomIn">
                 Zoom in
@@ -36,17 +37,22 @@
           </tr>
           <tr>
             <th>
-              <h5 style='padding-right: 50px;'>Toggle light and dark mode</h5>
+              <h5 style='padding-right: 50px;'>Theme</h5>
             </th>
             <th>
-              <button class='settings-modal-button' @click="toggleTheme">
-                Toggle
-              </button>
+              <div class="dropdown">
+                <button class="dropbtn settings-modal-button">Select</button>
+                <div class="dropdown-content">
+                  <a v-for="style in styles" :key="style"
+                      @click="changeTheme(style)">
+                      {{style}}</a>
+                </div>
+              </div>
             </th>
           </tr>
-
         </table>
-        </div>
+
+      </div>
     </div>
 </template>
 
@@ -64,6 +70,7 @@ export default {
       zoomMin: 0.3,
       zoomMax: 3,
       zoomSliderValue: 0,
+      styles: ['light', 'dark', 'light_roboto', 'dark_roboto'],
     };
   },
   methods: {
@@ -105,15 +112,10 @@ export default {
       this.updateConfigurationString();
     },
 
-    toggleTheme: function() {
-      const currClass = document.getElementsByTagName('HTML')[0]
-          .getAttribute('class');
-      if (currClass === 'dark') {
-        this.$store.commit('setTheme', 'light');
-      } else {
-        this.$store.commit('setTheme', 'dark');
+    changeTheme: function(theme) {
+      if (this.styles.includes(theme)) {
+        this.$store.commit('setTheme', theme);
       }
-      this.updateConfigurationString();
     },
 
     updateConfigurationString: function() {
@@ -140,6 +142,7 @@ export default {
 
   /* The Modal (background) */
   #settingsModal {
+    background-color: rgba(255,255,255,0.5); /* Partly opaque background */
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
     z-index: 1; /* Sit on top */
@@ -155,7 +158,7 @@ export default {
     @include theme(background-color, color-background);
     margin: 15% auto; /* 15% from the top and centered */
     padding: 25px;
-    @include theme(border, color-gray-darkest, 2px solid);
+    @include theme(border, color-on-background, 2px solid);
     width: 60%; /* Could be more or less, depending on screen size */
     word-wrap: normal;
     font-size: small;
@@ -163,30 +166,67 @@ export default {
 
   /* The Close Button */
   #closeSettingsModalButton {
-    @include theme(background-color, color-white);
-    @include theme(color, color-black);
-    @include theme(border-color, color-black);
     float: right;
     font-size: 28px;
     font-weight: bold;
   }
 
-  #closeSettingsModalButton:hover,
-  #closeSettingsModalButton:focus {
-    @include theme(color, color-black);
-    text-decoration: none;
-    cursor: pointer;
-  }
-
   .settings-modal-button {
-    @include theme(background-color, color-white);
-    @include theme(border, color-black, 2px solid);
-    @include theme(color, color-black);
+    @include theme(background-color, color-background);
+    @include theme(border, color-on-background, 2px solid);
+    @include theme(color, color-on-background);
   }
+  .settings-modal-button:hover {
+  @include theme(background-color, color-gray-light)
+}
 
   .padding-table-columns td
   {
     padding:0 115px 0 0; /* Only right padding*/
   }
+
+  /** DROPDOWN START */
+  .dropbtn {
+  padding: 8px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+}
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  @include theme(background-color, color-gray-light);
+  @include theme(border, color-on-background, 1px solid);
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  @include theme(color, color-on-background);
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {
+  @include theme(background-color, color-gray)
+}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+/** DROPDOWN END */
 
 </style>

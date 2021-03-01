@@ -43,7 +43,7 @@
     flex-flow: row nowrap;
     justify-content: space-between;
     color: white !important;
-    font-family: Century Gothic;
+    @include theme(font-family, font-stack-headers);
 
     &:hover {
       @include theme(background-color, color-primary-light);

@@ -181,7 +181,7 @@ export default {
 
   .code-block {
     margin-right: 5px;
-    font-family: monospace, monospace;
+    @include theme(font-family, font-stack-code);
     white-space: pre-wrap;
     word-break: break-word;
   }

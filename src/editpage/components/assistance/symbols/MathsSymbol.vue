@@ -21,7 +21,7 @@ export default {
     width: 40px;
     cursor: copy;
     text-align: center;
-    font-family: monospace, monospace;
+    @include theme(font-family, font-stack-code);
     font-size: larger;
 
     &:hover {

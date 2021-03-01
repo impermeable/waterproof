@@ -1,6 +1,6 @@
 @import './_functions';
 
-$dark: (
+$dark_roboto: (
   // Primary brand color and variants.
     // TODO: These colors are very similar, and used interchangeably for navigation
     //  items. Should probably merge these.
@@ -44,15 +44,15 @@ $dark: (
     color-highlight-mode-text: black,
 
     /** Fonts used in branding (logos, application title, etc.) */
-    font-stack-brand: 'Century Gothic',
+    font-stack-brand: 'Roboto',
 
     // Fonts used in page headers (h1-h6). Separate to allow easy modification in
     // the future.
-    font-stack-headers: 'Century Gothic',
+    font-stack-headers: 'Roboto',
 
     // Fonts used in body text. Separate to allow easy modification in the future.
-    font-stack-body: 'Century Gothic',
+    font-stack-body: 'Roboto',
 
     // Fonts used for displaying code.
-    font-stack-code: 'monospace'//'Letter Gothic Std'
+    font-stack-code: 'Roboto Mono'
 );
