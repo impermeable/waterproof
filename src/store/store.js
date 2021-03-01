@@ -71,7 +71,7 @@ export default {
       }
 
       // Conformance. Must be 'light' or 'dark'. Default is light
-      if (state.settings.theme !== 'dark') {
+      if (state.settings.theme == null || state.settings.theme === '') {
         state.settings.theme = 'light';
       }
       document.getElementsByTagName('HTML')[0]
@@ -80,7 +80,7 @@ export default {
       if (result.hasOwnProperty('zoom')) {
         state.settings.zoom = result['zoom'];
       }
-      // Conformance. Must be number that is not zero. TODO?: must be in range.
+      // Conformance. Assume here the number is not zero and in range.
       if (state.settings.zoom == null || state.settings.zoom == 0.0 ||
           typeof state.settings.zoom !== 'number') {
         state.settings.zoom = 1.0;
@@ -98,11 +98,9 @@ export default {
       updateConfiguration(remote, state.settings);
     },
     setTheme: function(state, theme) {
-      if (theme === 'light' || theme === 'dark') {
-        state.settings.theme = theme;
-        document.getElementsByTagName('HTML')[0].setAttribute('class', theme);
-        updateConfiguration(remote, state.settings);
-      }
+      state.settings.theme = theme;
+      document.getElementsByTagName('HTML')[0].setAttribute('class', theme);
+      updateConfiguration(remote, state.settings);
     },
   },
   actions: {

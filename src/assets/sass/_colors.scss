@@ -9,4 +9,17 @@ $themeValues: ();
 
 @import '/abstracts/_dark.scss';
 @include generateThemeMappings(dark, $dark);
+
+@import '/abstracts/_light_roboto.scss';
+@include generateThemeMappings(light_roboto, $light_roboto);
+
+@import '/abstracts/_dark_roboto.scss';
+@include generateThemeMappings(dark_roboto, $dark_roboto);
 /** end theme generation **/
+
+/** To add another theme:
+- Create file like light.scss in src/sass/abstracts
+- Add reference in src/sass/main
+- Add reference and generateThemeMapping in this file
+- Go to src/store/store.js and add map name to styles list
+*/

@@ -36,7 +36,7 @@ export default {
 
     .topbar-shortcut {
         padding-top: 3px;
-        font-family: monospace;
+        @include theme(font-family, font-stack-code);
         @include theme(color, color-gray);
         padding-left: 10px;
     }

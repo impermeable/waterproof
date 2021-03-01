@@ -31,9 +31,9 @@ $light: (
     // Color for multiple areas in a notebook, like search interface,
     // code blocks
     color-gray-darkest: #707070,
-    color-gray-dark: #e6e6e6,
-    color-gray-light: #f2f2f2,
-    color-gray: #e6e6e6,
+    color-gray-dark: #b1b1b1,
+    color-gray-light: #ececec,
+    color-gray: #c9c9c9,
     color-black: #000000,
     color-red: red,
     color-white: white,
@@ -41,5 +41,18 @@ $light: (
     color-transparent: transparent,
 
     color-highlight-mode: #fff6bf,
-    color-highlight-mode-text: black
+    color-highlight-mode-text: black,
+
+    /** Fonts used in branding (logos, application title, etc.) */
+    font-stack-brand: 'Century Gothic',
+
+    // Fonts used in page headers (h1-h6). Separate to allow easy modification in
+    // the future.
+    font-stack-headers: 'Century Gothic',
+
+    // Fonts used in body text. Separate to allow easy modification in the future.
+    font-stack-body: 'Century Gothic',
+
+    // Fonts used for displaying code.
+    font-stack-code: 'monospace'//'Letter Gothic Std'
 );
