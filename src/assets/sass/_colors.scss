@@ -21,5 +21,10 @@ $themeValues: ();
 - Create file like light.scss in src/sass/abstracts
 - Add reference in src/sass/main
 - Add reference and generateThemeMapping in this file
-- Go to src/store/store.js and add map name to styles list
+- Go to SettingsModal.vue and add map name to styles list
+    (For simplicity, we only check in SettingsModal whether the map exists)
+
+NOTE: The default theme is light, and to change this:
+- Go to src/store/store.js and change default
+- Change class of <html> element
 */
