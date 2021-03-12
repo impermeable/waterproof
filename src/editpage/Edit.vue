@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid" id="app">
     <settings-modal
-      ref="settingsModal">
+      ref="settingsModal" :eventBus="mainBus">
     </settings-modal>
     <topbar v-bind:shortKeys="shortKeys" :eventBus="mainBus" :recents="recents">
     </topbar>
@@ -467,7 +467,6 @@ export default {
     this.mainBus.$on('on-edit', this.doOnEdit);
     this.mainBus.$on('on-proof-window', this.doOnActiveProofWindow);
     this.mainBus.$on('goto-homescreen', this.homeScreen);
-    this.mainBus.$on('settings', this.$refs.settingsModal.forwardEvent);
 
     window.onresize = this.refreshExecGutters;
 

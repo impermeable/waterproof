@@ -63,10 +63,11 @@ import Vue from 'vue';
 export default {
   name: 'SettingsModal',
   components: {},
-  props: {},
+  props: {
+    eventBus: Object,
+  },
   data: function() {
     return {
-      eventBus: new Vue(),
       zoomMin: 0.3,
       zoomMax: 3,
       zoomSliderValue: 0,
@@ -74,11 +75,6 @@ export default {
     };
   },
   methods: {
-    forwardEvent: function(event) {
-      console.log(event);
-      this.eventBus.$emit(event);
-      console.log('forwarded done');
-    },
     closeSettingsModal: function() {
       document.getElementById('settingsModal').style.display = 'none';
     },
