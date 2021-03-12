@@ -10,12 +10,12 @@
             Settings
           </h1> -->
           <h3>
-            Configuration
+            Current configuration
           </h3>
           <p id="settingsOverview">
           </p>
           <h3>
-            View Settings
+            View options
           </h3>
         <!-- <div class="slidecontainer">
             <input v-model="zoomSliderValue" type="range" min="0.3" max="3"
