@@ -12,6 +12,12 @@
           <h3>
             Current configuration
           </h3>
+          <table>
+            <tr v-for="setting in configurationString"
+                      :key="setting.name">
+              <td>{{setting.name}}</td><td>{{setting.val}}</td>
+            </tr>
+          </table>
           <p id="settingsOverview">
           </p>
           <h3>
@@ -58,8 +64,6 @@
 
 
 <script>
-import Vue from 'vue';
-
 export default {
   name: 'SettingsModal',
   components: {},
@@ -113,15 +117,21 @@ export default {
         this.$store.commit('setTheme', theme);
       }
     },
-
-    updateConfigurationString: function() {
+  },
+  computed: {
+    configurationString() {
       const libs = this.$store.state.libraries;
       const settings = this.$store.state.settings;
-      document.getElementById('settingsOverview').innerHTML =
-          'Sertop path: ' + libs.sertopPath + '<br /> Serapi Version: '
-          + libs.serapiVersion + '<br /> Library Version: '
-          + libs.libraryVersion + '<br /> Zoom: ' + settings.zoom
-          + '<br /> Theme: ' + settings.theme;
+      return [
+        {
+          name: 'Sertop path',
+          val: libs.sertopPath,
+        },
+        {
+          name: 'Zoom',
+          val: settings.zoom.toPrecision(2),
+        },
+      ];
     },
   },
   mounted: function() {
