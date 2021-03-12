@@ -15,7 +15,8 @@
           <table>
             <tr v-for="setting in configurationString"
                       :key="setting.name">
-              <td>{{setting.name}}</td><td>{{setting.val}}</td>
+              <td :title="setting.name">{{setting.name}}</td>
+              <td :title="setting.val">{{setting.val}}</td>
             </tr>
           </table>
           <p id="settingsOverview">
