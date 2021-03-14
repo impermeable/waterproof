@@ -74,8 +74,7 @@ export default {
       if (state.settings.theme == null || state.settings.theme === '') {
         state.settings.theme = 'light';
       }
-      document.getElementsByTagName('HTML')[0]
-          .setAttribute('class', state.settings.theme);
+      document.documentElement.className = state.settings.theme;
 
       if (result.hasOwnProperty('zoom')) {
         state.settings.zoom = result['zoom'];
@@ -99,7 +98,7 @@ export default {
     },
     setTheme: function(state, theme) {
       state.settings.theme = theme;
-      document.getElementsByTagName('HTML')[0].setAttribute('class', theme);
+      document.documentElement.className = theme;
       updateConfiguration(remote, state.settings);
     },
   },

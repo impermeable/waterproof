@@ -156,7 +156,7 @@ export default {
         },
         {
           text: 'Settings',
-          icon: require('../../../assets/images/settingsGear2.svg'),
+          icon: require('../../../assets/images/settingsGear.svg'),
           event: 'openSettingsModal',
           eventType: 'openSettingsModal',
           requires: [],

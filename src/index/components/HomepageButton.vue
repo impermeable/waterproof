@@ -104,7 +104,7 @@ export default {
    * Ensure text is vertically centered.
    */
   &-text {
-    @include theme(color, color-text-in-primary);
+    @include theme(color, color-primary);
     display: flex;
     justify-content: center;
   }

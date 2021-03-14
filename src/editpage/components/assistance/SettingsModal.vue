@@ -1,7 +1,7 @@
 <template>
-    <div id="settingsModal" class="modal">
+    <div id="settingsModal" class="modal" @click="closeSettingsModal">
         <!-- Modal content -->
-        <div id="settingsModalContent">
+        <div id="settingsModalContent" @click.stop>
           <button id="closeSettingsModalButton" class="settings-modal-button"
               @click="closeSettingsModal">
             &times;
@@ -129,8 +129,20 @@ export default {
           val: libs.sertopPath,
         },
         {
+          name: 'Serapi version',
+          val: libs.serapiVersion,
+        },
+        {
+          name: 'Library version',
+          val: libs.libraryVersion,
+        },
+        {
           name: 'Zoom',
           val: settings.zoom.toPrecision(2),
+        },
+        {
+          name: 'Theme',
+          val: settings.theme,
         },
       ];
     },
@@ -149,7 +161,7 @@ export default {
 
   /* The Modal (background) */
   #settingsModal {
-    background-color: rgba(255,255,255,0.5); /* Partly opaque background */
+    background-color: rgba(0,0,0,0.95); /* Partly opaque background */
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
     z-index: 1; /* Sit on top */
