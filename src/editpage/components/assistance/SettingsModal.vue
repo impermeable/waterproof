@@ -1,54 +1,44 @@
 <template>
     <div id="settingsModal" class="modal" @click="closeSettingsModal">
-        <!-- Modal content -->
-        <div id="settingsModalContent" @click.stop>
-          <button id="closeSettingsModalButton" class="settings-modal-button"
-              @click="closeSettingsModal">
-            &times;
+      <!-- Modal content -->
+      <div id="settingsModalContent" @click.stop>
+        <button id="closeSettingsModalButton" class="settings-modal-button"
+            @click="closeSettingsModal">
+          &times;
         </button>
-          <!-- <h1>
-            Settings
-          </h1> -->
-          <h3>
-            Current configuration
-          </h3>
-          <table>
-            <tr v-for="setting in configurationString"
-                      :key="setting.name">
-              <td :title="setting.name">{{setting.name}}</td>
-              <td :title="setting.val">{{setting.val}}</td>
-            </tr>
-          </table>
-          <p id="settingsOverview">
-          </p>
-          <h3>
-            View options
-          </h3>
-        <!-- <div class="slidecontainer">
-            <input v-model="zoomSliderValue" type="range" min="0.3" max="3"
-            step="0.1"
-            value="50" class="slider" id="myRange" @change="zoomSliderChanged">
-        </div> -->
-        <table class='padding-table-columns'>
+        <p id="settingsOverview">
+        </p>
+        <h3>
+          View options
+        </h3>
+        <table style='margin: 0px; padding: 0px'>
           <tr>
-            <th><h5 style='padding-right: 50px;'>Change the zoom level</h5></th>
             <th>
-              <button class='settings-modal-button' @click="zoomIn">
-                Zoom in
-              </button>
-              &nbsp;
-              <button class='settings-modal-button' @click="zoomOut">
-                Zoom out
-              </button>
+              <h6>Zoom:</h6>
+            </th>
+            <th style='width: 50%'>
+              <h6>{{zoomLevel}}</h6>
+            </th>
+            <th style='width: 100px'>
+              <button style='width: 49%; height: 40px; margin-right: 1%'
+                class='settings-modal-button'
+                @click="zoomIn"> + </button>
+              <button style='width: 49%; height: 40px; margin-left: 1%'
+                class='settings-modal-button'
+                @click="zoomOut"> - </button>
             </th>
           </tr>
           <tr>
             <th>
-              <h5 style='padding-right: 50px;'>Theme</h5>
+              <h6>Theme:</h6>
             </th>
-            <th>
-              <div class="dropdown">
-                <button class="dropbtn settings-modal-button">Select</button>
+            <th style='width: 50%'>
+              <h6>{{currentTheme}}</h6>
+            </th>
+            <th style='width: 100px'>
+              <div style='width: 100%' class="dropdown">
+                <button style='width: 100%; height: 40px'
+                  class="dropbtn settings-modal-button">Select</button>
                 <div class="dropdown-content">
                   <a v-for="style in styles" :key="style"
                       @click="changeTheme(style)">
@@ -58,7 +48,19 @@
             </th>
           </tr>
         </table>
-
+        <h4 style='margin-top: 10%'>
+            Configuration
+        </h4>
+        <table>
+          <tr v-for="setting in configurationString"
+                    :key="setting.name">
+            <td style='padding-right: 20px;'
+                v-if="setting.type === 'Dependency'"
+                :title="setting.name">{{setting.name}}</td>
+            <td v-if="setting.type === 'Dependency'"
+                :title="setting.val">{{setting.val}}</td>
+          </tr>
+        </table>
       </div>
     </div>
 </template>
@@ -120,6 +122,14 @@ export default {
     },
   },
   computed: {
+    zoomLevel() {
+      const settings = this.$store.state.settings;
+      return settings.zoom.toPrecision(3);
+    },
+    currentTheme() {
+      const settings = this.$store.state.settings;
+      return settings.theme;
+    },
     configurationString() {
       const libs = this.$store.state.libraries;
       const settings = this.$store.state.settings;
@@ -127,22 +137,27 @@ export default {
         {
           name: 'Sertop path',
           val: libs.sertopPath,
+          type: 'Dependency',
         },
         {
           name: 'Serapi version',
           val: libs.serapiVersion,
+          type: 'Dependency',
         },
         {
           name: 'Library version',
           val: libs.libraryVersion,
+          type: 'Dependency',
         },
         {
           name: 'Zoom',
           val: settings.zoom.toPrecision(2),
+          type: 'Zoom',
         },
         {
           name: 'Theme',
           val: settings.theme,
+          type: 'Theme',
         },
       ];
     },
@@ -199,11 +214,6 @@ export default {
   @include theme(background-color, color-gray-light)
 }
 
-  .padding-table-columns td
-  {
-    padding:0 115px 0 0; /* Only right padding*/
-  }
-
   /** DROPDOWN START */
   .dropbtn {
   padding: 8px;
@@ -216,6 +226,10 @@ export default {
 .dropdown {
   position: relative;
   display: inline-block;
+}
+
+h6 {
+  padding-right: 10px;
 }
 
 /* Dropdown Content (Hidden by Default) */
