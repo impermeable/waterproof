@@ -11,56 +11,63 @@
         <h3>
           View options
         </h3>
-        <table style='margin: 0px; padding: 0px'>
+        <table style='width: 50%; padding: 0px' class="alternateRows">
           <tr>
-            <th>
+            <td>
               <h6>Zoom:</h6>
-            </th>
-            <th style='width: 50%'>
-              <h6>{{zoomLevel}}</h6>
-            </th>
-            <th style='width: 100px'>
-              <button style='width: 49%; height: 40px; margin-right: 1%'
+            </td>
+            <td style='width: 50%'>
+              <h6>{{ (zoomLevel * 100).toFixed(0)}} %</h6>
+            </td>
+            <td>
+              <button style='width: 25%; height: 40px;'
                 class='settings-modal-button'
                 @click="zoomIn"> + </button>
-              <button style='width: 49%; height: 40px; margin-left: 1%'
+              <button style='width: calc(50% - 6px);
+              height: 40px; margin: 1px 2px;'
+                      class='settings-modal-button'
+                      @click="resetZoom">Reset</button>
+              <button style='width: 25%; height: 40px;'
                 class='settings-modal-button'
                 @click="zoomOut"> - </button>
-            </th>
+            </td>
           </tr>
           <tr>
-            <th>
+            <td>
               <h6>Theme:</h6>
-            </th>
-            <th style='width: 50%'>
+            </td>
+            <td>
               <h6>{{currentTheme}}</h6>
-            </th>
-            <th style='width: 100px'>
+            </td>
+            <td>
               <div style='width: 100%' class="dropdown">
                 <button style='width: 100%; height: 40px'
-                  class="dropbtn settings-modal-button">Select</button>
-                <div class="dropdown-content">
+                  class="dropbtn settings-modal-button">
+                  <span>{{currentTheme}}</span>
+                  <span style="float: right">&blacktriangledown;</span>
+                </button>
+                <div class="dropdown-content" style="width: 100%">
                   <a v-for="style in styles" :key="style"
                       @click="changeTheme(style)">
                       {{style}}</a>
                 </div>
               </div>
-            </th>
+            </td>
           </tr>
         </table>
         <h4 style='margin-top: 10%'>
             Configuration
         </h4>
-        <table>
-          <tr v-for="setting in configurationString"
-                    :key="setting.name">
-            <td style='padding-right: 20px;'
-                v-if="setting.type === 'Dependency'"
-                :title="setting.name">{{setting.name}}</td>
-            <td v-if="setting.type === 'Dependency'"
-                :title="setting.val">{{setting.val}}</td>
-          </tr>
-        </table>
+        <div style="overflow-y: scroll; max-height: 10%">
+          <table class="alternateRows" style="width: 100%">
+            <tr v-for="setting in configurationString"
+                :key="setting.name">
+              <td style='padding-right: 20px;'
+                  :title="setting.name">{{setting.name}}</td>
+              <td :title="setting.val">{{setting.val}}</td>
+            </tr>
+          </table>
+        </div>
       </div>
     </div>
 </template>
@@ -88,10 +95,6 @@ export default {
 
     openSettingsModal: function() {
       document.getElementById('settingsModal').style.display = 'block';
-      this.updateConfigurationString();
-      // const release = await store.state.lock.acquire();
-
-      // release();
     },
 
     zoomIn: function() {
@@ -102,9 +105,8 @@ export default {
       this.zoomChange(1/1.1);
     },
 
-    zoomSliderChanged: function() {
-      const val = parseFloat(this.zoomSliderValue);
-      this.$store.commit('setZoom', val);
+    resetZoom() {
+      this.$store.commit('setZoom', 1.0);
     },
 
     zoomChange: function(factor) {
@@ -127,37 +129,22 @@ export default {
       return settings.zoom.toPrecision(3);
     },
     currentTheme() {
-      const settings = this.$store.state.settings;
-      return settings.theme;
+      return this.$store.state.settings.theme;
     },
     configurationString() {
       const libs = this.$store.state.libraries;
-      const settings = this.$store.state.settings;
       return [
         {
           name: 'Sertop path',
           val: libs.sertopPath,
-          type: 'Dependency',
         },
         {
           name: 'Serapi version',
           val: libs.serapiVersion,
-          type: 'Dependency',
         },
         {
           name: 'Library version',
           val: libs.libraryVersion,
-          type: 'Dependency',
-        },
-        {
-          name: 'Zoom',
-          val: settings.zoom.toPrecision(2),
-          type: 'Zoom',
-        },
-        {
-          name: 'Theme',
-          val: settings.theme,
-          type: 'Theme',
         },
       ];
     },
@@ -176,7 +163,7 @@ export default {
 
   /* The Modal (background) */
   #settingsModal {
-    background-color: rgba(0,0,0,0.95); /* Partly opaque background */
+    background-color: rgba(0,0,0,0.75); /* Partly opaque background */
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
     z-index: 1; /* Sit on top */
@@ -190,7 +177,11 @@ export default {
   /* Modal Content/Box */
   #settingsModalContent {
     @include theme(background-color, color-background);
-    margin: 15% auto; /* 15% from the top and centered */
+
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+
     padding: 25px;
     @include theme(border, color-on-background, 2px solid);
     width: 60%; /* Could be more or less, depending on screen size */
@@ -261,5 +252,9 @@ h6 {
   display: block;
 }
 /** DROPDOWN END */
+
+.alternateRows tr:nth-child(even) {
+  @include theme(background-color, color-gray-light);
+}
 
 </style>
