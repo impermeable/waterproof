@@ -11,7 +11,8 @@
         <h3>
           View options
         </h3>
-        <table style='width: 50%; padding: 0; min-width: 400px' class="alternateRows">
+        <table style='width: 50%; padding: 0; min-width: 400px'
+               class="alternateRows">
           <tr>
             <td>
               <h6>Zoom:</h6>
