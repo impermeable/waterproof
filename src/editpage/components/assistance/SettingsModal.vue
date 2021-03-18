@@ -11,20 +11,20 @@
         <h3>
           View options
         </h3>
-        <table style='width: 50%; padding: 0; min-width: 400px'
+        <table style='width: 50%; padding: 0;'
                class="alternateRows">
           <tr>
             <td>
               <h6>Zoom:</h6>
             </td>
-            <td style='width: 50%'>
+            <td style='width: 50%; min-width: 60px'>
               <h6>{{ (zoomLevel * 100).toFixed(0)}} %</h6>
             </td>
-            <td>
+            <td style='min-width:120px'>
               <button style='width: 25%; height: 40px;'
                 class='settings-modal-button'
                 @click="zoomIn"> + </button>
-              <button style='width: calc(50% - 6px);
+              <button style='width: calc(50% - 4px);
               height: 40px; margin: 1px 2px;'
                       class='settings-modal-button'
                       @click="resetZoom">Reset</button>
