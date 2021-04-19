@@ -8,6 +8,7 @@
           It is built as an Electron app, using the Vue.js and
           Bootstrap frameworks.
         </p>
+        <p>SEP Group #2 2020-2021 was Here!</p>
         <p>
           Waterproof was originally created and developed by Team ChefCoq as a
           Software Engineering Project at Eindhoven University of Technology.
