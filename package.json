@@ -47,7 +47,7 @@
     "electron-debug": "^3.2.0",
     "electron-devtools-installer": "^3.2.0",
     "electron-icon-builder": "^1.0.2",
-    "eslint": "^5.16.0",
+    "eslint": "^7.24.0",
     "eslint-config-google": "^0.13.0",
     "jsdoc": "^3.6.6",
     "mocha-junit-reporter": "^1.23.3",
