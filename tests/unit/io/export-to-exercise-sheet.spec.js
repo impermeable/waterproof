@@ -24,7 +24,7 @@ function loadNotebook(file) {
         },
         (err) => {
           reject(err);
-        }
+        },
     );
   });
 }
@@ -43,7 +43,7 @@ function exportToExerciseSheet(file) {
         },
         (err) => {
           reject(err);
-        }
+        },
     );
   });
 }

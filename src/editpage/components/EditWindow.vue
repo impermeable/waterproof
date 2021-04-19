@@ -207,7 +207,7 @@ export default {
             'remove-block',
             this.focusedElement,
             null,
-            this
+            this,
         );
         this.dispatchTextChange.flush();
       }

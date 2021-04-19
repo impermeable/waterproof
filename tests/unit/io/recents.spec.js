@@ -101,7 +101,7 @@ describe('The recent file list', () => {
           expect(recents.filelist[0].location).to.equal(fileUnixPathOne);
           expect(recents.filelist[1].location).to.equal(fileUnixPathTwo);
           done();
-        }
+        },
     );
 
     it('should adjust order after inserting entry with windows path ',
@@ -114,7 +114,7 @@ describe('The recent file list', () => {
           expect(recents.filelist[0].location).to.equal(fileWindowsPathOne);
           expect(recents.filelist[1].location).to.equal(fileWindowsPathTwo);
           done();
-        }
+        },
     );
 
     it('should keep at most maxLength entries in list for unix',
@@ -133,7 +133,7 @@ describe('The recent file list', () => {
           expect(recents.filelist[1].location).to.equal(fileUnixPathTwo);
           expect(recents.filelist[9].location).to.not.equal(fileUnixPathOne);
           done();
-        }
+        },
     );
 
     it('should keep at most maxLength entries in list for windows',
@@ -151,7 +151,7 @@ describe('The recent file list', () => {
           expect(recents.filelist[1].location).to.equal(fileWindowsPathTwo);
           expect(recents.filelist[9].location).to.not.equal(fileWindowsPathOne);
           done();
-        }
+        },
     );
   });
 });

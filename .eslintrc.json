@@ -14,6 +14,8 @@
   },
   "rules": {
     "linebreak-style": 0,
-    "no-console": 0
+    "no-console": 0,
+    "vue/no-mutating-props": 0, // TODO - fix this anti-pattern
+    "vue/return-in-computed-property": 0 // TODO - fix this one too
   }
 }

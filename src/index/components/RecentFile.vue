@@ -8,7 +8,7 @@
 
 <script>
 
-import Index from '../Index';
+// import Index from '../Index'; // @tentative eslint: registed but not used
 import Notebook from '../../io/notebook';
 
 const {dialog} = require('electron').remote;
@@ -17,7 +17,7 @@ export default {
   name: 'RecentFile',
   props: ['fileInfo'],
   components: {
-    Index,
+    // Index, // @tentative eslint: registed but not used
   },
   data: function() {
     return {

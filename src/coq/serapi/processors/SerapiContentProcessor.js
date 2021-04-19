@@ -189,7 +189,7 @@ class SerapiContentProcessor extends SerapiProcessor {
           sentence.bp, sentence.ep, sentence.str);
     }
 
-    if (result.hasOwnProperty('error')) {
+    if (Object.prototype.hasOwnProperty.call(result, 'error')) {
       this.currentContent += contentAdded;
 
       if (furthestIndex > -1) {

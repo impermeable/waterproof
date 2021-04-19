@@ -39,13 +39,13 @@ export default {
       state.sercompPath = path;
     },
     updateConfig(state, partial) {
-      if (partial.hasOwnProperty('sertopPath')) {
+      if (Object.prototype.hasOwnProperty.call(partial, 'sertopPath')) {
         state.sertopPath = partial['sertopPath'];
       }
-      if (partial.hasOwnProperty('serapiVersion')) {
+      if (Object.prototype.hasOwnProperty.call(partial, 'serapiVersion')) {
         state.serapiVersion = partial['serapiVersion'];
       }
-      if (partial.hasOwnProperty('libraryVersion')) {
+      if (Object.prototype.hasOwnProperty.call(partial, 'libraryVersion')) {
         state.libraryVersion = partial['libraryVersion'];
       }
     },

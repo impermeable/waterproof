@@ -158,9 +158,9 @@ export default {
 
       // Make sure all elements are blocks
       for (const block of clipboardBlocks) {
-        if (!block.hasOwnProperty('type') ||
-            !block.hasOwnProperty('text') &&
-            !block.hasOwnProperty('id')) {
+        if (!Object.prototype.hasOwnProperty.call(block, 'type') ||
+            !Object.prototype.hasOwnProperty.call(block, 'text') &&
+            !Object.prototype.hasOwnProperty.call(block, 'id')) {
           return null;
         }
       }

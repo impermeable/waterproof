@@ -185,7 +185,7 @@ export default {
       // For each button, enable it if all requirements are met
       for (const button of this.buttons) {
         const isEnabled = button.requires.every(
-            (requirement) => status.includes(requirement)
+            (requirement) => status.includes(requirement),
         );
         // If disabled does not start in the object vue does not know about it
         this.$set(button, 'disabled', !isEnabled);

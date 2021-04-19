@@ -26,7 +26,7 @@ function loadNotebook(file) {
         },
         (err) => {
           reject(err);
-        }
+        },
     );
   });
 }
@@ -45,7 +45,7 @@ function exportToCoq(file) {
         },
         (err) => {
           reject(err);
-        }
+        },
     );
   });
 }

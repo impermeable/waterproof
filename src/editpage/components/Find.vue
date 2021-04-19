@@ -232,7 +232,7 @@ export default {
           const newText = blocks[i].text.replace(
               new RegExp(this.find, 'gi'), (match) => {
                 return this.replace;
-              }
+              },
           );
           if (newText !== '' || i === this.focusedElement) {
             changes.push({

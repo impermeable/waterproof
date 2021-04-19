@@ -32,7 +32,7 @@
   "license": "AGPL-3.0-or-later",
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.12.1",
-    "@vue/cli-plugin-eslint": "^3.12.1",
+    "@vue/cli-plugin-eslint": "^4.5.12",
     "@vue/cli-plugin-unit-mocha": "^4.5.12",
     "@vue/cli-service": "^4.5.12",
     "@vue/compiler-sfc": "3.0.2",
@@ -64,6 +64,7 @@
     "async-mutex": "^0.1.4",
     "bootstrap-vue": "^2.21.2",
     "codemirror": "^5.60.0",
+    "eslint-plugin-vue": "^7.9.0",
     "jquery": "^3.6.0",
     "lodash.debounce": "^4.0.8",
     "lodash.orderby": "^4.6.0",
