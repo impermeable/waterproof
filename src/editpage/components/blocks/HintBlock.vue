@@ -98,7 +98,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import "/../../../assets/sass/_colors.scss";
+  @import "./../../../assets/sass/_colors.scss";
 
   .hint-base {
     position: relative;

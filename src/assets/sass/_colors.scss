@@ -1,19 +1,19 @@
-@import '/abstracts/_mixins.scss';
+@import './abstracts/_mixins.scss';
 
 /** this section generates a theme map for each theme **/
 $themes: ();
 $themeValues: ();
 
-@import '/abstracts/_light.scss';
+@import './abstracts/_light.scss';
 @include generateThemeMappings(light, $light);
 
-@import '/abstracts/_dark.scss';
+@import './abstracts/_dark.scss';
 @include generateThemeMappings(dark, $dark);
 
-@import '/abstracts/_light_roboto.scss';
+@import './abstracts/_light_roboto.scss';
 @include generateThemeMappings(light_roboto, $light_roboto);
 
-@import '/abstracts/_dark_roboto.scss';
+@import './abstracts/_dark_roboto.scss';
 @include generateThemeMappings(dark_roboto, $dark_roboto);
 /** end theme generation **/
 
