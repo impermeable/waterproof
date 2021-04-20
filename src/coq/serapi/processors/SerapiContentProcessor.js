@@ -129,8 +129,8 @@ class SerapiContentProcessor extends SerapiProcessor {
 
     this.state.lastExecuted = lastUnchangedSentence;
     this.state.target = Math.min(this.state.target, lastUnchangedSentence);
-    this.editor.executeStarted(lastUnchangedSentence < 0 ? -1
-        : this.state.endIndexOfSentence(lastUnchangedSentence));
+    this.editor.executeStarted(lastUnchangedSentence < 0 ? -1 :
+        this.state.endIndexOfSentence(lastUnchangedSentence));
     this.editor.setContentSuccess(newGoal, editIndex, true);
   }
 

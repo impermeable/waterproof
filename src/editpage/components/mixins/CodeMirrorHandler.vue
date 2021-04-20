@@ -56,8 +56,8 @@ export default {
         fromIndex: cm.indexFromPos(fromCursor),
         to: toCursor,
         toIndex: cm.indexFromPos(toCursor),
-        selection: fromCursor.ch !== toCursor.ch
-          || fromCursor.line !== toCursor.line,
+        selection: fromCursor.ch !== toCursor.ch ||
+          fromCursor.line !== toCursor.line,
       };
       this.eventBus.$emit('setCursorPos', this.cursorPos);
     },

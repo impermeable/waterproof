@@ -109,9 +109,9 @@ export default {
      * @return {Boolean} Whether select all should be active
      */
     canSelectAll: function() {
-      return this.selectedCount < this.blocks.length
-          && document.activeElement.nodeName !== 'TEXTAREA'
-          && document.activeElement.nodeName !== 'INPUT';
+      return this.selectedCount < this.blocks.length &&
+          document.activeElement.nodeName !== 'TEXTAREA' &&
+          document.activeElement.nodeName !== 'INPUT';
     },
 
     /**

@@ -119,8 +119,8 @@ function parseErrorResponse(response) {
   }
 
   if (Object.prototype.hasOwnProperty.call(responseContent, 'stm_ids')) {
-    if (Array.isArray(responseContent.stm_ids)
-          && responseContent.stm_ids.length > 0) {
+    if (Array.isArray(responseContent.stm_ids) &&
+          responseContent.stm_ids.length > 0) {
       const stms = responseContent.stm_ids[0];
       lastSentenceIdCorrect = +stms[0];
       failureSentenceId = +stms[1];
@@ -239,11 +239,11 @@ function parseToSentence(response) {
 function isReadyFeedback(response) {
   // this is not great... but there is nothing really unique about so it will
   // suffice
-  return response[0] === 'Feedback'
-      && response[1].length === 4
-      && response[1][3].length === 2
-      && response[1][3][0] === 'contents'
-      && response[1][3][1] === 'Processed';
+  return response[0] === 'Feedback' &&
+      response[1].length === 4 &&
+      response[1][3].length === 2 &&
+      response[1][3][0] === 'contents' &&
+      response[1][3][1] === 'Processed';
 }
 
 /**

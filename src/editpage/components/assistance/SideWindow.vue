@@ -109,8 +109,8 @@ export default {
         return false;
       }
       for (const item of this.items) {
-        if (Object.prototype.hasOwnProperty.call(item, 'advanced')
-          && item.advanced) {
+        if (Object.prototype.hasOwnProperty.call(item, 'advanced') &&
+          item.advanced) {
           return true;
         }
       }

@@ -79,8 +79,8 @@ if (process.env.NODE_ENV !== 'coverage') {
       }).then(() => {
         const data = fs.readFileSync(writeFile, 'utf-8');
         fs.unlinkSync(writeFile);
-        expect(data).to.include(COQ_SPECIAL_COMMENT_START
-            + 'This is some sample text.*)');
+        expect(data).to.include(COQ_SPECIAL_COMMENT_START +
+            'This is some sample text.*)');
         done();
       }).catch(done);
     });
@@ -93,8 +93,8 @@ if (process.env.NODE_ENV !== 'coverage') {
       }).then(() => {
         const data = fs.readFileSync(writeFile, 'utf-8');
         fs.unlinkSync(writeFile);
-        expect(data).to.include(COQ_SPECIAL_COMMENT_START
-            + 'It\'s really not that hard.*)');
+        expect(data).to.include(COQ_SPECIAL_COMMENT_START +
+            'It\'s really not that hard.*)');
         done();
       }).catch(done);
     });
@@ -108,10 +108,10 @@ if (process.env.NODE_ENV !== 'coverage') {
           }).then(() => {
             const data = fs.readFileSync(writeFile, 'utf-8');
             fs.unlinkSync(writeFile);
-            expect(data).to.include(COQ_SPECIAL_COMMENT_START
-                + '(* Start of input area *)*)');
-            expect(data).to.include(COQ_SPECIAL_COMMENT_START
-                + '(* End of input area *)*)');
+            expect(data).to.include(COQ_SPECIAL_COMMENT_START +
+                '(* Start of input area *)*)');
+            expect(data).to.include(COQ_SPECIAL_COMMENT_START +
+                '(* End of input area *)*)');
             done();
           }).catch(done);
         });

@@ -89,9 +89,9 @@ export default {
       }
     },
     fixError: function() {
-      this.block.text = DEFAULT_TITLE + '\n'
-        + HINT_SEPARATOR + '\n'
-        + this.block.text;
+      this.block.text = DEFAULT_TITLE + '\n' +
+        HINT_SEPARATOR + '\n' +
+        this.block.text;
     },
   },
 };

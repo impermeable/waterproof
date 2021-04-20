@@ -18,10 +18,10 @@ function flatten(data) {
    *   where `key` is not a number
    */
   function isKeyValuePair(obj) {
-    return Array.isArray(obj)
-      && obj.length == 2
-      && typeof (obj[0]) === 'string'
-      && Number(obj[0]).toString() !== obj[0];
+    return Array.isArray(obj) &&
+      obj.length == 2 &&
+      typeof (obj[0]) === 'string' &&
+      Number(obj[0]).toString() !== obj[0];
   }
 
   /**

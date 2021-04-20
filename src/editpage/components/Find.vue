@@ -112,8 +112,8 @@ export default {
             this.markWord(direction);
           };
         }
-      } else if ((direction === 1 && !this.findCursor.findNext())
-              || (direction === -1 && !this.findCursor.findPrevious())) {
+      } else if ((direction === 1 && !this.findCursor.findNext()) ||
+              (direction === -1 && !this.findCursor.findPrevious())) {
         if (this.findList.length === 1 &&
             this.blocks[this.findPos].text.toLowerCase()
                 .includes(this.find.toLowerCase())
@@ -190,8 +190,8 @@ export default {
     },
 
     findNextBlock: function(direction) {
-      if (this.findPos >= 0 && this.findList[this.findIndex]
-              && this.findPos === this.findList[this.findIndex].index) {
+      if (this.findPos >= 0 && this.findList[this.findIndex] &&
+              this.findPos === this.findList[this.findIndex].index) {
         // There is a currently active search result
         const l = this.findList.length;
         this.findIndex = (((this.findIndex + direction) % l) + l) % l;

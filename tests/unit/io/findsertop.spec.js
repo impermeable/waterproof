@@ -16,8 +16,8 @@ const sertopFinder = require('../../../src/io/findsertop');
  */
 function existsSyncReplacement( specialPath ) {
   return function(userPath) {
-    return (userPath === specialPath
-      || specialPath.startsWith(userPath));
+    return (userPath === specialPath ||
+      specialPath.startsWith(userPath));
   };
 }
 

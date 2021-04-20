@@ -184,8 +184,8 @@ export default {
       for (const library of libFiles) {
         if (!store.state.done) {
           store.commit('setLoadingMessage',
-              `Compiling libraries ${libDone + 1}/${libTotal}`
-              + ` (${library})`);
+              `Compiling libraries ${libDone + 1}/${libTotal}` +
+              ` (${library})`);
         }
         await compiler.compileLibrary(library);
         libDone++;
