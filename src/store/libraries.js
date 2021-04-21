@@ -39,13 +39,13 @@ export default {
       state.sercompPath = path;
     },
     updateConfig(state, partial) {
-      if (partial.hasOwnProperty('sertopPath')) {
+      if (Object.prototype.hasOwnProperty.call(partial, 'sertopPath')) {
         state.sertopPath = partial['sertopPath'];
       }
-      if (partial.hasOwnProperty('serapiVersion')) {
+      if (Object.prototype.hasOwnProperty.call(partial, 'serapiVersion')) {
         state.serapiVersion = partial['serapiVersion'];
       }
-      if (partial.hasOwnProperty('libraryVersion')) {
+      if (Object.prototype.hasOwnProperty.call(partial, 'libraryVersion')) {
         state.libraryVersion = partial['libraryVersion'];
       }
     },
@@ -184,8 +184,8 @@ export default {
       for (const library of libFiles) {
         if (!store.state.done) {
           store.commit('setLoadingMessage',
-              `Compiling libraries ${libDone + 1}/${libTotal}`
-              + ` (${library})`);
+              `Compiling libraries ${libDone + 1}/${libTotal}` +
+              ` (${library})`);
         }
         await compiler.compileLibrary(library);
         libDone++;

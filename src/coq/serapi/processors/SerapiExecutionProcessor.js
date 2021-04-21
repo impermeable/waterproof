@@ -231,7 +231,7 @@ class SerapiExecutionProcessor extends SerapiProcessor {
           }
         })
         .then((result) => {
-          if (result.hasOwnProperty('error')) {
+          if (Object.prototype.hasOwnProperty.call(result, 'error')) {
             return {
               error: result.error,
               messages: messages,

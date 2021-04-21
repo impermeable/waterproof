@@ -37,7 +37,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import '/../../../../assets/sass/_colors.scss';
+@import './../../../../assets/sass/_colors.scss';
   .symbol-list {
       display: flex;
       flex-flow: row wrap;

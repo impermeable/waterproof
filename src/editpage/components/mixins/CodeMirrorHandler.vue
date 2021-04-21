@@ -56,8 +56,8 @@ export default {
         fromIndex: cm.indexFromPos(fromCursor),
         to: toCursor,
         toIndex: cm.indexFromPos(toCursor),
-        selection: fromCursor.ch !== toCursor.ch
-          || fromCursor.line !== toCursor.line,
+        selection: fromCursor.ch !== toCursor.ch ||
+          fromCursor.line !== toCursor.line,
       };
       this.eventBus.$emit('setCursorPos', this.cursorPos);
     },
@@ -75,11 +75,11 @@ export default {
     scrollToWord: function(coords) {
       let offset = coords.top;
       const height = document.querySelector(
-          `#edit-window-${this.tabindex}`
+          `#edit-window-${this.tabindex}`,
       ).clientHeight;
       offset -= height/2;
       const codemirrorInstance = document.querySelector(
-          `#edit-window-${this.tabindex} #source-editor`
+          `#edit-window-${this.tabindex} #source-editor`,
       );
       if (codemirrorInstance) {
         const VueScrollTo = require('vue-scrollto');

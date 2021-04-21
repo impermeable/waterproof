@@ -95,8 +95,8 @@ function printVernacProof( array, s ) {
  * @return {String} The pretty-printed segment
  */
 function printVernacStartTheoremProof( array, s ) {
-  return `${array[1]} ${array[2][0][0][0][0][1][1]}`
-      + ` : ${prettyPrint(array[2][0][1][1][0][1])}`;
+  return `${array[1]} ${array[2][0][0][0][0][1][1]}` +
+      ` : ${prettyPrint(array[2][0][1][1][0][1])}`;
 }
 
 /**

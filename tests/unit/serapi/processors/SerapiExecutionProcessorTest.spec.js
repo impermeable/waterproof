@@ -599,7 +599,7 @@ describe('serapi execution processor', () => {
         expect(editor.executeSuccess.callCount).to.equal(1);
 
         expect(
-            editor.executeError.calledAfter(editor.executeSuccess)
+            editor.executeError.calledAfter(editor.executeSuccess),
         ).to.equal(true);
       });
 

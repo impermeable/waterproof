@@ -177,7 +177,7 @@ export default {
       // (only if the URI is non-null, because multiple new tabs should still
       // be possible)
       const duplicateIndex = fileURI === null ? -1 : this.tabs.findIndex(
-          (tab) => tab.fileURI === fileURI
+          (tab) => tab.fileURI === fileURI,
       );
       if (duplicateIndex >= 0) {
         this.switchToTab(duplicateIndex);
@@ -350,7 +350,7 @@ export default {
      */
     homeScreen: function() {
       const unsavedChanges = this.$refs.proofWindow.some(
-          (pw) => pw.notebook && pw.notebook.unsavedChanges
+          (pw) => pw.notebook && pw.notebook.unsavedChanges,
       );
       if (unsavedChanges) {
         const closeAnyway = window.confirm('Some tabs contain unsaved ' +
@@ -472,7 +472,7 @@ export default {
 
     const query = this.$route.query;
 
-    if (query.hasOwnProperty('location')) {
+    if (Object.prototype.hasOwnProperty.call(query, 'location')) {
       const parameter = query.location;
       const filePath = decodeURIComponent(parameter);
       this.tabs.push({

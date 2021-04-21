@@ -107,8 +107,8 @@ export default {
       return parts;
     },
     hasError: function() {
-      return this.block.state.error !== null
-        && this.block.state.error !== undefined;
+      return this.block.state.error !== null &&
+        this.block.state.error !== undefined;
     },
     hasErrorBlock: function() {
       return this.hasError && this.block.state.error.message;

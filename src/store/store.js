@@ -66,7 +66,7 @@ export default {
       state.assistanceItems[index] = result;
     },
     setConfig: function(state, result) {
-      if (result.hasOwnProperty('theme')) {
+      if (Object.prototype.hasOwnProperty.call(result, 'theme')) {
         state.settings.theme = result['theme'];
       }
 
@@ -76,7 +76,7 @@ export default {
       }
       document.documentElement.className = state.settings.theme;
 
-      if (result.hasOwnProperty('zoom')) {
+      if (Object.prototype.hasOwnProperty.call(result, 'zoom')) {
         state.settings.zoom = result['zoom'];
       }
       // Conformance. Assume here the number is not zero and in range.

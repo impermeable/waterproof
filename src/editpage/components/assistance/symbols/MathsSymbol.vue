@@ -15,7 +15,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import '/../../../../assets/sass/_colors.scss';
+@import './../../../../assets/sass/_colors.scss';
   .symbol-button {
     height: 40px;
     width: 40px;

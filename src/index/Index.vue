@@ -7,7 +7,7 @@
             Loading...
         </li>
         <recent-file
-          v-else=""
+          v-else
           v-for="file in this.recents.filelist"
           v-bind:fileInfo="file"
           v-bind:key="file.id"
@@ -36,12 +36,12 @@ import RecentFile from './components/RecentFile';
 import HomepageButton from './components/HomepageButton';
 import Recents from '../io/recents';
 import ShortKeys from '../io/shortKey';
-import Loader from '../pageless/Loader';
+// import Loader from '../pageless/Loader';
 
 export default {
   name: 'app',
   components: {
-    Loader,
+    // Loader,
     RecentFile,
     HomepageButton,
   },

@@ -353,7 +353,7 @@ export default {
               continue;
             }
             const isEnabled = button.requires.every(
-                (requirement) => status.includes(requirement)
+                (requirement) => status.includes(requirement),
             );
             this.$set(button, 'disabled', !isEnabled);
           }
