@@ -2,6 +2,7 @@
   <a :title="titleText" @click="sendEvent">
     <div :class="{'sidebar-button': true, 'disabled': buttonInfo.disabled}"
      v-shortkey="shortcut" @shortkey="sendEvent"
+     v-b-tooltip.hover.rightbottom :title="titleText"
      :key="buttonInfo.text + buttonInfo.disabled">
       <div class="tooltip-image image-masks"
            :style="{'-webkit-mask-image': 'url(' + buttonInfo.icon + ')'}">
