@@ -8,6 +8,7 @@
     <div class="symbol-list" v-if="unfolded">
       <maths-symbol
         v-for="(symbol, index) in item.elements"
+        v-b-tooltip.hover :title="symbol.name"
         v-bind:item="symbol" :event-bus="eventBus"
         v-bind:key="'symbol' + index" />
     </div>
