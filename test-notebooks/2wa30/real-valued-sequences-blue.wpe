@@ -1,0 +1,151 @@
+{
+  "exerciseSheet": true,
+  "blocks": [
+    {
+      "type": "text",
+      "text": "# **Real-valued sequences**\nThis file contains the blue exercises from the chapter \"Real-valued sequences\"."
+    },
+    {
+      "type": "code",
+      "text": "Require Import Reals.\nRequire Import wplib.Tactics.Tactics.\nRequire Import wplib.Notations.Notations."
+    },
+    {
+      "type": "text",
+      "text": "Please enter your name and group number here:"
+    },
+    {
+      "type": "input",
+      "start": true,
+      "id": "input-1"
+    },
+    {
+      "type": "code",
+      "text": "Admitted."
+    },
+    {
+      "type": "input",
+      "start": false,
+      "id": "input-1"
+    },
+    {
+      "type": "text",
+      "text": "In this sheet you will prove some properties about real valued sequences.\nWe start by defining an arbitrary sequence $z$, as we did before."
+    },
+    {
+      "type": "text",
+      "text": "## **Exercise 1: bounded sequences**\n\nShow that $z$ is bounded if and only if it is both bounded above and bounded below."
+    },
+    {
+      "type": "code",
+      "text": "Variable z : ℕ → ℝ."
+    },
+    {
+      "type": "text",
+      "text": "In Waterproof, we define bounded, bounded above and bounded below for sequences in the metric space $\\mathbb{R}$, with the usual distance function."
+    },
+    {
+      "type": "code",
+      "text": "Definition is_bounded (a : ℕ → ℝ) := \n  ∃ q : ℝ,\n    ∃ M : ℝ, M ≥ 0 ∧\n      ∀ n : ℕ, \n        |a n - q| ≤ M.\nDefinition is_bounded_equivalent (a : ℕ → ℝ) :=\n  ∃ M : ℝ, M ≥ 0 ∧ \n    ∀ n : ℕ, |a n| ≤ M.\n    \nLemma is_bounded_equivalence : \n  ∀ (a : ℕ → ℝ),\n    is_bounded a ⇔ \n      is_bounded_equivalent a.\nProof.\nTake a : (ℕ → ℝ).\nWe show both statements.\nAssume a_is_bounded : (is_bounded a).\nChoose q such that q_bounds_a according to a_is_bounded.\nChoose M1 such that M_bounds_a according to q_bounds_a.\ndestruct M_bounds_a.\nChoose M := (M1 + |q|).\nWe show both statements.\nIt holds that (|q| ≥ 0) (H1).\nRewrite (M) = ((M1 + |q|)) ≥ (0).\nTake n : ℕ.\nRewrite (|a n| = |a n - q + q|).\nBy Rabs_triang it holds that (|a n - q + q| ≤ |a n - q| + |q|) (triangle).\nRewrite (|a n - q + q|) ≤ (|a n - q| + |q|) ≤ (M1 + |q|).\n\nAssume a_n_bounded : (there exists M : ℝ, M ≥ 0 ∧ ∀ n : ℕ, |a n| ≤ M).\nChoose q := 0.\nChoose M1 such that H according to a_n_bounded.\ndestruct H.\nChoose M := M1. \nWe show both statements.\nIt holds that (M ≥ 0).\nTake n : ℕ.\nRewrite (|a n - q|) = (|a n|) ≤ (M).\nQed."
+    },
+    {
+      "type": "text",
+      "text": "Recall, upper bounds and lower bounds for a sequence are defined as"
+    },
+    {
+      "type": "code",
+      "text": "Definition is_upper_bound (a : ℕ → ℝ) (M : ℝ) := \n  ∀ n : ℕ, a n ≤ M.\n\nDefinition is_lower_bound (a : ℕ → ℝ) (m : ℝ) := \n  ∀ n : ℕ, a n ≥ m."
+    },
+    {
+      "type": "text",
+      "text": "With these, we can define a sequence to be bounded above and bounded below."
+    },
+    {
+      "type": "code",
+      "text": "Definition is_bounded_above (a : ℕ → ℝ) := \n  ∃ M : ℝ, is_upper_bound a M.\nDefinition is_bounded_below (a : ℕ → ℝ) :=\n  ∃ m : ℝ, is_lower_bound a m."
+    },
+    {
+      "type": "text",
+      "text": "Now, we can start our first exercise."
+    },
+    {
+      "type": "code",
+      "text": "\nLemma bounded_equivalence : is_bounded_equivalent z ⇔ is_bounded_above z ∧ is_bounded_below z.\nProof."
+    },
+    {
+      "type": "hint",
+      "text": "Click to open hint.\n<hint>\nMoreover, to take the maximum of two numbers, use `Rmax`.\nSo for instance, if you want to take the maximum of `a` and `b`, write\n\n`Rmax (a) (b)`.\n\nA very useful lemma in the following proof will be `RmaxAbs`.\n\nRecal, you can use a lemma by using\n`By` .. ` it holds that` ... `. `"
+    },
+    {
+      "type": "input",
+      "start": true,
+      "id": "input-2"
+    },
+    {
+      "type": "code",
+      "text": "Admitted."
+    },
+    {
+      "type": "input",
+      "start": false,
+      "id": "input-2"
+    },
+    {
+      "type": "text",
+      "text": "## **Exercise 2**\nLet $a : ℕ \\to ℝ$ be a real-valued sequence."
+    },
+    {
+      "type": "code",
+      "text": "\nVariable a : ℕ → ℝ.\n\n"
+    },
+    {
+      "type": "text",
+      "text": "We define divergence to $\\infty$ similar as in the lecture notes."
+    },
+    {
+      "type": "code",
+      "text": "Definition diverges_to_infinity (x : ℕ → ℝ) := \n  ∀ M : ℝ,\n    ∃ N : ℕ,\n      ∀ n : ℕ, (n ≥ N)%nat ⇒\n        x n ≥ M.\nNotation \"x ⟶ ∞\" := (diverges_to_infinity x) (at level 20).\n\n"
+    },
+    {
+      "type": "text",
+      "text": "Similarly, we also define divergence to $-\\infty$."
+    },
+    {
+      "type": "code",
+      "text": "Definition diverges_to_minus_infinity (x : ℕ → ℝ) := \n  ∀ M : ℝ,\n    ∃ N : ℕ,\n      ∀ n : ℕ, (n ≥ N)%nat ⇒\n        x n ≤ M.\nNotation \"x ⟶ -∞\" := (diverges_to_minus_infinity x) (at level 20).\n"
+    },
+    {
+      "type": "text",
+      "text": "Finally, we need to define the 'opposite' of a sequence.\nThat is, we have to define a sequence where every element is the negative of the original sequence."
+    },
+    {
+      "type": "code",
+      "text": "\nDefinition opp (a : ℕ → ℝ) := n ↦ - a n.\n"
+    },
+    {
+      "type": "text",
+      "text": "Show that $\\lim_{n\\to\\infty} a_n = \\infty$ if and only if $\\lim_{n\\to\\infty} (-a_n) = -\\infty$."
+    },
+    {
+      "type": "code",
+      "text": "Lemma divergence_opp : a ⟶ ∞ ⇔ (opp a) ⟶ -∞.\nProof."
+    },
+    {
+      "type": "hint",
+      "text": "Click to open hint.\n<hint>\nRecall, in case a hypothesis starts with 'there exists' such that some property holds, then you can select such a variable by using\n\n`Choose ` name `such that` name-property `according to` name-hypothesis`.`\n\nNote the absence of brackets!\nAlso, please be aware of (general) naming rules. \nFor instance, consider the case where you need to prove `∃ N : nat, ..` and you have a hypothesis that says `∃ N : nat, ..`\n\nIn that case, there is **no conflict** in naming, since there is no `N` defined yet.\nHowever, if you `Choose` such a variable, you can not assign the same name to both of them. That would give a naming conflict!"
+    },
+    {
+      "type": "input",
+      "start": true,
+      "id": "input-3"
+    },
+    {
+      "type": "code",
+      "text": "Admitted."
+    },
+    {
+      "type": "input",
+      "start": false,
+      "id": "input-3"
+    }
+  ]
+}
