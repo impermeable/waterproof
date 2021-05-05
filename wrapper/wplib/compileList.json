@@ -7,12 +7,5 @@
   "Tactics/Waterprove",
   "Tactics/Tactics",
   "Tactics/TacticsContra",
-  "Lib/sup_and_inf",
-  "Lib/sup_and_inf_new_definitions",
-  "Lib/sequences",
-  "Lib/subsequences",
-  "Definitions/Subsequences",
-  "Lib/sequential_accumulation_points",
-  "Notations/SetNotations",
-  "Lib/series"  
+  "Tactics/SetTheoryTactics"
 ]
