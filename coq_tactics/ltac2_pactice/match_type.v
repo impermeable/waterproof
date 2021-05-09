@@ -11,11 +11,10 @@ Definition is_of_type (x:nat) (t:Type) : bool :=
 Compute is_of_type 1 bool.
 
 
-
 Ltac2 match_type (x:constr) (t:constr) :=
     lazy_match! x with
     | nat => (of_string "x is a nat")
-    | &t => (concat (of_string "x is type ") (of_constr t))
+    | context [?z] => (concat (of_string "x is type ") (of_constr z))
     | _ => (of_constr x)
     end.
 
