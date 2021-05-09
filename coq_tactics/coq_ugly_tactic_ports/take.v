@@ -16,7 +16,7 @@ Ltac2 Type exn ::= [ TakeError(string) ].
 Ltac2 raise_take_error (s:string) := 
     Control.throw (TakeError s).
 
-Ltac2 intro_with_type_matching s t := 
+Ltac2 intro_with_type_matching s (t:constr) := 
     lazy_match! goal with
     | [ |- forall _ : ?u, _] => 
         lazy_match! u with
