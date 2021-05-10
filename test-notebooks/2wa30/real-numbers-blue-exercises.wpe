@@ -1,0 +1,127 @@
+{
+  "exerciseSheet": true,
+  "blocks": [
+    {
+      "type": "text",
+      "text": "# **Real numbers (! requires Waterproof version 0.5.1 or up !)**\nThis file contains the blue exercises from the chapter \"Real numbers\"."
+    },
+    {
+      "type": "code",
+      "text": "Require Import Reals.\nRequire Import wplib.Tactics.Tactics.\nRequire Import wplib.Tactics.TacticsContra.\nRequire Import wplib.Notations.Notations.\nRequire Import wplib.Lib.sup_and_inf_new_definitions.\n\nSection real_numbers."
+    },
+    {
+      "type": "text",
+      "text": "## **Some definitions**\nTwo important concepts from this chapter are the **supremum** and the **infimum**.\nRecall, that a subset of the real numbers is defined as follows:"
+    },
+    {
+      "type": "code",
+      "text": "Variable B : subsets_R."
+    },
+    {
+      "type": "text",
+      "text": "## **Exercise 1: bounded intervals**\nShow that for any two real numbers $a, b$ such that $a < b$ we have\n- $\\sup [a, b] = b$,\n- $\\inf ~[a, b] = a$."
+    },
+    {
+      "type": "text",
+      "text": "We first introduce real numbers $a$ and $b$ such that $a ≤ b$: "
+    },
+    {
+      "type": "code",
+      "text": "Variable a b : R.\nHypothesis a_lt_b : a < b."
+    },
+    {
+      "type": "text",
+      "text": "Now we can continue with the exercise:"
+    },
+    {
+      "type": "code",
+      "text": "Lemma inf_bounded_interval : is_inf [a,b] a. \nProof. \n"
+    },
+    {
+      "type": "hint",
+      "text": "Click to open hint.\n<hint>\nWith\n```\nExpand the definition of is_inf.\n```\nyou can ask Waterproof to write out the definition of is_inf.\n\nThis is a useful command for when working with Waterproof, but if you don't write afterwards what is the result of expanding the definition, the proof may be hard to read for a human. Therefore, we recommend to after expanding the definition, tell the reader the new goal by\n```\nWe need to show that ((is_lower_bound [a, b] a) ∧ (for all y : ℝ, is_lower_bound [a, b] y ⇒ y ≤ a)).\n```\n</hint>"
+    },
+    {
+      "type": "input",
+      "start": true,
+      "id": "input-3"
+    },
+    {
+      "type": "code",
+      "text": "Admitted."
+    },
+    {
+      "type": "input",
+      "start": false,
+      "id": "input-3"
+    },
+    {
+      "type": "text",
+      "text": "## **Exercise 2: Proposition 4.4.3**\nLet $A$ be a subset of $\\mathbb{R}$. Assume that $A$ is non-empty and\nbounded from above: "
+    },
+    {
+      "type": "code",
+      "text": "Variable A : subsets_R.\nHypothesis A_bdd_above : (exists b : ℝ, is_upper_bound A b).\nHypothesis A_nonempty : (exists a : ℝ, is_in A a)."
+    },
+    {
+      "type": "text",
+      "text": "Next, we define what it means for a set to have a maximum:"
+    },
+    {
+      "type": "code",
+      "text": "Definition is_max (C : subsets_R) (x : ℝ) := \n  is_in C x ∧ is_upper_bound C x."
+    },
+    {
+      "type": "text",
+      "text": "\nShow that for all $y ∈ ℝ$, if $y$ is the supremum of $A$ then (if $y$ is in $A$ then $M$ is the maximum of $A$)."
+    },
+    {
+      "type": "code",
+      "text": "Lemma sup_in_bdd_set_is_max : \n  for all y : ℝ, is_sup A y ⇒\n    (is_in A y ⇒ is_max A y).\nProof."
+    },
+    {
+      "type": "input",
+      "start": true,
+      "id": "input-1"
+    },
+    {
+      "type": "code",
+      "text": "Admitted."
+    },
+    {
+      "type": "input",
+      "start": false,
+      "id": "input-1"
+    },
+    {
+      "type": "text",
+      "text": "## **Exercise 3: open intervals**\nShow that $\\sup[0,4) = 4$"
+    },
+    {
+      "type": "code",
+      "text": "Lemma sup_open_interval_0_4 : is_sup [0,4) 4. \nProof. \n"
+    },
+    {
+      "type": "hint",
+      "text": "Click to open hint.\n<hint>\nWhen showing that 4 is less than any other upper bound of $[0,4)$, it is probably a good idea to split the cases $c<0$ and $c ≥ 0$ (by writing `Either (c < 0) or (c ≥ 0).`)."
+    },
+    {
+      "type": "hint",
+      "text": "Click to open hint.\n<hint>\nYou can start a contradiction argument by writing\n```\nWe argue by contradiction.\n```\nYou can conclude a contradiction argument for instance if both $A$ and $¬ A$ appear in the hypothesis list above the line on the right hand side. You can then write\n```\nContradiction.\n```"
+    },
+    {
+      "type": "input",
+      "start": true,
+      "id": "input-2"
+    },
+    {
+      "type": "code",
+      "text": "Admitted."
+    },
+    {
+      "type": "input",
+      "start": false,
+      "id": "input-2"
+    }
+  ]
+}
