@@ -16,16 +16,18 @@ Ltac2 Type exn ::= [ TakeError(string) ].
 Ltac2 raise_take_error (s:string) := 
     Control.throw (TakeError s).
 
-Ltac2 intro_with_type_matching s (t:constr) := 
-    lazy_match! goal with
+Ltac2 intro_with_type_matching s t := 
+    match! goal with
     | [ |- forall _ : ?u, _] => 
-        lazy_match! u with
-            | &t => print (of_constr t); print (of_constr u); Std.intros false s
-            | _ => raise_take_error (
+        match Constr.equal u t with
+            | true => Std.intros false s
+            | false => raise_take_error (
             "The type of the variable must match the type of the 'forall' goal's bound variable.")
         end
     | [|- _] => raise_take_error("'Take' can only be applied to 'forall' goals")
     end.
+    
+    
 
 Ltac2 Notation "Take" s(intropatterns) ":" t(constr) := intro_with_type_matching s t.
 
