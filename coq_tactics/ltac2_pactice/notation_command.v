@@ -20,8 +20,7 @@ Definition double_successor x := S (S x).
     double_successor (double_successor x). *)
 
 Ltac2 my_intro_function this :=
-    Control.enter(
-        fun () => Std.intros true this).
+    Std.intros false this.
 Ltac2 Notation "my_intro" x(intropatterns) := my_intro_function x.
 
 Lemma all_x_is_itself : forall x: nat, x = x.
