@@ -1,5 +1,6 @@
 (*
 Author: Lulof Pirée (1363638)
+    & Cosmin Manea
 Creation date: 7 May 2021
 
 First attempt at rewriting the "Take" tactic in Ltac2.
@@ -50,16 +51,6 @@ Abort.
 Goal exists n : nat, n <= 2*n.
     Take n : nat.
 Abort.
-
-
-    (* induction n.
-    (* Base case, 0 <= 2*0 *)
-        apply le_n.
-    (* Inductive step *)
-        assert (n_le_Sn: n <= S n).
-            apply le_S.
-            apply le_n.
-        apply n_le_Sn. *)
         
             
             
