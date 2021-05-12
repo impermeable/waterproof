@@ -109,8 +109,6 @@ Goal forall (n m k: nat)  (b1 b2: bool), Nat.odd (n + m + k) = andb b1 b2.
     Take n, m, k : nat, b1, b2: bool.
 Abort.
             
-
-
 (* Test 6: Two sets of multiple variables of the same type.
    But with different names *)
    Goal forall (n m k: nat)  (b1 b2: bool), Nat.odd (n + m + k) = andb b1 b2.
