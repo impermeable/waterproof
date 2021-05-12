@@ -13,7 +13,7 @@ From Ltac2 Require Import Message.
 Ltac2 Type exn ::= [ TakeError(string) ].
 
 Ltac2 raise_take_error (s:string) := 
-    Control.throw (TakeError s).
+    Control.zero (TakeError s).
 
 Ltac2 intro_with_type_matching s t := 
     match! goal with
@@ -31,45 +31,69 @@ Ltac2 intro_with_type_matching s t :=
 
 Ltac2 Notation "Take" s(intropatterns) ":" t(constr) := intro_with_type_matching s t.
 
+Ltac2 Type exn ::= [ CannotHappenError(string) ].
 
 Ltac2 rec take_multiarg x :=
     match x with
     | head::tail =>
         match head with
-        | s::r => print (of_constr s);
-            match r with 
-            | r::nil => () (* intro_with_type_matching s r *)
-            | [] => ()
-            end
-        | [] => ()
-        end
+        | (s, t) => intro_with_type_matching s t
+        | _ => Control.zero (CannotHappenError "Cannot happen")
+        end; take_multiarg tail
     | [] => ()
     end.
 
+Ltac2 rec intro_list_with_typematching (x) (t:constr) :=
+    match x with
+    | head::tail => intro_with_type_matching head t; 
+                    intro_list_with_typematching tail t
+    | [] => ()
+    end.
 Ltac2 Notation "Take" x(list1(seq(intropatterns, ":", constr), ",")) := 
-    print x.
+    take_multiarg x.
 
-(* This should work fine *)
+(* Testcases *)
+
+Ltac2 Type exn ::= [ TestFailedError(string) ].
+
+Ltac2 assert_raises_error f :=
+    match Control.case f with
+    | Val _ => Control.throw (TestFailedError "Should raise an error")
+    | Err exn => print (of_string "Test passed")
+    end.
+
+(* Test 0: This should work fine *)
 Goal forall n : nat, n <= 2*n.
     Take n : nat.
 Abort.
 
-(* Also this should work fine *)
+(* Test 1: Also this should work fine *)
 Goal forall n : nat, n <= 2*n.
     Take x : nat.
 Abort.
 
-(* This should raise an error, because the type does not match*)
+(* Test 2: This should raise an error, because the type does not match*)
 Goal forall n : nat, n <= 2*n.
-    Take n : bool.
+    assert_raises_error (fun () => Take n : bool).
 Abort.
 
-(* This should raise an error, because "Take" solves forall-quatifiers *)
+(* Test 3: This should raise an error, because "Take" solves forall-quatifiers *)
 Goal exists n : nat, n <= 2*n.
-    Take n : nat.
+    assert_raises_error (fun() => Take n : nat).
 Abort.
-        
-            
+
+(* Test 4: Multi argument testcase *)
+Goal forall n : nat, forall m : nat, n + m <= 2*n + m.
+    Take n : nat, m : nat.
+Abort.
+
+Search (nat  -> bool).
+
+(* Test 5: Two sets of multiple variables of the same type. *)
+Goal forall n: nat, forall m : nat, forall k: nat, 
+     forall b1:bool, forall b2:bool, Nat.odd (n + m + k) = andb b1 b2.
+    Take n, m, k : nat, b1, b2: bool.
+Abort.
             
             
 
