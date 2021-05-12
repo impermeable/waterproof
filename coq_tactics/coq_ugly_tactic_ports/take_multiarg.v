@@ -76,7 +76,9 @@ Ltac2 Type exn ::= [ TestFailedError(string) ].
 Ltac2 assert_raises_error f :=
     match Control.case f with
     | Val _ => Control.throw (TestFailedError "Should raise an error")
-    | Err exn => print (of_string "Test passed")
+    | Err exn => print (concat 
+        (of_string "Test passed, got error:") 
+        (of_exn exn))
     end.
 
 (* Test 0: This should work fine *)
