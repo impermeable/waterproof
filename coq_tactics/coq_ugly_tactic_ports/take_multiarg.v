@@ -1,5 +1,6 @@
 (*
 Author: Lulof Pirée (1363638)
+    & Cosmin Manea
 Creation date: 12 May 2021
 
 Version of "Take" tactic that accepts any number of arguments.
