@@ -21,7 +21,7 @@ Ltac2 check_constr_type_equal (a: constr) (b: constr) :=
     Constr.equal (eval cbv in (type_of $a)) (eval cbv in (type_of $b)).
 
 Ltac2 assume_goal_premise_with_type_checking (h) (t:constr) :=
-    match! goal with
+    lazy_match! goal with
     | [|- ?premise -> ?conclusion] => 
         match check_constr_type_equal t premise with
         | true => Std.intros false h (* "intros h" always use the name "h"*)
@@ -67,5 +67,13 @@ Goal forall n : nat, (n = 1) -> (n = 1).
     Assume my_hypothesis : (n = 1).
 Abort.
 
+(* Test 2:
+    Not an implication goal, should raise an error.
+*)
+Goal forall n : nat, (n = 1) /\ (n = 1).
+    intros n.
+    assert_raises_error (fun () => Assume my_hypothesis : (n = 1)).
+    Assume my_hypothesis : (n = 1).
+Abort.
 
 

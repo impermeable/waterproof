@@ -26,7 +26,7 @@ Does:
         or if the goal is not a ∀-quantifier.
 *)
 Ltac2 intro_with_type_matching s t := 
-    match! goal with
+    lazy_match! goal with
     | [ |- forall _ : ?u, _] => 
         match Constr.equal u t with
             | true => Std.intros false s
@@ -129,16 +129,18 @@ Abort.
    Take a, b, c, d, e, f, g : nat, b1, b2: bool.
 Abort.
 
-(* Test 9: This should give a helpful error, but it does not:
-    "Uncaught Ltac2 exception:
-    Match_failure"
-    (Note that two variables have the same name "a"!)*)
+(* Test 9: This should give a helpful error.
+    (Note that two variables have the same name "a"!)
+    
+    Currently it raises "Internal (err:(a is already used.))"
+    which seems clear enough :)
+    *)
 Goal forall (a b c d e f g: nat) (b1 b2: bool), 
         Nat.odd (a + b + c + d + e + f + g) = andb b1 b2.
-    Take a, b, c, d, e, f, g : nat, a, h: bool.
+    assert_raises_error (fun() => Take a, b, c, d, e, f, g : nat, a, h: bool).
 Abort.
 
-(* Test 9: Two sets of multiple variables of the same type.
+(* Test 10: Two sets of multiple variables of the same type.
    But in a *different order* with different names.*)
 (* DOES NOT WORK (yet)*)
 Goal forall (n m k: nat)  (b1 b2: bool), Nat.odd (n + m + k) = andb b1 b2.
