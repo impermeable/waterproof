@@ -39,7 +39,6 @@ Ltac2 Type exn ::= [ WeKnowError(string) ].
 Ltac2 raise_we_know_error (s:string) := 
     Control.zero (WeKnowError s).
 
-
 Ltac2 check_hypothesis (s:ident) (t:constr) :=
     let h := (Control.hyp s) in
     match Constr.equal (eval cbv in (type_of $h)) (eval cbv in $t) with 
