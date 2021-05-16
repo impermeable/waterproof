@@ -40,14 +40,14 @@ Ltac2 raise_we_know_error (s:string) :=
     Control.zero (WeKnowError s).
 
 
-Ltac2 hypothesis_checking (s:ident) (t:constr) :=
+Ltac2 check_hypothesis (s:ident) (t:constr) :=
     let h := (Control.hyp s) in
     match Constr.equal (eval cbv in (type_of $h)) (eval cbv in $t) with 
     | true => ()
     | false => raise_we_know_error("This hypothesis does not exist.")
     end. 
 
-Ltac2 Notation "We" "know" s(ident) ":" t(constr) := hypothesis_checking s t.
+Ltac2 Notation "We" "know" s(ident) ":" t(constr) := check_hypothesis s t.
 
 (* Test 1: basic functionality of "We know H:..."*)
 Goal forall x: nat, x = 3 -> x < 4.
@@ -72,7 +72,7 @@ Goal forall x: nat, x = 3 -> x < 4.
 Abort.
 
 
-Definition double:= fun (x: nat) => 2*x.
+Definition double := fun (x: nat) => 2*x.
 
 (* Test 3: this test shows why we need "(eval cbv in $t)".
     Without "eval cbv in", "t" would contain "double x",
