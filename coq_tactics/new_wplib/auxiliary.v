@@ -50,19 +50,3 @@ Definition type_of {T : Type} (x : T) := T.
 *)  
 Ltac2 check_constr_type_equal (a: constr) (b: constr) :=
     Constr.equal (eval cbv in (type_of $a)) (eval cbv in (type_of $b)).
-
-
-(*
-    [Textual description]
-
-    Arguments:
-        * a: [type], [description what it is supposed to be]
-        * b: [type], [description what it is supposed to be]
-
-    Returns:
-        * [type], [description what it will be (under which conditions)]
-
-    Raises Exceptions:
-        * [SomeError]: [Situation(s) in which the error is raised]
-*)
-Ltac2 my_dummy_function (a, b: constr) := ...
