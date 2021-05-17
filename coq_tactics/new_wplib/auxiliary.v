@@ -39,6 +39,8 @@ Definition type_of {T : Type} (x : T) := T.
 
 (*  
     Ltac2 function: constr -> constr -> bool.
+    Check if the normalized type of "a" is judgementally 
+    equal to the normalized type of "b".
 
     Arguments:
         * a, b: constr, any constr
