@@ -39,8 +39,24 @@ Definition type_of {T : Type} (x : T) := T.
 
 (*  
     Ltac2 function: constr -> constr -> bool.
-    Check if the normalized type of "a" is syntactically 
-    equal to the normalized type of "b".
+    Check if the normalized TYPE OF "a" is syntactically 
+    equal to the normalized TYPE OF "b".
+
+    Arguments:
+        * a, b: constr, any constr
+    Returns:
+        * bool:
+            - true if the TYPES OF a and b are syntactically equal
+                (i.e. are of the same type after normalization)
+            - false otherwise.
+*)  
+Ltac2 check_constr_type_equal (a: constr) (b: constr) :=
+    Constr.equal (eval cbv in (type_of $a)) (eval cbv in (type_of $b)).
+
+(*  
+    Ltac2 function: constr -> constr -> bool.
+    Check if the normalized form of "a" is syntactically 
+    equal to the normalized form of "b".
 
     Arguments:
         * a, b: constr, any constr
@@ -50,5 +66,5 @@ Definition type_of {T : Type} (x : T) := T.
                 (i.e. are of the same type after normalization)
             - false otherwise.
 *)  
-Ltac2 check_constr_type_equal (a: constr) (b: constr) :=
-    Constr.equal (eval cbv in (type_of $a)) (eval cbv in (type_of $b)).
+Ltac2 check_constr_equal (a: constr) (b: constr) :=
+    Constr.equal (eval cbv in $a) (eval cbv in $b).
