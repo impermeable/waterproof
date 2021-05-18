@@ -39,14 +39,14 @@ Definition type_of {T : Type} (x : T) := T.
 
 (*  
     Ltac2 function: constr -> constr -> bool.
-    Check if the normalized type of "a" is judgementally 
+    Check if the normalized type of "a" is syntactically 
     equal to the normalized type of "b".
 
     Arguments:
         * a, b: constr, any constr
     Returns:
         * bool:
-            - true if a and b are judgementally equal
+            - true if a and b are syntactically equal
                 (i.e. are of the same type after normalization)
             - false otherwise.
 *)  
