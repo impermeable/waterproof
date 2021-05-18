@@ -33,7 +33,7 @@ From Ltac2 Require Import Message.
 
 Ltac2 Type exn ::= [ TakeError(string) ].
 
-Ltac2 raise_take_error (s:string) := 
+Local Ltac2 raise_take_error (s:string) := 
     Control.zero (TakeError s).
 
 (*  
@@ -56,7 +56,7 @@ Ltac2 raise_take_error (s:string) :=
         * TakeError, if the top-level connective in the goal 
             is not a ∀-quantifier.
 *)
-Ltac2 intro_with_type_matching s t := 
+Local Ltac2 intro_with_type_matching s t := 
     lazy_match! goal with
     | [ |- forall _ : ?u, _] => 
         match Constr.equal u t with
@@ -75,7 +75,7 @@ Ltac2 Type exn ::= [ CannotHappenError(string) ].
     Does:
         * call intro_with_type_matching v t for each v ∈ x.
 *)
-Ltac2 rec intro_list_with_typematching x (t:constr) :=
+Local Ltac2 rec intro_list_with_typematching x (t:constr) :=
     match x with
     | head::tail => intro_with_type_matching head t; 
                     intro_list_with_typematching tail t
@@ -87,7 +87,7 @@ Ltac2 rec intro_list_with_typematching x (t:constr) :=
     Does:
     * call intro_list_with_typematching(v, t) for each (v, t) ∈ x
 *)
-Ltac2 rec take_multiarg x :=
+Local Ltac2 rec take_multiarg x :=
     match x with
     | head::tail =>
         match head with
