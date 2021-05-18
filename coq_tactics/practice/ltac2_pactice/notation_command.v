@@ -1,6 +1,7 @@
 From Ltac2 Require Import Ltac2.
 From Ltac2 Require Option.
 From Ltac2 Require Std.
+From Ltac2 Require Import Message.
 Require Import ArithRing.
 Require Import Nat.
 
@@ -38,9 +39,12 @@ Proof.
     reflexivity.
 Qed.
 
-Ltac2 destruct_into_2 hyp :=
+(* Ltac2 destruct_into_2 (hyp: constr) :=
     Control.enter (fun () => Std.destruct false hyp).
 Ltac2 Notation "break_in_two" H(constr) := 
-    destruct_into_2 hyp.
+    destruct_into_2 hyp. *)
 
-Lemma one_is_one_and_not_zero : 1 = 1 /\ 1 <> 0.
+Ltac2 Notation "My" "print" opt("this_one") c(constr) :=
+    print (of_constr c).
+Ltac2 Notation "My" "print" this_one(opt("this_one")) c(constr) :=
+    print (of_constr c).
