@@ -216,9 +216,22 @@ class CoqAST {
    * @param {*} array The array with the CoqAST information
    */
   constructor( array ) {
+    this.representation = convert_s_exp_to_string(array, 0, '');
     this.locinfo = new LocInfo(array[1][0]);
     this.content = convertToASTComp(array[1][1]);
   }
+}
+
+/** Convert an s-expression to a string with indentation */
+function convert_s_exp_to_string( expr, depth, stringSoFar ) {
+  let returnString = stringSoFar;
+  if (Array.isArray(expr)) {
+    for (let i = 0; i < expr.length; i++) {
+      returnString = convert_s_exp_to_string(expr[i], depth + 1, returnString);
+    }
+    return returnString;
+  }
+  return returnString + '\n' + '| '.repeat((depth)) + expr.toString();
 }
 
 /**
