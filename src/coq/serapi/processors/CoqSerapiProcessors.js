@@ -43,6 +43,9 @@ class CoqSerapiProcessors extends CoqInterface {
 
     this.astProcessor =
         new SerapiASTProcessor(this.tagger, this.state, editor);
+
+    // TODO: TEMP
+    this.alwaysAST = false;
   }
 
   /**
@@ -55,11 +58,13 @@ class CoqSerapiProcessors extends CoqInterface {
     if (!this.ready) {
       return Promise.resolve();
     }
-    const intermediate = this.contentProcessor.setContent(content);
-    setTimeout(() => {
-      this.astProcessor.getAllAsts().then();
-    }, 100);
-    return intermediate;
+    // TODO: TEMP
+    if (this.alwaysAST) {
+      setTimeout(() => {
+        this.astProcessor.getAllAsts().then();
+      }, 100);
+    }
+    return this.contentProcessor.setContent(content);
   }
 
   /**
@@ -157,6 +162,16 @@ class CoqSerapiProcessors extends CoqInterface {
    */
   getState() {
     return this.state;
+  }
+
+
+  // TODO: TEMP:
+  /**
+   * a
+   * @return {Promise<void>}
+   */
+  getAllASTs() {
+    return this.astProcessor.getAllAsts();
   }
 }
 
