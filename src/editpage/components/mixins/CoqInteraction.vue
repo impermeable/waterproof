@@ -29,6 +29,8 @@ export default {
     this.eventBus.$on('coqAST', this.coqAST);
     this.eventBus.$on('coqLog', this.coqToggleLog);
     this.eventBus.$on('coqTime', this.coqToggleTiming);
+    // TODO: TEMP
+    this.eventBus.$on('coqLogAST', this.coqToggleASTLog);
   },
   methods: {
     startCoq: function() {
@@ -96,8 +98,12 @@ export default {
      *
      * @param {Number} sentenceNr  The sentence to request the AST for
      */
-    coqAST: function(sentenceNr) {
-      this.coq.getAST(sentenceNr);
+    coqAST: function() {
+      this.coq.getAllASTs();
+    },
+
+    coqToggleASTLog: function() {
+      this.coq.alwaysAST = !this.coq.alwaysAST;
     },
 
     coqSearch: function(detail) {
