@@ -15,9 +15,9 @@ const sinon = require('sinon');
 
 const proofResponse = [
   'Ack',
-  '(ObjList((CoqAst((((fname ToplevelInput)(line_nb 1)(bol_pos 0)' +
-  '(line_nb_last 1)(bol_pos_last 0)(bp 7)(ep 13)))' +
-  '(VernacExpr()(VernacProof()()))))))',
+  '(ObjList((CoqAst((v((control())(attrs())(expr(VernacProof()()))))' +
+  '(loc(((fname ToplevelInput)(line_nb 1)(bol_pos 0)(line_nb_last 1)' +
+  '(bol_pos_last 0)(bp 0)(ep 6))))))))',
   'Completed',
 ];
 
