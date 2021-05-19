@@ -216,10 +216,25 @@ class CoqAST {
    * @param {*} array The array with the CoqAST information
    */
   constructor( array ) {
-    this.locinfo = new LocInfo(array[1][0]);
-    this.content = convertToASTComp(array[1][1]);
+    // this.representation = convertSexpToString(array, 0, '');
+    this.locinfo = new LocInfo(array[1][1]);
+    this.content = convertToASTComp(array[1][0]);
   }
 }
+/*
+
+/!** Convert an s-expression to a string with indentation *!/
+function convert_s_exp_to_string( expr, depth, stringSoFar ) {
+  let returnString = stringSoFar;
+  if (Array.isArray(expr)) {
+    for (let i = 0; i < expr.length; i++) {
+      returnString = convert_s_exp_to_string(expr[i], depth + 1, returnString);
+    }
+    return returnString;
+  }
+  return returnString + '\n' + '| '.repeat((depth)) + expr.toString();
+}
+*/
 
 /**
  * A JavaScript equivalent of a VernacExpr object
@@ -264,8 +279,7 @@ class LocInfo {
    * @param {Array} array Array containing location info
    */
   constructor( array ) {
-    const result = flatten(array)[0];
-    // console.log(result);
+    const result = flatten(array)[1][0];
     this.fname = result.fname;
     this.line_nb = result.line_nb;
     this.bol_pos = result.bol_pos;
