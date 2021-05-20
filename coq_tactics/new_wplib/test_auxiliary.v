@@ -24,13 +24,54 @@ along with Waterproof-lib.  If not, see <https://www.gnu.org/licenses/>.
 From Ltac2 Require Import Ltac2.
 From Ltac2 Require Option.
 From Ltac2 Require Import Message.
+Add LoadPath "./coq_tactics/new_wplib/" as wplib.
+Load auxiliary.
 
 Ltac2 Type exn ::= [ TestFailedError(string) ].
 
+Ltac2 fail_test (s:string) := 
+    Control.zero (TestFailedError s).
+
+
 Ltac2 assert_raises_error f :=
     match Control.case f with
-    | Val _ => Control.throw (TestFailedError "Should raise an error")
+    | Val _ => fail_test "Should raise an error"
     | Err exn => print (concat 
         (of_string "Test passed, got error:") 
         (of_exn exn))
+    end.
+
+(*
+    Check if two lists (of type "constr list") are equal. 
+    Raise an error if they have different lengths,
+    or that there exists an index such that their value at that index
+    differs.
+
+    Arguments:
+        * x, y: (constr list), lists of constr's to be compared.
+
+    Raises Exceptions:
+        * TestFailedError, if x and y have a different length.
+        * TestFailedError, if there exists an i such that x[i] ≠ y[i].
+*)
+Ltac2 rec assert_list_equal (x:constr list) (y: constr list) :=
+    match x with
+    | x_head::x_tail =>
+        match y with
+        | y_head::y_tail =>
+            match (check_constr_equal x_head y_head) with
+            | true => assert_list_equal x_tail y_tail
+            | false => print(concat (of_string "Unequal elements:") 
+                                    (concat (of_constr x_head) 
+                                            (of_constr y_head)
+                                    )
+                            ); fail_test "List have different element"
+            end
+        | [] => fail_test "First list has more elements"
+        end
+    | [] => 
+        match y with
+            | [] => print (of_string "Test passed: lists indeed equal")
+            | y_head::y_tai => fail_test "Second list has more elements"
+        end
     end.
