@@ -32,7 +32,16 @@ Ltac2 Type exn ::= [ TestFailedError(string) ].
 Ltac2 fail_test (s:string) := 
     Control.zero (TestFailedError s).
 
+(*
+    Check if the function "f" raises an error when evaluated.
 
+    Arguments:
+        * f, function without arguments.
+    
+    Raises Exceptions:
+        * TestFailedError, if the execution of "f"
+            does NOT raise a catchable exception.
+*)
 Ltac2 assert_raises_error f :=
     match Control.case f with
     | Val _ => fail_test "Should raise an error"
