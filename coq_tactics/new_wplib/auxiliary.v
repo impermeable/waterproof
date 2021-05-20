@@ -25,6 +25,9 @@ along with Waterproof-lib.  If not, see <https://www.gnu.org/licenses/>.
 From Ltac2 Require Import Ltac2.
 From Ltac2 Require Option.
 
+(* Defensive programming error *)
+Ltac2 Type exn ::= [ CannotHappenError(string) ].
+
 
 (*
     Gallina function mapping a term of a type
