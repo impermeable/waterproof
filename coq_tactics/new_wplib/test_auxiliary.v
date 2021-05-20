@@ -24,8 +24,6 @@ along with Waterproof-lib.  If not, see <https://www.gnu.org/licenses/>.
 From Ltac2 Require Import Ltac2.
 From Ltac2 Require Option.
 From Ltac2 Require Import Message.
-Add LoadPath "./coq_tactics/new_wplib/" as wplib.
-Load auxiliary.
 
 Ltac2 Type exn ::= [ TestFailedError(string) ].
 
@@ -68,7 +66,7 @@ Ltac2 rec assert_list_equal (x:constr list) (y: constr list) :=
     | x_head::x_tail =>
         match y with
         | y_head::y_tail =>
-            match (check_constr_equal x_head y_head) with
+            match (Constr.equal x_head y_head) with
             | true => assert_list_equal x_tail y_tail
             | false => print(concat (of_string "Unequal elements:") 
                                     (concat (of_constr x_head) 
@@ -83,4 +81,11 @@ Ltac2 rec assert_list_equal (x:constr list) (y: constr list) :=
             | [] => print (of_string "Test passed: lists indeed equal")
             | y_head::y_tai => fail_test "Second list has more elements"
         end
+    end.
+
+
+Ltac2 assert_hyp_exists (h: ident) :=
+    match Control.case (fun () => Control.hyp h) with
+    | Val _ => print(concat (of_string "Indeed hyp exists:") (of_ident h))
+    | Err exn => print (of_exn exn); fail_test "Hyp not found"
     end.

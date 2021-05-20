@@ -24,6 +24,11 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Waterproof-lib.  If not, see <https://www.gnu.org/licenses/>.
 *)
+From Ltac2 Require Import Ltac2.
+From Ltac2 Require Option.
+From Ltac2 Require Import Message.
+Add LoadPath "./coq_tactics/new_wplib/" as wplib.
+Load test_auxiliary.
 
 (*
 --------------------------------------------------------------------------------
@@ -36,3 +41,13 @@ Ltac2 Eval assert_list_equal [] [].
 
 Ltac2 Eval assert_raises_error (fun () =>
 assert_list_equal (constr:(1)::constr:(3)::[]) (constr:(2)::constr:(3)::[]) ).
+
+(*
+--------------------------------------------------------------------------------
+    Testcases for assert_hyp_exists
+*)
+Goal forall n, n = 1.
+    intros n.
+    assert_hyp_exists @n.
+    assert_raises_error (fun () => assert_hyp_exists @x).
+Abort.
