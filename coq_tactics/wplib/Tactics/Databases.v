@@ -1,7 +1,7 @@
 (** # **Databases**
 In this file, we construct so-called Hint Databases.
 These databases can be used in combination with the tactics `auto` and `eauto`.
-When using such a tactic, the hints in th database are recursively called until a certain search depth (standard is 5).
+When using such a tactic, the hints in the database are recursively called until a certain search depth (standard is 5).
 We choose to split the interesting hints among a number of different databases, so that the recursive search  size and the corresponding search time remain relatively small.
 
 ## **Equality**

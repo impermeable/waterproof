@@ -46,3 +46,7 @@ scripts/unit_tests.tex
 *.vo
 
 wrapper/**/*.v
+
+# Some files that Coq produces sometimes, 
+# probably when compiling a .v file
+*.*.aux
