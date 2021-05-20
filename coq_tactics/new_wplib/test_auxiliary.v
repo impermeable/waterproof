@@ -29,7 +29,7 @@ Load auxiliary.
 
 Ltac2 Type exn ::= [ TestFailedError(string) ].
 
-Ltac2 fail_test (s:string) := 
+Local Ltac2 fail_test (s:string) := 
     Control.zero (TestFailedError s).
 
 (*
