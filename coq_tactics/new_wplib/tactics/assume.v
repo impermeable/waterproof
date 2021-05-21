@@ -40,24 +40,10 @@ Ltac2 Type exn ::= [ AssumeError(string) ].
 Ltac2 raise_assume_error (s:string) := 
     Control.zero (AssumeError s).
 
-
-Ltac2 rec assume_breakdown (x: (ident*constr) list) :=
-    lazy_match! goal with
-    | [h:?a/\?b |- _] => ()
-    | [|-_] => ()
-    end.
-
-(* 
-Ltac2 assume_premise_with_breakdown (x: (ident*constr) list) :=
-    lazy_match! goal with
-    | [ |- ?premise->?conclusion] => Std.intros false premise; assume_breakdown x
-    | [|- _] => raise_assume_error "Cannot assume premise: 
-                                    goal is not an implication"
-    end. *)
-
 (*
 --------------------------------------------------------------------------------
-    "intro_hyp_from_list" plus subroutines
+    "intro_hyp_from_list" plus subroutines.
+    This function is a subroutine of "Assume" itself.
 *)
 
 
@@ -116,4 +102,41 @@ Local Ltac2 rec intro_hyp_from_list_recursion
 *)
 Ltac2 intro_hyp_from_list (x: (ident*constr) list) (h: ident) :=
     intro_hyp_from_list_recursion x h [].
+
+
+(*
+--------------------------------------------------------------------------------
+    Main function implementing "Assume" plus subroutines.
+*)
+
+Ltac2 rec assume_breakdown (x: (ident*constr) list) :=
+    lazy_match! goal with
+    | [h:?a/\?b |- _] => let f := fun () =>  (intro_hyp_from_list x h) in 
+                         match Control.case f with
+                         | Val new_x => 
+                            match x with
+                                | head::tail => assume_breakdown new_x
+                                | [] => ()
+                            end
+                         | Err exn => destruct h as [h' h''];
+                                      (* Todo: this is endless recursion.
+                                      Need to match hyps in x with h' and h''*)
+                                      assume_breakdown x
+                         end
+    | [|-_] => 
+        match x with
+        | head::tail => raise_assume_error "Too many hypotheses provided"
+        | [] => ()
+        end
+    end.
+
+
+Ltac2 assume_premise_with_breakdown (x: (ident*constr) list) :=
+    lazy_match! goal with
+    | [ |- ?premise->?conclusion] => intros premise; assume_breakdown x
+    | [|- _] => raise_assume_error "Cannot assume premise: 
+                                    goal is not an implication"
+    end.
+
+
     
