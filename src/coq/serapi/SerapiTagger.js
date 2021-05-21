@@ -36,11 +36,8 @@ class SerapiTagger {
     } : null;
     this.commandStartTime = null;
 
-    const isDebug = process.env.NODE_ENV !== 'production';
-    // Mot sure exactly what's the purpose of this,
-    // but it breaks the ide
     this.timing = false;
-    this.logging = isDebug;
+    this.logging = false;
   }
 
   /**

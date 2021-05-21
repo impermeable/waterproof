@@ -1,6 +1,6 @@
 import SerapiProcessor from '../util/SerapiProcessor';
 import {createASTCommand} from '../util/SerapiCommandFactory';
-import {extractCoqAST} from '../ASTProcessor';
+import {extractCoqAST, currentlyNotParsedTypes} from '../ASTProcessor';
 
 /**
  * Processor for ast handling
@@ -28,6 +28,10 @@ class SerapiASTProcessor extends SerapiProcessor {
     return Promise.resolve();
   }
 
+  // eslint-disable-next-line require-jsdoc
+  getUnparsedTypes() {
+    return Array.from(currentlyNotParsedTypes);
+  }
   /**
    * Fetch the asts for a specific sentence
    * @param {Number} sentenceIndex the index of the sentence

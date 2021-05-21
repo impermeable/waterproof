@@ -287,6 +287,13 @@ export default {
             shortkeyTag: '',
             requires: ['notebook', 'coq-ready'],
           },
+          {
+            text: 'Log currently unparsed types',
+            event: 'coqUnparsedAST',
+            eventType: 'on-proof-window',
+            shortkeyTag: '',
+            requires: ['notebook', 'coq-ready'],
+          },
         ] : []),
         help: [
           // 0,1,2 are magical constants from store.js

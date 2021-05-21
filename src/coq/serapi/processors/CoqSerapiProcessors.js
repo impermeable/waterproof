@@ -173,6 +173,11 @@ class CoqSerapiProcessors extends CoqInterface {
   getAllASTs() {
     return this.astProcessor.getAllAsts();
   }
+
+  // eslint-disable-next-line require-jsdoc
+  getUnparsedTypes() {
+    return this.astProcessor.getUnparsedTypes();
+  }
 }
 
 export default CoqSerapiProcessors;

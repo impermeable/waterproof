@@ -29,6 +29,8 @@ export default {
     this.eventBus.$on('coqAST', this.coqAST);
     this.eventBus.$on('coqLog', this.coqToggleLog);
     this.eventBus.$on('coqTime', this.coqToggleTiming);
+
+    this.eventBus.$on('coqUnparsedAST', this.logNotParsed);
     // TODO: TEMP
     this.eventBus.$on('coqLogAST', this.coqToggleASTLog);
   },
@@ -100,6 +102,10 @@ export default {
      */
     coqAST: function() {
       this.coq.getAllASTs();
+    },
+
+    logNotParsed: function() {
+      console.log(this.coq.getUnparsedTypes());
     },
 
     coqToggleASTLog: function() {
