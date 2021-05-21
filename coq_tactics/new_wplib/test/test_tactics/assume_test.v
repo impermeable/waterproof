@@ -67,12 +67,36 @@ Ltac2 assert_second_elems_equal (x : (ident*constr) list)
     
     
 
+(* 
+    Test 1: assert the input hypothesis gets renamed 
+    to the ident given in the matching tuple of the input list. 
+*)
 Goal 0=0 -> 1=1.
     intros h.
     intro_hyp_from_list ((@a, constr:(2=2))::(@b, constr:(3=3))::(@c, constr:(0=0))::[]) @h.
     assert_hyp_exists @c.
-Qed.
+Abort.
 
-Goal 
+(*
+    Test 2: Assert the matching tuple is removed from the output list.
+    Case: matching tuple is last.
+*)
+Goal 0=0 -> 1=1.
+    intros h.
+    Ltac2 result_t2 := fun () => 
+        intro_hyp_from_list ((@b, constr:(3=3))::(@c, constr:(0=0))::[]) @h.
+    assert_second_elems_equal (result_t2 ()) ((@b, constr:(3=3))::[]).
+Abort.
+
+(*
+    Test 3: Assert the matching tuple is removed from the output list.
+    Case: matching tuple is first.
+*)
+Goal 0=0 -> 1=1.
+    intros h.
+    Ltac2 result_t3 := fun () => 
+        intro_hyp_from_list ((@b, constr:(0=0))::(@c, constr:(9=9))::[]) @h.
+    assert_second_elems_equal (result_t3 ()) ((@c, constr:(9=9))::[]).
+Abort.
 
     

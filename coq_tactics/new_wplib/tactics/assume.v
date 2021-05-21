@@ -40,18 +40,25 @@ Ltac2 Type exn ::= [ AssumeError(string) ].
 Ltac2 raise_assume_error (s:string) := 
     Control.zero (AssumeError s).
 
-(*
-Ltac2 rec assume_breakdown (x: seq list) :=
-    match goal with:
-    | [h:?A/\?B |- _] => remove and rename
-    | []
 
-
-Ltac2 assume_premise_with_breakdown (x: seq list) :=
+Ltac2 rec assume_breakdown (x: (ident*constr) list) :=
     lazy_match! goal with
-    | [ |- premise->conclusion] => intros premise; assume_breakdown x.
+    | [h:?a/\?b |- _] => ()
+    | [|-_] => ()
+    end.
+
+(* 
+Ltac2 assume_premise_with_breakdown (x: (ident*constr) list) :=
+    lazy_match! goal with
+    | [ |- ?premise->?conclusion] => Std.intros false premise; assume_breakdown x
     | [|- _] => raise_assume_error "Cannot assume premise: 
-                                    goal is not an implication" *)
+                                    goal is not an implication"
+    end. *)
+
+(*
+--------------------------------------------------------------------------------
+    "intro_hyp_from_list" plus subroutines
+*)
 
 
 
@@ -68,12 +75,20 @@ Local Ltac2 rec intro_hyp_from_list_recursion
         | (s, t) =>
             print (of_constr t);
             print (of_constr (eval cbv in (type_of &h)));
-            let h := (eval cbv in (type_of &h)) in
-            match (check_constr_type_equal h t ) with
-                | true => print (of_string "do stuff")
+            let h' := (eval cbv in (type_of &h)) in
+            match (Constr.equal h' t ) with
+                | true => Std.rename ((h, s)::[]);
+                    (* The type of remainder may be the empty list,
+                        so we cannot simply return "remainder::prev"*)
+                    match remainder with
+                        | head::tail => List.append remainder prev
+                        | [] => prev
+                    end
                 | false => 
                     intro_hyp_from_list_recursion remainder @h ((s, t)::prev)
             end
+        (* x is a nonempty list of (ident*constr) tuples. 
+            Hence case can never happen! But Ltac2 requires it.*)
         | _ => Control.throw (CannotHappenError "x malformed" )
         end
     | [] => raise_assume_error("Premise not present in given hypotheses")
