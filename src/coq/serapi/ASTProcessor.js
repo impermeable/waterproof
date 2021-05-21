@@ -200,8 +200,15 @@ function extractCoqAST( nestedArrays ) {
  */
 function convertToASTComp(array) {
   if (array[0] in constrDict) {
+    if (currentlyNotParsedTypes.has(constrDict)) {
+      currentlyNotParsedTypes.delete(constrDict);
+    }
     const ConstructorForObject = constrDict[array[0]];
     return new ConstructorForObject(array);
+  } else {
+    console.warn(`Currently not parsing: ${array[0]}`,
+        JSON.parse(JSON.stringify(array.length > 1 ? array.slice(1) : array)));
+    currentlyNotParsedTypes.add(array[0]);
   }
   return array;
 }
@@ -235,6 +242,188 @@ function convert_s_exp_to_string( expr, depth, stringSoFar ) {
   return returnString + '\n' + '| '.repeat((depth)) + expr.toString();
 }
 */
+
+// eslint-disable-next-line require-jsdoc
+class GenericVType {
+  /**
+   *
+   * @param {*} array
+   */
+  constructor( array ) {
+    const {attrs, control, expr} = flatten(array[1]);
+
+    this.attributes = {'attrs': attrs, 'control': control};
+    // this.data = convertToASTComp(expr);
+    this.data = convertToASTComp(expr);
+  }
+}
+
+// eslint-disable-next-line require-jsdoc
+class VernacRequire {
+  // eslint-disable-next-line require-jsdoc
+  constructor( array ) {
+    // console.log('VernacRequire', (JSON.stringify(array[3])));
+    this.qualid = array[1];
+    this.export_flag = array[2] === 'true';
+    this.list = array[3].map((el) => {
+      return {
+        locinfo: new LocInfo(['loc', el.loc]),
+        content: convertToASTComp(el.v),
+      };
+    });
+  }
+}
+
+// eslint-disable-next-line require-jsdoc
+class SerQualid {
+  // eslint-disable-next-line require-jsdoc
+  constructor( array ) {
+    this.dirPath = array[1][1];
+    this.id = array[2][1];
+  }
+}
+
+// eslint-disable-next-line require-jsdoc
+class VernacStartTheoremProof {
+  // TheoremKindEnum = {
+  //   Theorem: 'Theorem',
+  //   Lemma: 'Lemma',
+  //   Fact: 'Fact',
+  //   Remark: 'Remark',
+  //   Property: 'Property',
+  //   Proposition: 'Proposition',
+  //   Corollary: 'Corollary',
+  // }
+
+  // eslint-disable-next-line require-jsdoc
+  constructor( array ) {
+    console.warn('VernacStartTheoremProof', array);
+    this.theoremKind = array[1];
+    // console.log
+    this.proofExprs = [];
+    this.proofExprs = array[2][0].map((el) => {
+      const id = el[0];
+      const exprList = el[1];
+      const l1 = Object.keys(id).length;
+      const l2 = Object.keys(exprList).length;
+
+      const result = {};
+      if (l1 > 1) {
+        if (id.v) {
+          const ident = id.v[0] === 'Id' ? id.v[1] : undefined;
+          result['ident_decl'] = {
+            locinfo: new LocInfo(['loc', id.loc]),
+            ident: ident,
+          };
+        } else {
+          // console.warn('TODO: PARSE', id);
+          result['unparsed'] = id.map((i) => convertToASTComp(i));
+        }
+      }
+      if (l2 > 0) {
+        result['data'] = {
+          locinfo: new LocInfo(['loc', exprList.loc]),
+          content: convertToASTComp(exprList.v),
+        };
+      }
+      return result;
+    });
+  }
+}
+
+// eslint-disable-next-line require-jsdoc
+class VernacProof {
+  // TODO: check why this crap is always empty...
+
+  // eslint-disable-next-line require-jsdoc
+  constructor( array ) {
+    this.rawGenericArg = array[0] || {};
+    this.sectionSubsetExpr = array[1] || {};
+  }
+}
+
+// eslint-disable-next-line require-jsdoc
+class VernacEndProof {
+  // eslint-disable-next-line require-jsdoc
+  constructor( array ) {
+    // console.warn('VernacEndProof', array);
+    if (array[1].length === 1) {
+      this.proofEnd = array[1];
+    } else {
+      this.proofEnd = array[1][0];
+      this.proofDetails = {
+        isOpaque: array[1][1] === 'Opaque',
+        lident: array[1][2],
+      };
+    }
+    this.proofFinished = this.proofEnd === 'Proved';
+  }
+}
+
+// eslint-disable-next-line require-jsdoc
+class CNotation {
+  // eslint-disable-next-line require-jsdoc
+  constructor( array ) {
+    // TODO not sure what array[1] is
+    this.notation = convertToASTComp(array[2]);
+
+    // object of type List<> * List<List> * List<patterns> * List<List<binder>>
+    this.constrNotationSubstitution = {
+      'exprListOfLists': array[3][1],
+      'patternExprs': array[3][2],
+      'binderExprsListOfLists': array[3][3],
+    };
+    this.constrNotationSubstitution['exprList'] = array[3][0].map((el) => ({
+      locinfo: new LocInfo(['loc', el.loc]),
+      content: convertToASTComp(el.v),
+    }));
+    // this.notation = array[1];
+  }
+}
+
+// eslint-disable-next-line require-jsdoc
+class CRef {
+  // eslint-disable-next-line require-jsdoc
+  constructor( array ) {
+    this.libNames = {
+      locinfo: new LocInfo(['loc', array[1].loc]),
+      content: convertToASTComp(array[1].v),
+    };
+    if (Object.keys(array[2]).length > 0) {
+      console.warn('Still need to parse this...');
+    }
+    this.instanceExpr = array[2];
+  }
+}
+
+// eslint-disable-next-line require-jsdoc
+class CPrim {
+  // eslint-disable-next-line require-jsdoc
+  constructor( array ) {
+    console.warn('CPrim', array);
+    this.isNumeric = array[1][0] === 'Numeric';
+    if (this.isNumeric) {
+      this.value = '';
+      const {exp, frac, int} = array[1][1][1];
+      const positive = array[1][1][0] === 'SPlus';
+      // TODO represent the number based on the 3 possible formats.
+      // integer part: [0-9][0-9_]*
+      // fractional part: empty or .[0-9_]+
+      // exponent part: empty or [eE][+-]?[0-9][0-9_]* or
+      this.value = {positive: positive, exp: exp, frac: frac, int: int};
+    } else {
+      this.value = array[1][1];
+    }
+  }
+}
+
+// eslint-disable-next-line require-jsdoc
+class InConstrEntry {
+  // eslint-disable-next-line require-jsdoc
+  constructor( array ) {
+    this.data = array[1];
+  }
+}
 
 /**
  * A JavaScript equivalent of a VernacExpr object
@@ -293,11 +482,24 @@ class LocInfo {
 const constrDict = {
   'VernacExpr': VernacExpr,
   'VernacExtend': VernacExtend,
+  'v': GenericVType,
+  'VernacRequire': VernacRequire,
+  'Ser_Qualid': SerQualid,
+  'VernacStartTheoremProof': VernacStartTheoremProof,
+  'VernacProof': VernacProof,
+  'VernacEndProof': VernacEndProof,
+  'CNotation': CNotation,
+  'InConstrEntry': InConstrEntry,
+  'CRef': CRef,
+  'CPrim': CPrim,
 };
+
+const currentlyNotParsedTypes = new Set();
 
 export {
   traverseArray,
   extractCoqAST,
   CoqAST,
   prettyPrint,
+  currentlyNotParsedTypes,
 };
