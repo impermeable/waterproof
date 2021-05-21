@@ -73,8 +73,6 @@ Local Ltac2 rec intro_hyp_from_list_recursion
     | tuple::remainder => 
         match tuple with
         | (s, t) =>
-            print (of_constr t);
-            print (of_constr (eval cbv in (type_of &h)));
             let h' := (eval cbv in (type_of &h)) in
             match (Constr.equal h' t ) with
                 | true => Std.rename ((h, s)::[]);
