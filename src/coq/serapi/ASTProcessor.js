@@ -1,3 +1,6 @@
+import VernacEndProof from './datastructures/VernacEndProof';
+import CPrim from './datastructures/CPrim';
+
 const flatten = require('./flatten-expr').flatten;
 
 /**
@@ -297,7 +300,6 @@ class VernacStartTheoremProof {
 
   // eslint-disable-next-line require-jsdoc
   constructor( array ) {
-    console.warn('VernacStartTheoremProof', array);
     this.theoremKind = array[1];
     // console.log
     this.proofExprs = [];
@@ -343,24 +345,6 @@ class VernacProof {
 }
 
 // eslint-disable-next-line require-jsdoc
-class VernacEndProof {
-  // eslint-disable-next-line require-jsdoc
-  constructor( array ) {
-    // console.warn('VernacEndProof', array);
-    if (array[1].length === 1) {
-      this.proofEnd = array[1];
-    } else {
-      this.proofEnd = array[1][0];
-      this.proofDetails = {
-        isOpaque: array[1][1] === 'Opaque',
-        lident: array[1][2],
-      };
-    }
-    this.proofFinished = this.proofEnd === 'Proved';
-  }
-}
-
-// eslint-disable-next-line require-jsdoc
 class CNotation {
   // eslint-disable-next-line require-jsdoc
   constructor( array ) {
@@ -393,27 +377,6 @@ class CRef {
       console.warn('Still need to parse this...');
     }
     this.instanceExpr = array[2];
-  }
-}
-
-// eslint-disable-next-line require-jsdoc
-class CPrim {
-  // eslint-disable-next-line require-jsdoc
-  constructor( array ) {
-    console.warn('CPrim', array);
-    this.isNumeric = array[1][0] === 'Numeric';
-    if (this.isNumeric) {
-      this.value = '';
-      const {exp, frac, int} = array[1][1][1];
-      const positive = array[1][1][0] === 'SPlus';
-      // TODO represent the number based on the 3 possible formats.
-      // integer part: [0-9][0-9_]*
-      // fractional part: empty or .[0-9_]+
-      // exponent part: empty or [eE][+-]?[0-9][0-9_]* or
-      this.value = {positive: positive, exp: exp, frac: frac, int: int};
-    } else {
-      this.value = array[1][1];
-    }
   }
 }
 
@@ -486,7 +449,7 @@ const constrDict = {
   'VernacRequire': VernacRequire,
   'Ser_Qualid': SerQualid,
   'VernacStartTheoremProof': VernacStartTheoremProof,
-  'VernacProof': VernacProof,
+  'VernacProof': VernacProof, // ported
   'VernacEndProof': VernacEndProof,
   'CNotation': CNotation,
   'InConstrEntry': InConstrEntry,
