@@ -25,19 +25,16 @@ along with Waterproof-lib.  If not, see <https://www.gnu.org/licenses/>.
 
 From Ltac2 Require Import Ltac2.
 From Ltac2 Require Option.
+From Ltac2 Require Import Message.
+
+
+Ltac2 Type exn ::= [ ChooseError(string) ].
+
+Local Ltac2 raise_take_error (s:string) := 
+    Control.zero (ChooseError s).
 
 
 
-(*
-    Ltac2 function that instantiates a variable
-    in an exists goal.
-
-    Arguments:
-        * x: a generic constr.
-    Returns:
-        * instantiated x in an exists goal.
-
-*)
 
 Ltac2 chooseExistsNoIntro x :=
     exists $x.
@@ -46,12 +43,14 @@ Ltac2 chooseExistsNoIntro x :=
 Ltac2 chooseExistsWithIntro s t :=
     pose (s := $t); exists &s.
 
+
+
+
 Ltac2 chooseDestructThreeArguments s u v :=
     destruct $v as [s u].
 
 Ltac2 chooseDestructFourArguments s u v t :=
     destruct $v with $t as [s u].
-
 
 Ltac2 Notation "Choose" s(constr) :=
     chooseExistsNoIntro s.
@@ -62,27 +61,32 @@ Ltac2 Notation "Choose" s(ident) ":=" t(constr) :=
 
 
 
-
-(*
-
-Ltac2 Notation "Choose" s(opt(constr)) ofType(opt(":=")) t(constr) :=
+Ltac2 choose_variable_in_exists_goal s t :=
     lazy_match! goal with
-        | [ |- exists _, _] =>
+        | [ |- exists _ : _, _] =>
             match s with
-                | None => chooseExistsNoIntro t
-                | Some y => chooseExistsWithIntro s t
+                | None => exists $t
+                | Some(y) => pose (s := $t); exists &s
             end
-        | [ |- _ ] => print(of_string "Error")
+        | [ |- _ ] => raise_take_error("'Choose' can only be applied to 'exists' goals")
     end.
 
 
-*)
+
+
+Ltac2 Notation "Choose" s(opt(ident)) ofType(opt(":=")) t(constr) :=
+    choose_variable_in_exists_goal s t.
 
 
 
 
-Goal forall n: nat, exists  m: nat, (n = m). 
+
+
+
+
+Goal forall n: nat, exists m: nat, (n = m). 
     intro n.
-    Choose m := n.
-    auto.
+    (* this will not work; Ltac2 thinks that we are calling the tactic with s := n... *)
+    Choose n.
+    reflexivity.
 Abort.
