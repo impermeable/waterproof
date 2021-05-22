@@ -44,7 +44,7 @@ Ltac2 chooseExistsNoIntro x :=
 
 
 Ltac2 chooseExistsWithIntro s t :=
-    pose (s := $t); exists $s.
+    pose (s := $t); exists &s.
 
 Ltac2 chooseDestructThreeArguments s u v :=
     destruct $v as [s u].
