@@ -218,7 +218,12 @@ function convertToASTComp(array) {
   } else {
     console.warn(`Currently not parsing: ${array[0]}`,
         JSON.parse(JSON.stringify(array.length > 1 ? array.slice(1) : array)));
-    currentlyNotParsedTypes.add(array[0]);
+    if (!currentlyNotParsedTypes.has(array[0])) {
+      currentlyNotParsedTypes.set(array[0], 1);
+    } else {
+      currentlyNotParsedTypes[array[0]]++;
+    }
+    // currentlyNotParsedTypes.add(array[0]);
   }
   return array;
 }
@@ -269,16 +274,16 @@ class GenericVType {
 }
 
 
-// eslint-disable-next-line require-jsdoc
-class VernacProof {
-  // TODO: check why this crap is always empty...
+// // eslint-disable-next-line require-jsdoc
+// class VernacProof {
+//   // TODO: check why this crap is always empty...
 
-  // eslint-disable-next-line require-jsdoc
-  constructor( array ) {
-    this.rawGenericArg = array[0] || {};
-    this.sectionSubsetExpr = array[1] || {};
-  }
-}
+//   // eslint-disable-next-line require-jsdoc
+//   constructor( array ) {
+//     this.rawGenericArg = array[0] || {};
+//     this.sectionSubsetExpr = array[1] || {};
+//   }
+// }
 
 
 /**
@@ -320,7 +325,7 @@ const constrDict = {
   'VernacRequire': VernacRequire,
   'Ser_Qualid': SerQualid,
   'VernacStartTheoremProof': VernacStartTheoremProof,
-  'VernacProof': VernacProof, // ported
+  // 'VernacProof': VernacProof, // ported
   'VernacEndProof': VernacEndProof,
   'CNotation': CNotation,
   'InConstrEntry': InConstrEntry,
@@ -328,7 +333,8 @@ const constrDict = {
   'CPrim': CPrim,
 };
 
-const currentlyNotParsedTypes = new Set();
+// const currentlyNotParsedTypes = new Set();
+const currentlyNotParsedTypes = new Map();
 
 export {
   traverseArray,
