@@ -60,3 +60,9 @@ Ltac2 Eval
     let result := (copy_suffix_to_target 12 1 
                    "Hello world Unicorns!" "~_________~") in
     assert_string_equal result "~Unicorns!~".
+
+(*
+--------------------------------------------------------------------------------
+    Testcase for "add_to_ident_name".
+*)
+Ltac2 Eval Ident.equal @unicorn (add_to_ident_name @uni "corn").
