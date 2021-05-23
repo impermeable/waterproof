@@ -99,4 +99,39 @@ Goal 0=0 -> 1=1.
     assert_second_elems_equal (result_t3 ()) ((@c, constr:(9=9))::[]).
 Abort.
 
-    
+(*
+    Test 4: It is also allowed to use a different name than "h".
+*)
+Goal 0=0 -> 1=1.
+    intros m.
+    intro_hyp_from_list ((@b, constr:(0=0))::(@c, constr:(9=9))::[]) @m.
+Abort.
+
+
+(*
+--------------------------------------------------------------------------------
+    Testcases for "hyp_is_in_list".
+*)
+
+(* 
+    Test 1: the item is in the list, should resolve to true.
+*)
+Goal 0=0 -> 1=1.
+    intros h.
+        
+    assert_is_true (
+        hyp_is_in_list ((@a, constr:(2=2))::(@b, constr:(3=3))
+                        ::(@c, constr:(0=0))::[]) @h).
+Abort.
+
+(* 
+    Test 2: the item is NOT in the list, 
+    should resolve to false.
+*)
+Goal 0=0 -> 1=1.
+    intros h.
+        
+    assert_is_false (
+        hyp_is_in_list ((@a, constr:(2=2))::(@b, constr:(3=3))
+                        ::(@c, constr:(1=1))::[]) @h).
+Abort.

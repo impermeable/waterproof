@@ -59,7 +59,8 @@ Local Ltac2 rec intro_hyp_from_list_recursion
     | tuple::remainder => 
         match tuple with
         | (s, t) =>
-            let h' := (eval cbv in (type_of &h)) in
+            let h_constr := Control.hyp h in
+            let h' := (eval cbv in (type_of $h_constr)) in
             match (Constr.equal h' t ) with
                 | true => Std.rename ((h, s)::[]);
                     (* The type of remainder may be the empty list,
@@ -69,7 +70,7 @@ Local Ltac2 rec intro_hyp_from_list_recursion
                         | [] => prev
                     end
                 | false => 
-                    intro_hyp_from_list_recursion remainder @h ((s, t)::prev)
+                    intro_hyp_from_list_recursion remainder h ((s, t)::prev)
             end
         (* x is a nonempty list of (ident*constr) tuples. 
             Hence case can never happen! But Ltac2 requires it.*)
@@ -106,10 +107,49 @@ Ltac2 intro_hyp_from_list (x: (ident*constr) list) (h: ident) :=
 
 (*
 --------------------------------------------------------------------------------
+    Function to check if a hypothesis is in a list.
+    Very similar to "intro_hyp_from_list", but does not do renaming
+    nor removing elements from the list.
+*)
+
+(*
+    Given a list of (ident, constr) tuples and a hypothesis h,
+    searches the list if it contains an entry (s, t)
+    such that t judgementally equals the type of h.
+
+    Arguments:
+        * x: a list of (ident, constr) tuples. 
+            This are pairs of name:type hypotheses.
+        * h: the ident of a hypothesis in the current context.
+            (Control.hyp h) should exist.
+
+    Returns:
+        * bool: true if such a tuple (s, t), where t matches
+            the definition of h, is found
+*)
+Ltac2 rec hyp_is_in_list (x: (ident*constr) list) (h: ident) :=
+    match x with
+    | head::tail =>
+        match head with
+        | (s, t) => 
+            let h' := (eval cbv in (type_of &h)) in
+            match (Constr.equal h' t ) with
+            | true => true
+            | false => hyp_is_in_list tail h
+            end
+        | _ => Control.throw (CannotHappenError "x malformed" )
+        end
+    | [] => false
+    end.
+
+(*
+--------------------------------------------------------------------------------
     Main function implementing "Assume" plus subroutines.
 *)
 
-Ltac2 rec assume_breakdown (x: (ident*constr) list) :=
+
+
+(* Ltac2 rec assume_breakdown (x: (ident*constr) list) :=
     lazy_match! goal with
     | [h:?a/\?b |- _] => let f := fun () =>  (intro_hyp_from_list x h) in 
                          match Control.case f with
@@ -136,7 +176,7 @@ Ltac2 assume_premise_with_breakdown (x: (ident*constr) list) :=
     | [ |- ?premise->?conclusion] => intros premise; assume_breakdown x
     | [|- _] => raise_assume_error "Cannot assume premise: 
                                     goal is not an implication"
-    end.
+    end. *)
 
 
     
