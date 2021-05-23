@@ -137,3 +137,22 @@ Ltac2 concat_strings (s1:string) (s2: string) :=
     let empty_result := String.make tot_len underscore in
     let half_result := copy_suffix_to_target 0 0 s1 empty_result in
         copy_suffix_to_target 0 (String.length s1) s2 half_result.
+
+Ltac2 Type exn ::= [ AddToIdentNameError(string) ].
+(*
+    Add a string to an ident and return it as a new ident.
+
+    Arguments:
+        * h: ident, the ident to extend.
+        * s: string, the string to add.
+    Returns:
+        * ident, concatenation of string representation of "h" and "s",
+            and converted back to ident.
+*)
+Ltac2 add_to_ident_name (h: ident) (s: string) :=
+    let result := Ident.of_string(concat_strings (Ident.to_string h) s) in
+    (* "result" is of type "ident option" instead of "ident" *)
+    match result with
+    | Some r => r
+    | None => Control.zero (AddToIdentNameError "Cannot add string to ident")
+    end.
