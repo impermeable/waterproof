@@ -147,22 +147,35 @@ Ltac2 rec hyp_is_in_list (x: (ident*constr) list) (h: ident) :=
     Main function implementing "Assume" plus subroutines.
 *)
 
+Ltac2 elim_hyp_from_list (x: (ident*constr) list) (h: constr) :=
+    let f := fun () =>  (intro_hyp_from_list x h) in 
+    match Control.case f with
+    | Val new_x => new_x
+    | Err exn => 
+        let f2 :=  fun () =>  
+            let h1 := Ident.of_string(String.set((String.length h + 1) "1")) in
+            let h2 := Ident.of_string(String.set((String.length h + 1) "2")) in
+            Std.destruct h as [h1 h2]
 
 
-(* Ltac2 rec assume_breakdown (x: (ident*constr) list) :=
+Ltac2 rec assume_breakdown (x: (ident*constr) list) :=
     lazy_match! goal with
-    | [h:?a/\?b |- _] => let f := fun () =>  (intro_hyp_from_list x h) in 
-                         match Control.case f with
-                         | Val new_x => 
-                            match x with
-                                | head::tail => assume_breakdown new_x
-                                | [] => ()
-                            end
-                         | Err exn => destruct h as [h' h''];
-                                      (* Todo: this is endless recursion.
-                                      Need to match hyps in x with h' and h''*)
-                                      assume_breakdown x
-                         end
+    | [h:?a/\?b |- _] => 
+        let f := fun () =>  (intro_hyp_from_list x h) in 
+        match Control.case f with
+        | Val new_x => 
+            match x with
+                | head::tail => assume_breakdown new_x
+                | [] => ()
+            end
+        | Err exn => destruct h as [h' h''];
+        
+            match hyp_is_in_list x h' with
+            | true => intro_hyp_from_list x h'; (*Match h''*)
+            | false => 
+            end;
+            assume_breakdown x
+        end
     | [|-_] => 
         match x with
         | head::tail => raise_assume_error "Too many hypotheses provided"
@@ -176,7 +189,7 @@ Ltac2 assume_premise_with_breakdown (x: (ident*constr) list) :=
     | [ |- ?premise->?conclusion] => intros premise; assume_breakdown x
     | [|- _] => raise_assume_error "Cannot assume premise: 
                                     goal is not an implication"
-    end. *)
+    end.
 
 
     
