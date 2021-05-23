@@ -74,3 +74,11 @@ Ltac2 Eval assert_raises_error
 Ltac2 Eval assert_is_false (false).
 Ltac2 Eval assert_raises_error 
     (fun () => assert_is_false true).
+
+(*
+--------------------------------------------------------------------------------
+    Testcases for "string_equal".
+*)
+Ltac2 Eval assert_is_true (string_equal "hello" "hello").
+Ltac2 Eval assert_is_false (string_equal "hello" "Hello").
+Ltac2 Eval assert_is_false (string_equal "hello" "hell").

@@ -149,3 +149,58 @@ Ltac2 assert_is_false (b:bool) :=
     | false => print (of_string "Test passed: received false")
     |  true => fail_test "Expected Ltac2 FALSE, got Ltac2 bool 'true'"
     end.
+
+
+Local Ltac2 rec string_equal_rec (idx) (s1:string) (s2:string) :=
+    (* If the strings are of unequal length, 
+        then they are never equal*)
+    let len1 := (String.length s1) in
+    let len2 := (String.length s2) in
+    match Int.equal len1 len2 with
+    | false => false
+    | true => 
+        (* If we are past the last index of the strings,
+        then stop and return "true".
+        Otherwise, compare the integer representation
+        of the characters of the current index and recurse.*)
+        match (Int.equal idx len1) with
+        | true => true
+        | false =>
+            let ascii_int_1 := Char.to_int (String.get s1 idx) in
+            let ascii_int_2 := Char.to_int (String.get s2 idx) in
+            match Int.equal ascii_int_1 ascii_int_2 with
+            | true => string_equal_rec (Int.add idx 1) s1 s2
+            | false => false
+            end
+        end
+    end.
+
+(*
+    Compare two Ltac2 strings for equality.
+
+    Arguments:
+        * s1, s2: string, strings to compare.
+
+    Returns:
+        * bool
+            - true, if "s1" and "s2" have 
+                the same length and the same characters.
+            - false otherwise.
+*)
+Ltac2 string_equal (s1:string) (s2:string) := string_equal_rec 0 s1 s2.
+
+(*
+    Assert two Ltac2 strings are equal.
+
+    Arguments:
+        * s1, s2: string, strings to compare.
+
+    Raises Exceptions:
+        * TestFailedError, if s1 has different characters or a different
+            length as s2.
+*)
+Ltac2 assert_string_equal (s1:string) (s2:string) :=
+    match string_equal s1 s2 with
+    | true => print (of_string "Test passed: strings are equal")
+    | false => fail_test "Strings not equal"
+    end.
