@@ -25,56 +25,56 @@ along with Waterproof-lib.  If not, see <https://www.gnu.org/licenses/>.
 From Ltac2 Require Import Ltac2.
 From Ltac2 Require Option.
 
-(*
+(**
     Replace a single character at a string and return the result.
 
     Arguments:
-        * s : string, the string to modify.
-        * pos : int, the index of the character to replace.
+        - [s : string], the string to modify.
+        - [pos : int], the index of the character to replace.
             Counting starts at 0.
-        * c : char, the replacement character.
+        - [c : char], the replacement character.
 
     Returns:
-        * string: same as "s", 
-            but with the character at "pos"
-            replaced with "c".
+        - [string]: same as [s], 
+            but with the character at [pos]
+            replaced with [c].
 
     Raises exceptions:
-        * Out_of_bounds, if "pos" is greater or equal to the
-            length of string.
+        * [Out_of_bounds], if [pos] is greater or equal to the
+            length of  [s].
 *)
 Ltac2 replace_at_pos (s:string) (pos: int) (c:char) :=
     (String.set s pos c; s).
 
 
-(*
-    Copy substring of "source" into "target".
-    Replaces previously present part of "target".
+(**
+    Copy substring of [source] into [target].
+    Replaces previously present part of [target].
     In Python notation: copy source[source_idx:source_end] to 
     target[target_idx: target_idx + (source_end - source_idx)]
 
     Arguments:
-        * source_idx : int, starting index of substring to copy from "source"
-        * target_idx: int, position of "target" where substring 
+        - [source_idx : int], starting index of substring to copy from [source]
+        - [target_idx: int], position of [target] where substring 
             should be pasted.
-        * source_end : int, fist index of "source" 
+        - [source_end : int], fist index of [source] 
             that should not be part of substring.
-            Note that "source_end - 1" is the last index that is included
+            Note that [source_end - 1] is the last index that is included
             in the substring.
-        * source: string, string to copy substring from.
-        * target: string, string to copy substring into.
+        - [source: string], string to copy substring from.
+        - [target: string], string to copy substring into.
 
     Returns:
-        * string: same as "target" but with with the characters at indices
-            "target_idx" up to "target_idx + (source_end - source_idx)" replaced
-            with the the characters of "source" between 
-            "source_idx" and (not including) "source_end".
+        - [string: same] as [target] but with with the characters at indices
+            [target_idx] up to [target_idx + (source_end - source_idx)] replaced
+            with the the characters of [source] between 
+            [source_idx] and (not including) [source_end].
 
     Raises exceptions:
-        * Out_of_bounds, if one of the following indices does not exist:
-            - "source_idx" or "source_end-1"  in "source".
-            - "target_idx" in "target".
-            - "target_idx + (source_end - source_idx)" in target.
+        - [Out_of_bounds], if one of the following indices does not exist:
+            - [source_idx] or [source_end-1]  in [source].
+            - [target_idx] in [target].
+            - [target_idx + (source_end - source_idx)] in target.
 *)
 Local Ltac2 rec copy_to_target (source_idx: int) (target_idx:int) 
                                (source_end:int) (source: string) 
@@ -89,47 +89,47 @@ Local Ltac2 rec copy_to_target (source_idx: int) (target_idx:int)
                        source_end source t'
     end.
 
-(*
-    Copy the suffix (starting at index "source_idx") of "source"
-    intro "target" at position "target_idx".
+(**
+    Copy the suffix (starting at index [source_idx]) of [source]
+    intro [target] at position [target_idx].
     In Python notation:
         "return target[:target_idx] + source[source_idx:] 
                 + target[len(source) + target_idx:]"
 
 
     Arguments:
-        * source_idx : int, starting index of substring (suffix) 
-            to copy from "source"
-        * target_idx: int, position of "target" where the substring 
+        - [source_idx : int], starting index of substring (suffix) 
+            to copy from [source]
+        - [target_idx: int], position of [target] where the substring 
             should be pasted.
-        * source: string, string to copy substring from.
-        * target: string, string to copy substring into.
+        - [source: string], string to copy substring from.
+        - [target: string], string to copy substring into.
 
     Returns:
-        * string: same as "target" but with with the characters at indices
-        "target_idx" up to "target_idx + String.length(source)" replaced
-        with the the characters of "source" starting at index "source_idx".
+        - [string], same as [target] but with with the characters at indices
+        [target_idx] up to [target_idx + String.length(source)" replaced
+        with the the characters of [source] starting at index [source_idx].
 
     Raises exceptions:
-        * Out_of_bounds, if one of the following indices does not exist:
-            - "source_idx" in "source".
-            - "target_idx" in "target".
-            - "target_idx + String.length(source)" in target.
+        - [Out_of_bounds], if one of the following indices does not exist:
+            - [source_idx] in [source].
+            - [target_idx] in [target].
+            - [target_idx + String.length(source)" in target.
 *)
 Ltac2 copy_suffix_to_target (source_idx: int) (target_idx:int) 
                          (source: string) (target: string):=
     let i := String.length(source) in
     copy_to_target source_idx target_idx i source target.
 
-(*
+(**
     Concatenate two strings and return a longer string.
 
     Arguments:
-        * s1 : string, string to form the prefix of the output.
-        * s2 : string, string to form the suffix of the output.
+        - [s1 : string], string to form the prefix of the output.
+        - [s2 : string], string to form the suffix of the output.
 
     Returns:
-        * string, concatenation of "s1" and "s2".
+        - [string], concatenation of [s1] and [s2].
 *)
 Ltac2 concat_strings (s1:string) (s2: string) :=
     let underscore := Char.of_int 95 in
@@ -139,19 +139,19 @@ Ltac2 concat_strings (s1:string) (s2: string) :=
         copy_suffix_to_target 0 (String.length s1) s2 half_result.
 
 Ltac2 Type exn ::= [ AddToIdentNameError(string) ].
-(*
+(**
     Add a string to an ident and return it as a new ident.
 
     Arguments:
-        * h: ident, the ident to extend.
-        * s: string, the string to add.
+        - [h: ident], the ident to extend.
+        - [s: string], the string to add.
     Returns:
-        * ident, concatenation of string representation of "h" and "s",
-            and converted back to ident.
+        - [ident], concatenation of string representation of [h] and [s],
+            and converted back to [ident].
 *)
 Ltac2 add_to_ident_name (h: ident) (s: string) :=
     let result := Ident.of_string(concat_strings (Ident.to_string h) s) in
-    (* "result" is of type "ident option" instead of "ident" *)
+    (* [result] is of type [ident option] instead of [ident] *)
     match result with
     | Some r => r
     | None => Control.zero (AddToIdentNameError "Cannot add string to ident")
