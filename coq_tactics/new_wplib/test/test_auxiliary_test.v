@@ -65,8 +65,12 @@ Ltac2 Eval assert_raises_error
 
 (*
 --------------------------------------------------------------------------------
-    Testcases for "assert_is_true"
+    Testcases for "assert_is_true" and "assert_is_false".
 *)
 Ltac2 Eval assert_is_true (true).
 Ltac2 Eval assert_raises_error 
     (fun () => assert_is_true false).
+
+Ltac2 Eval assert_is_false (false).
+Ltac2 Eval assert_raises_error 
+    (fun () => assert_is_false true).

@@ -119,7 +119,7 @@ Ltac2 assert_constr_is_true (b:constr) :=
     end.
 
 (*
-    Assert that the Ltac2-variable is an  bool with value "true".
+    Assert that the Ltac2-variable is a bool with value "true".
 
     Arguments:
         * b: bool, should equal "true"
@@ -131,5 +131,21 @@ Ltac2 assert_constr_is_true (b:constr) :=
 Ltac2 assert_is_true (b:bool) :=
     match b with
     | true => print (of_string "Test passed: received true")
-    | false => fail_test "Expected Ltac2 true, got Ltac2 expression 'false'"
+    | false => fail_test "Expected Ltac2 true, got Ltac2 bool 'false'"
+    end.
+
+(*
+    Assert that the Ltac2-variable is a bool with value "false".
+
+    Arguments:
+        * b: bool, should equal "false"
+
+    Raises Exceptions:
+        * TestFailedError, if b is not a bool.
+        * TestFailedError, if b is TRUE.
+*)
+Ltac2 assert_is_false (b:bool) :=
+    match b with
+    | false => print (of_string "Test passed: received false")
+    |  true => fail_test "Expected Ltac2 FALSE, got Ltac2 bool 'true'"
     end.
