@@ -25,7 +25,7 @@ along with Waterproof-lib.  If not, see <https://www.gnu.org/licenses/>.
 From Ltac2 Require Import Ltac2.
 From Ltac2 Require Option.
 
-(**
+(** * replace_at_pos
     Replace a single character at a string and return the result.
 
     Arguments:
@@ -40,14 +40,14 @@ From Ltac2 Require Option.
             replaced with [c].
 
     Raises exceptions:
-        * [Out_of_bounds], if [pos] is greater or equal to the
+        - [Out_of_bounds], if [pos] is greater or equal to the
             length of  [s].
 *)
 Ltac2 replace_at_pos (s:string) (pos: int) (c:char) :=
     (String.set s pos c; s).
 
 
-(**
+(** * copy_to_target
     Copy substring of [source] into [target].
     Replaces previously present part of [target].
     In Python notation: copy source[source_idx:source_end] to 
@@ -89,7 +89,7 @@ Local Ltac2 rec copy_to_target (source_idx: int) (target_idx:int)
                        source_end source t'
     end.
 
-(**
+(** * copy_suffix_to_target
     Copy the suffix (starting at index [source_idx]) of [source]
     intro [target] at position [target_idx].
     In Python notation:
@@ -107,21 +107,21 @@ Local Ltac2 rec copy_to_target (source_idx: int) (target_idx:int)
 
     Returns:
         - [string], same as [target] but with with the characters at indices
-        [target_idx] up to [target_idx + String.length(source)" replaced
+        [target_idx] up to [target_idx + String.length(source)] replaced
         with the the characters of [source] starting at index [source_idx].
 
     Raises exceptions:
         - [Out_of_bounds], if one of the following indices does not exist:
             - [source_idx] in [source].
             - [target_idx] in [target].
-            - [target_idx + String.length(source)" in target.
+            - [target_idx + String.length(source)] in target.
 *)
 Ltac2 copy_suffix_to_target (source_idx: int) (target_idx:int) 
                          (source: string) (target: string):=
     let i := String.length(source) in
     copy_to_target source_idx target_idx i source target.
 
-(**
+(** * concat_strings
     Concatenate two strings and return a longer string.
 
     Arguments:
@@ -139,7 +139,7 @@ Ltac2 concat_strings (s1:string) (s2: string) :=
         copy_suffix_to_target 0 (String.length s1) s2 half_result.
 
 Ltac2 Type exn ::= [ AddToIdentNameError(string) ].
-(**
+(** * add_to_ident_name
     Add a string to an ident and return it as a new ident.
 
     Arguments:
