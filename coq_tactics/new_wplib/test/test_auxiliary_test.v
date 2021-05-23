@@ -32,7 +32,7 @@ Load test_auxiliary.
 
 (*
 --------------------------------------------------------------------------------
-    Testcases for assert_list_equal
+    Testcases for "assert_list_equal"
 *)
 Ltac2 Eval assert_list_equal (constr:(1)::constr:(2)::constr:(3)::[])
                              (constr:(1)::constr:(2)::constr:(3)::[]).
@@ -44,10 +44,21 @@ assert_list_equal (constr:(1)::constr:(3)::[]) (constr:(2)::constr:(3)::[]) ).
 
 (*
 --------------------------------------------------------------------------------
-    Testcases for assert_hyp_exists
+    Testcases for "assert_hyp_exists"
 *)
 Goal forall n, n = 1.
     intros n.
     assert_hyp_exists @n.
     assert_raises_error (fun () => assert_hyp_exists @x).
 Abort.
+
+
+(*
+--------------------------------------------------------------------------------
+    Testcases for "assert_is_true"
+*)
+Ltac2 Eval assert_is_true constr:(true).
+Ltac2 Eval assert_raises_error 
+    (fun () => assert_is_true constr:(false)).
+    Ltac2 Eval assert_raises_error 
+    (fun () => assert_is_true constr:(1)).

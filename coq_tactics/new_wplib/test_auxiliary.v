@@ -83,9 +83,36 @@ Ltac2 rec assert_list_equal (x:constr list) (y: constr list) :=
         end
     end.
 
+(*
+    Assert that the hypothesis of the given ident
+    exists in the current environment.
 
+    Arguments:
+        * x, y: (constr list), lists of constr's to be compared.
+
+    Raises Exceptions:
+        * TestFailedError, if x and y have a different length.
+        * TestFailedError, if there exists an i such that x[i] ≠ y[i].
+*)
 Ltac2 assert_hyp_exists (h: ident) :=
     match Control.case (fun () => Control.hyp h) with
     | Val _ => print(concat (of_string "Indeed hyp exists:") (of_ident h))
     | Err exn => print (of_exn exn); fail_test "Hyp not found"
+    end.
+
+(*
+    Assert that the argument is a Boolean and 
+    has value "true"
+
+    Arguments:
+        * b: bool, should equal "true"
+
+    Raises Exceptions:
+        * TestFailedError, if b is not a bool.
+        * TestFailedError, if b is false.
+*)
+Ltac2 assert_is_true (b:constr) :=
+    match Constr.equal b constr:(true) with
+    | true => print (of_string "Test passed: received true")
+    | false => fail_test "Did not get a bool with value true"
     end.
