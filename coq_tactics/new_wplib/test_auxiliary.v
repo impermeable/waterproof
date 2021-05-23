@@ -100,9 +100,10 @@ Ltac2 assert_hyp_exists (h: ident) :=
     | Err exn => print (of_exn exn); fail_test "Hyp not found"
     end.
 
+
 (*
-    Assert that the argument is a Boolean and 
-    has value "true"
+    Assert that the constr-variable describes 
+    a Gallina bool with value "true".
 
     Arguments:
         * b: bool, should equal "true"
@@ -111,8 +112,24 @@ Ltac2 assert_hyp_exists (h: ident) :=
         * TestFailedError, if b is not a bool.
         * TestFailedError, if b is false.
 *)
-Ltac2 assert_is_true (b:constr) :=
+Ltac2 assert_constr_is_true (b:constr) :=
     match Constr.equal b constr:(true) with
+    | true => print (of_string "Test passed: received constr:(true)")
+    | false => fail_test "Did not get a constr equal to a bool with value true"
+    end.
+
+(*
+    Assert that the Ltac2-variable is an  bool with value "true".
+
+    Arguments:
+        * b: bool, should equal "true"
+
+    Raises Exceptions:
+        * TestFailedError, if b is not a bool.
+        * TestFailedError, if b is false.
+*)
+Ltac2 assert_is_true (b:bool) :=
+    match b with
     | true => print (of_string "Test passed: received true")
-    | false => fail_test "Did not get a bool with value true"
+    | false => fail_test "Expected Ltac2 true, got Ltac2 expression 'false'"
     end.

@@ -55,10 +55,18 @@ Abort.
 
 (*
 --------------------------------------------------------------------------------
+    Testcases for "assert_constr_is_true"
+*)
+Ltac2 Eval assert_constr_is_true constr:(true).
+Ltac2 Eval assert_raises_error 
+    (fun () => assert_constr_is_true constr:(false)).
+    Ltac2 Eval assert_raises_error 
+    (fun () => assert_constr_is_true constr:(1)).
+
+(*
+--------------------------------------------------------------------------------
     Testcases for "assert_is_true"
 *)
-Ltac2 Eval assert_is_true constr:(true).
+Ltac2 Eval assert_is_true (true).
 Ltac2 Eval assert_raises_error 
-    (fun () => assert_is_true constr:(false)).
-    Ltac2 Eval assert_raises_error 
-    (fun () => assert_is_true constr:(1)).
+    (fun () => assert_is_true false).
