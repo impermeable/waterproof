@@ -45,37 +45,11 @@ Ltac2 chooseExistsWithIntro s t :=
 
 
 
-
-Ltac2 chooseDestructThreeArguments s u v :=
-    destruct $v as [s u].
-
-Ltac2 chooseDestructFourArguments s u v t :=
-    destruct $v with $t as [s u].
-
 Ltac2 Notation "Choose" s(constr) :=
     chooseExistsNoIntro s.
 
 Ltac2 Notation "Choose" s(ident) ":=" t(constr) :=
     chooseExistsWithIntro s t.
-
-
-
-
-Ltac2 choose_variable_in_exists_goal s t :=
-    lazy_match! goal with
-        | [ |- exists _ : _, _] =>
-            match s with
-                | None => exists $t
-                | Some(y) => pose (s := $t); exists &s
-            end
-        | [ |- _ ] => raise_take_error("'Choose' can only be applied to 'exists' goals")
-    end.
-
-
-
-
-Ltac2 Notation "Choose" s(opt(ident)) ofType(opt(":=")) t(constr) :=
-    choose_variable_in_exists_goal s t.
 
 
 
