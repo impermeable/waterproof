@@ -135,3 +135,14 @@ Goal 0=0 -> 1=1.
         hyp_is_in_list ((@a, constr:(2=2))::(@b, constr:(3=3))
                         ::(@c, constr:(1=1))::[]) @h).
 Abort.
+
+
+(*
+--------------------------------------------------------------------------------
+    Testcases for "assume_premise_with_breakdown".
+*)
+
+Goal forall n, n = 1 /\ n = 2 -> False.
+    intros n.
+    let inp_list := ((@h0, constr:(n = 1))::(@h1, constr:(n = 1))::[]) in
+    assume_premise_with_breakdown inp_list.

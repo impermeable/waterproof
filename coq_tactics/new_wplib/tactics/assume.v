@@ -132,10 +132,13 @@ Ltac2 rec hyp_is_in_list (x: (ident*constr) list) (h: ident) :=
     | head::tail =>
         match head with
         | (s, t) => 
-            let h' := (eval cbv in (type_of &h)) in
+            print(of_string "hyp_is_in_list");
+            print(of_constr (Control.hyp h));
+            let h_value := Control.hyp h in
+            let h' := (eval cbv in (type_of $h_value)) in
             match (Constr.equal h' t ) with
-            | true => true
-            | false => hyp_is_in_list tail h
+            | true => print(of_string "is in list"); true
+            | false => print(of_string "not in list"); hyp_is_in_list tail h
             end
         | _ => Control.throw (CannotHappenError "x malformed" )
         end
@@ -151,19 +154,16 @@ Ltac2 rec elim_hyp_from_list (x: (ident*constr) list) (h: ident) :=
     (* let f := fun () =>  (intro_hyp_from_list x h) in  *)
     match hyp_is_in_list x h with
     | true => intro_hyp_from_list x h
-    | false =>  
+    | false =>  print(of_string "elim_hyp_from_list");
         let h1 := Fresh.in_goal h in
         let h2 := Fresh.in_goal h in
-        (* let g := fun () => 
-            (destruct h as [h1 h2])
-        in 
-        match Control.case g with
-            | Val newer_x => let x' := elim_hyp_from_list x h1 in
-                                elim_hyp_from_list x' h2
-            | Err exn => raise_assume_error("Cannot be broken down")
-            end
-    end. *)
-        destruct h as [h1 h2];
+        (** This goes wrong: needs to destruct value of [h],
+            but interprets what I write here as Gallina,
+            not as a reference to my Ltac2-ident variable [h]*)
+        destruct h as [$h1 $h2];
+        print (of_ident h);
+        print (concat (of_string "h1:") 
+               (of_constr (Control.hyp h1)));
         let x' := elim_hyp_from_list x h1 in
         match Int.equal (List.length x') (List.length x) with
         | true => raise_assume_error ("Cannot be broken down: first case not covered")
@@ -177,7 +177,7 @@ Ltac2 rec elim_hyp_from_list (x: (ident*constr) list) (h: ident) :=
                 | false => x''
                 end
             end
-        end
+        end)
     end.
 
 
