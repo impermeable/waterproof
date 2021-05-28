@@ -147,34 +147,50 @@ Ltac2 rec hyp_is_in_list (x: (ident*constr) list) (h: ident) :=
     Main function implementing "Assume" plus subroutines.
 *)
 
-Ltac2 elim_hyp_from_list (x: (ident*constr) list) (h: constr) :=
-    let f := fun () =>  (intro_hyp_from_list x h) in 
-    match Control.case f with
-    | Val new_x => new_x
-    | Err exn => 
-        let f2 :=  fun () =>  
-            let h1 := Ident.of_string(String.set((String.length h + 1) "1")) in
-            let h2 := Ident.of_string(String.set((String.length h + 1) "2")) in
-            Std.destruct h as [h1 h2]
+Ltac2 rec elim_hyp_from_list (x: (ident*constr) list) (h: ident) :=
+    (* let f := fun () =>  (intro_hyp_from_list x h) in  *)
+    match hyp_is_in_list x h with
+    | true => intro_hyp_from_list x h
+    | false =>  
+        let h1 := Fresh.in_goal h in
+        let h2 := Fresh.in_goal h in
+        (* let g := fun () => 
+            (destruct h as [h1 h2])
+        in 
+        match Control.case g with
+            | Val newer_x => let x' := elim_hyp_from_list x h1 in
+                                elim_hyp_from_list x' h2
+            | Err exn => raise_assume_error("Cannot be broken down")
+            end
+    end. *)
+        destruct h as [h1 h2];
+        let x' := elim_hyp_from_list x h1 in
+        match Int.equal (List.length x') (List.length x) with
+        | true => raise_assume_error ("Cannot be broken down: first case not covered")
+        | false =>
+            match x' with
+            | [] => raise_assume_error ("Cannot break down and cover both sides: too few hypotheses")
+            | head::tail => 
+                let x'' := elim_hyp_from_list x' h2 in
+                match Int.equal (List.length x'') (List.length x') with
+                | true => raise_assume_error ("Cannot be broken down: second case not covered")
+                | false => x''
+                end
+            end
+        end
+    end.
 
 
 Ltac2 rec assume_breakdown (x: (ident*constr) list) :=
     lazy_match! goal with
     | [h:?a/\?b |- _] => 
-        let f := fun () =>  (intro_hyp_from_list x h) in 
-        match Control.case f with
-        | Val new_x => 
-            match x with
+        match hyp_is_in_list x h with
+        | true => let new_x := intro_hyp_from_list x h in
+            match new_x with
                 | head::tail => assume_breakdown new_x
                 | [] => ()
             end
-        | Err exn => destruct h as [h' h''];
-        
-            match hyp_is_in_list x h' with
-            | true => intro_hyp_from_list x h'; (*Match h''*)
-            | false => 
-            end;
-            assume_breakdown x
+        | false => assume_breakdown (elim_hyp_from_list x h)
         end
     | [|-_] => 
         match x with
