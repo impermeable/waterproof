@@ -1,9 +1,8 @@
-(*
+(** * Testcases for [assume.v].
 Authors: 
-    * Lulof Pirée (1363638)
+    - Lulof Pirée (1363638)
 Creation date: 20 May 2021
 
-Testcases for "assume.v".
 --------------------------------------------------------------------------------
 
 This file is part of Waterproof-lib.
