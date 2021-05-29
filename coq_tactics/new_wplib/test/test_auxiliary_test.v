@@ -44,12 +44,27 @@ assert_list_equal (constr:(1)::constr:(3)::[]) (constr:(2)::constr:(3)::[]) ).
 
 (*
 --------------------------------------------------------------------------------
-    Testcases for "assert_hyp_exists"
+*)(** * Testcase for [assert_hyp_exists]
 *)
 Goal forall n, n = 1.
     intros n.
     assert_hyp_exists @n.
     assert_raises_error (fun () => assert_hyp_exists @x).
+Abort.
+
+(*
+--------------------------------------------------------------------------------
+*)(** * Testcase for [assert_hyp_has_type]
+*)
+Goal forall n: nat, n = 1 -> n = 1.
+    intros n h.
+    assert_hyp_has_type @n constr:(nat).
+    assert_hyp_has_type @h constr:(n = 1).
+
+    (* Wrong ident *)
+    assert_raises_error (fun () => assert_hyp_has_type @m constr:(nat)).
+    (* Wrong type *)
+    assert_raises_error (fun () => assert_hyp_has_type @n constr:(bool)).
 Abort.
 
 

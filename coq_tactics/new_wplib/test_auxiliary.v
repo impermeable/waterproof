@@ -24,6 +24,8 @@ along with Waterproof-lib.  If not, see <https://www.gnu.org/licenses/>.
 From Ltac2 Require Import Ltac2.
 From Ltac2 Require Option.
 From Ltac2 Require Import Message.
+Add LoadPath "./coq_tactics/new_wplib/" as wplib.
+Load auxiliary.
 
 Ltac2 Type exn ::= [ TestFailedError(string) ].
 
@@ -83,16 +85,16 @@ Ltac2 rec assert_list_equal (x:constr list) (y: constr list) :=
         end
     end.
 
-(*
+(** * assert_hyp_exists
     Assert that the hypothesis of the given ident
     exists in the current environment.
 
     Arguments:
-        * x, y: (constr list), lists of constr's to be compared.
+        - [h : ident], identifier of target hypothesis
 
     Raises Exceptions:
-        * TestFailedError, if x and y have a different length.
-        * TestFailedError, if there exists an i such that x[i] ≠ y[i].
+        - [TestFailedError], if there is no hypothesis with the identifier
+            stored in [h] in the current context.
 *)
 Ltac2 assert_hyp_exists (h: ident) :=
     match Control.case (fun () => Control.hyp h) with
@@ -100,6 +102,39 @@ Ltac2 assert_hyp_exists (h: ident) :=
     | Err exn => print (of_exn exn); fail_test "Hyp not found"
     end.
 
+(** * assert_hyp_has_type
+    Assert that the hypothesis of the given ident
+    exists in the current environment, AND has the indicated type.
+
+    Arguments:
+        - [h : ident], identifier of target hypothesis.
+        - [t : constr], expected type of the hypothesis identified
+            by the value of [h].
+
+    Raises Exceptions:
+        - [TestFailedError], if there is no hypothesis with the identifier
+            stored in [h] in the current context.
+        - [TestFailedError], if the hypothesis identified by [h] has a 
+            different type than [t]. Types are normalized before comparison.
+*)
+Ltac2 assert_hyp_has_type (h: ident) (t: constr) :=
+    assert_hyp_exists h;
+    let h_val := Control.hyp h in
+    let h_normalized :=  (eval cbv in (type_of $h_val)) in
+    let t_normalized :=  (eval cbv in $t) in
+    match Constr.equal h_normalized t_normalized with
+    | true => print (concat (concat (of_string "Hypothesis ") (of_ident h))
+                            (concat (of_string " indeed has type ") 
+                                    (of_constr t))
+                    )
+    | false => print (
+            concat  (concat  (of_string "Expected type: ") 
+                            (of_constr t))
+                    (concat (of_string ", actual type: ") 
+                            (of_constr (eval cbv in (type_of $h_val))))
+            );
+        fail_test "Hyp has wrong type"
+    end.
 
 (*
     Assert that the constr-variable describes 
