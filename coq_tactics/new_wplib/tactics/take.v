@@ -29,7 +29,8 @@ along with Waterproof-lib.  If not, see <https://www.gnu.org/licenses/>.
 From Ltac2 Require Import Ltac2.
 From Ltac2 Require Option.
 From Ltac2 Require Import Message.
-
+Add LoadPath "./coq_tactics/new_wplib/" as wplib.
+Load auxiliary.
 
 Ltac2 Type exn ::= [ TakeError(string) ].
 
@@ -67,8 +68,6 @@ Local Ltac2 intro_with_type_matching s t :=
     | [|- _] => raise_take_error("'Take' can only be applied to 'forall' goals")
     end.
     
-Ltac2 Type exn ::= [ CannotHappenError(string) ].
-
 (*  Arguments:
         * x: a list of intropatterns
         * t: a Type
