@@ -1,11 +1,12 @@
-(*
-Author: Lulof Pirée (1363638)
+(** * Testcases for [test_auxiliary.v]
+Authors: 
+    - Lulof Pirée (1363638)
 Creation date: 20 May 2021
 
 Testcases for the functions used to build testcases.
-It is assumes that "assert_raises_error" is correct,
+It is assumes that [assert_raises_error] is correct,
 and using this assumption it is tested that the other
-functions in "test_auxiliary.v" are correct.
+functions in [test_auxiliary.v] are correct.
 
 --------------------------------------------------------------------------------
 
@@ -32,7 +33,7 @@ Load test_auxiliary.
 
 (*
 --------------------------------------------------------------------------------
-    Testcases for "assert_list_equal"
+*) (** *    Testcases for [assert_list_equal]
 *)
 Ltac2 Eval assert_list_equal (constr:(1)::constr:(2)::constr:(3)::[])
                              (constr:(1)::constr:(2)::constr:(3)::[]).
@@ -70,7 +71,7 @@ Abort.
 
 (*
 --------------------------------------------------------------------------------
-    Testcases for "assert_constr_is_true"
+*) (** *    Testcases for [assert_constr_is_true]
 *)
 Ltac2 Eval assert_constr_is_true constr:(true).
 Ltac2 Eval assert_raises_error 
@@ -80,7 +81,7 @@ Ltac2 Eval assert_raises_error
 
 (*
 --------------------------------------------------------------------------------
-    Testcases for "assert_is_true" and "assert_is_false".
+*) (** *    Testcases for [assert_is_true] and [assert_is_false].
 *)
 Ltac2 Eval assert_is_true (true).
 Ltac2 Eval assert_raises_error 
@@ -92,7 +93,7 @@ Ltac2 Eval assert_raises_error
 
 (*
 --------------------------------------------------------------------------------
-    Testcases for "string_equal".
+*) (** * Testcases for [string_equal]
 *)
 Ltac2 Eval assert_is_true (string_equal "hello" "hello").
 Ltac2 Eval assert_is_false (string_equal "hello" "Hello").
