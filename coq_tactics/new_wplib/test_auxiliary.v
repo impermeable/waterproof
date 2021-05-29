@@ -24,13 +24,13 @@ along with Waterproof-lib.  If not, see <https://www.gnu.org/licenses/>.
 From Ltac2 Require Import Ltac2.
 From Ltac2 Require Option.
 From Ltac2 Require Import Message.
-Add LoadPath "./coq_tactics/new_wplib/" as wplib.
-Load auxiliary.
 
 Ltac2 Type exn ::= [ TestFailedError(string) ].
 
 Local Ltac2 fail_test (s:string) := 
     Control.zero (TestFailedError s).
+
+
 
 (*
     Check if the function "f" raises an error when evaluated.
@@ -120,7 +120,12 @@ Ltac2 assert_hyp_exists (h: ident) :=
 Ltac2 assert_hyp_has_type (h: ident) (t: constr) :=
     assert_hyp_exists h;
     let h_val := Control.hyp h in
-    let h_normalized :=  (eval cbv in (type_of $h_val)) in
+    (*  Same function as [type_of] in [auxiliary.v].
+        Repeated here to avoid double imports
+        in modules that import both 
+        [auxiliary.v] AND [test_auxiliary.v]. *)
+    let type_of := constr:(fun {T : Type} (x : T) => T) in
+    let h_normalized :=  (eval cbv in ($type_of $h_val)) in
     let t_normalized :=  (eval cbv in $t) in
     match Constr.equal h_normalized t_normalized with
     | true => print (concat (concat (of_string "Hypothesis ") (of_ident h))
@@ -131,7 +136,7 @@ Ltac2 assert_hyp_has_type (h: ident) (t: constr) :=
             concat  (concat  (of_string "Expected type: ") 
                             (of_constr t))
                     (concat (of_string ", actual type: ") 
-                            (of_constr (eval cbv in (type_of $h_val))))
+                            (of_constr (eval cbv in ($type_of $h_val))))
             );
         fail_test "Hyp has wrong type"
     end.
