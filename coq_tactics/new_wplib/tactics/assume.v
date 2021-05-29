@@ -1,13 +1,13 @@
-(*
+(** * assume.v
 Authors: 
-    * Lulof Pirée (1363638)
+    - Lulof Pirée (1363638)
 Creation date: 20 May 2021
 
-"Assume" can be used to introduce the premise of an implication (⇒)
+[Assume] can be used to introduce the premise of an implication (⇒)
 as an hypothesis. 
 There are two version: 
-    * one which expectes a type annotation and performs type-checking,
-    * one which only requires identifiers, and does not perform type checking.
+    - one which expectes a type annotation and performs type-checking,
+    - one which only requires identifiers, and does not perform type checking.
         It will raise a warning that type annotation is recommended.
 
 --------------------------------------------------------------------------------
@@ -188,11 +188,11 @@ Ltac2 rec elim_hyp_from_list (x: (ident*constr) list) (h: ident) :=
             end
         end)
     end.
-
+   
 
 Ltac2 rec assume_breakdown (x: (ident*constr) list) :=
     match! goal with
-    | [h:?a/\?b |- _] => 
+    | [h:?a/\?b |- _] =>  
         match hyp_is_in_list x h with
         | true => let new_x := intro_hyp_from_list x h in
             match new_x with
@@ -211,7 +211,12 @@ Ltac2 rec assume_breakdown (x: (ident*constr) list) :=
 
 Ltac2 assume_premise_with_breakdown (x: (ident*constr) list) :=
     lazy_match! goal with
-    | [ |- ?premise->?conclusion] => intros premise; assume_breakdown x
+    | [ |- ?premise1->?premise2->?conclusion] => 
+        intros premise1 premise2; 
+        assume_breakdown x
+    | [ |- ?premise->?conclusion] => 
+        intros premise; 
+        assume_breakdown x
     | [|- _] => raise_assume_error "Cannot assume premise: 
                                     goal is not an implication"
     end.

@@ -223,6 +223,20 @@ Goal forall A B C: Prop, (A /\ B) /\ (B /\ C) -> (A /\ C).
     assert_hyp_has_type @bc constr:(B /\ C).
 Abort.
 
+(** * Test 4
+    Base case: nested implication in premise.
+*)
+Goal forall A B C: Prop, (A /\ B) -> (B /\ C) -> (A /\ C).
+    intros A B C.
+    let inp_list := 
+        (
+            (@ab, constr:(A /\ B))::(@bc, constr:(B /\ C))::[]
+        ) in
+    assume_premise_with_breakdown inp_list.
+    assert_hyp_has_type @ab constr:(A /\ B).
+    assert_hyp_has_type @bc constr:(B /\ C).
+Abort.
+
 (* ---------------------------------------------------------------------------*)
 (**
     * Testcases for [Assume].
@@ -257,5 +271,15 @@ Goal forall A B C: Prop, (A /\ B) /\ (B /\ C) -> (A /\ C).
     Assume a:A and b:B and bc:(B /\ C).
     assert_hyp_has_type @a constr:(A).
     assert_hyp_has_type @b constr:(B).
+    assert_hyp_has_type @bc constr:(B /\ C).
+Abort.
+
+(** * Test 4
+    Base case: nested implication in premise.
+*)
+Goal forall A B C: Prop, (A /\ B) -> (B /\ C) -> (A /\ C).
+    intros A B C.
+    Assume ab:(A /\ B) and bc:(B /\ C).
+    assert_hyp_has_type @ab constr:(A /\ B).
     assert_hyp_has_type @bc constr:(B /\ C).
 Abort.
