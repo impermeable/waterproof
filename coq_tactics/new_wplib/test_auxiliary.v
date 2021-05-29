@@ -127,8 +127,8 @@ Ltac2 assert_hyp_has_type (h: ident) (t: constr) :=
     let h_normalized :=  (eval cbv in (type_of_test_aux $h_val)) in
     let t_normalized :=  (eval cbv in $t) in
     match Constr.equal h_normalized t_normalized with
-    | true => print (concat (concat (of_string "Hypothesis ") (of_ident h))
-                            (concat (of_string " indeed has type ") 
+    | true => print (concat (concat (of_string "Hypothesis '") (of_ident h))
+                            (concat (of_string "' indeed has type: ") 
                                     (of_constr t))
                     )
     | false => print (
