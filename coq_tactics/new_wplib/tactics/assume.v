@@ -42,17 +42,17 @@ Ltac2 raise_assume_error (s:string) :=
 
 (*
 --------------------------------------------------------------------------------
-    "intro_hyp_from_list" plus subroutines.
-    This function is a subroutine of "Assume" itself.
+    [intro_hyp_from_list] plus subroutines.
+    This function is a subroutine of [Assume] itself.
 *)
 
 
 
 (* Subroutine of intro_hyp_from_list:
-    performs iteration over the list "x",
+    performs iteration over the list [x],
     in a recursive way.
-    "prev" are the previously seen items of "x",
-    and "x" will be the remaining items. *)
+    [prev] are the previously seen items of [x],
+    and [x] will be the remaining items. *)
 Local Ltac2 rec intro_hyp_from_list_recursion
     (x: (ident*constr) list) (h: ident) (prev: (ident*constr) list) :=
     match x with
@@ -78,28 +78,29 @@ Local Ltac2 rec intro_hyp_from_list_recursion
         end
     | [] => raise_assume_error("Premise not present in given hypotheses")
     end.
-(*
-    Given a list of (ident, constr) tuples and a hypothesis h,
-    searches the list if it contains an entry (s, t)
-    such that t judgementally equals the type of h.
-    As soon as such a tuple is found, h is renamed to s,
-    and a copy of the list with with matching (s, t) tuple removed
+
+(** * intro_hyp_from_list
+    Given a list of [(ident, constr)] tuples and a hypothesis [h],
+    searches the list if it contains an entry [(s, t)]
+    such that [t] judgementally equals the type of [h].
+    As soon as such a tuple is found, [h] is renamed to [s],
+    and a copy of the list with with matching [(s, t)] tuple removed
     is be returned.
 
     Arguments:
-        * x: a list of (ident, constr) tuples. 
-            This are pairs of name:type hypotheses.
-        * h: the ident of a hypothesis in the current context.
-            (Control.hyp h) should exist.
+        - [x: (ident*constr) list], a list tuples, 
+            which are pairs (hypothesis name, hypothesis type).
+        - [h: ident], the ident of a hypothesis in the current context.
+            [Control.hyp h] should exist.
 
     Returns:
-        * a copy x' of x, such (s, t) ∉ x', 
-            where (s, t) ∈ x the first entry in x such that
-            t is judgementally equal to (Control.hyp h).
+        - [(ident*constr) list], a copy [x'] of [x], such [(s, t) ∉ x'], 
+            where [(s, t) ∈ x] is the first entry in [x] such that
+            [t] is judgementally equal to [Control.hyp h].
 
     Raises Exceptions:
-        * AssumeError, if there exists no (s, t) ∈ x such that
-            t is judgementally equal to (Control.hyp h).
+        * [AssumeError], if there exists no [(s, t) ∈ x] such that
+            [t] is judgementally equal to [Control.hyp h].
 *)
 Ltac2 intro_hyp_from_list (x: (ident*constr) list) (h: ident) :=
     intro_hyp_from_list_recursion x h [].
@@ -112,20 +113,22 @@ Ltac2 intro_hyp_from_list (x: (ident*constr) list) (h: ident) :=
     nor removing elements from the list.
 *)
 
-(*
-    Given a list of (ident, constr) tuples and a hypothesis h,
-    searches the list if it contains an entry (s, t)
-    such that t judgementally equals the type of h.
+(** * hyp_is_in_list
+    Given a list of [(ident, constr)] tuples and a hypothesis [h],
+    searches the list if it contains an entry [(s, t)]
+    such that [t] judgementally equals the type of [h].
 
     Arguments:
-        * x: a list of (ident, constr) tuples. 
-            This are pairs of name:type hypotheses.
-        * h: the ident of a hypothesis in the current context.
-            (Control.hyp h) should exist.
+        - [x: (ident*constr) list], a list tuples, 
+            which are pairs (hypothesis name, hypothesis type).
+        - [h: ident], the ident of a hypothesis in the current context.
+            [Control.hyp h] should exist.
 
     Returns:
-        * bool: true if such a tuple (s, t), where t matches
-            the definition of h, is found
+        - [bool],
+            - [true] if such a tuple [(s, t)], where [t] matches
+            the definition of [h], is found
+            - [false] otherwise
 *)
 Ltac2 rec hyp_is_in_list (x: (ident*constr) list) (h: ident) :=
     match x with
@@ -145,9 +148,10 @@ Ltac2 rec hyp_is_in_list (x: (ident*constr) list) (h: ident) :=
 
 (*
 --------------------------------------------------------------------------------
-    Main function implementing "Assume" plus subroutines.
+*)(** *    Main function implementing [Assume] plus subroutines.
 *)
 
+(* Subroutine of [assume_breakdown]*)
 Ltac2 rec elim_hyp_from_list (x: (ident*constr) list) (h: ident) :=
     (* let f := fun () =>  (intro_hyp_from_list x h) in  *)
     match hyp_is_in_list x h with
@@ -189,7 +193,7 @@ Ltac2 rec elim_hyp_from_list (x: (ident*constr) list) (h: ident) :=
         end)
     end.
    
-
+(* Subroutine of [assume_premise_with_breakdown]*)
 Ltac2 rec assume_breakdown (x: (ident*constr) list) :=
     match! goal with
     | [h:?a/\?b |- _] =>  
@@ -208,7 +212,32 @@ Ltac2 rec assume_breakdown (x: (ident*constr) list) :=
         end
     end.
 
-
+(** * assume_premise_with_breakdown
+    Take a list of [(ident : constr)] tuples,
+    where each tuple is a pair of a hypothesis name and its body.
+    Try to assume all premises of the goal,
+    and rename them accordingly to the input list.
+    If needed to match the specified hypotheses in the list,
+    automatically break down hypotheses of the form [h = h1 /\ h2]
+    into [h1] and [h2]. 
+    If the goal is of the form [A -> B -> C] 
+    break it down to hypotheses [A] and [B] with goal [C]
+    before matching with and renaming according to the input list list.
+    Raise an error if the input list does not cover all hypotheses,
+    or if it contains too many hypotheses.
+    
+    Arguments:
+        - [x : (ident*constr) list], list of tuples, 
+            which are (hypothesis name, hypothesis body) pairs.
+  
+    Raises Exceptions:
+        - [AssumeError], if [x] contains too many hypotheses 
+            (i.e. hypotheses that are not found 
+            in the recursive breakdown).
+        - [AssumeError], if [x] contains too few hypotheses 
+            (i.e. the premise of the goal cannot be broken down
+            such that all created hypotheses match a tuple in [x]).
+*)
 Ltac2 assume_premise_with_breakdown (x: (ident*constr) list) :=
     lazy_match! goal with
     | [ |- ?premise1->?premise2->?conclusion] => 
