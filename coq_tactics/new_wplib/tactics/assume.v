@@ -132,13 +132,11 @@ Ltac2 rec hyp_is_in_list (x: (ident*constr) list) (h: ident) :=
     | head::tail =>
         match head with
         | (s, t) => 
-            print(of_string "hyp_is_in_list");
-            print(of_constr (Control.hyp h));
             let h_value := Control.hyp h in
             let h' := (eval cbv in (type_of $h_value)) in
             match (Constr.equal h' t ) with
-            | true => print(of_string "is in list"); true
-            | false => print(of_string "not in list"); hyp_is_in_list tail h
+            | true => true
+            | false => hyp_is_in_list tail h
             end
         | _ => Control.throw (CannotHappenError "x malformed" )
         end
@@ -154,9 +152,12 @@ Ltac2 rec elim_hyp_from_list (x: (ident*constr) list) (h: ident) :=
     (* let f := fun () =>  (intro_hyp_from_list x h) in  *)
     match hyp_is_in_list x h with
     | true => intro_hyp_from_list x h
-    | false =>  print(of_string "elim_hyp_from_list. All hypotheses:");
-        print_all_hyps ();
-        print (concat (of_string "target:") (of_constr (Control.hyp h)));
+    | false => 
+        (* [h] is not in the list [x]. But we know that [h] is of the form
+        [h = h1 /\ h2], so check if h1 or h2 are in [x].
+        If they are not but can be broken down further, 
+        recursively try to do so (e.g. if [h1 = h1' /\ h1'']).
+        *)
         let h1 := Fresh.in_goal h in
         (* The goal does not include h1,
             so we manually need to tell that h2 cannot be h1 *)
@@ -166,21 +167,22 @@ Ltac2 rec elim_hyp_from_list (x: (ident*constr) list) (h: ident) :=
                               ) h in
         let h_val := Control.hyp h in
         (destruct $h_val as [$h1 $h2];
-                print (of_ident h);
-                print (concat (of_string "h1:") 
-               (of_constr (Control.hyp h1)));
-               print (concat (of_string "h2:") 
-               (of_constr (Control.hyp h2)));
+        (* Check if we succeed in eliminating [h1] from [x].
+            If not, that [h1] is unresolved, 
+            and the recursive breakdown failed *)
         let x' := elim_hyp_from_list x h1 in
         match Int.equal (List.length x') (List.length x) with
-        | true => raise_assume_error ("Cannot be broken down: first case not covered")
+        | true => raise_assume_error 
+            ("Cannot be broken down: first case not covered")
         | false =>
             match x' with
-            | [] => raise_assume_error ("Cannot break down and cover both sides: too few hypotheses")
+            | [] => raise_assume_error (
+                "Cannot break down and cover both sides: too few hypotheses")
             | head::tail => 
                 let x'' := elim_hyp_from_list x' h2 in
                 match Int.equal (List.length x'') (List.length x') with
-                | true => raise_assume_error ("Cannot be broken down: second case not covered")
+                | true => raise_assume_error 
+                    ("Cannot be broken down: second case not covered")
                 | false => x''
                 end
             end
@@ -195,14 +197,14 @@ Ltac2 rec assume_breakdown (x: (ident*constr) list) :=
         | true => let new_x := intro_hyp_from_list x h in
             match new_x with
                 | head::tail => assume_breakdown new_x
-                | [] => ()
+                | [] => print (of_string "Hypotheses successfully assumed")
             end
         | false => assume_breakdown (elim_hyp_from_list x h)
         end
     | [|-_] => 
         match x with
         | head::tail => raise_assume_error "Too many hypotheses provided"
-        | [] => ()
+        | [] => print (of_string "Hypotheses successfully assumed")
         end
     end.
 
