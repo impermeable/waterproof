@@ -154,16 +154,23 @@ Ltac2 rec elim_hyp_from_list (x: (ident*constr) list) (h: ident) :=
     (* let f := fun () =>  (intro_hyp_from_list x h) in  *)
     match hyp_is_in_list x h with
     | true => intro_hyp_from_list x h
-    | false =>  print(of_string "elim_hyp_from_list");
+    | false =>  print(of_string "elim_hyp_from_list. All hypotheses:");
+        print_all_hyps ();
+        print (concat (of_string "target:") (of_constr (Control.hyp h)));
         let h1 := Fresh.in_goal h in
-        let h2 := Fresh.in_goal h in
-        (** This goes wrong: needs to destruct value of [h],
-            but interprets what I write here as Gallina,
-            not as a reference to my Ltac2-ident variable [h]*)
-        destruct h as [$h1 $h2];
-        print (of_ident h);
-        print (concat (of_string "h1:") 
+        (* The goal does not include h1,
+            so we manually need to tell that h2 cannot be h1 *)
+        let h2 := Fresh.fresh (Fresh.Free.union 
+                                (Fresh.Free.of_goal ()) 
+                                (Fresh.Free.of_ids (h1::[]))
+                              ) h in
+        let h_val := Control.hyp h in
+        (destruct $h_val as [$h1 $h2];
+                print (of_ident h);
+                print (concat (of_string "h1:") 
                (of_constr (Control.hyp h1)));
+               print (concat (of_string "h2:") 
+               (of_constr (Control.hyp h2)));
         let x' := elim_hyp_from_list x h1 in
         match Int.equal (List.length x') (List.length x) with
         | true => raise_assume_error ("Cannot be broken down: first case not covered")
@@ -182,7 +189,7 @@ Ltac2 rec elim_hyp_from_list (x: (ident*constr) list) (h: ident) :=
 
 
 Ltac2 rec assume_breakdown (x: (ident*constr) list) :=
-    lazy_match! goal with
+    match! goal with
     | [h:?a/\?b |- _] => 
         match hyp_is_in_list x h with
         | true => let new_x := intro_hyp_from_list x h in
@@ -208,4 +215,5 @@ Ltac2 assume_premise_with_breakdown (x: (ident*constr) list) :=
     end.
 
 
-    
+Ltac2 Notation "Assume" x(list1(seq(ident, ":", constr), "and")) := 
+    assume_premise_with_breakdown x.

@@ -101,7 +101,7 @@ Goal 0=0 -> 1=1.
     let result :=
         intro_hyp_from_list ((@b, constr:(3=3))::(@c, constr:(0=0))::[]) @h
     in
-    assert_second_elems_equal (result_t2 ()) ((@b, constr:(3=3))::[]).
+    assert_second_elems_equal result ((@b, constr:(3=3))::[]).
 Abort.
 
 (**
@@ -181,9 +181,81 @@ Abort.
 *)
 Ltac2 Eval print(of_string "Testcases for [assume_premise_with_breakdown]").
 
+(** * Test 1
+    Base case: only one conjunction in premise.
+*)
 Goal forall n, n = 1 /\ n = 2 -> False.
     intros n.
     let inp_list := ((@h0, constr:(n = 1))::(@h1, constr:(n = 2))::[]) in
     assume_premise_with_breakdown inp_list.
 Abort.
 
+(** * Test 2
+    Base case: only nested conjunctions in premise.
+    Do not break down as deeply as possible,
+    as the input list still contains conjunctions!
+*)
+Goal forall A B C: Prop, (A /\ B) /\ (B /\ C) -> (A /\ C).
+    intros A B C.
+    let inp_list := 
+        (
+            (@ab, constr:(A /\ B))::(@bc, constr:(B /\ C))::[]
+        ) in
+    assume_premise_with_breakdown inp_list.
+    assert_hyp_has_type @ab constr:(A /\ B).
+    assert_hyp_has_type @bc constr:(B /\ C).
+Abort.
+
+(** * Test 3
+    Base case: only nested conjunctions in premise.
+    Do break some parts of the hypothesis to atomic expression,
+    leave conjunction in others.
+*)
+Goal forall A B C: Prop, (A /\ B) /\ (B /\ C) -> (A /\ C).
+    intros A B C.
+    let inp_list := 
+        (
+            (@a, constr:(A))::(@b, constr:(B))::(@bc, constr:(B /\ C))::[]
+        ) in
+    assume_premise_with_breakdown inp_list.
+    assert_hyp_has_type @a constr:(A).
+    assert_hyp_has_type @b constr:(B).
+    assert_hyp_has_type @bc constr:(B /\ C).
+Abort.
+
+(* ---------------------------------------------------------------------------*)
+(**
+    * Testcases for [Assume].
+    Same tests as for [assume_premise_with_breakdown],
+    but now using the custom notation.
+*)
+Goal forall n, n = 1 /\ n = 2 -> False.
+    intros n.
+    let inp_list := ((@h0, constr:(n = 1))::(@h1, constr:(n = 2))::[]) in
+    assume_premise_with_breakdown inp_list.
+Abort.
+
+(** * Test 2
+    Base case: only nested conjunctions in premise.
+    Do not break down as deeply as possible,
+    as the input list still contains conjunctions!
+*)
+Goal forall A B C: Prop, (A /\ B) /\ (B /\ C) -> (A /\ C).
+    intros A B C.
+    Assume ab:(A /\ B) and bc:(B /\ C).
+    assert_hyp_has_type @ab constr:(A /\ B).
+    assert_hyp_has_type @bc constr:(B /\ C).
+Abort.
+
+(** * Test 3
+    Base case: only nested conjunctions in premise.
+    Do break some parts of the hypothesis to atomic expression,
+    leave conjunction in others.
+*)
+Goal forall A B C: Prop, (A /\ B) /\ (B /\ C) -> (A /\ C).
+    intros A B C.
+    Assume a:A and b:B and bc:(B /\ C).
+    assert_hyp_has_type @a constr:(A).
+    assert_hyp_has_type @b constr:(B).
+    assert_hyp_has_type @bc constr:(B /\ C).
+Abort.
