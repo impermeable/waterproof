@@ -30,7 +30,7 @@ class SerapiASTProcessor extends SerapiProcessor {
 
   // eslint-disable-next-line require-jsdoc
   getUnparsedTypes() {
-    return Array.from(currentlyNotParsedTypes);
+    return currentlyNotParsedTypes;
   }
   /**
    * Fetch the asts for a specific sentence

@@ -7,6 +7,14 @@ import SerQualid from './datastructures/SerQualid';
 import InConstrEntry from './datastructures/InConstrEntry';
 import CRef from './datastructures/CRef';
 import VernacStartTheoremProof from './datastructures/VernacStartTheoremProof';
+import CProdN from './datastructures/CProdN';
+import CApp from './datastructures/CApp';
+import CLocalAssum from './datastructures/CLocalAssum';
+import IDt from './datastructures/IDt';
+import VernacDefinition from './datastructures/VernacDefinition';
+import DefineBody from './datastructures/DefineBody';
+import CLambdaN from './datastructures/CLambdaN';
+import VernacHints from './datastructures/VernacHints';
 
 const flatten = require('./flatten-expr').flatten;
 
@@ -221,7 +229,8 @@ function convertToASTComp(array) {
     if (!currentlyNotParsedTypes.has(array[0])) {
       currentlyNotParsedTypes.set(array[0], 1);
     } else {
-      currentlyNotParsedTypes[array[0]]++;
+      currentlyNotParsedTypes.set(array[0],
+          currentlyNotParsedTypes.get(array[0]) + 1);
     }
     // currentlyNotParsedTypes.add(array[0]);
   }
@@ -274,16 +283,16 @@ class GenericVType {
 }
 
 
-// // eslint-disable-next-line require-jsdoc
-// class VernacProof {
-//   // TODO: check why this crap is always empty...
+// eslint-disable-next-line require-jsdoc
+class VernacProof {
+  // TODO: check why this crap is always empty...
 
-//   // eslint-disable-next-line require-jsdoc
-//   constructor( array ) {
-//     this.rawGenericArg = array[0] || {};
-//     this.sectionSubsetExpr = array[1] || {};
-//   }
-// }
+  // eslint-disable-next-line require-jsdoc
+  constructor( array ) {
+    this.rawGenericArg = array[0] || {};
+    this.sectionSubsetExpr = array[1] || {};
+  }
+}
 
 
 /**
@@ -325,12 +334,20 @@ const constrDict = {
   'VernacRequire': VernacRequire,
   'Ser_Qualid': SerQualid,
   'VernacStartTheoremProof': VernacStartTheoremProof,
-  // 'VernacProof': VernacProof, // ported
+  'VernacProof': VernacProof,
   'VernacEndProof': VernacEndProof,
   'CNotation': CNotation,
   'InConstrEntry': InConstrEntry,
   'CRef': CRef,
   'CPrim': CPrim,
+  'CProdN': CProdN,
+  'CApp': CApp,
+  'CLocalAssum': CLocalAssum,
+  'Name': IDt,
+  'VernacDefinition': VernacDefinition,
+  'DefineBody': DefineBody,
+  'CLambdaN': CLambdaN,
+  'VernacHints': VernacHints,
 };
 
 // const currentlyNotParsedTypes = new Set();

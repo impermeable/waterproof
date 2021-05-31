@@ -1,26 +1,28 @@
+/* eslint-disable no-unused-vars */
 import {convertToASTComp} from '../ASTProcessor';
 import CoqType from './CoqType';
 import LocInfo from './LocInfo';
 
+enum TheoremKind {
+  Theorem = 'Theorem',
+  Lemma = 'Lemma',
+  Fact = 'Fact',
+  Remark = 'Remark',
+  Property = 'Property',
+  Proposition = 'Proposition',
+  Corollary = 'Corollary',
+}
+
 // eslint-disable-next-line require-jsdoc
 export default class VernacStartTheoremProof extends CoqType {
-  theoremKind: any;
-  proofExprs: never[];
-  // TheoremKindEnum = {
-  //   Theorem: 'Theorem',
-  //   Lemma: 'Lemma',
-  //   Fact: 'Fact',
-  //   Remark: 'Remark',
-  //   Property: 'Property',
-  //   Proposition: 'Proposition',
-  //   Corollary: 'Corollary',
-  // }
+  theoremKind: TheoremKind;
+  proofExprs: [];
 
   // eslint-disable-next-line require-jsdoc
   constructor( array ) {
     super();
     this.theoremKind = array[1];
-    // console.log
+
     this.proofExprs = [];
     this.proofExprs = array[2][0].map((el) => {
       const id = el[0];
