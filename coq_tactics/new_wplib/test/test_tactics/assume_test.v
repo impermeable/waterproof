@@ -41,7 +41,7 @@ Local Ltac2 rec map_to_second_elem_recursion (x : (ident*constr) list)
     | head::tail =>
         match head with
         | (s, t) => map_to_second_elem_recursion tail (List.append result [t])
-        | _ => Control.zero (CannotHappenError "x malformed")
+        | _ => Control.zero (Aux.CannotHappenError "x malformed")
         end
     | [] => result
     end.
@@ -174,6 +174,8 @@ Goal 0=0 -> 1=1.
         hyp_is_in_list ((@c, constr:(0=0))::[]) @h).
 Abort.
 
+
+
 (* ---------------------------------------------------------------------------*)
 (**
     * Testcases for [assume_premise_with_breakdown].
@@ -236,16 +238,23 @@ Goal forall A B C: Prop, (A /\ B) -> (B /\ C) -> (A /\ C).
     assert_hyp_has_type @bc constr:(B /\ C).
 Abort.
 
+
 (* ---------------------------------------------------------------------------*)
 (**
     * Testcases for [Assume].
     Same tests as for [assume_premise_with_breakdown],
     but now using the custom notation.
 *)
+Ltac2 Eval print(of_string "Testcases for Assume").
+
+(** * Test 1
+    Base case: only one conjunction in premise.
+*)
 Goal forall n, n = 1 /\ n = 2 -> False.
     intros n.
-    let inp_list := ((@h0, constr:(n = 1))::(@h1, constr:(n = 2))::[]) in
-    assume_premise_with_breakdown inp_list.
+    Assume n_is_one : (n = 1) and n_is_two : (n = 2).
+    assert_hyp_has_type @n_is_one constr:(n = 1).
+    assert_hyp_has_type @n_is_two constr:(n = 2).
 Abort.
 
 (** * Test 2
@@ -281,4 +290,15 @@ Goal forall A B C: Prop, (A /\ B) -> (B /\ C) -> (A /\ C).
     Assume ab:(A /\ B) and bc:(B /\ C).
     assert_hyp_has_type @ab constr:(A /\ B).
     assert_hyp_has_type @bc constr:(B /\ C).
+Abort.
+
+(** * Test 5
+    Example for the Software User Manual.
+*)
+Goal forall A B C D E: Prop, (A /\ B) /\ (C /\ D) -> E.
+    intros A B C D E.
+    Assume h_a:A and h_b:B and h_cd:(C /\ D).
+    assert_hyp_has_type @h_a constr:(A).
+    assert_hyp_has_type @h_b constr:(B).
+    assert_hyp_has_type @h_cd constr:(C /\ D).
 Abort.
