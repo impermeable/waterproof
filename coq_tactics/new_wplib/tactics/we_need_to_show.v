@@ -52,7 +52,7 @@ Ltac2 raise_goal_check_error (s:string) :=
 Local Ltac2 check_goal := fun (t:constr) =>
     lazy_match! goal with
     | [ |- ?g] => 
-        match check_constr_equal g t with
+        match Aux.check_constr_equal g t with
         | true => print (concat 
                     (of_string "The goal is indeed: ") (of_constr t))
         | false => raise_goal_check_error "No such goal"

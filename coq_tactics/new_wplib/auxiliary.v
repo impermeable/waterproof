@@ -25,8 +25,11 @@ along with Waterproof-lib.  If not, see <https://www.gnu.org/licenses/>.
 From Ltac2 Require Import Ltac2.
 From Ltac2 Require Option.
 
+Module Aux.
+
 (* Defensive programming error *)
 Ltac2 Type exn ::= [ CannotHappenError(string) ].
+
 
 
 (** * type_of
@@ -96,3 +99,5 @@ Local Ltac2 rec print_all_hyps_rec (x : (ident * constr option * constr) list) :
     each on a separate line.
 *)
 Ltac2 print_all_hyps () := print_all_hyps_rec (Control.hyps ()).
+
+End Aux.

@@ -1,11 +1,11 @@
 (*
 Authors: 
-    * Lulof Pirée (1363638)
-    * Cosmin Manea (1298542)
+    - Lulof Pirée (1363638)
+    - Cosmin Manea (1298542)
 Creation date: 17 May 2021
 
-Version of "Take" tactic that accepts any number of arguments.
-"Take" can be used to eliminate a ∀ clause in the goal,
+Version of [Take] tactic that accepts any number of arguments.
+[Take] can be used to eliminate a ∀ clause in the goal,
 by introducing variables.
 
 --------------------------------------------------------------------------------
@@ -91,7 +91,7 @@ Local Ltac2 rec take_multiarg x :=
     | head::tail =>
         match head with
         | (v, t) => intro_list_with_typematching v t
-        | _ => Control.zero (CannotHappenError "Cannot happen")
+        | _ => Control.zero (Aux.CannotHappenError "Cannot happen")
         end; take_multiarg tail
     | [] => ()
     end.
