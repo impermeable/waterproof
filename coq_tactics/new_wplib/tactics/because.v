@@ -30,43 +30,44 @@ From Ltac2 Require Import Ltac2.
 
 
 
-(*
+(** * and_hypothesis_destruct
     Destruct an AND hypothesis into its respective two parts.
 
     Arguments:
-        * s: constr, the AND hypothesis.
-        * u: ident, the name of the first part of s.
-        * v: ident, the name of the second part of s.
+        - [s: ident], the identifier of the AND hypothesis.
+        - [u: ident], the name of the first part of s.
+        - [v: ident], the name of the second part of s.
 
     Does:
         * destruct s into its two respective parts.
 *)
 Ltac2 and_hypothesis_destruct s u v :=
-    destruct $s as [u v].
+    let s_val := Control.hyp s in (destruct $s_val as [u v]).
 
 
 
-(*
+(** * or_hypothesis_destruct
     Destruct an OR hypothesis into its respective two parts.
 
     Arguments:
-        * s: constr, the OR hypothesis.
-        * u: ident, the name of the first part of s.
-        * v: ident, the name of the second part of s.
+        - [s: ident], the identifier of the OR hypothesis.
+        - [u: ident], the name of the first part of s.
+        - [v: ident], the name of the second part of s.
 
     Does:
         * destruct s into its two respective parts.
 *)
 Ltac2 or_hypothesis_destruct s u v :=
-    destruct $s as [u | v].
+    let s_val := Control.hyp s in (destruct $s_val as [u | v]).
 
 
 
-Ltac2 Notation "Because" s(constr) "both" u(ident) "and" v(ident) :=
+Ltac2 Notation "Because" s(ident) "both" u(ident) "and" v(ident) :=
     and_hypothesis_destruct s u v.
 
-Ltac2 Notation "Because" s(constr) "both" u(ident) ":" t_u(constr) "and" v(ident) ":" t_v(constr) :=
+
+Ltac2 Notation "Because" s(ident) "both" u(ident) ":" t_u(constr) "and" v(ident) ":" t_v(constr) :=
     and_hypothesis_destruct s u v.
 
-Ltac2 Notation "Because" s(constr) "either" u(ident) "or" v(ident) :=
+Ltac2 Notation "Because" s(ident) "either" u(ident) "or" v(ident) :=
     or_hypothesis_destruct s u v.
