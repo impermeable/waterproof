@@ -71,17 +71,3 @@ Proof.
     assert_hyp_has_type @x constr:(nat).
     assert_hyp_has_type @x_bigger_1 constr:(x > 1).
 Abort.
-
-(* ---------------------------------------------------------------------------*)
-(**
-    * Testcases for [Take ... such that ...].
-*)
-
-Goal forall n, n = 1 -> n <> 2.
-    Pick n:nat such that n_is_one : (n = 1).
-Abort.
-
-Goal forall x:nat, (x > 1) -> (x > 0).
-Proof.
-    Take x:nat;
-    such that x_bigger_1 : (x > 1).
