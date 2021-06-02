@@ -160,9 +160,10 @@ Ltac2 rec hyp_is_in_list (x: (ident*constr) list) (h: ident) :=
 (* Subroutine of [assume_breakdown]*)
 Ltac2 rec elim_hyp_from_list (x: (ident*constr) list) (h: ident) :=
     (* let f := fun () =>  (intro_hyp_from_list x h) in  *)
+    (print (of_string "elim_hyp_from_list"));
     match hyp_is_in_list x h with
-    | true => intro_hyp_from_list x h
-    | false => 
+    | true => print (of_string "in_list"); intro_hyp_from_list x h
+    | false => print (of_string "not in list");
         (* [h] is not in the list [x]. But we know that [h] is of the form
         [h = h1 /\ h2], so check if h1 or h2 are in [x].
         If they are not but can be broken down further, 
@@ -218,50 +219,26 @@ Ltac2 rec assume_breakdown (x: (ident*constr) list) :=
         end
     end.
 
-Ltac2 intro_premise_and_recurse (x: (ident*constr) list) (h:ident) 
-    (h2: ident option):=
-    let new_x := 
-            match hyp_is_in_list x h with
-            | true => intro_hyp_from_list x h
-            | false => x
-            end
-    in 
-    let newer_x :=
-        match h2 with
-        | Some hyp => 
-            match hyp_is_in_list x hyp with
-            | true => intro_hyp_from_list new_x hyp
-            | false => new_x
-            end
-        | None => new_x
-        end
-    in
-    assume_breakdown newer_x.
-
-Ltac2 intro_one_premise_and_recurse (x: (ident*constr) list) (h:ident) :=
+Ltac2 intro_one_premise_and_recurse (x: (ident*constr) list) :=
+    let h := (Fresh.in_goal @h) in
+    (intros $h; 
     let new_x := 
         match hyp_is_in_list x h with
-        | true => intro_hyp_from_list x h
+        | true => elim_hyp_from_list x h
         | false => x
         end
     in 
-    assume_breakdown new_x.
+    assume_breakdown new_x).
 
-Ltac2 intro_two_premises_and_recurse (x: (ident*constr) list) 
-(h1:ident) (h2: ident) :=
-    let new_x := 
-        match hyp_is_in_list x h1 with
-        | true => intro_hyp_from_list x h1
-        | false => x
-        end
-    in 
-    let newer_x := 
-        match hyp_is_in_list new_x h2 with
-        | true => intro_hyp_from_list new_x h2
-        | false => new_x
-        end
-    in 
-    assume_breakdown new_x.
+Ltac2 intro_two_premises_and_recurse (x: (ident*constr) list) :=
+    let h := @h in
+    let h1 := (Fresh.in_goal h) in
+    intros $h1; 
+    let new_x := elim_hyp_from_list x h1 in
+    let h2 := (Fresh.in_goal h) in
+    intros $h2; 
+    elim_hyp_from_list new_x h2;
+    print (of_string "intro-ed h2").
 
 (** * assume_premise_with_breakdown
     Take a list of [(ident : constr)] tuples,
@@ -292,11 +269,9 @@ Ltac2 intro_two_premises_and_recurse (x: (ident*constr) list)
 Ltac2 assume_premise_with_breakdown (x: (ident*constr) list) :=
     lazy_match! goal with
     | [ |- ?premise1->?premise2->?conclusion] => 
-        intros premise1 premise2; 
-        intro_two_premises_and_recurse x premise1 premise2
+        intro_two_premises_and_recurse x
     | [ |- ?premise->?conclusion] => 
-        intros premise; 
-        intro_one_premise_and_recurse x premise
+        intro_one_premise_and_recurse x
         
     | [|- _] => raise_assume_error "Cannot assume premise: 
                                     goal is not an implication"
