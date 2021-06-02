@@ -302,3 +302,13 @@ Goal forall A B C D E: Prop, (A /\ B) /\ (C /\ D) -> E.
     assert_hyp_has_type @h_b constr:(B).
     assert_hyp_has_type @h_cd constr:(C /\ D).
 Abort.
+
+(** * Test 6
+    Assume single hypothesis.
+    Based on in-vivo bug.
+*)
+Goal forall n, n = 1 -> n <> 2.
+    intros n.
+    Assume n_is_one : (n = 1) .
+    assert_hyp_has_type @n_is_one constr:(n = 1).
+Abort.

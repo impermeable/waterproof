@@ -32,13 +32,19 @@ From Ltac2 Require Import Ltac2.
 From Ltac2 Require Option.
 From Ltac2 Require Import Message.
 Add LoadPath "./coq_tactics/new_wplib/" as wplib.
-Load auxiliary.
+Load take.
 
 
 Ltac2 Type exn ::= [ AssumeError(string) ].
 
 Ltac2 raise_assume_error (s:string) := 
     Control.zero (AssumeError s).
+
+
+Local Ltac2 cannot_happen () :=
+    Control.throw (Aux.CannotHappenError 
+                "This statement should never be executed.").
+
 
 (*
 --------------------------------------------------------------------------------
@@ -60,7 +66,7 @@ Local Ltac2 rec intro_hyp_from_list_recursion
         match tuple with
         | (s, t) =>
             let h_constr := Control.hyp h in
-            let h' := (eval cbv in (type_of $h_constr)) in
+            let h' := (eval cbv in (Aux.type_of $h_constr)) in
             match (Constr.equal h' t ) with
                 | true => Std.rename ((h, s)::[]);
                     (* The type of remainder may be the empty list,
@@ -74,7 +80,7 @@ Local Ltac2 rec intro_hyp_from_list_recursion
             end
         (* x is a nonempty list of (ident*constr) tuples. 
             Hence case can never happen! But Ltac2 requires it.*)
-        | _ => Control.throw (CannotHappenError "x malformed" )
+        | _ => cannot_happen ()
         end
     | [] => raise_assume_error("Premise not present in given hypotheses")
     end.
@@ -136,12 +142,12 @@ Ltac2 rec hyp_is_in_list (x: (ident*constr) list) (h: ident) :=
         match head with
         | (s, t) => 
             let h_value := Control.hyp h in
-            let h' := (eval cbv in (type_of $h_value)) in
+            let h' := (eval cbv in (Aux.type_of $h_value)) in
             match (Constr.equal h' t ) with
             | true => true
             | false => hyp_is_in_list tail h
             end
-        | _ => Control.throw (CannotHappenError "x malformed" )
+        | _ => cannot_happen ()
         end
     | [] => false
     end.
@@ -212,6 +218,51 @@ Ltac2 rec assume_breakdown (x: (ident*constr) list) :=
         end
     end.
 
+Ltac2 intro_premise_and_recurse (x: (ident*constr) list) (h:ident) 
+    (h2: ident option):=
+    let new_x := 
+            match hyp_is_in_list x h with
+            | true => intro_hyp_from_list x h
+            | false => x
+            end
+    in 
+    let newer_x :=
+        match h2 with
+        | Some hyp => 
+            match hyp_is_in_list x hyp with
+            | true => intro_hyp_from_list new_x hyp
+            | false => new_x
+            end
+        | None => new_x
+        end
+    in
+    assume_breakdown newer_x.
+
+Ltac2 intro_one_premise_and_recurse (x: (ident*constr) list) (h:ident) :=
+    let new_x := 
+        match hyp_is_in_list x h with
+        | true => intro_hyp_from_list x h
+        | false => x
+        end
+    in 
+    assume_breakdown new_x.
+
+Ltac2 intro_two_premises_and_recurse (x: (ident*constr) list) 
+(h1:ident) (h2: ident) :=
+    let new_x := 
+        match hyp_is_in_list x h1 with
+        | true => intro_hyp_from_list x h1
+        | false => x
+        end
+    in 
+    let newer_x := 
+        match hyp_is_in_list new_x h2 with
+        | true => intro_hyp_from_list new_x h2
+        | false => new_x
+        end
+    in 
+    assume_breakdown new_x.
+
 (** * assume_premise_with_breakdown
     Take a list of [(ident : constr)] tuples,
     where each tuple is a pair of a hypothesis name and its body.
@@ -242,14 +293,33 @@ Ltac2 assume_premise_with_breakdown (x: (ident*constr) list) :=
     lazy_match! goal with
     | [ |- ?premise1->?premise2->?conclusion] => 
         intros premise1 premise2; 
-        assume_breakdown x
+        intro_two_premises_and_recurse x premise1 premise2
     | [ |- ?premise->?conclusion] => 
         intros premise; 
-        assume_breakdown x
+        intro_one_premise_and_recurse x premise
+        
     | [|- _] => raise_assume_error "Cannot assume premise: 
                                     goal is not an implication"
     end.
 
-
+(** * Assume
+    Version with type checking.
+*)
 Ltac2 Notation "Assume" x(list1(seq(ident, ":", constr), "and")) := 
     assume_premise_with_breakdown x.
+
+(** * such that
+    Simply alternative notation for [Assume].
+*)
+Ltac2 Notation "such" "that" x(list1(seq(ident, ":", constr), "and")) := 
+    assume_premise_with_breakdown x.
+
+(** * Take ... such that ...
+    Simply concatenates [Take] and [Assume].
+*)
+(* Ltac2 Notation "Take" takelist(list1(seq(list1(intropatterns, ","), ":", constr), ","))
+               "such" "that" assumelist(list1(seq(ident, ":", constr), "and")) :=
+               take_multiarg takelist;
+               print (of_string "Variable taken");
+               assume_premise_with_breakdown assumelist.
+     *)
