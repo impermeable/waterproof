@@ -37,24 +37,26 @@ Ltac2 Type exn ::= [ TakeError(string) ].
 Local Ltac2 raise_take_error (s:string) := 
     Control.zero (TakeError s).
 
-(*  
+(** * intro_with_type_matching
     Check if the goal is a ∀-quantifier over a bound variable
-    of type "t". 
-    In case it is, introduce such a variable with ident "s".
+    of type [t]. 
+    In case it is, introduce such a variable with ident [s].
     If it is not, raise an error.
 
     Arguments:
-        * s: an intropatterns
-        * t: a Type
+        - [s:Std.intro_pattern list], name for variable to introduce.
+            Despite being of type [list], this can simply be a single name
+            as parsed by [Ltac2 Notation].
+        - [t:constr], the type of the variable to introduce.
 
     Does:
-        * perform ∀-elim by introducing s as a variable of type t.
-            (Call "intros $s")
+        - perform ∀-elim by introducing s as a variable of type [t].
+            (Call [intros $s])
 
     Raises Exceptions:
-        * TakeError, if the type "t" 
+        - [TakeError], if the type [t] 
             does not match the type of the bound variable in the ∀-goal.
-        * TakeError, if the top-level connective in the goal 
+        - [TakeError], if the top-level connective in the goal 
             is not a ∀-quantifier.
 *)
 Local Ltac2 intro_with_type_matching (s:Std.intro_pattern list) (t:constr) := 
@@ -70,23 +72,44 @@ Local Ltac2 intro_with_type_matching (s:Std.intro_pattern list) (t:constr) :=
     | [|- _] => raise_take_error("'Take' can only be applied to 'forall' goals")
     end.
     
-(*  Arguments:
-        * x: a list of intropatterns
-        * t: a Type
+(** * intro_list_with_typematching
+    Introduce for each name in the list [x] a new variable of type [t].
+
+    Arguments:
+        - [x]: a list of intropatterns
+        - [t: constr], the type of the variables to introduce.
     Does:
-        * call intro_with_type_matching v t for each v ∈ x.
+        - call [intro_with_type_matching v t] for each [v] ∈ [x].
+
+    Raises Exceptions:
+        - [TakeError], if the top-level connective in the goal 
+            is not a ∀-quantifier, or if the variables of [x]
+            cannot all be introduced as of type [t].
 *)
-Local Ltac2 rec intro_list_with_typematching x (t:constr) :=
+Local Ltac2 rec intro_list_with_typematching (x: Std.intro_pattern list list)
+     (t:constr) :=
     match x with
     | head::tail => intro_with_type_matching head t; 
                     intro_list_with_typematching tail t
     | [] => ()
     end.
 
-(*  Arguments:
-        * x: a list of (v, t) pairs
+(** * take_multiarg
+
+    Takes a list of [(name_list, type)] tuples, and introduces each
+    name in each [name_list] as a new variable of type [type].
+
+    Arguments:
+        - x: a list of (v, t) pairs, where each [t: constr]
+            and each [v : Std.intro_pattern list list].
     Does:
-    * call intro_list_with_typematching(v, t) for each (v, t) ∈ x
+        - call [intro_list_with_typematching (v, t)] for each (v, t) ∈ x
+
+    Raises Exceptions:
+        - [TakeError], if the top-level connective in the goal 
+            is not a ∀-quantifier, or if the variables of the given type
+            cannot all be introduced (in the given order).
+
 *)
 Local Ltac2 rec take_multiarg x :=
     match x with

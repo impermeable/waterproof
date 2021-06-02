@@ -1,6 +1,6 @@
-(*
+(** * we_need_to_show.v
 Authors: 
-    * Lulof Pirée (1363638)
+    - Lulof Pirée (1363638)
 
 Creation date: 18 May 2021
 
@@ -37,17 +37,17 @@ Ltac2 Type exn ::= [ GoalCheckError(string) ].
 Ltac2 raise_goal_check_error (s:string) := 
     Control.zero (GoalCheckError s).
 
-(*
-    Check if the type of the goal is syntactically equal to "t".
+(** * check_goal
+    Check if the type of the goal is syntactically equal to [t].
 
     Arguments:
-        * t: constr, any constr to be compared against the goal.
+        - [t: constr], any constr to be compared against the goal.
 
     Does:
-        * Prints a confirmation that the goal equals the provided type.
+        - Prints a confirmation that the goal equals the provided type.
     
     Raises Exceptions:
-        * GoalCheckError, if the goal is not syntactically equal to "t".
+        - [GoalCheckError], if the goal is not syntactically equal to [t].
 *)
 Local Ltac2 check_goal := fun (t:constr) =>
     lazy_match! goal with
