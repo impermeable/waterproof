@@ -68,7 +68,20 @@ You may want to choose a specific variable of type ")
         ( Message.of_string ".
 This can for example be done using 'Choose ... '.").
 
+(** * goal_to_hint
+    Give a hint indicating a potential step to proving 
+    a given proposition [g].
 
+    Arguments:
+        - [g : constr], should be a [Prop], 
+            namely the goal to provide hints for.
+    
+    Returns:
+        - [message], message containing a hint.
+
+    Raises exceptions:
+        - [GoalHintError], if no hint is available for [g].
+*)
 Ltac2 goal_to_hint (g:constr) :=
     (* The order matters. 
         If the ∀ case is above the ⇒,
@@ -80,6 +93,11 @@ Ltac2 goal_to_hint (g:constr) :=
     | _ => Control.zero (GoalHintError "No hint available for this goal.")
     end.
 
+(** * print_goal_hint
+    Print a hint indicating a potential step to proving 
+    the current goal (if the goal is a ∀, ⇒ or ∃ proposition).
+    When no hint is available, print "No hint available".
+*)
 Ltac2 print_goal_hint () :=
     let f () := goal_to_hint (Control.goal ()) in
     match Control.case f with
@@ -88,9 +106,12 @@ Ltac2 print_goal_hint () :=
         | (mess, _) => Message.print mess
         | _ => ()
         end
-    | Err exn => Message.print (Message.of_string "No hint available")
+    | Err exn => Message.print (Message.of_string "No hint available.")
     end.
 
+(** * Help tactic
+    Tries to give a hint how to proceed proving the current goal.
+*)
 Ltac2 Notation "Help" := print_goal_hint ().
 
 
