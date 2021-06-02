@@ -228,13 +228,6 @@ Local Ltac2 intro_one_premise_and_recurse (x: (ident*constr) list) :=
     elim_hyp_from_list x h; 
     print (of_string "Hypotheses successfully assumed")
     ).
-    (* let new_x := 
-        match hyp_is_in_list x h with
-        | true => 
-        | false => x
-        end
-    in 
-    assume_breakdown new_x). *)
 
 (* Subroutine of  [assume_premise_with_breakdown] *)
 Ltac2 intro_two_premises_and_recurse (x: (ident*constr) list) :=
