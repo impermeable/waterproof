@@ -5,10 +5,7 @@ Creation date: 20 May 2021
 
 [Assume] can be used to introduce the premise of an implication (⇒)
 as an hypothesis. 
-There are two version: 
-    - one which expectes a type annotation and performs type-checking,
-    - one which only requires identifiers, and does not perform type checking.
-        It will raise a warning that type annotation is recommended.
+It expectes a type annotation for each hypothesis, and performs type-checking,
 
 --------------------------------------------------------------------------------
 
