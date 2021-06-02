@@ -100,4 +100,20 @@ Local Ltac2 rec print_all_hyps_rec (x : (ident * constr option * constr) list) :
 *)
 Ltac2 print_all_hyps () := print_all_hyps_rec (Control.hyps ()).
 
+
+(** * print_bool
+    Prints the value of an Ltac2 [bool] to the output.
+
+    Arguments:
+        - [b: bool], any Ltac2 [bool] term.
+    
+    Does:
+        - print "true" if [b] is [true], print "false" otherwise.
+*)
+Ltac2 print_bool (b: bool) :=
+    match b with
+    | true => Message.print (Message.of_string "true")
+    | false => Message.print (Message.of_string "false")
+    end.
+
 End Aux.
