@@ -160,10 +160,9 @@ Ltac2 rec hyp_is_in_list (x: (ident*constr) list) (h: ident) :=
 (* Subroutine of [assume_breakdown]*)
 Ltac2 rec elim_hyp_from_list (x: (ident*constr) list) (h: ident) :=
     (* let f := fun () =>  (intro_hyp_from_list x h) in  *)
-    (print (of_string "elim_hyp_from_list"));
     match hyp_is_in_list x h with
-    | true => print (of_string "in_list"); intro_hyp_from_list x h
-    | false => print (of_string "not in list");
+    | true => intro_hyp_from_list x h
+    | false =>
         (* [h] is not in the list [x]. But we know that [h] is of the form
         [h = h1 /\ h2], so check if h1 or h2 are in [x].
         If they are not but can be broken down further, 
@@ -219,7 +218,8 @@ Ltac2 rec assume_breakdown (x: (ident*constr) list) :=
         end
     end.
 
-Ltac2 intro_one_premise_and_recurse (x: (ident*constr) list) :=
+(* Subroutine of  [assume_premise_with_breakdown] *)
+Local Ltac2 intro_one_premise_and_recurse (x: (ident*constr) list) :=
     let h := (Fresh.in_goal @h) in
     (intros $h; 
     let new_x := 
@@ -230,6 +230,7 @@ Ltac2 intro_one_premise_and_recurse (x: (ident*constr) list) :=
     in 
     assume_breakdown new_x).
 
+(* Subroutine of  [assume_premise_with_breakdown] *)
 Ltac2 intro_two_premises_and_recurse (x: (ident*constr) list) :=
     let h := @h in
     let h1 := (Fresh.in_goal h) in
@@ -238,7 +239,7 @@ Ltac2 intro_two_premises_and_recurse (x: (ident*constr) list) :=
     let h2 := (Fresh.in_goal h) in
     intros $h2; 
     elim_hyp_from_list new_x h2;
-    print (of_string "intro-ed h2").
+    print (of_string "Hypotheses successfully assumed").
 
 (** * assume_premise_with_breakdown
     Take a list of [(ident : constr)] tuples,
