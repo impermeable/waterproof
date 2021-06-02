@@ -67,7 +67,8 @@ Local Ltac2 rec intro_hyp_from_list_recursion
         | (s, t) =>
             let h_constr := Control.hyp h in
             let h' := (eval cbv in (Aux.type_of $h_constr)) in
-            match (Constr.equal h' t ) with
+            let t' := (eval cbv in $t) in
+            match (Constr.equal h' t' ) with
                 | true => Std.rename ((h, s)::[]);
                     (* The type of remainder may be the empty list,
                         so we cannot simply return "remainder::prev"*)
@@ -143,7 +144,8 @@ Ltac2 rec hyp_is_in_list (x: (ident*constr) list) (h: ident) :=
         | (s, t) => 
             let h_value := Control.hyp h in
             let h' := (eval cbv in (Aux.type_of $h_value)) in
-            match (Constr.equal h' t ) with
+            let t' := (eval cbv in $t) in
+            match (Constr.equal h' t' ) with
             | true => true
             | false => hyp_is_in_list tail h
             end
@@ -222,13 +224,17 @@ Ltac2 rec assume_breakdown (x: (ident*constr) list) :=
 Local Ltac2 intro_one_premise_and_recurse (x: (ident*constr) list) :=
     let h := (Fresh.in_goal @h) in
     (intros $h; 
-    let new_x := 
+    Aux.print_bool (hyp_is_in_list x h);
+    elim_hyp_from_list x h; 
+    print (of_string "Hypotheses successfully assumed")
+    ).
+    (* let new_x := 
         match hyp_is_in_list x h with
-        | true => elim_hyp_from_list x h
+        | true => 
         | false => x
         end
     in 
-    assume_breakdown new_x).
+    assume_breakdown new_x). *)
 
 (* Subroutine of  [assume_premise_with_breakdown] *)
 Ltac2 intro_two_premises_and_recurse (x: (ident*constr) list) :=

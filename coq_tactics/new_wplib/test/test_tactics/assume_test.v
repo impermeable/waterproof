@@ -174,6 +174,19 @@ Goal 0=0 -> 1=1.
         hyp_is_in_list ((@c, constr:(0=0))::[]) @h).
 Abort.
 
+(** * Test 4
+    Based on in-vivo bug.
+*)
+Goal forall x:nat, (x > 1) -> (x > 0).
+Proof.
+    intros x.
+    intros x_ge_one.
+    print (of_constr (eval cbv in (Aux.type_of x_ge_one))).
+    print (of_constr (eval cbv in (x > 1))).
+    assert_is_true (
+        hyp_is_in_list ((@c, constr:(x > 1))::[]) @x_ge_one).
+Abort.
+
 
 
 (* ---------------------------------------------------------------------------*)
@@ -307,8 +320,19 @@ Abort.
     Assume single hypothesis.
     Based on in-vivo bug.
 *)
-Goal forall n, n = 1 -> n <> 2.
+Goal forall n:nat, (n = 1) -> (n <> 2).
     intros n.
     Assume n_is_one : (n = 1) .
     assert_hyp_has_type @n_is_one constr:(n = 1).
+Abort.
+
+(** * Test 7
+    Assume single hypothesis.
+    Based on in-vivo bug.
+*)
+Goal forall x:nat, (x > 1) -> (x > 0).
+Proof.
+    intros x.
+    Assume x_ge_one : (x > 1).
+    assert_hyp_has_type @x_ge_one constr:(x > 1).
 Abort.
