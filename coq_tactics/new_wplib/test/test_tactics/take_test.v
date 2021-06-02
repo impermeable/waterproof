@@ -92,8 +92,10 @@ Goal forall (a b c d e f g: nat) (b1 b2: bool),
 Abort.
 
 (* Test 10: Two sets of multiple variables of the same type.
-    But in a *different order* with different names.*)
-(* DOES NOT WORK. *)
+    But in a *different order* with different names.
+    
+    DOES NOT WORK. -- so wrapped in a  [assert_raises_error] for now.
+*)
 Goal forall (n m k: nat)  (b1 b2: bool), Nat.odd (n + m + k) = andb b1 b2.
     assert_raises_error (fun() => Take y, u: bool, a, b, c : nat).
 Abort.
