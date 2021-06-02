@@ -57,9 +57,11 @@ Local Ltac2 raise_take_error (s:string) :=
         * TakeError, if the top-level connective in the goal 
             is not a ∀-quantifier.
 *)
-Local Ltac2 intro_with_type_matching s t := 
+Local Ltac2 intro_with_type_matching (s:Std.intro_pattern list) (t:constr) := 
     lazy_match! goal with
     | [ |- forall _ : ?u, _] => 
+        let u' := (eval cbv in $u) in
+        let t' := (eval cbv in $t) in
         match Constr.equal u t with
             | true => Std.intros false s
             | false => raise_take_error (
@@ -97,5 +99,6 @@ Local Ltac2 rec take_multiarg x :=
     end.
 
 
-Ltac2 Notation "Take" x(list1(seq(list1(intropatterns, ","), ":", constr), ",")) := 
+Ltac2 Notation "Take" x(list1(seq(list1(intropatterns, ","), 
+                        ":", constr), ",")) := 
     take_multiarg x.
