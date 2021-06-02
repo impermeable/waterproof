@@ -24,7 +24,6 @@ along with Waterproof-lib.  If not, see <https://www.gnu.org/licenses/>.
 *)
 From Ltac2 Require Import Ltac2.
 From Ltac2 Require Option.
-From Ltac2 Require Import Message.
 
 Ltac2 Type exn ::= [ GoalHintError(string) ].
 
@@ -81,20 +80,17 @@ Ltac2 goal_to_hint (g:constr) :=
     | _ => Control.zero (GoalHintError "No hint available for this goal.")
     end.
 
-Goal forall x:nat, x = x.
-    print (goal_to_hint (Control.goal ())).
-    let g := Control.goal () in
-    print (of_constr (eval cbv in $g)).
-Abort.
+Ltac2 print_goal_hint () :=
+    let f () := goal_to_hint (Control.goal ()) in
+    match Control.case f with
+    | Val mess => 
+        match mess with
+        | (mess, _) => Message.print mess
+        | _ => ()
+        end
+    | Err exn => Message.print (Message.of_string "No hint available")
+    end.
 
-Goal 0=0 -> 0=0.
-    print (goal_to_hint (Control.goal ())).
-    let g := Control.goal () in
-    print (of_constr (eval cbv in $g)).
-Abort.
+Ltac2 Notation "Help" := print_goal_hint ().
 
-Goal exists x:nat, x = 1.
-    print (goal_to_hint (Control.goal ())).
-    let g := Control.goal () in
-    print (of_constr (eval cbv in $g)).
-Abort.
+
