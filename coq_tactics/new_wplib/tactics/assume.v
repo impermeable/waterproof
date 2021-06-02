@@ -296,12 +296,12 @@ Ltac2 Notation "Assume" x(list1(seq(ident, ":", constr), "and")) :=
 Ltac2 Notation "such" "that" x(list1(seq(ident, ":", constr), "and")) := 
     assume_premise_with_breakdown x.
 
-(** * Take ... such that ...
+(** * Pick ... such that ...
     Simply concatenates [Take] and [Assume].
 *)
-(* Ltac2 Notation "Take" takelist(list1(seq(list1(intropatterns, ","), ":", constr), ","))
-               "such" "that" assumelist(list1(seq(ident, ":", constr), "and")) :=
-               take_multiarg takelist;
-               print (of_string "Variable taken");
-               assume_premise_with_breakdown assumelist.
-     *)
+Ltac2 Notation "Pick" var_id(intropatterns) ":" var_type(constr) 
+    "such" "that" hyp_id(ident) ":" hyp_var(constr):=
+        intro_with_type_matching var_id var_type;
+        print (of_string "Variable taken");
+        assume_premise_with_breakdown ((hyp_id, hyp_var)::[]).
+    
