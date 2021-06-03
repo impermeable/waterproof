@@ -106,8 +106,7 @@ Ltac2 assert_and_prove_sublemma (id: ident) (conclusion: constr)
         | Some lemma => lemma
         end
     in
-    let by_arg () := first [waterprove_with_hint conclusion help_lemma 
-                            | fail_automation () ]
+    let by_arg () := waterprove_with_hint conclusion help_lemma
     in
     let proof_attempt () := Aux.ltac2_assert_with_by id conclusion by_arg
     in
