@@ -54,25 +54,65 @@ Proof.
     ltac1:(lra).
 Qed.
 
+(** * get_search_depth
+    Placeholder for the function that retrieves the maximum
+    search-depth to pass as an argument to [waterprove].
+*)
 Local Ltac2 get_search_depth () := 
     print (of_string "Warning: seach depth still hardcoded to '2'.");
     2.
 
+(** * waterprove_with_hint
+    First print an hint for reaching the target goal,
+    try to prove the goal immediately afterward.
+
+    Arguments:
+        - [target_goal: constr], the goal to prove. 
+        - [lemmas: constr], lemmas to pass to [waterprove] for automatically
+            proving the [target_goal].
+*)
 Local Ltac2 waterprove_with_hint (target_goal:constr) (lemmas:constr) :=
     print_goal_hint (Some target_goal);
     waterprove target_goal lemmas (get_search_depth ()).
+
+Ltac2 Type exn ::= [ AutomationFailure(string) ].
+
+Local Ltac2 fail_automation () := 
+        Control.zero (AutomationFailure 
+        "Waterproof could not find a proof. 
+If you believe the statement should hold, 
+try making a smaller step.").
 
 Local Ltac2 print_failure () :=
     print (of_string "Waterproof could not find a proof. 
 If you believe the statement should hold, 
 try making a smaller step.").
 
-Ltac2 Notation "By" lemma(constr) "it" "holds" "that" id(ident) ":" conclusion(constr) :=
-    let by_arg () := first [waterprove_with_hint conclusion lemma | print_failure () ]
+(** * By ... it holds that ... : ...
+    Introduce a new sublemma and try to prove it immediately
+    using a given lemma.
+
+    Arguments:
+        - [lemma: constr], reference to a lemma 
+            used to prove the new sublemma (via [waterprove)]).
+        - [id: ident], name for the new sublemma.
+            If the proof succeeds, 
+            it will become a hypotheses bearing [id] as name.
+        - [conclusion: constr], the actual content 
+            of the new sublemma to prove.
+*)
+Ltac2 Notation "By" lemma(constr) 
+               "it" "holds" "that" id(ident) ":" conclusion(constr) :=
+    
+    let by_arg () := first [waterprove_with_hint conclusion lemma 
+                            | fail_automation () ]
     in
-    Aux.ltac2_assert_with_by id conclusion by_arg;
-    print (of_string "Assertion created")
-    .
+    let proof_attempt () := Aux.ltac2_assert_with_by id conclusion by_arg
+    in
+    match Control.case proof_attempt with
+    | Val _ => print (of_string ("Lemma added"))
+    | Err exn => fail_automation()
+    end.
 
 
 
