@@ -46,3 +46,8 @@ scripts/unit_tests.tex
 *.vo
 
 wrapper/**/*.v
+
+*.glob
+*.vok
+*.vos
+*.aux

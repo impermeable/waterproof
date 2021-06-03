@@ -105,7 +105,14 @@ export default {
     },
 
     logNotParsed: function() {
-      console.log(this.coq.getUnparsedTypes());
+      const unparsed = this.coq.getUnparsedTypes();
+      if (unparsed.size > 0) {
+        console.log(`${unparsed.size} types still left to parse:`);
+        console.log(new Map([...unparsed.entries()]
+            .sort((a, b) => b[1] - a[1])));
+      } else {
+        console.log('No types left to parse! 🎉');
+      }
     },
 
     coqToggleASTLog: function() {

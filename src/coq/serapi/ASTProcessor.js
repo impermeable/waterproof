@@ -1,6 +1,5 @@
 import VernacEndProof from './datastructures/VernacEndProof';
 import CPrim from './datastructures/CPrim';
-import LocInfo from './datastructures/LocInfo';
 import CNotation from './datastructures/CNotation';
 import VernacRequire from './datastructures/VernacRequire';
 import SerQualid from './datastructures/SerQualid';
@@ -15,6 +14,8 @@ import VernacDefinition from './datastructures/VernacDefinition';
 import DefineBody from './datastructures/DefineBody';
 import CLambdaN from './datastructures/CLambdaN';
 import VernacHints from './datastructures/VernacHints';
+import HintsResolve, {HintsReference} from './datastructures/HintsResolve';
+import CoqAST from './datastructures/CoqAst';
 
 const flatten = require('./flatten-expr').flatten;
 
@@ -237,21 +238,7 @@ function convertToASTComp(array) {
   return array;
 }
 
-/**
- * Class to record the AST given back by serAPI
- */
-class CoqAST {
-  /**
-   * Construct CoqAST object from array containing the
-   * AST information given back by serAPI.
-   * @param {*} array The array with the CoqAST information
-   */
-  constructor( array ) {
-    // this.representation = convertSexpToString(array, 0, '');
-    this.locinfo = new LocInfo(array[1][1]);
-    this.content = convertToASTComp(array[1][0]);
-  }
-}
+
 /*
 
 /!** Convert an s-expression to a string with indentation *!/
@@ -348,6 +335,8 @@ const constrDict = {
   'DefineBody': DefineBody,
   'CLambdaN': CLambdaN,
   'VernacHints': VernacHints,
+  'HintsResolve': HintsResolve,
+  'HintsReference': HintsReference,
 };
 
 // const currentlyNotParsedTypes = new Set();
