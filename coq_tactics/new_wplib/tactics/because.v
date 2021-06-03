@@ -1,4 +1,4 @@
-(*
+(** * because.v
 Authors: 
     * Cosmin Manea (1298542)
 
@@ -39,7 +39,7 @@ From Ltac2 Require Import Ltac2.
         - [v: ident], the name of the second part of s.
 
     Does:
-        * destruct s into its two respective parts.
+        - Destruct [s] into its two respective parts.
 *)
 Ltac2 and_hypothesis_destruct s u v :=
     let s_val := Control.hyp s in (destruct $s_val as [u v]).
@@ -55,7 +55,7 @@ Ltac2 and_hypothesis_destruct s u v :=
         - [v: ident], the name of the second part of s.
 
     Does:
-        * destruct s into its two respective parts.
+        - Destruct [s] into its two respective parts.
 *)
 Ltac2 or_hypothesis_destruct s u v :=
     let s_val := Control.hyp s in (destruct $s_val as [u | v]).
