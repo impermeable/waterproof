@@ -2,8 +2,8 @@
 Author: Cosmin Manea (1298542)
 Creation date: 20 May 2021
 
-Generic auxiliary functions.
-
+Two tactics for instantiating a variable according to a specific rule:
+choose a specific value or when the hypothesis reads ``∃ n : N``, one can define such an `n`.
 --------------------------------------------------------------------------------
 
 This file is part of Waterproof-lib.
@@ -35,58 +35,48 @@ Local Ltac2 raise_take_error (s:string) :=
 
 
 
+(** *choose_varible_in_exists_goal_with_renaming
+    Instantiate a variable in an exists goal, according to a given constructor, and also rename the constructor.
 
-Ltac2 chooseExistsNoIntro x :=
-    exists $x.
+    Arguments:
+        * [s: ident], an ident for naming an indefined constr/variable.
+        * [t: constr], the requirted constr that needs to be instantiated.
 
+    Does:
+        * instantiates the constr t under the name s.
 
-Ltac2 chooseExistsWithIntro s t :=
-    pose (s := $t); exists &s.
-
-
-
-
-Ltac2 chooseDestructThreeArguments s u v :=
-    destruct $v as [s u].
-
-Ltac2 chooseDestructFourArguments s u v t :=
-    destruct $v with $t as [s u].
-
-Ltac2 Notation "Choose" s(constr) :=
-    chooseExistsNoIntro s.
-
-Ltac2 Notation "Choose" s(ident) ":=" t(constr) :=
-    chooseExistsWithIntro s t.
-
-
-
-
-Ltac2 choose_variable_in_exists_goal s t :=
+    Raises Exceptions:
+        * ChooseError, if the goal is not an exists goal.
+*)
+Ltac2 choose_variable_in_exists_goal_with_renaming s t :=
     lazy_match! goal with
-        | [ |- exists _ : _, _] =>
-            match s with
-                | None => exists $t
-                | Some(y) => pose (s := $t); exists &s
-            end
+        | [ |- exists _ : _, _] => pose (s := $t); exists &s
         | [ |- _ ] => raise_take_error("'Choose' can only be applied to 'exists' goals")
     end.
 
 
 
+(** *choose_variable_in_exists_no_renaming
+    Instantiate a variable in an exists goal, according to a given constructor, without renaming the constructor.
 
-Ltac2 Notation "Choose" s(opt(ident)) ofType(opt(":=")) t(constr) :=
-    choose_variable_in_exists_goal s t.
+    Arguments:
+        * t: constr, the requirted constr that needs to be instantiated.
+
+    Does:
+        * instantiates the constr t under the same name.
+
+    Raises Exceptions:
+        * ChooseError, if the goal is not an exists goal.
+*)
+Ltac2 choose_variable_in_exists_no_renaming t :=
+    lazy_match! goal with
+        | [ |- exists _ : _, _] => exists $t
+        | [ |- _ ] => raise_take_error("'Choose' can only be applied to 'exists' goals")
+    end.
 
 
+Ltac2 Notation "Choose" t(constr) :=
+    choose_variable_in_exists_no_renaming t.
 
-
-
-
-
-
-Goal forall n: nat, exists m: nat, (n = m). 
-    intro n.
-    (* this will not work; Ltac2 thinks that we are calling the tactic with s := n... *)
-    Choose n.
-    reflexivity.
-Abort.
+Ltac2 Notation "Choose" s(ident) ":=" t(constr) :=
+    choose_variable_in_exists_goal_with_renaming s t.
