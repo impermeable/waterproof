@@ -157,19 +157,22 @@ Ltac2 Notation "It" "holds" "that" id(ident) ":" conclusion(constr) :=
     assert_and_prove_sublemma id conclusion None.
 
 
+Ltac2 warn_wrong_goal_given () :=
+    print (of_string "Warning: 
+The statement you provided does not exactly correspond to what you need to show. 
+This can make your proof less readable.")
+
+Ltac2 solve_remainder_proof (target_goal:constr) (lemmas:constr) :=
+    let target := eval cbv in $target_goal in
+    let real_goal := eval cbv in (Control.goal ()) in
+    match Constr.equal target real_goal with
+    | false => 
+        warn_wrong_goal_given (); 
+        change target_goal || "TODO -- this function is WIP"
+
+    | true => 
 (* Below is copied stuff for easy reference. Just as a personal note, should eventually be removed.*)
-(* Ltac new_hyp_verified_pose_proof s t u:=
-    assert (u : t) by (first [ wp_power t s
-                            | idtac "Waterproof could not find a proof. If you believe the statement should hold, try making a smaller step"]).
-    Ltac new_hyp_verified_pose_proof_no_name s t:=
-    ( wp_power t s || fail "Waterproof could not find a proof. If you believe the statement should hold, try making a smaller step").
-    Tactic Notation "By" constr(s)
-    "it" "holds" "that" constr(t) "("ident(u)")"
-    := new_hyp_verified_pose_proof s t u.
-    Tactic Notation "It" "holds" "that"
-    constr(t) "(" ident(u) ")" :=
-    assert (u : t) by first [ wp_power t dum
-                            | idtac "Waterproof could not find a proof. If you believe the statement should hold, try making a smaller step"].
+(* 
     Ltac conclude_proof t s :=
     match goal with
     | [|-t] => idtac
