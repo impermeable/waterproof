@@ -28,7 +28,8 @@ Add LoadPath "./coq_tactics/new_wplib/" as wplib.
 Load test_auxiliary.
 Load forward_reasoning.
 
-Ltac2 Eval first [waterprove_with_hint constr:(0 < 1) constr:(0 < 1) | print_failure () ].
+Ltac2 Eval first [waterprove_with_hint constr:(0 < 1) constr:(0 < 1) 
+                  | print_failure () ].
 
 (* -------------------------------------------------------------------------- *)
 (** * Testcases for [By ... it holds that ... : ...] *)
@@ -52,6 +53,32 @@ Lemma test2: 0 = 0.
 Proof.
     let result () := 
         By zero_lt_one it holds that this_lemma:(1 > 2)
+    in
+    assert_raises_error result.
+Abort.
+
+
+(* -------------------------------------------------------------------------- *)
+(** * Testcases for [It holds that ... : ...] *)
+
+(** * Test 1
+    Base case: intoduce a sublemma that can be proven immediately.
+*)
+Lemma test1: 0 = 0.
+Proof.
+    It holds that this_lemma:(True).
+    assert_hyp_has_type @this_lemma constr:(True).
+Abort.
+
+
+(** * Test 2
+    Corner case: try a sublemma that cannot be solved,
+    at least not with the default lemmas [waterprove] uses.
+*)
+Lemma test2: 0 = 0.
+Proof.
+    let result () := 
+        It holds that this_lemma:(1 > 2)
     in
     assert_raises_error result.
 Abort.

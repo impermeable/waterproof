@@ -37,7 +37,6 @@ Require Import Integration.
 Require Import micromega.Lra.
 Require Import Omega.
 Require Import Max.
-Require Import Reals.
 
 Require Import Sets.Ensembles.
 Require Import Sets.Classical_sets.
@@ -52,6 +51,11 @@ Local Open Scope R_scope.
 Lemma zero_lt_one: 0 < 1.
 Proof.
     ltac1:(lra).
+Qed.
+
+Lemma dummy_lemma: 0 = 0.
+Proof.
+    reflexivity.
 Qed.
 
 (** * get_search_depth
@@ -89,6 +93,37 @@ If you believe the statement should hold,
 try making a smaller step.").
 
 (** * By ... it holds that ... : ...
+    Introduce a new sublemma and try to prove it immediately,
+    optionally using a given lemma.
+
+    Arguments:
+        - [id: ident], name for the new sublemma.
+            If the proof succeeds, 
+            it will become a hypotheses bearing [id] as name.
+        - [conclusion: constr], the actual content 
+            of the new sublemma to prove.
+        - [proving_lemma: constr], optional reference to a lemma 
+            used to prove the new sublemma (via [waterprove)]).
+*)
+Ltac2 assert_and_prove_sublemma (id: ident) (conclusion: constr) 
+                                (proving_lemma: constr option) :=
+    let help_lemma := 
+        match proving_lemma with
+        | None => constr:(dummy_lemma)
+        | Some lemma => lemma
+        end
+    in
+    let by_arg () := first [waterprove_with_hint conclusion help_lemma 
+                            | fail_automation () ]
+    in
+    let proof_attempt () := Aux.ltac2_assert_with_by id conclusion by_arg
+    in
+    match Control.case proof_attempt with
+    | Val _ => print (of_string ("New sublemma successfully added."))
+    | Err exn => fail_automation()
+    end.
+
+(** * By ... it holds that ... : ...
     Introduce a new sublemma and try to prove it immediately
     using a given lemma.
 
@@ -102,18 +137,24 @@ try making a smaller step.").
             of the new sublemma to prove.
 *)
 Ltac2 Notation "By" lemma(constr) 
-               "it" "holds" "that" id(ident) ":" conclusion(constr) :=
+               "it" "holds" "that" id(ident) ":" conclusion(constr) := 
+    assert_and_prove_sublemma id conclusion (Some lemma).
     
-    let by_arg () := first [waterprove_with_hint conclusion lemma 
-                            | fail_automation () ]
-    in
-    let proof_attempt () := Aux.ltac2_assert_with_by id conclusion by_arg
-    in
-    match Control.case proof_attempt with
-    | Val _ => print (of_string ("Lemma added"))
-    | Err exn => fail_automation()
-    end.
+    
+(** * It holds that ... : ...
+    Introduce a new sublemma and try to prove it immediately.
+    Same as [By ... it holds that ... : ...],
+    but without using a specified lemma.
 
+    Arguments:
+        - [id: ident], name for the new sublemma.
+            If the proof succeeds, 
+            it will become a hypotheses bearing [id] as name.
+        - [conclusion: constr], the actual content 
+            of the new sublemma to prove.
+*)
+Ltac2 Notation "It" "holds" "that" id(ident) ":" conclusion(constr) :=
+    assert_and_prove_sublemma id conclusion None.
 
 
 (* Below is copied stuff for easy reference. Just as a personal note, should eventually be removed.*)
