@@ -116,4 +116,51 @@ Ltac2 print_bool (b: bool) :=
     | false => Message.print (Message.of_string "false")
     end.
 
+(** * ltac2_assert
+    Introduce *and prove* a new sublemma.
+    Wrapper for the build-in Gallina [assert] statement
+    that can accept Ltac2 variables as arguments.
+    Includes a 'by' clause as used in
+    [assert (... : ...) by ...].
+
+    Arguments:
+        - [id: ident], name of the new sublemma to prove.
+        - [lemma_content: constr], new proposition to prove.
+        - [by_arg: unit -> unit], 
+            function that tries the prove the new sublemma.
+*)
+Ltac2 ltac2_assert_with_by (id: ident) (lemma_constent: constr)
+                           (by_arg: unit -> unit) :=
+    (** [Std.assert] expects an [AssertType] as argument.
+        An [AssrtType] consist of three parts:
+        - an [intropatterns opt]. 
+            The whole [(Some (Std.IntroNaming (Std.IntroIdentifier id)))] 
+            thing just wraps an [ident] into an optional [intropatterns].
+        - A [constr], the actual propositions to assert.
+        - Optionally, the method to prove the proposition 
+            (e.g. manually done with "by [something]"). 
+            This is an optional [unit -> unit]. 
+            It is a series of tactic executions used to prove the [constr].
+    *)
+    Std.assert (Std.AssertType 
+        (Some (Std.IntroNaming (Std.IntroIdentifier id))) 
+        lemma_constent (Some by_arg)).
+
+(** * ltac2_assert
+    Introduce a new sublemma.
+    Wrapper for the build-in Gallina [assert] statement
+    that can accept Ltac2 variables as arguments.
+
+    Arguments:
+        - [id: ident], name of the new sublemma to prove.
+        - [lemma_content: constr], new proposition to prove.
+*)
+Ltac2 ltac2_assert (id: ident) (lemma_content: constr) :=
+    Std.assert (Std.AssertType 
+        (Some (Std.IntroNaming (Std.IntroIdentifier id))) 
+        lemma_constent None).
+
+
+
+
 End Aux.
