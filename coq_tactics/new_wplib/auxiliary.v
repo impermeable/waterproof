@@ -158,9 +158,6 @@ Ltac2 ltac2_assert_with_by (id: ident) (lemma_constent: constr)
 Ltac2 ltac2_assert (id: ident) (lemma_content: constr) :=
     Std.assert (Std.AssertType 
         (Some (Std.IntroNaming (Std.IntroIdentifier id))) 
-        lemma_constent None).
-
-
-
+        lemma_content None).
 
 End Aux.
