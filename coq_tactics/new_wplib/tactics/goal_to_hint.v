@@ -97,9 +97,19 @@ Ltac2 goal_to_hint (g:constr) :=
     Print a hint indicating a potential step to proving 
     the current goal (if the goal is a ∀, ⇒ or ∃ proposition).
     When no hint is available, print "No hint available".
+
+    Arguments:
+        - [g: constr option], optional goal to generate hint for.
+            If [None] is given, then uses currently active goal.
 *)
-Ltac2 print_goal_hint () :=
-    let f () := goal_to_hint (Control.goal ()) in
+Ltac2 print_goal_hint (g: constr option) :=
+    let g' := 
+        match g with
+        | None => Control.goal ()
+        | Some y => y
+        end
+    in
+    let f () := goal_to_hint g' in
     match Control.case f with
     | Val mess => 
         match mess with
@@ -112,6 +122,6 @@ Ltac2 print_goal_hint () :=
 (** * Help tactic
     Tries to give a hint how to proceed proving the current goal.
 *)
-Ltac2 Notation "Help" := print_goal_hint ().
+Ltac2 Notation "Help" := print_goal_hint None.
 
 
