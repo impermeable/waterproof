@@ -28,6 +28,14 @@ Add LoadPath "./coq_tactics/new_wplib/" as wplib.
 Load test_auxiliary.
 Load forward_reasoning.
 
+(* lra only works in the [R_scope] *)
+Local Open Scope R_scope.
+Lemma zero_lt_one: 0 < 1.
+Proof.
+    ltac1:(lra).
+Qed.
+
+
 (* -------------------------------------------------------------------------- *)
 (** * Testcases for [By ... it holds that ... : ...] *)
 

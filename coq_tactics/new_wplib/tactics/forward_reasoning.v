@@ -46,13 +46,6 @@ Load waterprove.
 Load goal_to_hint.
 Load auxiliary.
 
-(* lra only works in the [R_scope] *)
-Local Open Scope R_scope.
-Lemma zero_lt_one: 0 < 1.
-Proof.
-    ltac1:(lra).
-Qed.
-
 Lemma dummy_lemma: 0 = 0.
 Proof.
     reflexivity.
@@ -160,17 +153,19 @@ Ltac2 Notation "It" "holds" "that" id(ident) ":" conclusion(constr) :=
 Ltac2 warn_wrong_goal_given () :=
     print (of_string "Warning: 
 The statement you provided does not exactly correspond to what you need to show. 
-This can make your proof less readable.")
+This can make your proof less readable.").
 
 Ltac2 solve_remainder_proof (target_goal:constr) (lemmas:constr) :=
     let target := eval cbv in $target_goal in
-    let real_goal := eval cbv in (Control.goal ()) in
+    let real_goal := Control.goal () in
+    let real_goal := eval cbv in $real_goal in
     match Constr.equal target real_goal with
-    | false => 
-        warn_wrong_goal_given (); 
-        change target_goal || "TODO -- this function is WIP"
+    | false => ()
+        (* warn_wrong_goal_given (); 
+        change target_goal || "TODO -- this function is WIP" *)
 
-    | true => 
+    | true =>  ()
+    end.
 (* Below is copied stuff for easy reference. Just as a personal note, should eventually be removed.*)
 (* 
     Ltac conclude_proof t s :=
