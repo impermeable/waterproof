@@ -28,9 +28,6 @@ Add LoadPath "./coq_tactics/new_wplib/" as wplib.
 Load test_auxiliary.
 Load forward_reasoning.
 
-Ltac2 Eval first [waterprove_with_hint constr:(0 < 1) constr:(0 < 1) 
-                  | print_failure () ].
-
 (* -------------------------------------------------------------------------- *)
 (** * Testcases for [By ... it holds that ... : ...] *)
 
