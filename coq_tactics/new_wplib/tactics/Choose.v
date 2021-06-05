@@ -1,5 +1,6 @@
 (*
-Author: Cosmin Manea (1298542)
+Author: 
+    - Cosmin Manea (1298542)
 Creation date: 20 May 2021
 
 Two tactics for instantiating a variable according to a specific rule:
@@ -30,48 +31,50 @@ From Ltac2 Require Import Message.
 
 Ltac2 Type exn ::= [ ChooseError(string) ].
 
-Local Ltac2 raise_take_error (s:string) := 
+Local Ltac2 raise_choose_error (s:string) := 
     Control.zero (ChooseError s).
 
 
 
-(** *choose_varible_in_exists_goal_with_renaming
-    Instantiate a variable in an exists goal, according to a given constructor, and also rename the constructor.
+(** * choose_varible_in_exists_goal_with_renaming
+    Instantiate a variable in an [exists] [goal], according to a given [constr], and also renames
+    the [constr].
 
     Arguments:
-        * [s: ident], an ident for naming an indefined constr/variable.
-        * [t: constr], the requirted constr that needs to be instantiated.
+        - [s: ident], an [ident] for naming an idefined [constr]/variable.
+        - [t: constr], the requirted [constr] that needs to be instantiated.
 
     Does:
-        * instantiates the constr t under the name s.
+        - instantiates the [constr] [t] under the name [s].
 
     Raises Exceptions:
-        * ChooseError, if the goal is not an exists goal.
+        - [ChooseError], if the [goal] is not an [exists] [goal].
 *)
-Ltac2 choose_variable_in_exists_goal_with_renaming s t :=
+Ltac2 choose_variable_in_exists_goal_with_renaming (s:ident) (t:constr) :=
     lazy_match! goal with
         | [ |- exists _ : _, _] => pose (s := $t); exists &s
-        | [ |- _ ] => raise_take_error("'Choose' can only be applied to 'exists' goals")
+        | [ |- _ ] => raise_choose_error("'Choose' can only be applied to 'exists' goals")
     end.
 
 
 
-(** *choose_variable_in_exists_no_renaming
-    Instantiate a variable in an exists goal, according to a given constructor, without renaming the constructor.
+(** * choose_variable_in_exists_no_renaming
+    Instantiate a variable in an [exists] [goal], according to a given [constr], without renaming
+    said [constr].
 
     Arguments:
-        * t: constr, the requirted constr that needs to be instantiated.
+        - [t: constr], the requirted [constr] that needs to be instantiated.
 
     Does:
-        * instantiates the constr t under the same name.
+        - instantiates the [constr] [t] under the same name.
 
     Raises Exceptions:
-        * ChooseError, if the goal is not an exists goal.
+        - [ChooseError], if the [goal] is not an [exists] [goal].
 *)
-Ltac2 choose_variable_in_exists_no_renaming t :=
+Ltac2 choose_variable_in_exists_no_renaming (t:constr) :=
     lazy_match! goal with
         | [ |- exists _ : _, _] => exists $t
-        | [ |- _ ] => raise_take_error("'Choose' can only be applied to 'exists' goals")
+        | [ |- _ ] => raise_choose_error("'Choose' can only be applied to 'exists' goals")
     end.
 
 

@@ -1,8 +1,9 @@
 (*
-Author: Cosmin Manea (1298542)
+Author: 
+    - Cosmin Manea (1298542)
 Creation date: 30 May 2021
 
-Various tactics for instantiating a variable according to a specific rule given from a:
+Various tactics for instantiating a variable according to a specific rule given from a
 previously known result.
 --------------------------------------------------------------------------------
 
@@ -29,20 +30,17 @@ From Ltac2 Require Option.
 
 
 (** * choose_destrct_without_extra_hypothesis
-    Choose a variable such that two additional hypotheses are satisfied.
+    Chooses a variable such that two additional hypotheses are satisfied.
 
     Arguments:
-        * [s: ident], one of the two hypotheses.
-        * [v: constr], the requirted constr that needs to be instantiated.
-        * [u: ident], the other hypothesis.
+        - [s: ident], one of the two hypotheses.
+        - [v: constr], the requirted constr that needs to be instantiated.
+        - [u: ident], the other hypothesis.
 
     Does:
-        * instantiates the constr v under the hypotheses s and u.
-
-    Raises Exceptions:
-        * ExistsError, if the goal is not an exists goal.
+        - instantiates the constr [v] under the hypotheses [s] and [u].
 *)
-Ltac2 choose_destruct_without_extra_hypothesis s u v :=
+Ltac2 choose_destruct_without_extra_hypothesis (s:ident) (u:ident) (v:constr) :=
    destruct $v as [s u].
 
 
@@ -51,18 +49,15 @@ Ltac2 choose_destruct_without_extra_hypothesis s u v :=
     Choose a variable such that three additional hypotheses are satisfied.
 
     Arguments:
-        * [s: ident], the first hypothesis.
-        * [v: constr], the requirted constr that needs to be instantiated.
-        * [u: ident], the second hypothesis.
-        * [t: constr], the last hypothesis.
+        - [s: ident], the first hypothesis.
+        - [v: constr], the requirted constr that needs to be instantiated.
+        - [u: ident], the second hypothesis.
+        - [t: constr], the last hypothesis.
 
     Does:
-        * instantiates the constr v under the hypotheses s, u and .
-
-    Raises Exceptions:
-        * ExistsError, if the goal is not an exists goal.
+        - instantiates the constr [v] under the hypotheses [s], [u] and [t].
 *)
-Ltac2 choose_destruct_with_extra_hypothesis s u v t :=
+Ltac2 choose_destruct_with_extra_hypothesis (s:ident) (u:ident) (v:constr) (t:constr) :=
     destruct $v with $t as [s u].
 
 

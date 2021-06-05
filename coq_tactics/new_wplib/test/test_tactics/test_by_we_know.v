@@ -1,9 +1,10 @@
 (*
 Authors: 
-    * Cosmin Manea (1298542)
+    - Cosmin Manea (1298542)
+
 Creation date: 23 May 2021
 
-Testcases for the "By ... we know ..." tactic.
+Testcases for the [By ... we know ...] tactic.
 Tests pass if they can be run without unhandled errors.
 --------------------------------------------------------------------------------
 
@@ -24,12 +25,12 @@ along with Waterproof-lib.  If not, see <https://www.gnu.org/licenses/>.
 *)
 
 From Ltac2 Require Import Ltac2.
-Add LoadPath "./coq_tactics/new_wplib/tactics/" as wplib.
+Add LoadPath "C:/Users/cosmi/Desktop/SEP/waterproof/coq_tactics/new_wplib/tactics/" as wplib.
 Load by_we_know.
 
-(* Test 0: This should work fine *)
+(** Test 0: This should work fine *)
 Goal forall n : nat, ((n = n) <-> (n + 1 = n + 1)).
     intro n.
     split.
-    By (n = n), we know (n + 1 = n + 1).
+    By (n = n) we know (n + 1 = n + 1).
 Abort.

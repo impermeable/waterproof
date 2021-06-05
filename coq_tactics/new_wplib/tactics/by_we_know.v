@@ -1,10 +1,10 @@
 (*
 Authors: 
-    * Cosmin Manea (1298542)
+    - Cosmin Manea (1298542)
 Creation date: 23 May 2021
 
-Version of "By ... we know ..." tactic.
-"By ... we know ..." can be used to prove a result using an already existing result.
+Version of [By ... we know ...] tactic.
+[By ... we know ...] can be used to prove a result using an already existing result.
 
 --------------------------------------------------------------------------------
 
@@ -27,18 +27,18 @@ along with Waterproof-lib.  If not, see <https://www.gnu.org/licenses/>.
 From Ltac2 Require Import Ltac2.
 
 
-(*
+(** * by_we_know_assertion
     Use an already existing result to conclude that another result also holds.
 
     Arguments:
-        * s: a constr (the result we want to hold).
-        & t: a constr (an already existing result).
+        - [s: constr], the result we want to hold.
+        - [t: constr], an already existing result.
 
     Does:
-        * asserts the provability of t by using the provability of s
+        - asserts the provability of [t] by using the provability of [s]
 *)
-Ltac2 assertion s t :=
+Ltac2 by_we_know_assertion (s:constr) (t:constr) :=
     assert $t as s.
 
-Ltac2 Notation "By" t(constr) ", " "we" "know" s(constr) :=
-    assertion s t.
+Ltac2 Notation "By" t(constr) "we" "know" s(constr) :=
+    by_we_know_assertion s t.

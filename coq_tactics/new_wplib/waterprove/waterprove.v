@@ -1,11 +1,12 @@
 (*
 Authors: 
-    * Cosmin Manea (1298542)
+    - Cosmin Manea (1298542)
 
-Creation date: 1 June 2021
+Creation date: 01 June 2021
 
 The waterprove automation function.
-This function calls the automation tactics, auto, eauto and intuition, with a specific set of lemmas.
+This function calls the automation tactics, [auto], [eauto] and [intuition], 
+with a specific set of lemmas.
 
 --------------------------------------------------------------------------------
 
@@ -31,7 +32,8 @@ Require Import Reals.
 
 
 (** * waterprove
-    Calls the automation tactics auto
+    Calls the automation tactics [auto], [eauto] and [intuition], 
+    with a specific set of lemmas.
 
     Arguments:
         * [t: constr], the result to be proven by automation.
@@ -39,12 +41,11 @@ Require Import Reals.
         * [n: int], the search depth.
 
     Does:
-        * calls the automation tactics auto, eauto, intuition (auto) and intuition (eauto), in this order,
-          with search of depth equal to n and with the set of lemmas supplied by s.
-        * if no proof is found, a message saying this is printed.
+        * calls the automation tactics [auto], [eauto], [intuition (auto)] and [intuition (eauto)], 
+          in this order, with search of depth equal to [n] and with the set of lemmas supplied by [s].
+        * if no proof is found, a message stating this is printed.
 *)
-
-Ltac2 waterprove t s (n:int) :=
+Ltac2 waterprove (t:constr) (s:constr) (n:int) :=
   first [   solve [auto n using $s with *]
           | solve [eauto n using $s with *]
           | solve [ltac1:(s |- intuition (auto using s with *)) (Ltac1.of_constr s)]
