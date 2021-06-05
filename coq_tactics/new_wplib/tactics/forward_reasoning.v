@@ -108,6 +108,11 @@ Local Ltac2 unwrap_optional_lemma (lemma: constr option) :=
             of the new sublemma to prove.
         - [proving_lemma: constr], optional reference to a lemma 
             used to prove the new sublemma (via [waterprove)]).
+
+    Raises exception:
+        - [AutomationFailure], if [waterprove] fails the prove the sublemma.
+            This happens if the sublemma does not hold,
+            but can also happen if it is simply too difficult for [waterprove].
 *)
 Ltac2 assert_and_prove_sublemma (id: ident) (conclusion: constr) 
                                 (proving_lemma: constr option) :=
@@ -119,7 +124,7 @@ Ltac2 assert_and_prove_sublemma (id: ident) (conclusion: constr)
     in
     match Control.case proof_attempt with
     | Val _ => print (of_string ("New sublemma successfully added."))
-    | Err exn => fail_automation()
+    | Err exn => fail_automation ()
     end.
 
 (** * By ... it holds that ... : ...
@@ -134,6 +139,11 @@ Ltac2 assert_and_prove_sublemma (id: ident) (conclusion: constr)
             it will become a hypotheses bearing [id] as name.
         - [conclusion: constr], the actual content 
             of the new sublemma to prove.
+
+    Raises exception:
+        - [AutomationFailure], if [waterprove] fails the prove the sublemma.
+            This happens if the sublemma does not hold,
+            but can also happen if it is simply too difficult for [waterprove].
 *)
 Ltac2 Notation "By" lemma(constr) 
                "it" "holds" "that" id(ident) ":" conclusion(constr) := 
@@ -151,6 +161,11 @@ Ltac2 Notation "By" lemma(constr)
             it will become a hypotheses bearing [id] as name.
         - [conclusion: constr], the actual content 
             of the new sublemma to prove.
+
+    Raises exception:
+        - [AutomationFailure], if [waterprove] fails the prove the sublemma.
+            This happens if the sublemma does not hold,
+            but can also happen if it is simply too difficult for [waterprove].
 *)
 Ltac2 Notation "It" "holds" "that" id(ident) ":" conclusion(constr) :=
     assert_and_prove_sublemma id conclusion None.
@@ -183,15 +198,48 @@ Ltac2 warn_wrong_goal_given (wrong_target: constr) :=
             (of_string "). ")
     ).
 
+(** * target_equals_goal_judgementally
+    Check if [target] is judgementally (i.e. by rewriting definitions)
+    equal to the goal.
+
+    Arguments:
+        - [target:constr], expression to compare to goal.
+
+    Returns:
+        - [bool],
+            - [true], if [target] is judgementally equal 
+                to the goal under focus.
+            - [false], otherwise.
+*)
 Ltac2 target_equals_goal_judgementally (target:constr) :=
     let target := eval cbv in $target in
     let real_goal := Control.goal () in
     let real_goal := eval cbv in $real_goal in
     Constr.equal target real_goal.
     
+(** * solve_remainder_proof
+    Check if the given [target_goal] equals the actual goal under focus.
+    If they are different, raise an error.
+    If they are equivalent after rewriting, raise an error and continue.
+    If the [target_goal] is equivalent to the goal under focus,
+    finish the proof automatically with the given lemma.
 
-Ltac2 solve_remainder_proof (target_goal:constr) (lemmas:constr option) :=
-    let lemmas := unwrap_optional_lemma lemmas
+    Arguments:
+        - [target_goal: constr], expression that 
+            should equal the goal under focus.
+        - [lemma: constr option], optional lemma to include in the
+            automatic proof completion ([waterprove]).
+    
+    Raises exceptions:
+        - [AutomationFailure], if [waterprove] fails the prove the goal
+            (I.e. the goal is too difficult, or does not hold).
+        - [AutomationFailure], if [target_goal] is not equivalent
+            to the actual goal under focus, even after rewriting.
+*)
+    
+*)
+Ltac2 solve_remainder_proof (target_goal:constr) (lemma:constr option) :=
+    let lemma := unwrap_optional_lemma lemma
     in
     (* First check if the given target equals the goal directly,
         without applying any rewrite. *)
@@ -209,34 +257,44 @@ Ltac2 solve_remainder_proof (target_goal:constr) (lemmas:constr option) :=
             warn_equivalent_goal_given ();
             let g := Control.goal () in
             change $target_goal;
-            waterprove_with_hint target_goal lemmas
+            waterprove_with_hint target_goal lemma
         end
-    | true =>  waterprove_with_hint target_goal lemmas
+    | true =>  waterprove_with_hint target_goal lemma
     end.
 
+
+(** * We conclude that ...
+    Finish proving a goal using automation.
+
+    Arguments:
+        - [target_goal: constr], expression that 
+            should equal the goal under focus.
+        - [lemma: constr option], optional lemma to include in the
+            automatic proof completion ([waterprove]).
+
+    Raises exceptions:
+        - [AutomationFailure], if [waterprove] fails the prove the goal
+            (I.e. the goal is too difficult, or does not hold).
+        - [AutomationFailure], if [target_goal] is not equivalent
+            to the actual goal under focus, even after rewriting.
+*)
 Ltac2 Notation "We" "conclude" "that" target_goal(constr) := 
     solve_remainder_proof target_goal None.
 
+(** * We conclude that ...
+    Finish proving a goal using automation.
 
+    Arguments:
+        - [target_goal: constr], expression that 
+            should equal the goal under focus.
 
+    Raises exceptions:
+        - [AutomationFailure], if [waterprove] fails the prove the goal
+            (I.e. the goal is too difficult, or does not hold).
+        - [AutomationFailure], if [target_goal] is not equivalent
+            to the actual goal under focus, even after rewriting.
+*)
 Ltac2 Notation "By" lemma(constr) "we" "conclude" "that" target_goal(constr) := 
     solve_remainder_proof target_goal (Some lemma).
-
-
-(* Below is copied stuff for easy reference. Just as a personal note, should eventually be removed.*)
-(* 
-    Ltac conclude_proof t s :=
-    match goal with
-    | [|-t] => idtac
-    | _ => (idtac "Warning: The statement you provided does not exactly correspond to what you need to show. This can make your proof less readable.";
-        change t || fail "The statement you provided is not what you needed to show. If you are trying to prove an intermediate step, add a name to your hypothesis between brackets at the end of the sentence.")
-    end; wp_power t s || fail "Waterproof could not find a proof. Try making a smaller step.".
-    Tactic Notation "It" "holds" "that" constr(t) :=
-    conclude_proof t dum.
-    Tactic Notation "By" constr(s)
-    "it" "holds" "that" constr(t)
-    := conclude_proof t s.
-    Tactic Notation "It" "follows" "that" constr(t) :=
-    conclude_proof t dum. *)
 
 
