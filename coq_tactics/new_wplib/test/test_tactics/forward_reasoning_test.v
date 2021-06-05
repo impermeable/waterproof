@@ -117,6 +117,25 @@ Proof.
     assert_raises_error result.
 Abort.
 
+(** * Example for the SUM.
+    Somewhat more realistic context.
+*)
+
+Open Scope nat_scope.
+Inductive even : nat -> Prop :=
+    even0 : even 0
+  | evenS : forall x:nat, even x -> even (S (S x)).
+
+Lemma it_holds_example: forall x:nat, x > 1 /\ x < 3 -> even x.
+Proof.
+    intros x h.
+    It holds that x_is_two: (x = 2).
+    rewrite x_is_two. (* Change the goal to "even 2"*)
+    apply evenS. (* Change the goal to "even 0"*)
+    apply even0.
+Qed.
+
+Open Scope R_scope.
 
 (* -------------------------------------------------------------------------- *)
 (** * Testcases for [We conclude that ... ] *)
