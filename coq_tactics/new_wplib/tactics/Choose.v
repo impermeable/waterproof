@@ -50,7 +50,7 @@ Local Ltac2 raise_choose_error (s:string) :=
     Raises Exceptions:
         - [ChooseError], if the [goal] is not an [exists] [goal].
 *)
-Ltac2 choose_variable_in_exists_goal_with_renaming s t :=
+Ltac2 choose_variable_in_exists_goal_with_renaming (s:ident) (t:constr) :=
     lazy_match! goal with
         | [ |- exists _ : _, _] => pose (s := $t); exists &s
         | [ |- _ ] => raise_choose_error("'Choose' can only be applied to 'exists' goals")
@@ -71,7 +71,7 @@ Ltac2 choose_variable_in_exists_goal_with_renaming s t :=
     Raises Exceptions:
         - [ChooseError], if the [goal] is not an [exists] [goal].
 *)
-Ltac2 choose_variable_in_exists_no_renaming t :=
+Ltac2 choose_variable_in_exists_no_renaming (t:constr) :=
     lazy_match! goal with
         | [ |- exists _ : _, _] => exists $t
         | [ |- _ ] => raise_choose_error("'Choose' can only be applied to 'exists' goals")

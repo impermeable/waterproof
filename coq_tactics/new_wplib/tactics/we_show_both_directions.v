@@ -49,7 +49,6 @@ Ltac2 raise_both_directions_error (s:string) :=
     Raises Exceptions:
         - [BothDirectionsError], if the [goal] is not an if and only if [goal].
 *)
-
 Ltac2 both_statements_iff () :=
     lazy_match! goal with 
         | [ |- _ <-> _] => split

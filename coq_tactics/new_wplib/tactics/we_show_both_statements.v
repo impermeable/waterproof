@@ -48,7 +48,6 @@ Ltac2 raise_both_statements_error (s:string) :=
     Raises Exceptions:
         - [BothStatementsError], if the [goal] is not a conjunction of statments.
 *)
-
 Ltac2 both_directions_and () :=
     lazy_match! goal with 
         | [ |- _ /\ _] => split

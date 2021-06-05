@@ -40,7 +40,7 @@ From Ltac2 Require Option.
     Does:
         - instantiates the constr [v] under the hypotheses [s] and [u].
 *)
-Ltac2 choose_destruct_without_extra_hypothesis s u v :=
+Ltac2 choose_destruct_without_extra_hypothesis (s:ident) (u:ident) (v:constr) :=
    destruct $v as [s u].
 
 
@@ -57,7 +57,7 @@ Ltac2 choose_destruct_without_extra_hypothesis s u v :=
     Does:
         - instantiates the constr [v] under the hypotheses [s], [u] and [t].
 *)
-Ltac2 choose_destruct_with_extra_hypothesis s u v t :=
+Ltac2 choose_destruct_with_extra_hypothesis (s:ident) (u:ident) (v:constr) (t:constr) :=
     destruct $v with $t as [s u].
 
 
