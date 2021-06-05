@@ -199,11 +199,16 @@ Qed.
 *)
 Lemma test_by_we_conclude_2: 0 + 0 = 20.
 Proof.
+    
+    assert (zero_plus_zero_is_twenty: 0+0 = 20).
+    rewrite zero_is_ten. (* Get goal: [10 + 10 = 20]*)
+    ltac1:(lra).
+
     (* This is just to test if the extra lemma is really needed: *)
     let failure () := We conclude that (0 + 0 = 10) in
     assert_raises_error failure.
     
-    By zero_is_ten we conclude that (0 + 0 = 20).
+    By zero_plus_zero_is_twenty we conclude that (0 + 0 = 20).
 Qed.
 
 (** * Test 3
