@@ -54,7 +54,7 @@ Testcases for [By ... it holds that ... : ...]:" )).
     NOTE: [waterprove] can apparently also find
     [zero_lt_one] by itself.
 *)
-Lemma test_it_holds_1: 0 = 0.
+Lemma test_by_it_holds_1: 0 = 0.
 Proof.
     By zero_lt_one it holds that this_lemma:(0 < 1).
     assert_hyp_has_type @this_lemma constr:(0 < 1).
@@ -66,7 +66,7 @@ Abort.
     The sublemma cannot be proven without the given lemma!
 
 *)
-Lemma test_it_holds_2: True.
+Lemma test_by_it_holds_2: True.
 Proof.
     (* This is just to test if the extra lemma is really needed: *)
     let failure () := It holds that ten_is_zero:(10 = 0) in
@@ -79,7 +79,7 @@ Abort.
     Corner case: try a sublemma that cannot be solved,
     at least not with the default lemmas and the provided lemma.
 *)
-Lemma test_it_holds_3: 0 = 0.
+Lemma test_by_it_holds_3: 0 = 0.
 Proof.
     let result () := 
         By zero_lt_one it holds that this_lemma:(1 > 2)
@@ -98,7 +98,7 @@ Testcases for [It holds that ... : ...]:" )).
 (** * Test 1
     Base case: intoduce a sublemma that can be proven immediately.
 *)
-Lemma test1: 0 = 0.
+Lemma test_it_holds_1: 0 = 0.
 Proof.
     It holds that this_lemma:(True).
     assert_hyp_has_type @this_lemma constr:(True).
@@ -109,13 +109,14 @@ Abort.
     Corner case: try a sublemma that cannot be solved,
     at least not with the default lemmas [waterprove] uses.
 *)
-Lemma test2: 0 = 0.
+Lemma test_it_holds_2: 0 = 0.
 Proof.
     let result () := 
         It holds that this_lemma:(1 > 2)
     in
     assert_raises_error result.
 Abort.
+
 
 (* -------------------------------------------------------------------------- *)
 (** * Testcases for [We conclude that ... ] *)
@@ -231,3 +232,17 @@ Proof.
     let result () := By zero_is_ten we conclude that (0 = 1) in
     assert_raises_error result.
 Abort.
+
+(** * Test 5
+    Shows that [waterprove]
+    can solve [(1 < 2)]
+    without explcitly being given 
+    the lemma that states [0 < 1].
+*)
+Lemma test_it_holds_5: 1 < 2.
+Proof.
+    assert (useless: 1 = 1).
+    reflexivity.
+
+    By useless we conclude that (1 < 2).
+Qed.
