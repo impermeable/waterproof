@@ -1,10 +1,10 @@
 (*
 Authors: 
-    * Cosmin Manea (1298542)
+    - Cosmin Manea (1298542)
 Creation date: 22 May 2021
 
-Version of "We show/prove both statements" tactic.
-"We show/prove both statements" can be used to split the proof of a conjunction.
+Version of [We show/prove both statements] tactic.
+[We show/prove both statements] can be used to split the proof of a conjunction.
 
 --------------------------------------------------------------------------------
 
@@ -32,28 +32,28 @@ From Ltac2 Require Import Message.
 
 Ltac2 Type exn ::= [ BothStatementsError(string) ].
 
-Ltac2 raise_take_error (s:string) := 
+Ltac2 raise_both_statements_error (s:string) := 
     Control.zero (BothStatementsError s).
 
 
-(*
+(** * both_directions_and
     Split the proof of a conjuctions statement into both of its parts.
 
     Arguments:
-        * no arguments
+        - no arguments
 
     Does:
-        * splits the conjunction statement into its both parts.
+        - splits the conjunction statement into its both parts.
 
     Raises Exceptions:
-        * BothStatementsError, if the goal is not a conjunction.
-
+        - [BothStatementsError], if the [goal] is not a conjunction of statments.
 *)
 
-Ltac2 and () :=
+Ltac2 both_directions_and () :=
     lazy_match! goal with 
         | [ |- _ /\ _] => split
-        | [ |- _ ] => raise_take_error("This is not an 'and' statement, so try another tactic.")
+        | [ |- _ ] => raise_both_statements_error("This is not an 'and' statement, so try another tactic.")
     end.
 
-Ltac2 Notation "We" show(opt("show")) prove(opt("prove")) "both" "statements" := and ().
+Ltac2 Notation "We" show(opt("show")) prove(opt("prove")) "both" "statements" := 
+    both_directions_and ().

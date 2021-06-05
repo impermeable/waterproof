@@ -1,10 +1,10 @@
 (*
 Authors: 
-    * Cosmin Manea (1298542)
+    - Cosmin Manea (1298542)
 
 Creation date: 23 May 2021
 
-Version of the "Because ... both/either ..." tactic.
+Version of the [Because ... both/either ...] tactic.
 This tactic uses an already existing result to prove that more results hold.
 It is a form of forward reasoning.
 
@@ -34,14 +34,14 @@ From Ltac2 Require Import Ltac2.
     Destruct an AND hypothesis into its respective two parts.
 
     Arguments:
-        - [s: ident], the identifier of the AND hypothesis.
-        - [u: ident], the name of the first part of s.
-        - [v: ident], the name of the second part of s.
+        - [s: ident], the [ident] of the AND hypothesis.
+        - [u: ident], the name of the first part of [s].
+        - [v: ident], the name of the second part of [s].
 
     Does:
-        * destruct s into its two respective parts.
+        - splits [s] into its two respective parts.
 *)
-Ltac2 and_hypothesis_destruct s u v :=
+Ltac2 and_hypothesis_destruct (s:ident) (u:ident) (v:ident) :=
     let s_val := Control.hyp s in (destruct $s_val as [u v]).
 
 
@@ -50,12 +50,12 @@ Ltac2 and_hypothesis_destruct s u v :=
     Destruct an OR hypothesis into its respective two parts.
 
     Arguments:
-        - [s: ident], the identifier of the OR hypothesis.
-        - [u: ident], the name of the first part of s.
-        - [v: ident], the name of the second part of s.
+        - [s: ident], the [ident] of the OR hypothesis.
+        - [u: ident], the name of the first part of [s].
+        - [v: ident], the name of the second part of [s].
 
     Does:
-        * destruct s into its two respective parts.
+        - splits [s] into its two respective parts.
 *)
 Ltac2 or_hypothesis_destruct s u v :=
     let s_val := Control.hyp s in (destruct $s_val as [u | v]).

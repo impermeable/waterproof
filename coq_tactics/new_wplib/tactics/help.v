@@ -1,9 +1,9 @@
 (*
 Authors: 
-    * Cosmin Manea (1298542)
+    - Cosmin Manea (1298542)
 Creation date: 28 May 2021
 
-Version of the "Help" tactic.
+Version of the [Help] tactic.
 This tactic gives hints to what should be done to advance the proof state,
 depending on the goal.
 --------------------------------------------------------------------------------
@@ -34,14 +34,11 @@ From Ltac2 Require Import Message.
     on the goal.
 
     Arguments:
-        * no arguments.
+        - no arguments.
 
     Does:
-        * Prints hints on what should be done to advance the proof state, depending
+        - Prints hints on what should be done to advance the proof state, depending
           on the goal.
-
-    Raises exceptions:
-        * no exceptions.
 *)
 Ltac2 help () :=
     lazy_match! goal with

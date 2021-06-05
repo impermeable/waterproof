@@ -1,10 +1,10 @@
 (*
 Authors: 
-    * Cosmin Manea (1298542)
+    - Cosmin Manea (1298542)
 Creation date: 22 May 2021
 
-Version of "We show/prove both directions" tactic.
-"We show/prove both directions" can be used to split the proof of an if and only if statement.
+Version of [We show/prove both directions] tactic.
+[We show/prove both directions] can be used to split the proof of an if and only if statement.
 
 --------------------------------------------------------------------------------
 
@@ -32,30 +32,30 @@ From Ltac2 Require Import Message.
 
 Ltac2 Type exn ::= [ BothDirectionsError(string) ].
 
-Ltac2 raise_take_error (s:string) := 
+Ltac2 raise_both_directions_error (s:string) := 
     Control.zero (BothDirectionsError s).
 
 
 
-(*
+(** * both_statements_iff
     Split the proof of an if and only if statement into both of its directions.
 
     Arguments:
-        * no arguments
+        - no arguments
 
     Does:
-        * splits the if and only if statement into its both directions.
+        - splits the if and only if statement into its both directions.
 
     Raises Exceptions:
-        * BothDirectionsError, if the goal is not an if and only if goal.
-
+        - [BothDirectionsError], if the [goal] is not an if and only if [goal].
 *)
 
-Ltac2 iff () :=
+Ltac2 both_statements_iff () :=
     lazy_match! goal with 
         | [ |- _ <-> _] => split
-        | [ |- _ ] => raise_take_error("This is not an if and only if, so try another tactic.")
+        | [ |- _ ] => raise_both_directions_error("This is not an if and only if, so try another tactic.")
     end.
 
 
-Ltac2 Notation "We" show(opt("show")) prove(opt("prove")) "both" "directions" := iff ().
+Ltac2 Notation "We" show(opt("show")) prove(opt("prove")) "both" "directions" := 
+    both_statements_iff ().
