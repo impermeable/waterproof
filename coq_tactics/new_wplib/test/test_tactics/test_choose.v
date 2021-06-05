@@ -1,9 +1,10 @@
 (*
 Authors: 
-    * Cosmin Manea (1298542)
+    - Cosmin Manea (1298542)
+
 Creation date: 30 May 2021
 
-Testcases for the two "Choose" tactics.
+Testcases for the two [Choose] tactics.
 Tests pass if they can be run without unhandled errors.
 --------------------------------------------------------------------------------
 
@@ -25,7 +26,7 @@ along with Waterproof-lib.  If not, see <https://www.gnu.org/licenses/>.
 
 From Ltac2 Require Import Ltac2.
 Add LoadPath "C:/Users/cosmi/Desktop/SEP/waterproof/coq_tactics/new_wplib" as wplib2.
-Load choose.
+Load Choose.
 Load test_auxiliary.
 
 
@@ -50,4 +51,11 @@ Abort.
 Goal forall n : nat, ( ( (n = n) \/ (n + 1 = n + 1) ) -> (n + 1 = n + 1)).
     intro n.
     assert_raises_error (fun() => Choose (n)).
+Abort.
+
+
+(** Test 3: This should work fine *)
+Goal forall n : nat, ( ( (n = n) \/ (n + 1 = n + 1) ) -> (n + 1 = n + 1)).
+    intro n.
+    assert_raises_error (fun() => Choose m := n).
 Abort.

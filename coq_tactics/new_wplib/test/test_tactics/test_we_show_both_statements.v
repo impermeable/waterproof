@@ -1,9 +1,9 @@
 (*
 Authors: 
-    * Cosmin Manea (1298542)
+    - Cosmin Manea (1298542)
 Creation date: 22 May 2021
 
-Test cases for the "We show/prove both directions" tactic.
+Test cases for the [We show/prove both directions] tactic.
 Tests pass if they can be run without unhandled errors.
 --------------------------------------------------------------------------------
 
@@ -24,24 +24,26 @@ along with Waterproof-lib.  If not, see <https://www.gnu.org/licenses/>.
 *)
 
 From Ltac2 Require Import Ltac2.
-From Ltac2 Require Option.
-From Ltac2 Require Import Message.
-Add LoadPath "./coq_tactics/new_wplib/tactics/" as wplib.
+
+Add LoadPath "C:/Users/cosmi/Desktop/SEP/waterproof/coq_tactics/new_wplib" as wplib2.
 Load we_show_both_statements.
+Load test_auxiliary.
 
-(* Test 0: This should work fine *)
+(** Test 0: This should work fine *)
 Goal forall n : nat, ((n = n) /\ (n + 1 = n + 1)).
     intro n.
     We show both statements.
 Abort.
 
-(* Test 1: This should also work fine *)
+
+(** Test 1: This should also work fine *)
 Goal forall n : nat, ((n = n) /\ (n + 1 = n + 1)).
     intro n.
-    We prove both directions.
+    We prove both statements.
 Abort.
 
-(* Test 2: This should raise an error, because the goal is not an if and only if*)
+
+(** Test 2: This should raise an error, because the goal is not a conjunction*)
 Goal forall n : nat, n <= n.
-    We show both statements.
+    assert_raises_error (fun() => We show both statements).
 Abort.

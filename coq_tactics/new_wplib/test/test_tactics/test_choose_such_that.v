@@ -1,9 +1,10 @@
 (*
 Authors: 
-    * Cosmin Manea (1298542)
+    - Cosmin Manea (1298542)
+
 Creation date: 30 May 2021
 
-Testcases for the "Choose ... such that ..." tactic.
+Testcases for the [Choose ... such that ...] tactic.
 Tests pass if they can be run without unhandled errors.
 --------------------------------------------------------------------------------
 
@@ -24,36 +25,18 @@ along with Waterproof-lib.  If not, see <https://www.gnu.org/licenses/>.
 *)
 
 From Ltac2 Require Import Ltac2.
+Require Import Rbase.
+Require Import Qreals.
+Require Import Rfunctions.
+Require Import SeqSeries.
+Require Import Rtrigo.
+Require Import Ranalysis.
+Require Import Integration.
+Require Import micromega.Lra.
+Require Import Omega.
+Require Import Max.
+
+Local Open Scope R_scope.
+
 Add LoadPath "C:/Users/cosmi/Desktop/SEP/waterproof/coq_tactics/new_wplib/tactics/" as wplib.
 Load choose_such_that.
-
-
-Lemma reflexivity_of_nat: forall n : nat, exists m : nat, (n = m).
-Proof.
-    intro n.
-    pose (m := n).
-    exists m.
-    reflexivity.
-Defined. 
-
-(** Test 0: This should work fine *)
-Goal forall n : nat, exists m : nat, (n + 1 = m + 1).
-    intro n.
-    Choose m such that n_eq_m according to (reflexivity of nat n m).
-Abort.
-
-
-(** Test 1: This should work fine *)
-Goal forall n : nat, ( ( (n = n) /\ (n + 1 = n + 1) ) -> (n + 1 = n + 1)).
-    intro n.
-    intro H.
-    Because H both n_eq_n : nat and n_plus_1_eq_n_plus_1 : nat.
-Abort.
-
-
-(** Test 2: This should work fine *)
-Goal forall n : nat, ( ( (n = n) \/ (n + 1 = n + 1) ) -> (n + 1 = n + 1)).
-    intro n.
-    intro H.
-    Because H either n_eq_n or n_plus_1_eq_n_plus_1.
-Abort.
