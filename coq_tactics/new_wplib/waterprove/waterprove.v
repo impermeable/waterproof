@@ -1,6 +1,7 @@
 (*
 Authors: 
     - Cosmin Manea (1298542)
+    - Lulof Pirée (added error)
 
 Creation date: 01 June 2021
 
@@ -30,25 +31,48 @@ From Ltac2 Require Import Ltac2.
 From Ltac2 Require Import Message.
 Require Import Reals.
 
+Ltac2 Type exn ::= [ AutomationFailure(string) ].
+
+Local Ltac2 fail_automation () := 
+        Control.zero (AutomationFailure 
+        "Waterproof could not find a proof. 
+If you believe the statement should hold, 
+try making a smaller step.").
 
 (** * waterprove
     Calls the automation tactics [auto], [eauto] and [intuition], 
     with a specific set of lemmas.
 
     Arguments:
-        * [t: constr], the result to be proven by automation.
-        * [s: constr], the list of lemmas to be used in the automation tactics.
-        * [n: int], the search depth.
+        - [t: constr], the result to be proven by automation.
+        - [s: constr], the list of lemmas to be used in the automation tactics.
+        - [n: int], the search depth.
 
     Does:
-        * calls the automation tactics [auto], [eauto], [intuition (auto)] and [intuition (eauto)], 
+        - Calls the automation tactics [auto], [eauto], [intuition (auto)] and [intuition (eauto)], 
           in this order, with search of depth equal to [n] and with the set of lemmas supplied by [s].
-        * if no proof is found, a message stating this is printed.
+        - If no proof is found, print a message conveying the failture.
+
+    Raises exceptions:
+        - [AutomationFailure], if 
 *)
 Ltac2 waterprove (t:constr) (s:constr) (n:int) :=
-  first [   solve [auto n using $s with *]
-          | solve [eauto n using $s with *]
-          | solve [ltac1:(s |- intuition (auto using s with *)) (Ltac1.of_constr s)]
-          | solve [ltac1:(s |- intuition (eauto using s with *)) (Ltac1.of_constr s)]
-          | print ( concat (of_string "Waterproof could not find a proof of ") (of_constr t) )
-        ].
+    let result () :=
+        first [
+            solve [auto n using $s with *]
+            | solve [eauto n using $s with *]
+            | solve [ltac1:(s |- intuition (auto using s with *)) 
+                (Ltac1.of_constr s)]
+            | solve [ltac1:(s |- intuition (eauto using s with *)) 
+                (Ltac1.of_constr s)]
+            | print (concat 
+                  (of_string "Waterproof could not find a proof of ") 
+                  (of_constr t)
+              );
+              fail_automation ()
+            ]
+    in
+    match Control.case result with
+    | Val _ => ()
+    | Err exn => fail_automation ()
+    end.
