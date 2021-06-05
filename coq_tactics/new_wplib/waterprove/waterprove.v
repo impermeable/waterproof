@@ -68,8 +68,8 @@ Ltac2 waterprove (t:constr) (s:constr) (n:int) :=
             | print (concat 
                   (of_string "Waterproof could not find a proof of ") 
                   (of_constr t)
-              );
-              fail_automation ()
+                );
+                fail_automation ()
             ]
     in
     match Control.case result with
