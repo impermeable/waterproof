@@ -236,8 +236,6 @@ Ltac2 target_equals_goal_judgementally (target:constr) :=
         - [AutomationFailure], if [target_goal] is not equivalent
             to the actual goal under focus, even after rewriting.
 *)
-    
-*)
 Ltac2 solve_remainder_proof (target_goal:constr) (lemma:constr option) :=
     let lemma := unwrap_optional_lemma lemma
     in
@@ -296,5 +294,3 @@ Ltac2 Notation "We" "conclude" "that" target_goal(constr) :=
 *)
 Ltac2 Notation "By" lemma(constr) "we" "conclude" "that" target_goal(constr) := 
     solve_remainder_proof target_goal (Some lemma).
-
-
