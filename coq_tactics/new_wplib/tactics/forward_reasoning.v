@@ -72,18 +72,29 @@ Local Ltac2 waterprove_with_hint (target_goal:constr) (lemmas:constr) :=
     print_goal_hint (Some target_goal);
     waterprove target_goal lemmas (get_search_depth ()).
 
-Ltac2 Type exn ::= [ AutomationFailure(string) ].
-
-Local Ltac2 fail_automation () := 
-        Control.zero (AutomationFailure 
-        "Waterproof could not find a proof. 
-If you believe the statement should hold, 
-try making a smaller step.").
-
 Local Ltac2 print_failure () :=
     print (of_string "Waterproof could not find a proof. 
 If you believe the statement should hold, 
 try making a smaller step.").
+
+(** * unwrap_optional_lemma
+    Given an optional lemma, either returns the lemma itself,
+    or case the argument is [None], returns a dummy lemma.
+
+    Arguments:
+        - [lemma: constr option], one of the following:
+            - a [constr] referring to a lemma, wrapped in [Some].
+            - the value [None]
+    
+    Returns:
+        - [constr]: the provided lemma, or [dummy_lemma] in case
+            the input was [None]. [dummy_lemma] simply states that [0=0].
+*)
+Local Ltac2 unwrap_optional_lemma (lemma: constr option) :=
+    match lemma with
+    | None => constr:(dummy_lemma)
+    | Some y => y
+    end.
 
 (** * By ... it holds that ... : ...
     Introduce a new sublemma and try to prove it immediately,
@@ -100,11 +111,7 @@ try making a smaller step.").
 *)
 Ltac2 assert_and_prove_sublemma (id: ident) (conclusion: constr) 
                                 (proving_lemma: constr option) :=
-    let help_lemma := 
-        match proving_lemma with
-        | None => constr:(dummy_lemma)
-        | Some lemma => lemma
-        end
+    let help_lemma := unwrap_optional_lemma proving_lemma
     in
     let by_arg () := waterprove_with_hint conclusion help_lemma
     in
@@ -149,22 +156,73 @@ Ltac2 Notation "It" "holds" "that" id(ident) ":" conclusion(constr) :=
     assert_and_prove_sublemma id conclusion None.
 
 
-Ltac2 warn_wrong_goal_given () :=
+
+(* -------------------------------------------------------------------------- *)
+(** * Tactics to finish a goal
+    They automate the last final steps. *)
+
+
+Ltac2 warn_equivalent_goal_given () :=
     print (of_string "Warning: 
 The statement you provided does not exactly correspond to what you need to show. 
-This can make your proof less readable.").
+This can make your proof less readable.
+Waterproof will try to rewrite the goal...").
 
-Ltac2 solve_remainder_proof (target_goal:constr) (lemmas:constr) :=
-    let target := eval cbv in $target_goal in
+Ltac2 warn_wrong_goal_given (wrong_target: constr) :=
+    print (concat
+            (concat
+                (concat
+                    (of_string "The actual goal (")
+                    (of_constr (Control.goal ()))
+                )
+                (concat 
+                    (of_string ") is not equivalent to the goal you gave (")
+                    (of_constr wrong_target)
+                )
+            )
+            (of_string "). ")
+    ).
+
+Ltac2 target_equals_goal_judgementally (target:constr) :=
+    let target := eval cbv in $target in
     let real_goal := Control.goal () in
     let real_goal := eval cbv in $real_goal in
-    match Constr.equal target real_goal with
-    | false => ()
-        (* warn_wrong_goal_given (); 
-        change target_goal || "TODO -- this function is WIP" *)
+    Constr.equal target real_goal.
+    
 
-    | true =>  ()
+Ltac2 solve_remainder_proof (target_goal:constr) (lemmas:constr option) :=
+    let lemmas := unwrap_optional_lemma lemmas
+    in
+    (* First check if the given target equals the goal directly,
+        without applying any rewrite. *)
+    match Constr.equal target_goal (Control.goal ()) with
+    | false => 
+        match target_equals_goal_judgementally target_goal with
+        | false => 
+            warn_wrong_goal_given (target_goal); 
+            Control.zero (AutomationFailure 
+        "Given goal not equivalent to actual goal.")
+        | true => 
+            (* User provided an equivalent goal, 
+            but written differently. 
+            Try to rewrite the real goal to match user input.*)
+            warn_equivalent_goal_given ();
+            let g := Control.goal () in
+            change $target_goal;
+            waterprove_with_hint target_goal lemmas
+        end
+    | true =>  waterprove_with_hint target_goal lemmas
     end.
+
+Ltac2 Notation "We" "conclude" "that" target_goal(constr) := 
+    solve_remainder_proof target_goal None.
+
+
+
+Ltac2 Notation "By" lemma(constr) "we" "conclude" "that" target_goal(constr) := 
+    solve_remainder_proof target_goal (Some lemma).
+
+
 (* Below is copied stuff for easy reference. Just as a personal note, should eventually be removed.*)
 (* 
     Ltac conclude_proof t s :=
