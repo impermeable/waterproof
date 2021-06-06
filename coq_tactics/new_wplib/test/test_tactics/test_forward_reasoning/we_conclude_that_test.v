@@ -168,3 +168,20 @@ Proof.
 
     By useless we conclude that (1 < 2).
 Qed.
+
+(** * Example for the SUM.
+    Somewhat more realistic context.
+*)
+
+Open Scope nat_scope.
+Inductive even : nat -> Prop :=
+    even0 : even 0
+  | evenS : forall x:nat, even x -> even (S (S x)).
+
+Lemma sum_example_by_we_conclude: forall x:nat, x = 2 -> even x.
+Proof.
+    intros x h.
+    rewrite h. (* Change the goal to "even 2"*)
+    apply evenS. (* Change the goal to "even 0"*)
+    By even0 we conclude that (even 0).
+Qed.
