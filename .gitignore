@@ -50,3 +50,6 @@ wrapper/**/*.v
 # Some files that Coq produces sometimes, 
 # probably when compiling a .v file
 *.*.aux
+
+# Some auxiliary file produced by some build-in tactic
+.lia.cache
