@@ -161,7 +161,7 @@ Abort.
     without explcitly being given 
     the lemma that states [0 < 1].
 *)
-Lemma test_it_holds_5: 1 < 2.
+Lemma test_by_we_conclude_5: 1 < 2.
 Proof.
     assert (useless: 1 = 1).
     reflexivity.
