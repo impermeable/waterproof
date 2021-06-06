@@ -1,10 +1,10 @@
-(** * forward_reasoning.v
+(** * [we_conclude_that.v]
 Authors: 
     - Lulof Pirée (1363638)
-Creation date: 3 June 2021
+Creation date: 6 June 2021
 
-Tactics that rely on [auto] (usually indirectly via [waterprove]).
-
+Tactic [We conclude that ...].
+Used to finish the proof of an (intermediate) goal.
 
 --------------------------------------------------------------------------------
 
@@ -42,140 +42,7 @@ Require Import Sets.Ensembles.
 Require Import Sets.Classical_sets.
 
 Add LoadPath "./coq_tactics/new_wplib/" as wplib.
-Load waterprove.
-Load goal_to_hint.
-Load auxiliary.
-
-Lemma dummy_lemma: True.
-Proof.
-    apply I.
-Qed.
-
-(** * get_search_depth
-    Placeholder for the function that retrieves the maximum
-    search-depth to pass as an argument to [waterprove].
-*)
-Local Ltac2 get_search_depth () := 
-    print (of_string "Warning: seach depth still hardcoded to '2'.");
-    2.
-
-(** * waterprove_with_hint
-    First print an hint for reaching the target goal,
-    try to prove the goal immediately afterward.
-
-    Arguments:
-        - [target_goal: constr], the goal to prove. 
-        - [lemmas: constr], lemmas to pass to [waterprove] for automatically
-            proving the [target_goal].
-*)
-Local Ltac2 waterprove_with_hint (target_goal:constr) (lemmas:constr) :=
-    print_goal_hint (Some target_goal);
-    waterprove target_goal lemmas (get_search_depth ()).
-
-Local Ltac2 print_failure () :=
-    print (of_string "Waterproof could not find a proof. 
-If you believe the statement should hold, 
-try making a smaller step.").
-
-(** * unwrap_optional_lemma
-    Given an optional lemma, either returns the lemma itself,
-    or case the argument is [None], returns a dummy lemma.
-
-    Arguments:
-        - [lemma: constr option], one of the following:
-            - a [constr] referring to a lemma, wrapped in [Some].
-            - the value [None]
-    
-    Returns:
-        - [constr]: the provided lemma, or [dummy_lemma] in case
-            the input was [None]. [dummy_lemma] simply states that [0=0].
-*)
-Local Ltac2 unwrap_optional_lemma (lemma: constr option) :=
-    match lemma with
-    | None => constr:(dummy_lemma)
-    | Some y => y
-    end.
-
-(** * By ... it holds that ... : ...
-    Introduce a new sublemma and try to prove it immediately,
-    optionally using a given lemma.
-
-    Arguments:
-        - [id: ident], name for the new sublemma.
-            If the proof succeeds, 
-            it will become a hypotheses bearing [id] as name.
-        - [conclusion: constr], the actual content 
-            of the new sublemma to prove.
-        - [proving_lemma: constr], optional reference to a lemma 
-            used to prove the new sublemma (via [waterprove)]).
-
-    Raises exception:
-        - [AutomationFailure], if [waterprove] fails the prove the sublemma.
-            This happens if the sublemma does not hold,
-            but can also happen if it is simply too difficult for [waterprove].
-*)
-Ltac2 assert_and_prove_sublemma (id: ident) (conclusion: constr) 
-                                (proving_lemma: constr option) :=
-    let help_lemma := unwrap_optional_lemma proving_lemma
-    in
-    let by_arg () := waterprove_with_hint conclusion help_lemma
-    in
-    let proof_attempt () := Aux.ltac2_assert_with_by id conclusion by_arg
-    in
-    match Control.case proof_attempt with
-    | Val _ => print (of_string ("New sublemma successfully added."))
-    | Err exn => fail_automation ()
-    end.
-
-(** * By ... it holds that ... : ...
-    Introduce a new sublemma and try to prove it immediately
-    using a given lemma.
-
-    Arguments:
-        - [lemma: constr], reference to a lemma 
-            used to prove the new sublemma (via [waterprove)]).
-        - [id: ident], name for the new sublemma.
-            If the proof succeeds, 
-            it will become a hypotheses bearing [id] as name.
-        - [conclusion: constr], the actual content 
-            of the new sublemma to prove.
-
-    Raises exception:
-        - [AutomationFailure], if [waterprove] fails the prove the sublemma.
-            This happens if the sublemma does not hold,
-            but can also happen if it is simply too difficult for [waterprove].
-*)
-Ltac2 Notation "By" lemma(constr) 
-               "it" "holds" "that" id(ident) ":" conclusion(constr) := 
-    assert_and_prove_sublemma id conclusion (Some lemma).
-    
-    
-(** * It holds that ... : ...
-    Introduce a new sublemma and try to prove it immediately.
-    Same as [By ... it holds that ... : ...],
-    but without using a specified lemma.
-
-    Arguments:
-        - [id: ident], name for the new sublemma.
-            If the proof succeeds, 
-            it will become a hypotheses bearing [id] as name.
-        - [conclusion: constr], the actual content 
-            of the new sublemma to prove.
-
-    Raises exception:
-        - [AutomationFailure], if [waterprove] fails the prove the sublemma.
-            This happens if the sublemma does not hold,
-            but can also happen if it is simply too difficult for [waterprove].
-*)
-Ltac2 Notation "It" "holds" "that" id(ident) ":" conclusion(constr) :=
-    assert_and_prove_sublemma id conclusion None.
-
-
-
-(* -------------------------------------------------------------------------- *)
-(** * Tactics to finish a goal
-    They automate the last final steps. *)
-
+Load forward_reasoning_aux.
 
 Ltac2 warn_equivalent_goal_given () :=
     print (of_string "Warning: 
