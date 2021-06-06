@@ -92,6 +92,14 @@ Proof.
     assert_raises_error result.
 Abort.
 
+(** * Test 6
+    Alternative [It follows that ...] notation.
+*)
+Lemma test_we_conclude_6: True.
+Proof.
+    It follows that True.
+Qed.
+
 
 (* -------------------------------------------------------------------------- *)
 (** * Testcases for [By ... we conclude that ... ] *)
