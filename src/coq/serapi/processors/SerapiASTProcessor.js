@@ -1,6 +1,7 @@
 import SerapiProcessor from '../util/SerapiProcessor';
 import {createASTCommand} from '../util/SerapiCommandFactory';
 import {extractCoqAST, currentlyNotParsedTypes} from '../ASTProcessor';
+import FlattenVisitor from '../datastructures/visitor/FlattenVisitor';
 
 /**
  * Processor for ast handling
@@ -57,8 +58,11 @@ class SerapiASTProcessor extends SerapiProcessor {
           console.group(`AST of sentence ${sentenceId}`);
           console.log(`Got AST for ${sentenceId}: `,
               JSON.parse(JSON.stringify(result.ast)));
-          console.log(`Got AST for ${sentenceId}\n`, result.ast.pprint());
-          console.log(`Flattening:\n`, result.ast.flatten());
+          // console.log(`Got AST for ${sentenceId}\n`, result.ast.pprint());
+          console.log(`Flattening:\n`);
+          const v = new FlattenVisitor();
+          result.ast.accept(v);
+          console.log(v.get());
           console.groupEnd();
         });
   }

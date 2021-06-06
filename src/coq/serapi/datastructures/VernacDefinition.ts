@@ -1,8 +1,9 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable require-jsdoc */
 import {convertToASTComp} from '../ASTProcessor';
-import CoqType from './CoqType';
+import CoqType, {Visitable} from './CoqType';
 import LocInfo from './LocInfo';
+import ASTVisitor from './visitor/ASTVisitor';
 
 enum DefinitionObjectKind {
   Definition= 'Definition',
@@ -20,7 +21,7 @@ enum DefinitionObjectKind {
   Let = 'Let',
 }
 
-export default class VernacDefinition extends CoqType {
+export default class VernacDefinition extends CoqType implements Visitable {
   discharge: boolean;
   defintionObjectKind: DefinitionObjectKind;
   nameDecl: { name: { locinfo: LocInfo; content: any; }; options: any; };
@@ -45,5 +46,10 @@ export default class VernacDefinition extends CoqType {
 
   pprint(): string {
     throw new Error('Method not implemented.');
+  }
+
+  accept(visitor: ASTVisitor) {
+    visitor.visitVernacDefinition(this);
+    // visitor.visitCNotation(this.);
   }
 }

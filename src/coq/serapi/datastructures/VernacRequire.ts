@@ -1,13 +1,15 @@
+/* eslint-disable require-jsdoc */
 /* eslint-disable camelcase */
 import {convertToASTComp} from '../ASTProcessor';
-import CoqType from './CoqType';
+import CoqType, {Visitable} from './CoqType';
 import LocInfo from './LocInfo';
+import ASTVisitor from './visitor/ASTVisitor';
 
 /**
  * Class to represent a Coq VernacRequire type.
  * @see https://coq.github.io/doc/v8.12/api/coq/Vernacexpr/index.html#type-vernac_expr.VernacRequire
  */
-export default class VernacRequire extends CoqType {
+export default class VernacRequire extends CoqType implements Visitable {
   qualid: any;
   export_flag: boolean;
   list: any;
@@ -28,5 +30,9 @@ export default class VernacRequire extends CoqType {
   // eslint-disable-next-line require-jsdoc
   pprint(): string {
     throw new Error('Method not implemented.');
+  }
+
+  accept(visitor: ASTVisitor): void {
+    visitor.visitVernacRequire(this);
   }
 }

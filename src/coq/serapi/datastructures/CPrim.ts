@@ -13,7 +13,7 @@ export default class CPrim extends CoqType {
   constructor( array : string | ['Number' | [string,
     Record<string, unknown>]] ) {
     super();
-    console.warn('CPrim', array);
+    // console.warn('CPrim', array);
     this.isNumeric = array[1][0] === 'Numeric';
     if (this.isNumeric) {
       const {exp, frac, int} = array[1][1][1];

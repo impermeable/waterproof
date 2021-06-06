@@ -16,8 +16,13 @@ import CLambdaN from './datastructures/CLambdaN';
 import VernacHints from './datastructures/VernacHints';
 import HintsResolve, {HintsReference} from './datastructures/HintsResolve';
 import CoqAST from './datastructures/CoqAst';
+import VernacExpr from './datastructures/VernacExpr';
+import VernacExtend from './datastructures/VernacExtend';
+import VernacProof from './datastructures/VernacProof';
+// import CoqType from './datastructures/CoqType';
+import GenericVType from './datastructures/GenericVType';
 
-const flatten = require('./flatten-expr').flatten;
+// const flatten = require('./flatten-expr').flatten;
 
 /**
  * The ppDict assigns to every name of an object appearing in an AST a function
@@ -253,66 +258,6 @@ function convert_s_exp_to_string( expr, depth, stringSoFar ) {
   return returnString + '\n' + '| '.repeat((depth)) + expr.toString();
 }
 */
-
-// eslint-disable-next-line require-jsdoc
-class GenericVType {
-  /**
-   *
-   * @param {*} array
-   */
-  constructor( array ) {
-    const {attrs, control, expr} = flatten(array[1]);
-
-    this.attributes = {'attrs': attrs, 'control': control};
-    // this.data = convertToASTComp(expr);
-    this.data = convertToASTComp(expr);
-  }
-}
-
-
-// eslint-disable-next-line require-jsdoc
-class VernacProof {
-  // TODO: check why this crap is always empty...
-
-  // eslint-disable-next-line require-jsdoc
-  constructor( array ) {
-    this.rawGenericArg = array[0] || {};
-    this.sectionSubsetExpr = array[1] || {};
-  }
-}
-
-
-/**
- * A JavaScript equivalent of a VernacExpr object
- */
-class VernacExpr {
-  /**
-   * Construct a VernacExpr objected from a nested array
-   * with the representation of the object.
-   * @param {Array} array Array as parsed from SerAPI message
-   */
-  constructor( array ) {
-    // console.log('In the constructor of VernacExpr...');
-    this.data = array;
-    this.data[2] = convertToASTComp(array[2]);
-    this.content = this.data[2];
-  }
-}
-
-/**
- * A JavaScript equivalent of a Coq VernacExtend object
- */
-class VernacExtend {
-  /**
-   * Construct a VernacExtend object from a nested array
-   * with the representation of the object
-   * @param {Array} array Array as parsed from SerAPI message
-   */
-  constructor( array ) {
-    // console.log('In the constructor of VernacExtend...');
-    this.data = array;
-  }
-}
 
 const constrDict = {
   'VernacExpr': VernacExpr,

@@ -1,11 +1,12 @@
 import {convertToASTComp} from '../ASTProcessor';
-import CoqType from './CoqType';
+import CoqType, {Visitable} from './CoqType';
 import LocInfo from './LocInfo';
+import ASTVisitor from './visitor/ASTVisitor';
 
 /**
  * Class to record the AST given back by serAPI
  */
-export default class CoqAST extends CoqType {
+export default class CoqAST extends CoqType implements Visitable {
   locinfo: LocInfo;
   content: any;
 
@@ -22,15 +23,22 @@ export default class CoqAST extends CoqType {
   }
 
   // eslint-disable-next-line require-jsdoc
+  accept(visitor: ASTVisitor): void {
+    // throw new Error('Method not implemented.');
+    visitor.visitCoqAST(this);
+    (this.content).accept(visitor);
+  }
+
+  // eslint-disable-next-line require-jsdoc
   pprint(): string {
     return `(${this.constructor.name}\n\t(TODO)\n)\n`;
   }
 
   // eslint-disable-next-line require-jsdoc
-  flatten() : [[LocInfo, string]] | [] {
-    return [];
-    // if(this.content !== null){
+  // flatten() : [[LocInfo, string]] | [] {
+  //   return [];
+  //   // if(this.content !== null){
 
-    // }
-  }
+  //   // }
+  // }
 }

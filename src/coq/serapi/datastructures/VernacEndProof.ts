@@ -1,4 +1,5 @@
-import CoqType from './CoqType';
+import CoqType, {Visitable} from './CoqType';
+import ASTVisitor from './visitor/ASTVisitor';
 
 /**
  * Class to represent a Coq VernacEndProof
@@ -7,7 +8,7 @@ import CoqType from './CoqType';
  *  | Admitted
  *  | Proved
  */
-class VernacEndProof extends CoqType {
+class VernacEndProof extends CoqType implements Visitable {
   proofEnd: string;
   proofDetails: { isOpaque: boolean; lident: CoqType; } =
     {isOpaque: false, lident: {} as CoqType};
@@ -36,6 +37,11 @@ class VernacEndProof extends CoqType {
    */
   pprint(): string {
     throw new Error('Method not implemented.');
+  }
+
+  // eslint-disable-next-line require-jsdoc
+  accept(visitor: ASTVisitor): void {
+    visitor.visitVernacEndProof(this);
   }
 }
 

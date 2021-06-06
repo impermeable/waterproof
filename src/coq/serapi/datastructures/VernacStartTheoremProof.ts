@@ -1,7 +1,8 @@
 /* eslint-disable no-unused-vars */
 import {convertToASTComp} from '../ASTProcessor';
-import CoqType from './CoqType';
+import CoqType, {Visitable} from './CoqType';
 import LocInfo from './LocInfo';
+import ASTVisitor from './visitor/ASTVisitor';
 
 enum TheoremKind {
   Theorem = 'Theorem',
@@ -14,16 +15,16 @@ enum TheoremKind {
 }
 
 // eslint-disable-next-line require-jsdoc
-export default class VernacStartTheoremProof extends CoqType {
+export default class VernacStartTheoremProof extends CoqType
+  implements Visitable {
   theoremKind: TheoremKind;
-  proofExprs: [];
+  proofExprs: [any, any];
 
   // eslint-disable-next-line require-jsdoc
   constructor( array ) {
     super();
     this.theoremKind = array[1];
 
-    this.proofExprs = [];
     this.proofExprs = array[2][0].map((el) => {
       const id = el[0];
       const exprList = el[1];
@@ -56,5 +57,10 @@ export default class VernacStartTheoremProof extends CoqType {
   // eslint-disable-next-line require-jsdoc
   pprint(): string {
     throw new Error('Method not implemented.');
+  }
+
+  // eslint-disable-next-line require-jsdoc
+  accept(visitor: ASTVisitor): void {
+    visitor.visitVernacStartTheoremProof(this);
   }
 }
