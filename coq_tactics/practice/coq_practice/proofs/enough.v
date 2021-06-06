@@ -26,14 +26,8 @@ Proof.
     apply Nat.lt_le_pred in h3. 
     simpl in h3. (* h3 becomes (x <= 2) *)
 
-    enough (2 <= x <= 2).
-        (* Destruct goal in (x <= 2) and (2 <= x) *)
-        apply Nat.le_antisymm.
-        exact h3.
-        exact h1.
-
-    (* Remains to show: (2 <= x <= 2) *)
-    split.
-    exact h1.
+    (* Destruct goal in (x <= 2) and (2 <= x) *)
+    apply Nat.le_antisymm.
     exact h3.
+    exact h1.
 Qed.
