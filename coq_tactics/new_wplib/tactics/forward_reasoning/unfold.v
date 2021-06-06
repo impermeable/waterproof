@@ -1,11 +1,10 @@
 (*
 Authors: 
     - Cosmin Manea (1298542)
-Creation date: 23 May 2021
 
-Version of [By ... we know ...] tactic.
-[By ... we know ...] can be used to prove a result using an already existing result.
+Creation date: 06 June 2021
 
+Version of [Unfold] tactic. This unfolds a definition.
 --------------------------------------------------------------------------------
 
 This file is part of Waterproof-lib.
@@ -25,8 +24,24 @@ along with Waterproof-lib.  If not, see <https://www.gnu.org/licenses/>.
 *)
 
 From Ltac2 Require Import Ltac2.
-Add LoadPath "C:/Users/cosmi/Desktop/SEP_my_branch_of_forward_reasoning/waterproof/coq_tactics/new_wplib/" as wplib.
-Load auxiliary.
+From Ltac2 Require Import Option.
 
-Ltac2 Notation "By" t(constr) "we" "know" s(ident) :=
-    Aux.ltac2_assert s t.
+(** * unfolding
+    Unfolds the definition of a statement, possibly inside another statement.
+
+    Arguments:
+        - [t: constr], the statement to unfold the definition for.
+        - [s: constr option], a possible additional statement, where [t] can be unfolded in.
+
+    Does:
+        - unfolds [t] in the current [goal], or in [s].
+*)
+Local Ltac2 unfolding (t: constr) (s: constr option) :=
+    match s with 
+        | None => unfold &t
+        | Some y => unfold &t in y
+    end.
+
+
+Ltac2 Notation "Unfold" t(constr) inn(opt("in")) s(opt(constr)) :=
+    unfolding t s.

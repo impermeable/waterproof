@@ -1,11 +1,10 @@
 (*
 Authors: 
     - Cosmin Manea (1298542)
-Creation date: 23 May 2021
 
-Version of [By ... we know ...] tactic.
-[By ... we know ...] can be used to prove a result using an already existing result.
+Creation date: 06 June 2021
 
+Tactic for defining a variable in an arbitrary goal.
 --------------------------------------------------------------------------------
 
 This file is part of Waterproof-lib.
@@ -25,8 +24,21 @@ along with Waterproof-lib.  If not, see <https://www.gnu.org/licenses/>.
 *)
 
 From Ltac2 Require Import Ltac2.
-Add LoadPath "C:/Users/cosmi/Desktop/SEP_my_branch_of_forward_reasoning/waterproof/coq_tactics/new_wplib/" as wplib.
-Load auxiliary.
+From Ltac2 Require Import Option.
 
-Ltac2 Notation "By" t(constr) "we" "know" s(ident) :=
-    Aux.ltac2_assert s t.
+(** * defining
+    Defines a variable in an arbitrary goal.
+
+    Arguments:
+        - [u: constr], the name of the variable.
+        - [t: constr], the variable to be defined.
+
+    Does:
+        - defines [t] as [u].
+*)
+Local Ltac2 defining (u: ident) (t: constr) :=
+    set (u := $t).
+
+
+Ltac2 Notation "Define" u(ident) ":=" t(constr) :=
+    defining u t.

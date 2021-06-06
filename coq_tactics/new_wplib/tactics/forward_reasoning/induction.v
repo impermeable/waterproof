@@ -1,11 +1,9 @@
 (*
-Authors: 
+Author: 
     - Cosmin Manea (1298542)
-Creation date: 23 May 2021
+Creation date: 06 June 2021
 
-Version of [By ... we know ...] tactic.
-[By ... we know ...] can be used to prove a result using an already existing result.
-
+Tactic for proving by mathematical induction.
 --------------------------------------------------------------------------------
 
 This file is part of Waterproof-lib.
@@ -24,9 +22,23 @@ You should have received a copy of the GNU General Public License
 along with Waterproof-lib.  If not, see <https://www.gnu.org/licenses/>.
 *)
 
-From Ltac2 Require Import Ltac2.
-Add LoadPath "C:/Users/cosmi/Desktop/SEP_my_branch_of_forward_reasoning/waterproof/coq_tactics/new_wplib/" as wplib.
-Load auxiliary.
 
-Ltac2 Notation "By" t(constr) "we" "know" s(ident) :=
-    Aux.ltac2_assert s t.
+From Ltac2 Require Import Ltac2.
+
+(** * induction_with_hypothesis_naming
+    Performs mathematical induction.
+
+    Arguments:
+        - [x: ident], the variable to perform the induction on.
+        - [y: ident], the name of the induction hypothesis.
+
+    Does:
+        - performs induction on [x].
+*)
+Local Ltac2 induction_with_hypothesis_naming (x: ident) (y: ident) :=
+    let x_val := Control.hyp x in induction $x_val.
+
+
+Ltac2 Notation "We" "prove" "by" "induction" "on" x(ident) "," 
+               "calling" "the" "induction" "hypothesis" y(ident) := 
+    induction_with_hypothesis_naming x y.

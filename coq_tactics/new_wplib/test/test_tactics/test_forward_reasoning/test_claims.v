@@ -1,11 +1,11 @@
 (*
 Authors: 
     - Cosmin Manea (1298542)
-Creation date: 23 May 2021
 
-Version of [By ... we know ...] tactic.
-[By ... we know ...] can be used to prove a result using an already existing result.
+Creation date: 06 June 2021
 
+Testcases for the [We claim that] tactic.
+Tests pass if they can be run without unhandled errors.
 --------------------------------------------------------------------------------
 
 This file is part of Waterproof-lib.
@@ -25,8 +25,12 @@ along with Waterproof-lib.  If not, see <https://www.gnu.org/licenses/>.
 *)
 
 From Ltac2 Require Import Ltac2.
-Add LoadPath "C:/Users/cosmi/Desktop/SEP_my_branch_of_forward_reasoning/waterproof/coq_tactics/new_wplib/" as wplib.
-Load auxiliary.
+Add LoadPath "C:/Users/cosmi/Desktop/SEP - CM forward reasoning/waterproof/coq_tactics/new_wplib/tactics/" as wplib.
+Load claims.
 
-Ltac2 Notation "By" t(constr) "we" "know" s(ident) :=
-    Aux.ltac2_assert s t.
+(** Test 0: This should work fine *)
+Goal forall n : nat, exists m : nat, (n = m).
+Proof.
+    intro n.
+    We claim that (n = n) ( n_eq_n ).
+Abort.

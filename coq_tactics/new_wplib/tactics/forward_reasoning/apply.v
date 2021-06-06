@@ -1,11 +1,10 @@
 (*
 Authors: 
     - Cosmin Manea (1298542)
-Creation date: 23 May 2021
 
-Version of [By ... we know ...] tactic.
-[By ... we know ...] can be used to prove a result using an already existing result.
+Creation date: 06 June 2021
 
+Version of [Apply] tactic. This allows the user to apply a lemma to prove the current goal.
 --------------------------------------------------------------------------------
 
 This file is part of Waterproof-lib.
@@ -25,8 +24,18 @@ along with Waterproof-lib.  If not, see <https://www.gnu.org/licenses/>.
 *)
 
 From Ltac2 Require Import Ltac2.
-Add LoadPath "C:/Users/cosmi/Desktop/SEP_my_branch_of_forward_reasoning/waterproof/coq_tactics/new_wplib/" as wplib.
-Load auxiliary.
 
-Ltac2 Notation "By" t(constr) "we" "know" s(ident) :=
-    Aux.ltac2_assert s t.
+(** * apply_lemma
+    Applies a lemma to prove the current goal.
+
+    Arguments:
+        - [lemma: constr], the lemma to be applied.
+
+    Does:
+        - applies [lemma] in proving the current [goal].
+*)
+Local Ltac2 apply_lemma (lemma: constr) :=
+    apply $lemma.
+
+Ltac2 Notation "Apply" t(constr) :=
+    apply_lemma t.

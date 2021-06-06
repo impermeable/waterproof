@@ -1,11 +1,10 @@
 (*
 Authors: 
     - Cosmin Manea (1298542)
-Creation date: 23 May 2021
+Creation date: 06 June 2021
 
-Version of [By ... we know ...] tactic.
-[By ... we know ...] can be used to prove a result using an already existing result.
-
+Test cases for the [We show/prove both directions] tactic.
+Tests pass if they can be run without unhandled errors.
 --------------------------------------------------------------------------------
 
 This file is part of Waterproof-lib.
@@ -25,8 +24,19 @@ along with Waterproof-lib.  If not, see <https://www.gnu.org/licenses/>.
 *)
 
 From Ltac2 Require Import Ltac2.
-Add LoadPath "C:/Users/cosmi/Desktop/SEP_my_branch_of_forward_reasoning/waterproof/coq_tactics/new_wplib/" as wplib.
-Load auxiliary.
 
-Ltac2 Notation "By" t(constr) "we" "know" s(ident) :=
-    Aux.ltac2_assert s t.
+Add LoadPath "C:/Users/cosmi/Desktop/SEP - CM forward reasoning/waterproof/coq_tactics/new_wplib" as wplib2.
+Load define.
+
+(** Test 0: This should work fine *)
+Goal forall n : nat, ((n = n) /\ (n + 1 = n + 1)).
+    intro n.
+    Define m := n.
+Abort.
+
+
+(** Test 1: This should also work fine *)
+Goal forall n : nat, ((n = n) \/ (n + 1 = n + 1)).
+    intro n.
+    Define m := n.
+Abort.

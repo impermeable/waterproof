@@ -1,11 +1,11 @@
 (*
 Authors: 
     - Cosmin Manea (1298542)
-Creation date: 23 May 2021
 
-Version of [By ... we know ...] tactic.
-[By ... we know ...] can be used to prove a result using an already existing result.
+Creation date: 06 June 2021
 
+Testcases for the proof finishing tactics.
+Tests pass if they can be run without unhandled errors.
 --------------------------------------------------------------------------------
 
 This file is part of Waterproof-lib.
@@ -25,8 +25,34 @@ along with Waterproof-lib.  If not, see <https://www.gnu.org/licenses/>.
 *)
 
 From Ltac2 Require Import Ltac2.
-Add LoadPath "C:/Users/cosmi/Desktop/SEP_my_branch_of_forward_reasoning/waterproof/coq_tactics/new_wplib/" as wplib.
-Load auxiliary.
+Add LoadPath "C:/Users/cosmi/Desktop/SEP - CM forward reasoning/waterproof/coq_tactics/new_wplib/tactics/" as wplib.
+Load proof_finishing_tactics.
 
-Ltac2 Notation "By" t(constr) "we" "know" s(ident) :=
-    Aux.ltac2_assert s t.
+
+(** Test 0: This should work fine *)
+Goal forall n : nat, n = n.
+    intro n.
+    This follows by reflexivity.
+Abort.
+
+
+(** Test 1: This should work fine *)
+Goal forall n : nat, n = n.
+    intro n.
+    This concludes the proof.
+Abort.
+
+
+(** Test 2: This should work fine *)
+Goal forall n : nat, (n = n) -> (n = n).
+    intro n.
+    intro h.
+    This follows by assumption.
+Abort.
+
+
+(** Test 3: This DOES NOT work fine *)
+Goal forall n : nat, n = n.
+    intro n.
+    Then s : (n = n) holds by assumption.
+Abort.
