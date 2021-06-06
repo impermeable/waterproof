@@ -46,9 +46,9 @@ Load waterprove.
 Load goal_to_hint.
 Load auxiliary.
 
-Lemma dummy_lemma: 0 = 0.
+Lemma dummy_lemma: True.
 Proof.
-    reflexivity.
+    apply I.
 Qed.
 
 (** * get_search_depth
