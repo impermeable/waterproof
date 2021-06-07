@@ -37,7 +37,7 @@ Qed.
 (* This axiom does not make sense, 
     but therefore we can be sure that [waterprove]
     does not know it without *explicitly* being told to use it.*)
-    Axiom zero_is_ten: 0 = 10.
+Axiom zero_is_ten: 0 = 10.
 
 
 (* -------------------------------------------------------------------------- *)
@@ -91,6 +91,14 @@ Proof.
     let result () := We conclude that (0 = 1) in
     assert_raises_error result.
 Abort.
+
+(** * Test 6
+    Alternative [It follows that ...] notation.
+*)
+Lemma test_we_conclude_6: True.
+Proof.
+    It follows that True.
+Qed.
 
 
 (* -------------------------------------------------------------------------- *)

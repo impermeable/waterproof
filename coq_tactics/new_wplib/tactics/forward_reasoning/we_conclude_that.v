@@ -146,6 +146,12 @@ Ltac2 solve_remainder_proof (target_goal:constr) (lemma:constr option) :=
 Ltac2 Notation "We" "conclude" "that" target_goal(constr) := 
     solve_remainder_proof target_goal None.
 
+(** * It follows that ...
+    Alternative notation for [We conclude that ...].
+*)
+Ltac2 Notation "It" "follows" "that" target_goal(constr) := 
+    solve_remainder_proof target_goal None.
+
 (** * We conclude that ...
     Finish proving a goal using automation.
 
