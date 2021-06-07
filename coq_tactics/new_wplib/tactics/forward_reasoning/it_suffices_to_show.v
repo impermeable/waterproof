@@ -33,6 +33,22 @@ Local Ltac2 fail_suffice_to_show () :=
     Control.zero (AutomationFailure 
 "Waterproof could not verify that this statement is enough to prove the goal.").
 
+(** * try_enough_expression
+    Execute a function [f] (assuming it contains
+    an expression that applies the [enough ... by ...] tactic).
+    If it succeeds, print that [statement] is sufficient to show the goal.
+    Raise an error if [f] also does.
+
+    Arguments:
+        - [f: unit -> unit], expression applying the tactic [enough ... by ...].
+        - [statement: constr], statement that was 'enough' 
+            evidence to proof the goal. Only used for printing purposes.
+    
+    Raises exceptions:
+        - [AutomationFailure], in case [f] throws an error.
+            This typically happens if the [enough ... by ...]-expression fails
+            to prove the goal.
+*)
 Local Ltac2 try_enough_expression (f: unit -> unit) 
                            (statement: constr):=
     match Control.case f with
@@ -48,7 +64,21 @@ Local Ltac2 try_enough_expression (f: unit -> unit)
     | Err exn => fail_suffice_to_show ()
     end.
 
+(** * apply_enough_with_waterprove
+    Try if the [waterprove] automation would be able to solve
+    the current goal, if [statement] were to hold.
+    If it succeeds, the goal is removed, 
+    and proving [statement] is added as a new goal.
+    If it fails, an error will be raised.
 
+    Arguments:
+        - [statement: constr], statement to assume to hold
+            (and to be proven later).
+    
+    Raises exceptions:
+        - [AutomationFailure], in case [waterprove] fails to prove the goal,
+            even if [statement] is given.
+*)
 Ltac2 apply_enough_with_waterprove (statement:constr) :=
     let g := Control.goal () in
     let hyp_name := Fresh.in_goal @h in
@@ -57,17 +87,75 @@ Ltac2 apply_enough_with_waterprove (statement:constr) :=
     in
     try_enough_expression f statement.
 
+(** * It suffices to show that ...
+    Same as the function [apply_enough_with_waterprove].
+
+    Take [statement] as a given fact, 
+    and try to prove the current goal automatically with it.
+    If it succeeds, the goal is removed, 
+    and proving [statement] is added as a new goal.
+    If it fails, an error will be raised.
+
+    Arguments:
+        - [statement: constr], statement to assume to hold
+            (and to be proven later).
+    
+    Raises exceptions:
+        - [AutomationFailure], in case no proof is found for the goal,
+            even if [statement] is given.
+*)
 Ltac2 Notation "It" "suffices" "to" "show" "that" 
     statement(constr) := 
     apply_enough_with_waterprove statement.
 
+(** * apply_enough_with_tactic
+    Take [statement] as a given fact, 
+    and try to prove the current goal using the specified tactic(s) [tac].
+    If it succeeds, the goal is removed, 
+    and proving [statement] is added as a new goal.
+    If it fails, an error will be raised.
+
+    Arguments:
+        - [statement: constr], statement to assume to hold
+            (and to be proven later).
+        - [tac: unit -> unit], expression containing a tactic
+            that is supposed to prove the current goal 
+            (usually using [statement] as a hypothesis).
+            This can be a concatenation of tactics enclosed in [(] and [])]
+            separated by [;]. E.g. [tac := (apply some_lemma;assumption)].
+    
+    Raises exceptions:
+        - [AutomationFailure], in case evaluating [tac] does not prove the goal,
+            even if [statement] is given.
+*)
 Ltac2 apply_enough_with_tactic (statement:constr) (tac:unit -> unit) :=
     let hyp_name := Fresh.in_goal @h in
     let f () := enough ($hyp_name : $statement) by (tac ())
     in
     try_enough_expression f statement.
 
+(** * It suffices to show that ... by ...
+    Same as the function [apply_enough_with_tactic].
 
+    Take [statement] as a given fact, 
+    and try to prove the current goal using the specified tactic(s) [tac].
+    If it succeeds, the goal is removed, 
+    and proving [statement] is added as a new goal.
+    If it fails, an error will be raised.
+
+    Arguments:
+        - [statement: constr], statement to assume to hold
+            (and to be proven later).
+        - [tac: unit -> unit], expression containing a tactic
+            that is supposed to prove the current goal 
+            (usually using [statement] as a hypothesis).
+            This can be a concatenation of tactics enclosed in [(] and [])]
+            separated by [;]. E.g. [tac := (apply some_lemma;assumption)].
+    
+    Raises exceptions:
+        - [AutomationFailure], in case evaluating [tac] does not prove the goal,
+            even if [statement] is given.
+*)
 Ltac2 Notation "It" "suffices" "to" "show" "that" 
     statement(constr) "by" tac(thunk(tactic)) := 
     apply_enough_with_tactic statement tac.
