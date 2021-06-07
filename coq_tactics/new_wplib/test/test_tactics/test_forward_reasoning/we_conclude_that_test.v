@@ -37,7 +37,7 @@ Qed.
 (* This axiom does not make sense, 
     but therefore we can be sure that [waterprove]
     does not know it without *explicitly* being told to use it.*)
-    Axiom zero_is_ten: 0 = 10.
+Axiom zero_is_ten: 0 = 10.
 
 
 (* -------------------------------------------------------------------------- *)
