@@ -1,9 +1,13 @@
 <template>
-    <div class="loader-footer" :style="{'max-height': maxHeight}">
-        <div class="inner-load">
+    <div class="loader-footer"
+         :style="{'max-height': maxHeight}">
+        <div :class="{'inner-load': true, 'failed-load': failed}">
             <scale-loader :loading="!done" :color="'white'"
                           :height="'15px'" class="scale-loader-lib">
             </scale-loader>
+            <template v-if="failed">
+              Serapi failed:
+            </template>
             {{loadState}}
         </div>
     </div>
@@ -22,9 +26,10 @@ export default {
     ...mapState({
       loadState: (state) => state.libraries.message,
       done: (state) => state.libraries.done,
+      failed: (state) => state.libraries.fail,
     }),
     maxHeight: function() {
-      return this.done ? '0' : '55px';
+      return (this.done && !this.failed) ? '0' : '55px';
     },
   },
   created() {
@@ -57,5 +62,9 @@ export default {
         margin-top: 5px;
         margin-right: 1em;
         display: inline;
+    }
+
+    .failed-load {
+       background-color: $color-error;
     }
 </style>
