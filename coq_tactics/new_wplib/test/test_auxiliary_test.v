@@ -98,3 +98,27 @@ Ltac2 Eval assert_raises_error
 Ltac2 Eval assert_is_true (string_equal "hello" "hello").
 Ltac2 Eval assert_is_false (string_equal "hello" "Hello").
 Ltac2 Eval assert_is_false (string_equal "hello" "hell").
+
+(*
+--------------------------------------------------------------------------------
+*) (** * Testcases for [assert_goal_is]
+*)
+
+(** * Test 1
+    Target does equal goal, no error should be raised.
+*)
+Lemma test_assert_goal_1: forall x:nat, x >= 0.
+Proof.
+    let t := constr:(forall x:nat, x >= 0) in
+    assert_goal_is t.
+Abort.
+
+(** * Test 2
+    Target does not equal goal, an error should be raised.
+*)
+Lemma test_assert_goal_2: forall x:nat, x >= 0.
+Proof.
+    let t := constr:(forall x:nat, x < 0) in
+    let result () := assert_goal_is t in
+    assert_raises_error result.
+Abort.
