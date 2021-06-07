@@ -67,6 +67,21 @@ Ltac2 apply_enough_with_tactic (statement:constr) (tac:unit) :=
     in
     try_enough_expression f statement.
 
+
+Ltac2 apply_enough_with_tactic_2 (statement:constr) (tac:unit -> unit) :=
+    (* If [tac] is not [unit -> unit] but just a unit,
+    then [tac] will be evaluated before [enough ($hyp_name : $statement)]
+    becomes evaluated. 
+    If [tac] would contain a tactic that uses the new statement
+    (which is usually the case when using [enough]),
+    then it would not be able to find this hypotheses.
+    Wrapping tac in a function solves this,
+    apparently it makes [tac] evaluated only later. *)
+    let hyp_name := Fresh.in_goal @h in
+    let f () := enough ($hyp_name : $statement) by (tac ())
+    in
+    f ().
+
 Ltac2 Notation "It" "suffices" "to" "show" "that" 
-    statement(constr) "by" tac(constr) := 
-    apply_enough_with_tactic statement tac.
+    statement(constr) "by" tac(thunk(tactic)) := 
+    apply_enough_with_tactic_2 statement tac.
