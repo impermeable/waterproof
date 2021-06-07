@@ -1,10 +1,11 @@
 (*
 Authors: 
     - Cosmin Manea (1298542)
+    - Lulof Pirée (1363638)
 Creation date: 06 June 2021
 
-Various versions of [Rewrite] tactic. This allows the user to rewrite the goal.
-The tactics allow for multiple rewrites simultaneously, using keywords such as `as, in` etc.
+Various versions of [Rewrite using ...] tactic. 
+This tactic is used to rewrite the goal or hypotheses.
 --------------------------------------------------------------------------------
 
 This file is part of Waterproof-lib.
@@ -27,29 +28,33 @@ From Ltac2 Require Import Ltac2.
 From Ltac2 Require Option.
 From Ltac2 Require Import Message.
 
-Add LoadPath "C:/Users/cosmi/Desktop/SEP - CM forward reasoning/waterproof/coq_tactics/new_wplib/tactics/" as wplib.
+Add LoadPath "./coq_tactics/new_wplib/" as wplib.
 Load forward_reasoning_aux.
 
-(** * rewriting
-    Rewrites the goal, according to the [waterprove] automation tactic, using an additional statement.
+Ltac2 Type exn ::= [ RewriteError(string) ].
 
-    Arguments:
-        - [statement: constr], the additional statement.
+Local Ltac2 fail_goal_rewrite () := 
+        Control.zero (RewriteError 
+            "Could not rewrite goal with this expression").
 
-    Does:
-        - rewrites [goal] using [statement], according to the [waterprove] automation tactic.
-*)
-Ltac2 rewriting (statement: constr) :=
-    let used_lemma := unwrap_optional_lemma None in
-    let u := Fresh.in_goal @u in
-    let u_val := (Control.hyp u) in
-    let by_arg () := waterprove_with_hint statement used_lemma in
-    Aux.ltac2_assert_with_by u statement by_arg; rewrite $u_val; clear u.
+Local Ltac2 print_rewrote_goal_success (statement: constr) :=
+    print(concat 
+        (concat
+            (of_string "Successfully rewrite goal using '")
+            (of_constr statement)
+        )
+        (of_string "'.")
+    ).
 
+Ltac2 rewrite_attempt (statement: constr) :=
+    let f () := (rewrite $statement) in
+    match Control.case f with
+    | Val _ => print_rewrote_goal_success statement
+    | Err exn => fail_goal_rewrite ()
+    end.
 
 Ltac2 Notation "Rewrite" "using" t(constr) :=
-    rewriting t.
-
+    rewrite_attempt t.
 
 Goal forall n : Q, exists m : Q, (n + 1 = m + 1).
 Proof.
@@ -60,4 +65,6 @@ Proof.
     }
     pose (m := n).
     exists m.
-    Rewrite using (n = n).
+    change m with n.
+    reflexivity.
+Qed.
