@@ -37,6 +37,11 @@ Local Ltac2 fail_goal_rewrite () :=
         Control.zero (RewriteError 
             "Could not rewrite goal with this expression").
 
+Local Ltac2 fail_verify_statement () :=
+    Control.zero (AutomationFailure 
+        "Could not verify that the replacement expression holds.
+You may need to prove this statement first before rewriting others with it.").
+
 Local Ltac2 print_rewrote_goal_success (statement: constr) :=
     print(concat 
         (concat
@@ -53,8 +58,19 @@ Ltac2 rewrite_attempt (statement: constr) :=
     | Err exn => fail_goal_rewrite ()
     end.
 
+Ltac2 rewrite_with_statement_check (statement: constr) :=
+    let u := Fresh.in_goal @u in
+    let by_arg () := waterprove_with_hint statement constr:(dummy_lemma)
+    in
+    let verify_statement () := Aux.ltac2_assert_with_by u statement by_arg
+    in
+    match Control.case verify_statement with
+    | Val _ => clear u; rewrite_attempt statement
+    | Err exn => clear u; fail_verify_statement ()
+    end.
+
 Ltac2 Notation "Rewrite" "using" t(constr) :=
-    rewrite_attempt t.
+    rewrite_with_statement_check t.
 
 Goal forall n : Q, exists m : Q, (n + 1 = m + 1).
 Proof.
