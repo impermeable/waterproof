@@ -44,6 +44,7 @@ Lemma test_rewrite_using_1: forall x y: nat, 5 * (x + y) = 5 * x + 5 * y.
 Proof.
     intros x y.
     Rewrite using Nat.mul_add_distr_l.
+    assert_goal_is constr:(5 * x + 5 * y = 5 * x + 5 * y).
     reflexivity.
 Qed.
 
@@ -54,6 +55,7 @@ Lemma test_rewrite_using_2: forall x y: nat, x + y + (x + y) = x + y + x + y.
 Proof.
     intros x y.
     Rewrite using Nat.add_assoc.
+    assert_goal_is constr:(x + y + x + y = x + y + x + y).
     reflexivity.
 Qed.
 
@@ -69,54 +71,105 @@ Proof.
 Abort.
 
 (* -------------------------------------------------------------------------- *)
+(** * Testcases for [Rewrite <- using ...] 
+    Same as [Rewrite using], but other way around 
+    (i.e. rewriting to LHS of theorem).
+*)
+
+(** * Test 1
+    Base case: valid left rewrite statement.
+*)
+Lemma test_rewrite_using_left_1: forall x y: nat,  5 * x + 5 * y = 5 * (x + y).
+Proof.
+    intros x y.
+    Rewrite <- using Nat.mul_add_distr_l.
+    assert_goal_is constr:(5 * (x + y) = 5 * (x + y)).
+    reflexivity.
+Qed.
+
+(** * Test 2
+    Base case: valid left rewrite statement.
+*)
+Lemma test_rewrite_using_left_2: forall x y: nat,  x + y + x + y = x + y + (x + y).
+Proof.
+    intros x y.
+    Rewrite <- using Nat.add_assoc.
+    assert_goal_is constr:(x + y + (x + y) = x + y + (x + y)).
+    reflexivity.
+Qed.
+
+(** * Test 3
+    Error case: unapplicable left rewrite statement.
+*)
+Lemma test_rewrite_using_3: forall x y: nat, x + y + (x + y) = x + y + x + y.
+Proof.
+    intros x y.
+    (* No multiplication is involved in the goal... *)
+    let result () := (Rewrite using Nat.mul_add_distr_l) in
+    assert_raises_error result.
+Abort.
+
+
+(* -------------------------------------------------------------------------- *)
 (** * Testcases for [Rewrite using ... in ...] 
     Variant with the [in] clause.
+*)
+
+(** * Test 1
+    Base case: valid rewrite statement
+    in a hypothesis.
 *)
 Lemma test_rewrite_using_in_1: forall x y: nat, 5 * (x + y) = 10 -> 2 = (x + y).
 Proof.
     intros x y.
     intros h.
     Rewrite using Nat.mul_add_distr_l in h.
-    assert_hyp_has_type @h (5 * x + 5 * y).
-Qed.
+    assert_hyp_has_type @h constr:(5 * x + 5 * y = 10).
+Abort.
 
-(* TODO: remove below. Just WIP inspiration for testcases. *)
+(** * Test 2
+    Error case: invalid rewrite statement
+    in a hypothesis.
+*)
 
-Lemma example: forall x y, (x + y) * (x + y) = x*x + 2*x*y + y*y.
+Lemma test_rewrite_using_in_2: forall x y: nat, 5 * (x + y) = 10 -> 2 = (x + y).
 Proof.
-intros x y.
-(* Rewrite (x + y) * (x + y) as (x * y)*x + (x * y)*y. 
-  Coq figured out that n := (x+y), m := x, p := y. 
-  Don't ask me how. Something with pattern matching.*)
-rewrite Nat.mul_add_distr_l.
-(* Can we also do other way around? Let's search! *)
-SearchRewrite ((_ + _) * _).
-(* We can now apply Nat.mul_add_distr_r without substitution,
-  but it is unclear whether Coq will choose p:=x or p:=y. *)
-rewrite Nat.mul_add_distr_r with (p:=x).
-rewrite Nat.mul_add_distr_r with (p:=y).
+    intros x y.
+    intros h.
+    (* This is a theorem about propositions 
+        -- clearly does not apply here!*)
+    let result () := (Rewrite using and_comm in h)
+    in assert_raises_error result.
+Abort.
 
-(* now we got:
-  x * x + y * x + (x * y + y * y)
-  How to get rid of those silly brackets? *)
-SearchRewrite (_ + (_ + _)).
-rewrite Nat.add_assoc.
+(* -------------------------------------------------------------------------- *)
+(** * Testcases for [Rewrite using <- ... in ...] 
+    Left-rewrite variant with the [in] clause.
+*)
 
-(* Now we want to use the theorem from right to left.
-  i.e. we got the RHS of the equality theorem, and we want the LHS *)
-rewrite <- Nat.add_assoc with (n := x * x).
-
-(* Need to replace (y * x + x * y) by 2*x*y.
-  First get the order straight.*)
-SearchPattern (?x * ?y = ?y * ?x).
-rewrite Nat.mul_comm with (n:=y) (m:=x).
-SearchRewrite (S _ * _).
-(* at 1 = apply only once.  This just says that x*y = 1*x*y   *)
-rewrite <- (Nat.mul_1_l (x * y)) at 1.
-(*  1*x*y + x*y = S(1)*x*y = 2*x*y  *)
-rewrite <- Nat.mul_succ_l.
-SearchRewrite (_ * (_ * _)).
-rewrite Nat.mul_assoc.
-(* Ok we are done. We got an expression of the shape A = A. *)
-reflexivity.
+(** * Test 1
+    Base case: valid left-directional rewrite statement
+    in a hypothesis.
+*)
+Lemma test_rewrite_using_in_left_1: forall x y: nat, 5 * x + 5 * y = 10 -> 5 * (x + y) = 10.
+Proof.
+    intros x y.
+    intros h.
+    Rewrite <- using Nat.mul_add_distr_l in h.
+    assert_hyp_has_type @h constr:(5 * (x + y) = 10).
+    assumption.
 Qed.
+
+(** * Test 2
+    Error case: invalid left rewrite statement
+    in a hypothesis.
+*)
+Lemma test_rewrite_using_in_left_2: forall x y: nat, 5 * (x + y) = 10 -> 2 = (x + y).
+Proof.
+    intros x y.
+    intros h.
+    (* This is a theorem about propositions 
+        -- clearly does not apply here!*)
+    let result () := (Rewrite <- using and_comm in h)
+    in assert_raises_error result.
+Abort.
