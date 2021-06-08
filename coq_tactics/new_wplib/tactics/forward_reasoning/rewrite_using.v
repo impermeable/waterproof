@@ -37,82 +37,145 @@ Local Ltac2 fail_goal_rewrite () :=
         Control.zero (RewriteError 
             "Could not rewrite goal with this expression").
 
-Local Ltac2 fail_verify_statement () :=
+Local Ltac2 fail_verify_lemma () :=
     Control.zero (AutomationFailure 
         "Could not verify that the replacement expression holds.
-You may need to prove this statement first before rewriting others with it.").
+You may need to prove this lemma first before rewriting others with it.").
 
-Local Ltac2 print_rewrote_goal_success (statement: constr) :=
+Local Ltac2 print_rewrote_goal_success (lemma: constr) :=
     print(concat 
         (concat
-            (of_string "Successfully rewrite goal using '")
-            (of_constr statement)
+            (of_string "Successfully rewrote goal using '")
+            (of_constr lemma)
         )
         (of_string "'.")
     ).
 
 (** * rewrite_attempt
-    Try to rewrite the goal using [statement].
+    Try to rewrite the goal using [lemma].
     Throw a custom error in case of failure,
     print a success message otherwise.
 
     Arguments:
-        - [statement:constr], 
+        - [lemma:constr], the lemma (or theorem) used for the rewrite.
+            This should be an equality proposition.
+        - [target: ident option], optional name of hypothesis to rewrite.
+            In case [None] is given, the goal will be rewritten.
+        - [to_left: bool], direction in which the lemma should be used.
+            - [true], the RHS of [lemma] will be interpreted as the current
+                goal/hypothesis, and the goal will be rewritten toward the
+                LHS. Equivalent to [rewrite <- ...].
+            - [false], vice-versa, so using the normal [rewrite] without [<-].
+
+    Raises exceptions:
+        - [RewriteError], in case the goal/hypothesis could not be
+            rewritten by [lemma] in the indicated direction.
 *)
-Local Ltac2 rewrite_attempt (statement: constr)
+Local Ltac2 rewrite_attempt (lemma: constr)
                             (target : ident option)
                             (to_left: bool):=
     let f () :=
         match target with
         | None => 
             match to_left with
-            | true => (rewrite <- $statement)
-            | false => (rewrite $statement)
+            | true => (rewrite <- $lemma)
+            | false => (rewrite $lemma)
             end
         | Some id => 
             match to_left with
-            | true => (rewrite <- $statement in $id)
-            | false => (rewrite $statement in $id)
+            | true => (rewrite <- $lemma in $id)
+            | false => (rewrite $lemma in $id)
             end
         end
     in
     match Control.case f with
-    | Val _ => print_rewrote_goal_success statement
+    | Val _ => print_rewrote_goal_success lemma
     | Err exn => fail_goal_rewrite ()
     end.
 
-(* Ltac2 rewrite_with_statement_check (statement: constr) :=
+(* TODO: ask Jim if this is needed, if not remove it *)
+(* Ltac2 rewrite_with_lemma_check (lemma: constr) :=
     let u := Fresh.in_goal @u in
-    let by_arg () := waterprove_with_hint statement constr:(dummy_lemma)
+    let by_arg () := waterprove_with_hint lemma constr:(dummy_lemma)
     in
-    let verify_statement () := Aux.ltac2_assert_with_by u statement by_arg
+    let verify_lemma () := Aux.ltac2_assert_with_by u lemma by_arg
     in
-    match Control.case verify_statement with
-    | Val _ => clear u; rewrite_attempt statement
-    | Err exn => clear u; fail_verify_statement ()
+    match Control.case verify_lemma with
+    | Val _ => clear u; rewrite_attempt lemma
+    | Err exn => clear u; fail_verify_lemma ()
     end. *)
 
+
+(** * Rewrite using ...
+    Try to rewrite the goal using [lemma].
+    Throw a custom error in case of failure,
+    print a success message otherwise.
+    Matches the LHS of [lemma] to the goal,
+    and tries to change part of expression towards the RHS.
+
+    Arguments:
+        - [lemma:constr], the lemma (or theorem) used for the rewrite.
+            This should be an equality proposition. 
+
+    Raises exceptions:
+        - [RewriteError], in case the goal/hypothesis could not be
+            rewritten by [lemma] in the right-to-left direction.
+*)
 Ltac2 Notation "Rewrite" "using" t(constr) :=
     rewrite_attempt t None false.
 
+(** * Rewrite using ... in ...
+    Try to rewrite a hypothesis using [lemma].
+    Throw a custom error in case of failure,
+    print a success message otherwise.
+    Matches the LHS of [lemma] to the goal,
+    and tries to change part of expression towards the RHS.
+
+    Arguments:
+        - [lemma:constr], the lemma (or theorem) used for the rewrite.
+            This should be an equality proposition. 
+        - [target: ident], name of hypothesis to rewrite.
+
+    Raises exceptions:
+        - [RewriteError], in case the goal/hypothesis could not be
+            rewritten by [lemma] in the right-to-left direction.
+*)
 Ltac2 Notation "Rewrite" "using" t(constr) "in" target(ident):=
     rewrite_attempt t (Some target) false.
 
+(** * Rewrite <- using ...
+    Try to rewrite the goal using [lemma].
+    Throw a custom error in case of failure,
+    print a success message otherwise.
+    Matches the RHS of [lemma] to the goal,
+    and tries to change part of expression towards the LHS.
+
+    Arguments:
+        - [lemma:constr], the lemma (or theorem) used for the rewrite.
+            This should be an equality proposition. 
+
+    Raises exceptions:
+        - [RewriteError], in case the goal/hypothesis could not be
+            rewritten by [lemma] in the left-to-right direction.
+*)
 Ltac2 Notation "Rewrite" "<-" "using" t(constr) :=
     rewrite_attempt t None true.
-    
+
+(** * Rewrite <- using ... in ...
+    Try to rewrite a hypothesis using [lemma].
+    Throw a custom error in case of failure,
+    print a success message otherwise.
+    Matches the RHS of [lemma] to the goal,
+    and tries to change part of expression towards the LHS.
+
+    Arguments:
+        - [lemma:constr], the lemma (or theorem) used for the rewrite.
+            This should be an equality proposition. 
+        - [target: ident], name of hypothesis to rewrite.
+
+    Raises exceptions:
+        - [RewriteError], in case the goal/hypothesis could not be
+            rewritten by [lemma] in the left-to-right direction.
+*)
 Ltac2 Notation "Rewrite" "<-" "using" t(constr) "in" target(ident):=
     rewrite_attempt t (Some target) true.
-
-Goal forall n : Q, exists m : Q, (n + 1 = m + 1).
-Proof.
-    intro.
-    assert (n = n) as X.
-    {
-        auto.
-    }
-    pose (m := n).
-    exists m.
-    change m with n.
-    reflexivity.
-Qed.
