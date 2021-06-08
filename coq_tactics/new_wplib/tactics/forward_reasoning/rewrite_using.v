@@ -51,14 +51,37 @@ Local Ltac2 print_rewrote_goal_success (statement: constr) :=
         (of_string "'.")
     ).
 
-Ltac2 rewrite_attempt (statement: constr) :=
-    let f () := (rewrite $statement) in
+(** * rewrite_attempt
+    Try to rewrite the goal using [statement].
+    Throw a custom error in case of failure,
+    print a success message otherwise.
+
+    Arguments:
+        - [statement:constr], 
+*)
+Local Ltac2 rewrite_attempt (statement: constr)
+                            (target : ident option)
+                            (to_left: bool):=
+    let f () :=
+        match target with
+        | None => 
+            match to_left with
+            | true => (rewrite <- $statement)
+            | false => (rewrite $statement)
+            end
+        | Some id => 
+            match to_left with
+            | true => (rewrite <- $statement in $id)
+            | false => (rewrite $statement in $id)
+            end
+        end
+    in
     match Control.case f with
     | Val _ => print_rewrote_goal_success statement
     | Err exn => fail_goal_rewrite ()
     end.
 
-Ltac2 rewrite_with_statement_check (statement: constr) :=
+(* Ltac2 rewrite_with_statement_check (statement: constr) :=
     let u := Fresh.in_goal @u in
     let by_arg () := waterprove_with_hint statement constr:(dummy_lemma)
     in
@@ -67,10 +90,19 @@ Ltac2 rewrite_with_statement_check (statement: constr) :=
     match Control.case verify_statement with
     | Val _ => clear u; rewrite_attempt statement
     | Err exn => clear u; fail_verify_statement ()
-    end.
+    end. *)
 
 Ltac2 Notation "Rewrite" "using" t(constr) :=
-    rewrite_with_statement_check t.
+    rewrite_attempt t None false.
+
+Ltac2 Notation "Rewrite" "using" t(constr) "in" target(ident):=
+    rewrite_attempt t (Some target) false.
+
+Ltac2 Notation "Rewrite" "<-" "using" t(constr) :=
+    rewrite_attempt t None true.
+    
+Ltac2 Notation "Rewrite" "<-" "using" t(constr) "in" target(ident):=
+    rewrite_attempt t (Some target) true.
 
 Goal forall n : Q, exists m : Q, (n + 1 = m + 1).
 Proof.
