@@ -141,16 +141,16 @@ Ltac2 assert_hyp_has_type (h: ident) (t: constr) :=
         fail_test "Hyp has wrong type"
     end.
 
-(*
+(** * assert_constr_is_true
     Assert that the constr-variable describes 
-    a Gallina bool with value "true".
+    a Gallina [bool] with value [true].
 
     Arguments:
-        * b: bool, should equal "true"
+        - [b: constr], should equal [true].
 
     Raises Exceptions:
-        * TestFailedError, if b is not a bool.
-        * TestFailedError, if b is false.
+        - [TestFailedError], if [b] is not a [bool].
+        - [TestFailedError], if [b] is [false].
 *)
 Ltac2 assert_constr_is_true (b:constr) :=
     match Constr.equal b constr:(true) with
@@ -158,15 +158,15 @@ Ltac2 assert_constr_is_true (b:constr) :=
     | false => fail_test "Did not get a constr equal to a bool with value true"
     end.
 
-(*
-    Assert that the Ltac2-variable is a bool with value "true".
+(** * assert_is_true
+    Assert that the Ltac2-variable is a bool with value [true].
 
     Arguments:
-        * b: bool, should equal "true"
+        - [b: bool], should equal [true].
 
     Raises Exceptions:
-        * TestFailedError, if b is not a bool.
-        * TestFailedError, if b is false.
+        - [TestFailedError], if [b] is not a [bool].
+        - [TestFailedError], if [b] is [false].
 *)
 Ltac2 assert_is_true (b:bool) :=
     match b with
@@ -174,15 +174,15 @@ Ltac2 assert_is_true (b:bool) :=
     | false => fail_test "Expected Ltac2 true, got Ltac2 bool 'false'"
     end.
 
-(*
-    Assert that the Ltac2-variable is a bool with value "false".
+(** * assert_is_false
+    Assert that the Ltac2-variable is a bool with value [false].
 
     Arguments:
-        * b: bool, should equal "false"
+        - [b: bool], should equal [false].
 
     Raises Exceptions:
-        * TestFailedError, if b is not a bool.
-        * TestFailedError, if b is TRUE.
+        - [TestFailedError], if b is not a [bool].
+        - [TestFailedError], if b is [true].
 *)
 Ltac2 assert_is_false (b:bool) :=
     match b with
@@ -215,32 +215,54 @@ Local Ltac2 rec string_equal_rec (idx) (s1:string) (s2:string) :=
         end
     end.
 
-(*
+(** * string_equal
     Compare two Ltac2 strings for equality.
 
     Arguments:
-        * s1, s2: string, strings to compare.
+        - [s1, s2: string], strings to compare.
 
     Returns:
-        * bool
-            - true, if "s1" and "s2" have 
+        - [bool]
+            - [true], if [s1] and [s2] have 
                 the same length and the same characters.
-            - false otherwise.
+            - [false] otherwise.
 *)
 Ltac2 string_equal (s1:string) (s2:string) := string_equal_rec 0 s1 s2.
 
-(*
+(** * assert_string_equal
     Assert two Ltac2 strings are equal.
 
     Arguments:
-        * s1, s2: string, strings to compare.
+        * [s1, s2: string], strings to compare.
 
     Raises Exceptions:
-        * TestFailedError, if s1 has different characters or a different
-            length as s2.
+        - [TestFailedError], if [s1] has different characters or a different
+            length as [s2].
 *)
 Ltac2 assert_string_equal (s1:string) (s2:string) :=
     match string_equal s1 s2 with
     | true => print (of_string "Test passed: strings are equal")
     | false => fail_test "Strings not equal"
+    end.
+
+
+(** * assert_goal_is
+    Check if the current goal under focus is judgementally equal
+    to the provided [constr].
+
+    Arguments:
+        - [target: constr], expression that should be 
+            judgementally equal to the goal.
+
+    Raises exceptions:
+        - [TestFailedError], if [target] is not 
+            judgementally equal to the goal.
+*)
+Ltac2 assert_goal_is (target:constr) :=
+    let g := Control.goal () in
+    let g' :=  (eval cbv in $g) in
+    let t' :=  (eval cbv in $target) in
+    match Constr.equal g' t' with
+    | true => print (of_string "Target is indeed equal to the goal.")
+    | false => fail_test "Target not equal to the goal."
     end.
