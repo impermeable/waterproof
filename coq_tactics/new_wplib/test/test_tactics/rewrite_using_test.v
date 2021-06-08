@@ -39,22 +39,26 @@ Open Scope nat_scope.
 
 (** * Test 1
     Base case: valid rewrite statement.
+    Using same proposition as [Nat.mul_add_distr_l].
 *)
 Lemma test_rewrite_using_1: forall x y: nat, 5 * (x + y) = 5 * x + 5 * y.
 Proof.
     intros x y.
-    Rewrite using Nat.mul_add_distr_l.
+    Check Nat.mul_add_distr_l.
+    Rewrite using (forall n m p : nat, n * (m + p) = n * m + n * p).
     assert_goal_is constr:(5 * x + 5 * y = 5 * x + 5 * y).
     reflexivity.
 Qed.
 
 (** * Test 2
     Base case: valid rewrite statement.
+    Using same proposition as [Nat.add_assoc].
 *)
 Lemma test_rewrite_using_2: forall x y: nat, x + y + (x + y) = x + y + x + y.
 Proof.
     intros x y.
-    Rewrite using Nat.add_assoc.
+    Check Nat.add_assoc.
+    Rewrite using (forall n m p : nat, n + (m + p) = n + m + p).
     assert_goal_is constr:(x + y + x + y = x + y + x + y).
     reflexivity.
 Qed.
@@ -66,7 +70,7 @@ Lemma test_rewrite_using_3: forall x y: nat, x + y + (x + y) = x + y + x + y.
 Proof.
     intros x y.
     (* No multiplication is involved in the goal... *)
-    let result () := (Rewrite using Nat.mul_add_distr_l) in
+    let result () := (Rewrite using (forall a b:nat, a * (a + b) = a * a + a * b)) in
     assert_raises_error result.
 Abort.
 
@@ -78,22 +82,24 @@ Abort.
 
 (** * Test 1
     Base case: valid left rewrite statement.
+    Using same proposition as [Nat.mul_add_distr_l].
 *)
 Lemma test_rewrite_using_left_1: forall x y: nat,  5 * x + 5 * y = 5 * (x + y).
 Proof.
     intros x y.
-    Rewrite <- using Nat.mul_add_distr_l.
+    Rewrite <- using (forall n m p : nat, n * (m + p) = n * m + n * p).
     assert_goal_is constr:(5 * (x + y) = 5 * (x + y)).
     reflexivity.
 Qed.
 
 (** * Test 2
     Base case: valid left rewrite statement.
+    Using same proposition as [Nat.add_assoc].
 *)
 Lemma test_rewrite_using_left_2: forall x y: nat,  x + y + x + y = x + y + (x + y).
 Proof.
     intros x y.
-    Rewrite <- using Nat.add_assoc.
+    Rewrite <- using (forall n m p : nat, n + (m + p) = n + m + p).
     assert_goal_is constr:(x + y + (x + y) = x + y + (x + y)).
     reflexivity.
 Qed.
@@ -105,7 +111,7 @@ Lemma test_rewrite_using_3: forall x y: nat, x + y + (x + y) = x + y + x + y.
 Proof.
     intros x y.
     (* No multiplication is involved in the goal... *)
-    let result () := (Rewrite using Nat.mul_add_distr_l) in
+    let result () := (Rewrite using (forall a b:nat, a * (a + b) = a * a + a * b)) in
     assert_raises_error result.
 Abort.
 
@@ -118,12 +124,13 @@ Abort.
 (** * Test 1
     Base case: valid rewrite statement
     in a hypothesis.
+    Using same proposition as [Nat.mul_add_distr_l].
 *)
 Lemma test_rewrite_using_in_1: forall x y: nat, 5 * (x + y) = 10 -> 2 = (x + y).
 Proof.
     intros x y.
     intros h.
-    Rewrite using Nat.mul_add_distr_l in h.
+    Rewrite using (forall n m p : nat, n * (m + p) = n * m + n * p) in h.
     assert_hyp_has_type @h constr:(5 * x + 5 * y = 10).
 Abort.
 
@@ -136,9 +143,10 @@ Lemma test_rewrite_using_in_2: forall x y: nat, 5 * (x + y) = 10 -> 2 = (x + y).
 Proof.
     intros x y.
     intros h.
+    Check and_comm.
     (* This is a theorem about propositions 
         -- clearly does not apply here!*)
-    let result () := (Rewrite using and_comm in h)
+    let result () := (Rewrite using (forall A B : Prop, A /\ B <-> B /\ A) in h)
     in assert_raises_error result.
 Abort.
 
@@ -150,12 +158,13 @@ Abort.
 (** * Test 1
     Base case: valid left-directional rewrite statement
     in a hypothesis.
+    Using same proposition as [Nat.mul_add_distr_l].
 *)
 Lemma test_rewrite_using_in_left_1: forall x y: nat, 5 * x + 5 * y = 10 -> 5 * (x + y) = 10.
 Proof.
     intros x y.
     intros h.
-    Rewrite <- using Nat.mul_add_distr_l in h.
+    Rewrite <- using (forall n m p : nat, n * (m + p) = n * m + n * p) in h.
     assert_hyp_has_type @h constr:(5 * (x + y) = 10).
     assumption.
 Qed.
@@ -170,6 +179,6 @@ Proof.
     intros h.
     (* This is a theorem about propositions 
         -- clearly does not apply here!*)
-    let result () := (Rewrite <- using and_comm in h)
+    let result () := (Rewrite <- using (forall A B : Prop, A /\ B <-> B /\ A) in h)
     in assert_raises_error result.
 Abort.

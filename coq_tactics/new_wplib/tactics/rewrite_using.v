@@ -29,7 +29,7 @@ From Ltac2 Require Option.
 From Ltac2 Require Import Message.
 
 Add LoadPath "./coq_tactics/new_wplib/" as wplib.
-Load forward_reasoning_aux.
+Load it_suffices_to_show. (* Used to avoid double inports in write_using.v*)
 
 Ltac2 Type exn ::= [ RewriteError(string) ].
 
@@ -37,22 +37,22 @@ Local Ltac2 fail_goal_rewrite () :=
         Control.zero (RewriteError 
             "Could not rewrite goal with this expression").
 
-Local Ltac2 fail_verify_lemma () :=
+Local Ltac2 fail_verify_prop () :=
     Control.zero (AutomationFailure 
-        "Could not verify that the replacement expression holds.
-You may need to prove this lemma first before rewriting others with it.").
+        "Could not verify that the proposition used for the rewrite holds.
+You may need to prove this proposition first before rewriting others with it.").
 
-Local Ltac2 print_rewrote_goal_success (lemma: constr) :=
+Local Ltac2 print_rewrote_goal_success (proposition: constr) :=
     print(concat 
         (concat
             (of_string "Successfully rewrote goal using '")
-            (of_constr lemma)
+            (of_constr proposition)
         )
         (of_string "'.")
     ).
 
 (** * rewrite_attempt
-    Try to rewrite the goal using [lemma].
+    Try to rewrite the goal using [prop].
     Throw a custom error in case of failure,
     print a success message otherwise.
 
@@ -93,89 +93,121 @@ Local Ltac2 rewrite_attempt (lemma: constr)
     | Err exn => fail_goal_rewrite ()
     end.
 
-(* TODO: ask Jim if this is needed, if not remove it *)
-(* Ltac2 rewrite_with_lemma_check (lemma: constr) :=
+(** * rewrite_with_prop_check 
+    Try to rewrite a goal or hypothesis using a
+    proposition litteral.
+    First tries to prove the proposition,
+    and then to rewrite the target with it.
+    Raises an error in case either of the two steps fails.
+
+    Arguments:
+        - [proposition: constr], litteral proposition
+            of the form ∀[... : ... = ...].
+        - [target: ident option], optional name of hypothesis to rewrite.
+            In case [None] is given, the goal will be rewritten.
+        - [to_left: bool], direction in which the lemma should be used.
+            - [true], the RHS of [lemma] will be interpreted as the current
+                goal/hypothesis, and the goal will be rewritten toward the
+                LHS. Equivalent to [rewrite <- ...].
+            - [false], vice-versa, so using the normal [rewrite] without [<-].
+
+    Raises exceptions:
+        - [AutomationFailure], in case [proposition] could not be proven
+            automatically. In this case, it may either be untrue,
+            or too difficult to prove automatically.
+        - [RewriteError], in case the goal/hypothesis could not be
+            rewritten by [proposition] in the indicated direction.
+        
+*)
+Ltac2 rewrite_with_prop_check (proposition: constr) 
+                            (target : ident option)
+                            (to_left: bool):=
+    (* Add proposition as a new hypothesis, 
+        then do the rewrite,
+        and then remove this hypothesis again.*)
     let u := Fresh.in_goal @u in
-    let by_arg () := waterprove_with_hint lemma constr:(dummy_lemma)
+    let by_arg () := waterprove_with_hint proposition constr:(dummy_lemma)
     in
-    let verify_lemma () := Aux.ltac2_assert_with_by u lemma by_arg
+    let verify_prop () := Aux.ltac2_assert_with_by u proposition by_arg
     in
-    match Control.case verify_lemma with
-    | Val _ => clear u; rewrite_attempt lemma
-    | Err exn => clear u; fail_verify_lemma ()
-    end. *)
+    match Control.case verify_prop with
+    | Val _ => print(of_ident u);
+        print(of_constr (Control.hyp u));
+        rewrite_attempt (Control.hyp u) target to_left; clear u
+    | Err exn => clear u; fail_verify_prop ()
+    end.
 
 
 (** * Rewrite using ...
-    Try to rewrite the goal using [lemma].
+    Try to rewrite the goal using [prop].
     Throw a custom error in case of failure,
     print a success message otherwise.
-    Matches the LHS of [lemma] to the goal,
+    Matches the LHS of [prop] to the goal,
     and tries to change part of expression towards the RHS.
 
     Arguments:
-        - [lemma:constr], the lemma (or theorem) used for the rewrite.
+        - [prop:constr], the prop (or theorem) used for the rewrite.
             This should be an equality proposition. 
 
     Raises exceptions:
         - [RewriteError], in case the goal/hypothesis could not be
-            rewritten by [lemma] in the right-to-left direction.
+            rewritten by [prop] in the right-to-left direction.
 *)
-Ltac2 Notation "Rewrite" "using" t(constr) :=
-    rewrite_attempt t None false.
+Ltac2 Notation "Rewrite" "using" prop(constr) :=
+    rewrite_with_prop_check prop None false.
 
 (** * Rewrite using ... in ...
-    Try to rewrite a hypothesis using [lemma].
+    Try to rewrite a hypothesis using [prop].
     Throw a custom error in case of failure,
     print a success message otherwise.
-    Matches the LHS of [lemma] to the goal,
+    Matches the LHS of [prop] to the goal,
     and tries to change part of expression towards the RHS.
 
     Arguments:
-        - [lemma:constr], the lemma (or theorem) used for the rewrite.
+        - [prop:constr], the prop (or theorem) used for the rewrite.
             This should be an equality proposition. 
         - [target: ident], name of hypothesis to rewrite.
 
     Raises exceptions:
         - [RewriteError], in case the goal/hypothesis could not be
-            rewritten by [lemma] in the right-to-left direction.
+            rewritten by [prop] in the right-to-left direction.
 *)
-Ltac2 Notation "Rewrite" "using" t(constr) "in" target(ident):=
-    rewrite_attempt t (Some target) false.
+Ltac2 Notation "Rewrite" "using" prop(constr) "in" target(ident):=
+    rewrite_with_prop_check prop (Some target) false.
 
 (** * Rewrite <- using ...
-    Try to rewrite the goal using [lemma].
+    Try to rewrite the goal using [prop].
     Throw a custom error in case of failure,
     print a success message otherwise.
-    Matches the RHS of [lemma] to the goal,
+    Matches the RHS of [prop] to the goal,
     and tries to change part of expression towards the LHS.
 
     Arguments:
-        - [lemma:constr], the lemma (or theorem) used for the rewrite.
+        - [prop:constr], the prop (or theorem) used for the rewrite.
             This should be an equality proposition. 
 
     Raises exceptions:
         - [RewriteError], in case the goal/hypothesis could not be
-            rewritten by [lemma] in the left-to-right direction.
+            rewritten by [prop] in the left-to-right direction.
 *)
-Ltac2 Notation "Rewrite" "<-" "using" t(constr) :=
-    rewrite_attempt t None true.
+Ltac2 Notation "Rewrite" "<-" "using" prop(constr) :=
+    rewrite_with_prop_check prop None true.
 
 (** * Rewrite <- using ... in ...
-    Try to rewrite a hypothesis using [lemma].
+    Try to rewrite a hypothesis using [prop].
     Throw a custom error in case of failure,
     print a success message otherwise.
-    Matches the RHS of [lemma] to the goal,
+    Matches the RHS of [prop] to the goal,
     and tries to change part of expression towards the LHS.
 
     Arguments:
-        - [lemma:constr], the lemma (or theorem) used for the rewrite.
+        - [prop:constr], the prop (or theorem) used for the rewrite.
             This should be an equality proposition. 
         - [target: ident], name of hypothesis to rewrite.
 
     Raises exceptions:
         - [RewriteError], in case the goal/hypothesis could not be
-            rewritten by [lemma] in the left-to-right direction.
+            rewritten by [prop] in the left-to-right direction.
 *)
-Ltac2 Notation "Rewrite" "<-" "using" t(constr) "in" target(ident):=
-    rewrite_attempt t (Some target) true.
+Ltac2 Notation "Rewrite" "<-" "using" prop(constr) "in" target(ident):=
+    rewrite_with_prop_check prop (Some target) true.
