@@ -20,7 +20,20 @@ export default class CProdN extends CoqType {
     };
   }
 
-  pprint(): string {
-    throw new Error('Method not implemented.');
+  pprint(indent = 0): string {
+    const tab = '\n'.concat('\t'.repeat(indent + 1));
+    let output = '';
+    for (let i = 0; i < this.localExprs.length; i++) {
+      output = output.concat('Local expr: ');
+      if (!Array.isArray(this.localExprs[i])) {
+        output = output.concat(
+            this.localExprs[i].pprint(indent + 1), tab);
+      } else {
+        output = output.concat(tab, '\t', this.localExprs[i].toString(), tab);
+      }
+    }
+    output = output.concat('Loc: ', this.expr.locinfo.pprint(indent + 1), tab);
+    output = output.concat(this.cprint(this.expr.content, indent));
+    return this.sprintf(super.pprint(indent), output);
   }
 }

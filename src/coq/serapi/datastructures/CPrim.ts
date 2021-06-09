@@ -30,11 +30,26 @@ export default class CPrim extends CoqType {
     }
   }
 
+  // eslint-disable-next-line valid-jsdoc
   /**
    * Returns a nice pretty-printed expression of {VernacEndProof}
    * TODO: implement me
    */
-  pprint(): string {
-    throw new Error('Method not implemented.');
+  pprint(indent = 0): string {
+    // TODO
+    const tab = '\n'.concat('\t'.repeat(indent + 1));
+    let output = '';
+    output = output.concat('Is numeric: ', this.isNumeric.toString(), tab);
+    if (this.isNumeric) {
+      output = output.concat('\tPositive: ', this.value['positive'].toString(),
+          tab);
+      output = output.concat('\tExp: ', this.value['exp'].toString(), tab);
+      output = output.concat('\tFrac: ', this.value['frac'].toString(), tab);
+      output = output.concat('\tInt: ', this.value['int'].toString(), tab);
+    } else {
+      output = output.concat('Value: ', this.value.toString(), tab);
+    }
+    return this.sprintf(super.pprint(indent), output);
+    // throw new Error('Method not implemented.');
   }
 }

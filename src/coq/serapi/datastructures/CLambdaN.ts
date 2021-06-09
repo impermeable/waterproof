@@ -18,7 +18,17 @@ export default class CLambdaN extends CoqType {
     };
   }
 
-  pprint(): string {
-    throw new Error('Method not implemented.');
+  pprint(indent = 1): string {
+    const tab = '\n'.concat('\t'.repeat(indent + 1));
+    let output = '';
+    if (!this.localExprs === null) {
+      for (let i = 0; i < this.localExprs.length; i++) {
+        output = output.concat(this.localExprs[i].pprint(indent + 1), tab);
+      }
+    }
+    output = output.concat('Loc: ', this.expr.locinfo.pprint(indent+1), tab);
+    output = output.concat(this.cprint(this.expr.content, indent));
+    return this.sprintf(super.pprint(indent), output);
+    // throw new Error('Method not implemented.');
   }
 }

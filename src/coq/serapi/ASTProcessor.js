@@ -16,6 +16,7 @@ import CLambdaN from './datastructures/CLambdaN';
 import VernacHints from './datastructures/VernacHints';
 import HintsResolve, {HintsReference} from './datastructures/HintsResolve';
 import CoqAST from './datastructures/CoqAst';
+import CoqType from './datastructures/CoqType';
 
 const flatten = require('./flatten-expr').flatten;
 
@@ -255,29 +256,47 @@ function convert_s_exp_to_string( expr, depth, stringSoFar ) {
 */
 
 // eslint-disable-next-line require-jsdoc
-class GenericVType {
+class GenericVType extends CoqType {
   /**
    *
    * @param {*} array
    */
   constructor( array ) {
+    super();
     const {attrs, control, expr} = flatten(array[1]);
 
     this.attributes = {'attrs': attrs, 'control': control};
     // this.data = convertToASTComp(expr);
     this.data = convertToASTComp(expr);
   }
+
+  // eslint-disable-next-line require-jsdoc
+  pprint(indent = 0) {
+    const s = this.data != null ? this.data.pprint(indent+1) : '';
+    // NOTE: we want an unscrict check here
+    return super.sprintf(super.pprint(indent), s);
+  }
 }
 
 
 // eslint-disable-next-line require-jsdoc
-class VernacProof {
+class VernacProof extends CoqType {
   // TODO: check why this crap is always empty...
 
   // eslint-disable-next-line require-jsdoc
   constructor( array ) {
+    super();
     this.rawGenericArg = array[0] || {};
     this.sectionSubsetExpr = array[1] || {};
+  }
+
+  // eslint-disable-next-line require-jsdoc
+  pprint(indent = 0) {
+    const tab = '\n'.concat('\t'.repeat(indent+1));
+    let output = '';
+    output = output.concat('Arg: ', this.rawGenericArg.toString(), tab);
+    output = output.concat('Expr: ', this.sectionSubsetExpr.toString(), tab);
+    return this.sprintf(super.pprint(indent), output);
   }
 }
 
@@ -285,32 +304,48 @@ class VernacProof {
 /**
  * A JavaScript equivalent of a VernacExpr object
  */
-class VernacExpr {
+class VernacExpr extends CoqType {
   /**
    * Construct a VernacExpr objected from a nested array
    * with the representation of the object.
    * @param {Array} array Array as parsed from SerAPI message
    */
   constructor( array ) {
+    super();
     // console.log('In the constructor of VernacExpr...');
     this.data = array;
     this.data[2] = convertToASTComp(array[2]);
     this.content = this.data[2];
+  }
+
+  // eslint-disable-next-line require-jsdoc
+  pprint(indent = 0) {
+    const output = output.concat(this.cprint(this.content, indent));
+    return this.sprintf(super.pprint(indent), output);
   }
 }
 
 /**
  * A JavaScript equivalent of a Coq VernacExtend object
  */
-class VernacExtend {
+class VernacExtend extends CoqType {
   /**
    * Construct a VernacExtend object from a nested array
    * with the representation of the object
    * @param {Array} array Array as parsed from SerAPI message
    */
   constructor( array ) {
+    super();
     // console.log('In the constructor of VernacExtend...');
     this.data = array;
+  }
+
+  // eslint-disable-next-line require-jsdoc
+  pprint(indent = 0) {
+    const tab = '\n'.concat('\t'.repeat(indent+1));
+    let output = '';
+    output = output.concat('Data: ', this.data.toString(), tab);
+    return this.sprintf(super.pprint(indent), output);
   }
 }
 

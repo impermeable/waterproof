@@ -13,7 +13,10 @@ export default class InConstrEntry extends CoqType {
   }
 
   // eslint-disable-next-line require-jsdoc
-  pprint(): string {
-    throw new Error('Method not implemented.');
+  pprint(indent = 0): string {
+    const tab = '\n'.concat('\t'.repeat(indent+1));
+    let output = '';
+    output = output.concat('Data: ', this.data.toString(), tab);
+    return this.sprintf(super.pprint(indent), output);
   }
 }
