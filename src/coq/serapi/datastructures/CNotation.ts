@@ -9,7 +9,7 @@ import LocInfo from './LocInfo';
 export default class CNotation extends CoqType {
   notation: CoqType;
   constrNotationSubstitution: { exprListOfLists: any; patternExprs: any;
-    binderExprsListOfLists: any; exprList: never[]; };
+    binderExprsListOfLists: any; exprList: any[]; };
 
   /**
    * Construct a CNotation object.
@@ -35,7 +35,20 @@ export default class CNotation extends CoqType {
   }
 
   // eslint-disable-next-line require-jsdoc
-  pprint(): string {
-    throw new Error('Method not implemented.');
+  pprint(indent = 0): string {
+    const tab = '\n'.concat('\t'.repeat(indent + 1));
+    let output = '';
+    output = output.concat(this.cprint(this.notation, indent));
+    for (let i = 0;
+      i < this.constrNotationSubstitution['exprList'].length;
+      i++) {
+      output = output.concat('Loc: ',
+          this.constrNotationSubstitution['exprList'][i].locinfo.pprint(
+              indent+1), tab);
+      output = output.concat(this.cprint(
+          this.constrNotationSubstitution['exprList'][i].content, indent));
+    }
+    return this.sprintf(super.pprint(indent), output);
+    // throw new Error('Method not implemented.');
   }
 }

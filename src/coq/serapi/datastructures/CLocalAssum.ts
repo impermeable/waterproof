@@ -22,7 +22,17 @@ export default class CLocalAssum extends CoqType {
     };
   }
 
-  pprint(): string {
-    throw new Error('Method not implemented.');
+  pprint(indent = 0): string {
+    const tab = '\n'.concat('\t'.repeat(indent + 1));
+    let output = '';
+    for (let i = 0; i < this.names.length; i++) {
+      output = output.concat('Loc: ', this.names[i].locinfo.pprint(indent + 1),
+          tab);
+      output = output.concat(this.cprint(this.names[i].content, indent));
+    }
+    output = output.concat('Kind: ', this.binderKind, tab);
+    output = output.concat('Loc: ', this.expr.locinfo.pprint(indent + 1), tab);
+    output = output.concat(this.cprint(this.expr.content, indent));
+    return this.sprintf(super.pprint(indent), output);
   }
 }

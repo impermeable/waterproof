@@ -30,12 +30,25 @@ class VernacEndProof extends CoqType {
     }
     this.proofFinished = this.proofEnd === 'Proved';
   }
+
+  // eslint-disable-next-line valid-jsdoc
   /**
    * Returns a nice pretty-printed expression of {VernacEndProof}
    * TODO: fixme
+   * @return {string}
    */
-  pprint(): string {
-    throw new Error('Method not implemented.');
+  pprint(indent = 0): string {
+    const tab = '\n'.concat('\t'.repeat(indent + 1));
+    let output = '';
+    if (typeof this.proofEnd === 'string') {
+      output = output.concat(this.proofEnd, tab);
+    } else {
+      output = output.concat(this.proofEnd, tab);
+      output = output.concat('Details: ', this.proofDetails.isOpaque.toString(),
+          tab);
+    }
+    output = output.concat('Finished: ', this.proofFinished.toString(), tab);
+    return this.sprintf(super.pprint(indent), output);
   }
 }
 

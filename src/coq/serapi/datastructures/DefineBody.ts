@@ -20,7 +20,15 @@ export default class DefineBody extends CoqType {
     this.exprOption = array[4];
   }
 
-  pprint(): string {
-    throw new Error('Method not implemented.');
+  pprint(indent = 0): string {
+    const tab = '\n'.concat('\t'.repeat(indent + 1));
+    let output = '';
+    output = output.concat('Local expr: ', this.localExprList.toString(), tab);
+    output = output.concat('Red exp: ', this.rawRedExprOption.toString(), tab);
+    output = output.concat('Loc: ', this.expr.locinfo.pprint(indent + 1), tab);
+    output = output.concat(this.cprint(this.expr.content, indent));
+    output = output.concat('Expr option: ', this.exprOption.toString(), tab);
+    return this.sprintf(super.pprint(indent), output);
+    // throw new Error('Method not implemented.');
   }
 }

@@ -30,7 +30,19 @@ export default class CApp extends CoqType {
     });
   }
 
-  pprint(): string {
-    throw new Error('Method not implemented.');
+  pprint(indent = 0): string {
+    const tab = '\n'.concat('\t'.repeat(indent + 1));
+    let output = '';
+    output = output.concat('Project flag: ', this.first.projFlag, tab);
+    output = output.concat('Loc: ', this.first.expr.locinfo.pprint(
+        indent + 1), tab);
+    output = output.concat(this.cprint(this.first.expr.content, indent));
+    for (let i = 0; i < this.list.length; i++) {
+      output = output.concat('Loc: ', this.list[i].locinfo.pprint(indent + 1),
+          tab);
+      output = output.concat(this.cprint(this.list[i].expr.content, indent));
+    }
+    return super.sprintf(super.pprint(indent), output);
+    // throw new Error('Method not implemented.');
   }
 }
