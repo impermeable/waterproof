@@ -99,8 +99,11 @@ export default class FlattenVisitor implements ASTVisitor {
 
     this._state.push([defExpr.locinfo,
       defExpr?.content.constructor.name]);
-    this._state.push([defExpr?.content.expr.locinfo,
-      defExpr?.content.expr.content.constructor.name]);
+
+    if (defExpr?.content.expr != null) {
+      this._state.push([defExpr?.content.expr.locinfo,
+        defExpr?.content.expr.content.constructor.name]);
+    }
   }
 
   visitVernacEndProof(term: VernacEndProof): void {
