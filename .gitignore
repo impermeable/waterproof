@@ -44,6 +44,8 @@ scripts/unit_tests.tex
 
 # compiled Coq libraries
 *.vo
+*.vos
+*.vok
 
 wrapper/**/*.v
 
