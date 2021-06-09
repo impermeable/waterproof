@@ -4,7 +4,7 @@ Authors:
 
 Creation date: 08 June 2021
 
-Testcases for the [By ... we know ...] tactic.
+Testcases for the [Either] tactic.
 Tests pass if they can be run without unhandled errors.
 --------------------------------------------------------------------------------
 

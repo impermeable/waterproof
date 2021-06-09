@@ -55,7 +55,7 @@ Ltac2 contra () :=
 
 
 (** * contradiction
-    Calls the Ltac1 [contradictio] tactic.
+    Calls the Ltac1 [contradiction] tactic.
 
     Arguments:
         - no arguments.
