@@ -5,11 +5,13 @@ p = Path('.')
 flatten = lambda t: [item for sublist in t for item in sublist]
 
 nb_paths = flatten([
-    list(p.glob('wrapper/wplib/Notebooks/Tutorial.wpn')),
+    # list(p.glob('wrapper/wplib/Notebooks/Tutorial.wpn')),
     list(p.glob('wrapper/wplib/Exercise_sheets/Lec_*.wpe')),
 ])
 
-del nb_paths[1]
+del nb_paths[1] # currently breaking
+del nb_paths[1] # currently breaking
+
 
 def nb_from_blocks(blocks):
     return {
@@ -38,5 +40,5 @@ if __name__ == '__main__':
 
     p = Path('./All_Notebooks.wpn')
     with p.open("w") as f:
-        json.dump(nb_from_blocks(blocks), f, indent=2)
+        json.dump(nb_from_blocks(blocks), f, indent=4, ensure_ascii=False)
     # p.write_text(nb_from_blocks(blocks))
