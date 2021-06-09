@@ -1,4 +1,4 @@
-(*
+(** * test_claims.v
 Authors: 
     - Cosmin Manea (1298542)
 
@@ -28,9 +28,13 @@ From Ltac2 Require Import Ltac2.
 Add LoadPath "C:/Users/cosmi/Desktop/SEP - CM forward reasoning/waterproof/coq_tactics/new_wplib/tactics/" as wplib.
 Load claims.
 
-(** Test 0: This should work fine *)
+
+(** Test 0: This should introduce a new subgoal, that n = n, under the name n_eq_n after
+            it is proven. *)
 Goal forall n : nat, exists m : nat, (n = m).
 Proof.
     intro n.
     We claim that (n = n) ( n_eq_n ).
+    reflexivity.
 Abort.
+

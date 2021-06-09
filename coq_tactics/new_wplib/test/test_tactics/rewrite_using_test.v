@@ -1,4 +1,4 @@
-(*
+(** * rewrite_using_test.v
 Authors: 
     - Lulof Pirée (1363638)
 Creation date: 08 June 2021

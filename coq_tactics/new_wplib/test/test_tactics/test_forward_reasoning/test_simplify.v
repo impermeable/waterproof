@@ -1,4 +1,4 @@
-(*
+(** * test_simplify.v
 Authors: 
     - Cosmin Manea (1298542)
 Creation date: 06 June 2021

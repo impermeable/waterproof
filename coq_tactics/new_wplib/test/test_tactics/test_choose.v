@@ -1,4 +1,4 @@
-(*
+(** * test_choose.v
 Authors: 
     - Cosmin Manea (1298542)
 
@@ -25,36 +25,36 @@ along with Waterproof-lib.  If not, see <https://www.gnu.org/licenses/>.
 *)
 
 From Ltac2 Require Import Ltac2.
-Add LoadPath "C:/Users/cosmi/Desktop/SEP/waterproof/coq_tactics/new_wplib" as wplib2.
+Add LoadPath "C:/Users/cosmi/Desktop/SEP - CM forward reasoning/waterproof/coq_tactics/new_wplib/tactics/" as wplib.
 Load Choose.
 Load test_auxiliary.
 
 
-(** Test 0: This should work fine *)
+(** Test 0: This should choose m equal to n *)
 Goal forall n : nat, exists m : nat, n = m.
 Proof.
   intros.
   Choose m := n.
   reflexivity.
-Abort.
+Qed.
 
 
-(** Test 1: This should work fine *)
+(** Test 1: This should choose m equal n implicitly *)
 Goal forall n : nat, exists m : nat, n = m.
     intro n.
     Choose (n).
     reflexivity.
-Abort.
+Qed.
 
 
-(** Test 2: This should work fine *)
+(** Test 2: This should raise an error, as the goal is not an exists goal *)
 Goal forall n : nat, ( ( (n = n) \/ (n + 1 = n + 1) ) -> (n + 1 = n + 1)).
     intro n.
     assert_raises_error (fun() => Choose (n)).
 Abort.
 
 
-(** Test 3: This should work fine *)
+(** Test 3: This should also raise an error, as the goal is not an exists goal *)
 Goal forall n : nat, ( ( (n = n) \/ (n + 1 = n + 1) ) -> (n + 1 = n + 1)).
     intro n.
     assert_raises_error (fun() => Choose m := n).

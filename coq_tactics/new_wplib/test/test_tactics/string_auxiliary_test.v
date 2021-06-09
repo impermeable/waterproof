@@ -1,9 +1,9 @@
-(*
+(** * string_auxiliary.v
 Authors: 
     * Lulof Pirée (1363638)
 Creation date: 23 May 2021
 
-Testcases for "string_auxiliary.v".
+Testcases for [string_auxiliary.v].
 --------------------------------------------------------------------------------
 
 This file is part of Waterproof-lib.
@@ -30,7 +30,7 @@ Load test_auxiliary.
 
 (*
 --------------------------------------------------------------------------------
-    Testcase for "replace_at_pos".
+    Testcase for [replace_at_pos].
 *)
 
 Ltac2 Eval 
@@ -40,7 +40,7 @@ Ltac2 Eval
 
 (*
 --------------------------------------------------------------------------------
-    Testcases for "concat_strings".
+    Testcases for [concat_strings].
 *)
 
 Ltac2 Eval 
@@ -53,7 +53,7 @@ Ltac2 Eval
 
 (*
 --------------------------------------------------------------------------------
-    Testcase for "copy_suffix_to_target".
+    Testcase for [copy_suffix_to_target].
 *)
 
 Ltac2 Eval
@@ -63,6 +63,6 @@ Ltac2 Eval
 
 (*
 --------------------------------------------------------------------------------
-    Testcase for "add_to_ident_name".
+    Testcase for [add_to_ident_name].
 *)
 Ltac2 Eval Ident.equal @unicorn (add_to_ident_name @uni "corn").

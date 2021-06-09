@@ -1,4 +1,4 @@
-(*
+(** * test_induction.v
 Authors: 
     - Cosmin Manea (1298542)
 
@@ -37,4 +37,4 @@ Proof.
     intro h.
     reflexivity.
     reflexivity.
-Abort.
+Defined.

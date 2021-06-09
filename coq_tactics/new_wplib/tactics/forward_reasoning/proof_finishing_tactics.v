@@ -1,4 +1,4 @@
-(*
+(** * proof_finishing_tactics.v
 Authors: 
     - Cosmin Manea (1298542)
 

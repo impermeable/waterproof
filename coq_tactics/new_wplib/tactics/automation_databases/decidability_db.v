@@ -1,4 +1,4 @@
-(*
+(** * decidability_db.v
 Hint database for being able to prove via case distinction.
 --------------------------------------------------------------------------------
 

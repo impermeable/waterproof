@@ -1,4 +1,4 @@
-(*
+(** * choose_such_that.v
 Author: 
     - Cosmin Manea (1298542)
 Creation date: 30 May 2021
@@ -30,40 +30,21 @@ From Ltac2 Require Option.
 
 
 (** * choose_destrct_without_extra_hypothesis
-    Chooses a variable such that two additional hypotheses are satisfied.
+    Chooses a variable according to a particular definition, and label the remaining parts 
+    of the definition.
 
     Arguments:
-        - [s: ident], one of the two hypotheses.
-        - [v: constr], the requirted constr that needs to be instantiated.
-        - [u: ident], the other hypothesis.
+        - [s: ident], the variable to be chosen.
+        - [v: constr], the definition used.
+        - [u: ident], the remaining parts of the definition.
 
     Does:
-        - instantiates the constr [v] under the hypotheses [s] and [u].
+        - destructs the constr [v] under the names [s] and [u].
 *)
 Ltac2 choose_destruct_without_extra_hypothesis (s:ident) (u:ident) (v:constr) :=
    destruct $v as [s u].
 
 
 
-(** * choose_destruct_with_extra_hypothesis
-    Choose a variable such that three additional hypotheses are satisfied.
-
-    Arguments:
-        - [s: ident], the first hypothesis.
-        - [v: constr], the requirted constr that needs to be instantiated.
-        - [u: ident], the second hypothesis.
-        - [t: constr], the last hypothesis.
-
-    Does:
-        - instantiates the constr [v] under the hypotheses [s], [u] and [t].
-*)
-Ltac2 choose_destruct_with_extra_hypothesis (s:ident) (u:ident) (v:constr) (t:constr) :=
-    destruct $v with $t as [s u].
-
-
-
-Ltac2 Notation "Choose" s(ident) "such" "that" u(ident) "according" "to" v(constr) withh(opt("with")) t(opt(constr)) :=
-    match t with 
-        | None => choose_destruct_without_extra_hypothesis s u v
-        | Some y => choose_destruct_with_extra_hypothesis s u v t
-    end.
+Ltac2 Notation "Choose" s(ident) "such" "that" u(ident) "according" "to" v(constr) :=
+    choose_destruct_without_extra_hypothesis s u v.

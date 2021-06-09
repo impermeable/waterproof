@@ -1,4 +1,4 @@
-(*
+(** * apply.v
 Authors: 
     - Cosmin Manea (1298542)
 
@@ -28,7 +28,7 @@ From Ltac2 Require Import Ltac2.
 Add LoadPath "C:/Users/cosmi/Desktop/SEP - CM forward reasoning/waterproof/coq_tactics/new_wplib/tactics/" as wplib.
 Load apply.
 
-(** Test 0: This should work fine *)
+(** Test 0: This should work just fine, by applying a hypothesis *)
 Goal forall n : nat, exists m : nat, (n = m).
 Proof.
     intro.
@@ -39,4 +39,19 @@ Proof.
     pose (m := n).
     exists m.
     Apply X.
-Abort.
+Defined.
+
+
+(** Test 1: This should also work just fine, by applying a lemma *)
+
+Lemma my_refl (n : nat) : n = n.
+Proof.
+    reflexivity.
+Defined.
+
+Goal forall n : nat, n = n.
+Proof.
+    intro n.
+    Apply (my_refl n).
+Defined.
+

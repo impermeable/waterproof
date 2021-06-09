@@ -1,4 +1,4 @@
-(*
+(** * test_we_show_both_directions.
 Authors: 
     - Cosmin Manea (1298542)
 
@@ -30,14 +30,14 @@ Add LoadPath "C:/Users/cosmi/Desktop/SEP/waterproof/coq_tactics/new_wplib" as wp
 Load we_show_both_directions.
 Load test_auxiliary.
 
-(** Test 0: This should work fine *)
+(** Test 0: this should work *)
 Goal forall n : nat, ((n = n) <-> (n + 1 = n + 1)).
     intro n.
     We show both directions.
 Abort.
 
 
-(** Test 1: This should also work fine *)
+(** Test 1: this should also work *)
 Goal forall n : nat, ((n = n) <-> (n + 1 = n + 1)).
     intro n.
     We prove both directions.

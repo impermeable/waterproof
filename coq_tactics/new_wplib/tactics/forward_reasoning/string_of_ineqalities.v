@@ -1,4 +1,4 @@
-(*
+(** * string_of_inequalities.v
 Authors: 
     - Cosmin Manea (1298542)
 

@@ -1,4 +1,4 @@
-(*
+(** * test_by_we_know.v
 Authors: 
     - Cosmin Manea (1298542)
 
@@ -28,9 +28,26 @@ From Ltac2 Require Import Ltac2.
 Add LoadPath "C:/Users/cosmi/Desktop/SEP/waterproof/coq_tactics/new_wplib/tactics/" as wplib.
 Load by_we_know.
 
-(** Test 0: This should work fine *)
+
+(** Test 0: This should work and assert that (n + 1 = n + 1) if (n = n) *)
 Goal forall n : nat, ((n = n) <-> (n + 1 = n + 1)).
+Proof.
     intro n.
     split.
     By (n = n) we know (n + 1 = n + 1).
+    reflexivity.
+    reflexivity.
+    reflexivity.
+Qed.
+
+
+(** Test 0: This should work and assert that (n + 1 = m + 1) if (n = m) *)
+Goal forall n m : nat, (n = m) <-> (n + 1 = m + 1).
+Proof.
+    intros.
+    split.
+    intros.
+    By (n = m) we know (n + 1 = m + 1).
+    exact H.
+    auto with *.
 Abort.

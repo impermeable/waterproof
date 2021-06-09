@@ -1,4 +1,4 @@
-(*
+(** * by_we_know.v
 Authors: 
     - Cosmin Manea (1298542)
 Creation date: 23 May 2021
