@@ -15,8 +15,12 @@ export default class VernacProof extends CoqType implements Visitable {
     this.sectionSubsetExpr = array[1] || {};
   }
 
-  pprint(): string {
-    throw new Error('Method not implemented.');
+  pprint(indent = 0) {
+    const tab = '\n'.concat('\t'.repeat(indent+1));
+    let output = '';
+    output = output.concat('Arg: ', this.rawGenericArg.toString(), tab);
+    output = output.concat('Expr: ', this.sectionSubsetExpr.toString(), tab);
+    return this.sprintf(super.pprint(indent), output);
   }
 
   accept(visitor: ASTVisitor): void {

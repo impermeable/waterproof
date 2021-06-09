@@ -33,7 +33,17 @@ export default class LocInfo extends CoqType {
   }
 
   // eslint-disable-next-line require-jsdoc
-  pprint(): string {
-    throw new Error('Method not implemented.');
+  pprint(indent = 0): string {
+    const tab = '\n'.concat('\t'.repeat(indent + 1));
+    let output = '';
+    output = output.concat('Name: ', this.fname, tab);
+    output = output.concat('Start line: ', this.line_nb.toString(), tab);
+    output = output.concat('Start pos: ', this.bol_pos.toString(), tab);
+    output = output.concat('End line: ', this.line_nb_last.toString(), tab);
+    output = output.concat('End pos: ', this.bol_pos_last.toString(), tab);
+    output = output.concat('Bp: ', this.bp.toString(), tab);
+    output = output.concat('Ep: ', this.ep.toString(), tab);
+    return this.sprintf(super.pprint(indent), output);
+    // throw new Error('Method not implemented.');
   }
 }

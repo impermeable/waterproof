@@ -20,7 +20,14 @@ export default class CRef extends CoqType {
   }
 
   // eslint-disable-next-line require-jsdoc
-  pprint(): string {
-    throw new Error('Method not implemented.');
+  pprint(indent = 0): string {
+    const tab = '\n'.concat('\t'.repeat(indent + 1));
+    let output = '';
+    output = output.concat('Loc: ', this.libNames.locinfo.pprint(indent+1),
+        tab);
+    output = output.concat(this.cprint(this.libNames.content, indent));
+    output = output.concat('Instance: ', this.instanceExpr.toString(), tab);
+    return this.sprintf(super.pprint(indent), output);
+    // throw new Error('Method not implemented.');
   }
 }

@@ -19,8 +19,11 @@ export default class VernacExtend extends CoqType implements Visitable {
     this.data = array;
   }
 
-  pprint(): string {
-    throw new Error('Method not implemented.');
+  pprint(indent = 0) {
+    const tab = '\n'.concat('\t'.repeat(indent+1));
+    let output = '';
+    output = output.concat('Data: ', this.data.toString(), tab);
+    return this.sprintf(super.pprint(indent), output);
   }
 
   accept(visitor: ASTVisitor): void {

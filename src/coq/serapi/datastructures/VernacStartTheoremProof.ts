@@ -18,7 +18,8 @@ enum TheoremKind {
 export default class VernacStartTheoremProof extends CoqType
   implements Visitable {
   theoremKind: TheoremKind;
-  proofExprs: [any, any];
+  // proofExprs: [any, any];
+  proofExprs: any[];
 
   // eslint-disable-next-line require-jsdoc
   constructor( array ) {
@@ -55,8 +56,32 @@ export default class VernacStartTheoremProof extends CoqType
   }
 
   // eslint-disable-next-line require-jsdoc
-  pprint(): string {
-    throw new Error('Method not implemented.');
+  pprint(indent = 0): string {
+    const tab = '\n'.concat('\t'.repeat(indent + 1));
+    let output = '';
+    output = output.concat('Kind: ', this.theoremKind.toString(), tab);
+    for (let i = 0; i < this.proofExprs.length; i++) {
+      if (!this.proofExprs[i]['ident_decl'] === null) {
+        output = output.concat('Loc: ',
+            this.proofExprs[i]['ident_decl'].locinfo.pprint(indent+1), tab);
+        output = output.concat(this.cprint(
+            this.proofExprs[i]['ident_decl'].content, indent));
+      }
+      if (!this.proofExprs[i]['unparsed'] === null) {
+        output = output.concat('Unparsed: ');
+      }
+      for (let j = 0; j < this.proofExprs[i]['unparsed']; j++) {
+        output = output.concat(this.cprint(this.proofExprs[i]['unparsed'][j],
+            indent+1));
+      }
+      if (!this.proofExprs[i]['data'] === null) {
+        output = output.concat('Loc: ',
+            this.proofExprs[i]['data'].locinfo.pprint(indent+1), tab);
+        output = output.concat(
+            this.cprint(this.proofExprs[i]['data'].content, indent));
+      }
+    }
+    return this.sprintf(super.pprint(indent), output);
   }
 
   // eslint-disable-next-line require-jsdoc

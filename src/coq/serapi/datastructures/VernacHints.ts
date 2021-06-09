@@ -13,8 +13,17 @@ export default class VernacHints extends CoqType implements Visitable {
     this.hintExpr = convertToASTComp(array[2]);
   }
 
-  pprint(): string {
-    throw new Error('Method not implemented.');
+  pprint(indent = 0): string {
+    const tab = '\n'.concat('\t'.repeat(indent + 1));
+    let output = '';
+    output = output.concat('Strings: ', this.strings, tab);
+    if (!Array.isArray(this.hintExpr)) {
+      output = output.concat('Hint: ', this.hintExpr.pprint(indent+1), tab);
+    } else {
+      output = output.concat('Hint: ', tab, '\t', this.hintExpr.toString(),
+          tab);
+    }
+    return this.sprintf(super.pprint(indent), output);
   }
 
   accept(visitor: ASTVisitor): void {

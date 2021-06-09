@@ -259,6 +259,7 @@ function convert_s_exp_to_string( expr, depth, stringSoFar ) {
 }
 */
 
+
 const constrDict = {
   'VernacExpr': VernacExpr,
   'VernacExtend': VernacExtend,

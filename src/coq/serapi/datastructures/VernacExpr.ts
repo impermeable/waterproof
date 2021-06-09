@@ -21,7 +21,9 @@ export default class VernacExpr extends CoqType {
     this.content = data[2];
   }
 
-  pprint(): string {
-    throw new Error('Method not implemented.');
+  print(indent = 0) {
+    const output = '';
+    output.concat(this.cprint(this.content, indent));
+    return this.sprintf(super.pprint(indent), output);
   }
 }

@@ -44,8 +44,18 @@ export default class VernacDefinition extends CoqType implements Visitable {
     this.defitionExpr = convertToASTComp(array[3]);
   }
 
-  pprint(): string {
-    throw new Error('Method not implemented.');
+  pprint(indent = 0): string {
+    const tab = '\n'.concat('\t'.repeat(indent+1));
+    let output = '';
+    output = output.concat('Discharge: ', this.discharge.toString(), tab);
+    output = output.concat('Def: ', this.defintionObjectKind.toString(), tab);
+    output = output.concat('Name: ', tab);
+    output = output.concat('\tLoc: ',
+        this.nameDecl.name.locinfo.pprint(indent+1), tab);
+    output = output.concat('\t', this.cprint(this.nameDecl.name.content,
+        indent+1));
+    return this.sprintf(super.pprint(indent), output);
+    // throw new Error('Method not implemented.');
   }
 
   accept(visitor: ASTVisitor) {

@@ -15,7 +15,11 @@ export default class SerQualid extends CoqType {
   }
 
   // eslint-disable-next-line require-jsdoc
-  pprint() : string {
-    throw new Error('Method not implemented.');
+  pprint(indent = 0) : string {
+    const tab = '\n'.concat('\t'.repeat(indent+1));
+    let output = '';
+    output = output.concat('Path: ', this.dirPath.toString(), tab);
+    output = output.concat('Id: ', this.id.toString(), tab);
+    return this.sprintf(super.pprint(indent), output);
   }
 }

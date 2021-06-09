@@ -30,15 +30,15 @@ export default class CoqAST extends CoqType implements Visitable {
   }
 
   // eslint-disable-next-line require-jsdoc
-  pprint(): string {
-    return `(${this.constructor.name}\n\t(TODO)\n)\n`;
+  pprint(indent = 0): string {
+    // TODO 1: sanity check - is content an CoqType ...
+    // (could be null or something)
+    // Call the method to pprint on the child(ren)
+    const tab = '\n'.concat('\t'.repeat(indent + 1));
+    let output = '';
+    output = output.concat('Loc: ', this.locinfo.pprint(indent+1), tab);
+    output = output.concat(this.cprint(this.content, indent));
+    return this.sprintf(super.pprint(indent), output);
+    //  return `(${this.constructor.name}\n\t(TODO)\n)\n`;
   }
-
-  // eslint-disable-next-line require-jsdoc
-  // flatten() : [[LocInfo, string]] | [] {
-  //   return [];
-  //   // if(this.content !== null){
-
-  //   // }
-  // }
 }

@@ -28,8 +28,18 @@ export default class VernacRequire extends CoqType implements Visitable {
   }
 
   // eslint-disable-next-line require-jsdoc
-  pprint(): string {
-    throw new Error('Method not implemented.');
+  pprint(indent = 0): string {
+    const tab = '\n'.concat('\t'.repeat(indent+1));
+    let output = '';
+    output = output.concat('Qualid: ', this.qualid.toString(), tab);
+    output = output.concat('Flag: ', this.export_flag.toString(), tab);
+    for (let i = 0; i < this.list.length; i++) {
+      output = output.concat('Loc: ', this.list[i].locinfo.pprint(indent+1),
+          tab);
+      output = output.concat(this.cprint(this.list[i].content, indent));
+    }
+    return this.sprintf(super.pprint(indent), output);
+    // throw new Error('Method not implemented.');
   }
 
   accept(visitor: ASTVisitor): void {

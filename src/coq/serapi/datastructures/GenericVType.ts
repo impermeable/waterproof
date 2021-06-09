@@ -7,10 +7,7 @@ import ASTVisitor from './visitor/ASTVisitor';
 export default class GenericVType extends CoqType implements Visitable {
   attributes: { attrs: any; control: any; };
   data: any;
-  // eslint-disable-next-line require-jsdoc
-  pprint(): string {
-    throw new Error('Method not implemented.');
-  }
+
   /**
    *
    * @param {*} array
@@ -22,6 +19,13 @@ export default class GenericVType extends CoqType implements Visitable {
     this.attributes = {'attrs': attrs, 'control': control};
     // this.data = convertToASTComp(expr);
     this.data = convertToASTComp(expr);
+  }
+
+  // eslint-disable-next-line require-jsdoc
+  pprint(indent = 0) {
+    const s = this.data != null ? this.data.pprint(indent+1) : '';
+    // NOTE: we want an unscrict check here
+    return super.sprintf(super.pprint(indent), s);
   }
 
   // eslint-disable-next-line require-jsdoc
