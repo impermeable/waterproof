@@ -6,6 +6,7 @@ import SerapiContentProcessor from './SerapiContentProcessor';
 import SerapiTagger from '../SerapiTagger';
 import SerapiExecutionProcessor from './SerapiExecutionProcessor';
 import SerapiSearchProcessor from './SerapiSearchProcessor';
+import SerapiASTProcessor from './SerapiASTProcessor';
 
 /**
  * The main interface to SerAPI. An implementation of CoqInterface
@@ -39,6 +40,12 @@ class CoqSerapiProcessors extends CoqInterface {
         new SerapiExecutionProcessor(this.tagger, this.state, editor);
     this.searchProcessor =
         new SerapiSearchProcessor(this.tagger, this.state, editor);
+
+    this.astProcessor =
+        new SerapiASTProcessor(this.tagger, this.state, editor);
+
+    // TODO: TEMP
+    this.alwaysAST = false;
   }
 
   /**
@@ -50,6 +57,12 @@ class CoqSerapiProcessors extends CoqInterface {
   setContent(content) {
     if (!this.ready) {
       return Promise.resolve();
+    }
+    // TODO: TEMP
+    if (this.alwaysAST) {
+      setTimeout(() => {
+        this.astProcessor.getAllAsts().then();
+      }, 100);
     }
     return this.contentProcessor.setContent(content);
   }
@@ -149,6 +162,21 @@ class CoqSerapiProcessors extends CoqInterface {
    */
   getState() {
     return this.state;
+  }
+
+
+  // TODO: TEMP:
+  /**
+   * a
+   * @return {Promise<void>}
+   */
+  getAllASTs() {
+    return this.astProcessor.getAllAsts();
+  }
+
+  // eslint-disable-next-line require-jsdoc
+  getUnparsedTypes() {
+    return this.astProcessor.getUnparsedTypes();
   }
 }
 

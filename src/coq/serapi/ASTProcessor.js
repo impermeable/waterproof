@@ -1,4 +1,28 @@
-const flatten = require('./flatten-expr').flatten;
+import VernacEndProof from './datastructures/VernacEndProof';
+import CPrim from './datastructures/CPrim';
+import CNotation from './datastructures/CNotation';
+import VernacRequire from './datastructures/VernacRequire';
+import SerQualid from './datastructures/SerQualid';
+import InConstrEntry from './datastructures/InConstrEntry';
+import CRef from './datastructures/CRef';
+import VernacStartTheoremProof from './datastructures/VernacStartTheoremProof';
+import CProdN from './datastructures/CProdN';
+import CApp from './datastructures/CApp';
+import CLocalAssum from './datastructures/CLocalAssum';
+import IDt from './datastructures/IDt';
+import VernacDefinition from './datastructures/VernacDefinition';
+import DefineBody from './datastructures/DefineBody';
+import CLambdaN from './datastructures/CLambdaN';
+import VernacHints from './datastructures/VernacHints';
+import HintsResolve, {HintsReference} from './datastructures/HintsResolve';
+import CoqAST from './datastructures/CoqAst';
+import VernacExpr from './datastructures/VernacExpr';
+import VernacExtend from './datastructures/VernacExtend';
+import VernacProof from './datastructures/VernacProof';
+// import CoqType from './datastructures/CoqType';
+import GenericVType from './datastructures/GenericVType';
+
+// const flatten = require('./flatten-expr').flatten;
 
 /**
  * The ppDict assigns to every name of an object appearing in an AST a function
@@ -200,90 +224,75 @@ function extractCoqAST( nestedArrays ) {
  */
 function convertToASTComp(array) {
   if (array[0] in constrDict) {
+    if (currentlyNotParsedTypes.has(constrDict)) {
+      currentlyNotParsedTypes.delete(constrDict);
+    }
     const ConstructorForObject = constrDict[array[0]];
     return new ConstructorForObject(array);
+  } else {
+    console.warn(`Currently not parsing: ${array[0]}`,
+        JSON.parse(JSON.stringify(array.length > 1 ? array.slice(1) : array)));
+    if (!currentlyNotParsedTypes.has(array[0])) {
+      currentlyNotParsedTypes.set(array[0], 1);
+    } else {
+      currentlyNotParsedTypes.set(array[0],
+          currentlyNotParsedTypes.get(array[0]) + 1);
+    }
+    // currentlyNotParsedTypes.add(array[0]);
   }
   return array;
 }
 
-/**
- * Class to record the AST given back by serAPI
- */
-class CoqAST {
-  /**
-   * Construct CoqAST object from array containing the
-   * AST information given back by serAPI.
-   * @param {*} array The array with the CoqAST information
-   */
-  constructor( array ) {
-    this.locinfo = new LocInfo(array[1][0]);
-    this.content = convertToASTComp(array[1][1]);
-  }
-}
 
-/**
- * A JavaScript equivalent of a VernacExpr object
- */
-class VernacExpr {
-  /**
-   * Construct a VernacExpr objected from a nested array
-   * with the representation of the object.
-   * @param {Array} array Array as parsed from SerAPI message
-   */
-  constructor( array ) {
-    // console.log('In the constructor of VernacExpr...');
-    this.data = array;
-    this.data[2] = convertToASTComp(array[2]);
-    this.content = this.data[2];
-  }
-}
+/*
 
-/**
- * A JavaScript equivalent of a Coq VernacExtend object
- */
-class VernacExtend {
-  /**
-   * Construct a VernacExtend object from a nested array
-   * with the representation of the object
-   * @param {Array} array Array as parsed from SerAPI message
-   */
-  constructor( array ) {
-    // console.log('In the constructor of VernacExtend...');
-    this.data = array;
+/!** Convert an s-expression to a string with indentation *!/
+function convert_s_exp_to_string( expr, depth, stringSoFar ) {
+  let returnString = stringSoFar;
+  if (Array.isArray(expr)) {
+    for (let i = 0; i < expr.length; i++) {
+      returnString = convert_s_exp_to_string(expr[i], depth + 1, returnString);
+    }
+    return returnString;
   }
+  return returnString + '\n' + '| '.repeat((depth)) + expr.toString();
 }
+*/
 
-/**
- * Class to record location info that is often part
- * of an AST given back by serAPI.
- */
-class LocInfo {
-  /**
-   * Construct a LocInfo object from an array containing
-   * serAPI location info
-   * @param {Array} array Array containing location info
-   */
-  constructor( array ) {
-    const result = flatten(array)[0];
-    // console.log(result);
-    this.fname = result.fname;
-    this.line_nb = result.line_nb;
-    this.bol_pos = result.bol_pos;
-    this.line_nb_last = result.line_nb_last;
-    this.bol_pos_last = result.bol_pos_last;
-    this.bp = result.bp;
-    this.ep = result.ep;
-  }
-}
 
 const constrDict = {
   'VernacExpr': VernacExpr,
   'VernacExtend': VernacExtend,
+  'v': GenericVType,
+  'VernacRequire': VernacRequire,
+  'Ser_Qualid': SerQualid,
+  'VernacStartTheoremProof': VernacStartTheoremProof,
+  'VernacProof': VernacProof,
+  'VernacEndProof': VernacEndProof,
+  'CNotation': CNotation,
+  'InConstrEntry': InConstrEntry,
+  'CRef': CRef,
+  'CPrim': CPrim,
+  'CProdN': CProdN,
+  'CApp': CApp,
+  'CLocalAssum': CLocalAssum,
+  'Name': IDt,
+  'VernacDefinition': VernacDefinition,
+  'DefineBody': DefineBody,
+  'CLambdaN': CLambdaN,
+  'VernacHints': VernacHints,
+  'HintsResolve': HintsResolve,
+  'HintsReference': HintsReference,
 };
+
+// const currentlyNotParsedTypes = new Set();
+const currentlyNotParsedTypes = new Map();
 
 export {
   traverseArray,
   extractCoqAST,
   CoqAST,
   prettyPrint,
+  currentlyNotParsedTypes,
+  convertToASTComp,
 };
