@@ -208,8 +208,8 @@ export default {
           // lets hide the file path to kind of anonymize
           const first = fullError.indexOf(`File "`);
           const last = fullError.indexOf('"', first + 6);
-          const smallError = fullError.substr(0, first)
-              + '...wplib/' + library + fullError.substr(last);
+          const smallError = fullError.substr(0, first) +
+              '...wplib/' + library + fullError.substr(last);
           store.commit('failMessage',
               `Failed to compile: ${library} with error:\n ${smallError}`);
           return;
