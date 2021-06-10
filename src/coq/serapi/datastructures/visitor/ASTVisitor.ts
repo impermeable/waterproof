@@ -35,7 +35,7 @@ import VernacStartTheoremProof from '../VernacStartTheoremProof';
  * only paramater number-based; So we need diffrent function names
  * per each type we visit.
  */
-export default interface ASTVisitor {
+interface ASTVisitor {
   visitCoqAST(term: CoqAST): void;
   visitGenericVType(term: GenericVType): void;
   visitCoqType(term: CoqType): void;
@@ -63,6 +63,7 @@ export default interface ASTVisitor {
   visitVernacStartTheoremProof(term: VernacStartTheoremProof): void;
 }
 
+export default ASTVisitor;
 // Note to self: quick hack to get all classes in a folder
 // eslint-disable-next-line max-len
 // ls src/coq/serapi/datastructures/**.ts | sed 's/\.[a-z]*//g' | awk -F '/' '{print $NF}'

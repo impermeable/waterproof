@@ -5,7 +5,7 @@ import ASTVisitor from './visitor/ASTVisitor';
 /**
  * A JavaScript equivalent of a Coq VernacExtend object
  */
-export default class VernacExtend extends CoqType implements Visitable {
+class VernacExtend extends CoqType implements Visitable {
   data: any;
   /**
    * Construct a VernacExtend object from a nested array
@@ -30,3 +30,5 @@ export default class VernacExtend extends CoqType implements Visitable {
     visitor.visitVernacExtend(this);
   }
 }
+
+export default VernacExtend;

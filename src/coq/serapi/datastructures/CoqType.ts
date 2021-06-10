@@ -4,7 +4,7 @@ import ASTVisitor from './visitor/ASTVisitor';
 /**
  * Abstract class representing a generic type returned by SerApi
  */
-export default abstract class CoqType implements Visitable {
+abstract class CoqType implements Visitable {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   // abstract pprint() : string; // TODO add parameter indent.
 
@@ -43,3 +43,5 @@ export default abstract class CoqType implements Visitable {
 export interface Visitable {
   accept(visitor: ASTVisitor) : void;
 }
+
+export default CoqType;

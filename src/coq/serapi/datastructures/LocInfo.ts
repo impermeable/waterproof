@@ -7,7 +7,7 @@ const flatten = require('../flatten-expr').flatten;
  * Class to record location info that is often part
  * of an AST given back by serAPI.
  */
-export default class LocInfo extends CoqType {
+class LocInfo extends CoqType {
   fname: string;
   line_nb: number;
   bol_pos: number;
@@ -47,3 +47,5 @@ export default class LocInfo extends CoqType {
     // throw new Error('Method not implemented.');
   }
 }
+
+export default LocInfo;

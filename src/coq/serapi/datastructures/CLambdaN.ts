@@ -6,7 +6,7 @@ import LocInfo from './LocInfo';
 /**
  * @see https://coq.github.io/doc/v8.12/api/coq/Constrexpr/index.html#type-constr_expr_r.CLambdaN
  */
-export default class CLambdaN extends CoqType {
+class CLambdaN extends CoqType {
   localExprs: any;
   expr: { locinfo: LocInfo; content: any; };
   constructor( array ) {
@@ -32,3 +32,5 @@ export default class CLambdaN extends CoqType {
     // throw new Error('Method not implemented.');
   }
 }
+
+export default CLambdaN;

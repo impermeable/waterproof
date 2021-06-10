@@ -6,7 +6,7 @@ import LocInfo from './LocInfo';
  * Class to  represent a Coq CNotation type
  * @see https://coq.github.io/doc/v8.12/api/coq/Constrexpr/index.html#type-constr_expr_r.CNotation
  */
-export default class CNotation extends CoqType {
+class CNotation extends CoqType {
   notation: CoqType;
   constrNotationSubstitution: { exprListOfLists: any; patternExprs: any;
     binderExprsListOfLists: any; exprList: any[]; };
@@ -52,3 +52,5 @@ export default class CNotation extends CoqType {
     // throw new Error('Method not implemented.');
   }
 }
+
+export default CNotation;

@@ -3,7 +3,7 @@ import {convertToASTComp} from '../ASTProcessor';
 import CoqType, {Visitable} from './CoqType';
 import ASTVisitor from './visitor/ASTVisitor';
 
-export default class VernacHints extends CoqType implements Visitable {
+class VernacHints extends CoqType implements Visitable {
   strings: any;
   hintExpr: any;
   constructor( array ) {
@@ -30,3 +30,5 @@ export default class VernacHints extends CoqType implements Visitable {
     visitor.visitVernacHints(this);
   }
 }
+
+export default VernacHints;

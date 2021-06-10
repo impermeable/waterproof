@@ -6,7 +6,7 @@ import ASTVisitor from './visitor/ASTVisitor';
 /**
  * Class to record the AST given back by serAPI
  */
-export default class CoqAST extends CoqType implements Visitable {
+class CoqAST extends CoqType implements Visitable {
   locinfo: LocInfo;
   content: any;
 
@@ -42,3 +42,5 @@ export default class CoqAST extends CoqType implements Visitable {
     //  return `(${this.constructor.name}\n\t(TODO)\n)\n`;
   }
 }
+
+export default CoqAST;

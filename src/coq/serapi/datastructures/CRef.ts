@@ -3,7 +3,7 @@ import CoqType from './CoqType';
 import LocInfo from './LocInfo';
 
 // eslint-disable-next-line require-jsdoc
-export default class CRef extends CoqType {
+class CRef extends CoqType {
   libNames: { locinfo: any; content: any; };
   instanceExpr: any;
   // eslint-disable-next-line require-jsdoc
@@ -31,3 +31,5 @@ export default class CRef extends CoqType {
     // throw new Error('Method not implemented.');
   }
 }
+
+export default CRef;

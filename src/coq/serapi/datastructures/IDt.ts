@@ -1,7 +1,7 @@
 /* eslint-disable require-jsdoc */
 import CoqType from './CoqType';
 
-export default class IDt extends CoqType {
+class IDt extends CoqType {
   name: any;
   constructor( array ) {
     super();
@@ -16,3 +16,5 @@ export default class IDt extends CoqType {
     // throw new Error('Method not implemented.');
   }
 }
+
+export default IDt;

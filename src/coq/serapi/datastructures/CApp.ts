@@ -6,7 +6,7 @@ import LocInfo from './LocInfo';
 /**
  * @see https://coq.github.io/doc/v8.12/api/coq/Constrexpr/index.html#type-constr_expr_r.CApp
  */
-export default class CApp extends CoqType {
+class CApp extends CoqType {
   [x: string]: any;
   first: { projFlag: any; expr: { locinfo: LocInfo; content: any; }; };
   constructor( array ) {
@@ -46,3 +46,5 @@ export default class CApp extends CoqType {
     // throw new Error('Method not implemented.');
   }
 }
+
+export default CApp;

@@ -21,7 +21,7 @@ enum DefinitionObjectKind {
   Let = 'Let',
 }
 
-export default class VernacDefinition extends CoqType implements Visitable {
+class VernacDefinition extends CoqType implements Visitable {
   discharge: boolean;
   defintionObjectKind: DefinitionObjectKind;
   nameDecl: { name: { locinfo: LocInfo; content: any; }; options: any; };
@@ -63,3 +63,5 @@ export default class VernacDefinition extends CoqType implements Visitable {
     // visitor.visitCNotation(this.);
   }
 }
+
+export default VernacDefinition;

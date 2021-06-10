@@ -27,7 +27,7 @@ import ASTVisitor from './ASTVisitor';
 
 type LocData = [LocInfo, string];
 
-export default class FlattenVisitor implements ASTVisitor {
+class FlattenVisitor implements ASTVisitor {
   private _state : LocData[] = [];
 
   visitCoqAST(term: CoqAst): void {
@@ -143,3 +143,5 @@ export default class FlattenVisitor implements ASTVisitor {
     return this._state;
   }
 }
+
+export default FlattenVisitor;

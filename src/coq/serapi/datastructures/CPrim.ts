@@ -6,7 +6,7 @@ import CoqType from './CoqType';
  * @see https://coq.github.io/doc/v8.12/api/coq/Constrexpr/index.html#type-prim_token
  */
 // eslint-disable-next-line require-jsdoc
-export default class CPrim extends CoqType {
+class CPrim extends CoqType {
   isNumeric: boolean;
   value: string | Record<string, unknown>;
   // eslint-disable-next-line require-jsdoc
@@ -53,3 +53,5 @@ export default class CPrim extends CoqType {
     // throw new Error('Method not implemented.');
   }
 }
+
+export default CPrim;

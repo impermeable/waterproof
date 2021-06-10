@@ -4,7 +4,7 @@ import CoqType, {Visitable} from './CoqType';
 import ASTVisitor from './visitor/ASTVisitor';
 
 // eslint-disable-next-line require-jsdoc
-export default class GenericVType extends CoqType implements Visitable {
+class GenericVType extends CoqType implements Visitable {
   attributes: { attrs: any; control: any; };
   data: any;
 
@@ -34,3 +34,5 @@ export default class GenericVType extends CoqType implements Visitable {
     this.data.accept(visitor);
   }
 }
+
+export default GenericVType;

@@ -15,7 +15,7 @@ enum TheoremKind {
 }
 
 // eslint-disable-next-line require-jsdoc
-export default class VernacStartTheoremProof extends CoqType
+class VernacStartTheoremProof extends CoqType
   implements Visitable {
   theoremKind: TheoremKind;
   // proofExprs: [any, any];
@@ -89,3 +89,5 @@ export default class VernacStartTheoremProof extends CoqType
     visitor.visitVernacStartTheoremProof(this);
   }
 }
+
+export default VernacStartTheoremProof;

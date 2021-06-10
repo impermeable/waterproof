@@ -6,7 +6,7 @@ import LocInfo from './LocInfo';
 /** Represents the Coq CProdN type
  *  CProdN = local_binder_expr list * constr_expr
  */
-export default class CProdN extends CoqType {
+class CProdN extends CoqType {
   localExprs: [CoqType];
   expr: { locinfo: LocInfo; content: any; };
 
@@ -37,3 +37,5 @@ export default class CProdN extends CoqType {
     return this.sprintf(super.pprint(indent), output);
   }
 }
+
+export default CProdN;

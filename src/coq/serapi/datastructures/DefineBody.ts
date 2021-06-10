@@ -3,7 +3,7 @@ import {convertToASTComp} from '../ASTProcessor';
 import CoqType from './CoqType';
 import LocInfo from './LocInfo';
 
-export default class DefineBody extends CoqType {
+class DefineBody extends CoqType {
   localExprList: any;
   rawRedExprOption: any;
   expr: { locinfo: LocInfo; content: any; };
@@ -32,3 +32,5 @@ export default class DefineBody extends CoqType {
     // throw new Error('Method not implemented.');
   }
 }
+
+export default DefineBody;

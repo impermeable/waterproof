@@ -9,7 +9,7 @@ import ASTVisitor from './visitor/ASTVisitor';
  * Class to represent a Coq VernacRequire type.
  * @see https://coq.github.io/doc/v8.12/api/coq/Vernacexpr/index.html#type-vernac_expr.VernacRequire
  */
-export default class VernacRequire extends CoqType implements Visitable {
+class VernacRequire extends CoqType implements Visitable {
   qualid: any;
   export_flag: boolean;
   list: any;
@@ -46,3 +46,5 @@ export default class VernacRequire extends CoqType implements Visitable {
     visitor.visitVernacRequire(this);
   }
 }
+
+export default VernacRequire;

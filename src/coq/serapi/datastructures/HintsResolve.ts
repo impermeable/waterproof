@@ -4,7 +4,7 @@ import {convertToASTComp} from '../ASTProcessor';
 import CoqType from './CoqType';
 import LocInfo from './LocInfo';
 
-export default class HintsResolve extends CoqType {
+class HintsResolve extends CoqType {
   hintList: any;
   constructor( array ) {
     super();
@@ -39,3 +39,5 @@ export class HintsReference extends CoqType {
     return this.sprintf(super.pprint(indent), output);
   }
 }
+
+export default HintsResolve;

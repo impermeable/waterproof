@@ -3,7 +3,7 @@ import {convertToASTComp} from '../ASTProcessor';
 import CoqType from './CoqType';
 import LocInfo from './LocInfo';
 
-export default class CLocalAssum extends CoqType {
+class CLocalAssum extends CoqType {
   names: any;
   binderKind: any;
   expr: { locinfo: LocInfo; content: any; };
@@ -36,3 +36,5 @@ export default class CLocalAssum extends CoqType {
     return this.sprintf(super.pprint(indent), output);
   }
 }
+
+export default CLocalAssum;

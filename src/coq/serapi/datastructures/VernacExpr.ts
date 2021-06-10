@@ -5,7 +5,7 @@ import CoqType from './CoqType';
 /**
  * A JavaScript equivalent of a VernacExpr object
  */
-export default class VernacExpr extends CoqType {
+class VernacExpr extends CoqType {
   content: any;
   /**
    * Construct a VernacExpr objected from a nested array
@@ -27,3 +27,5 @@ export default class VernacExpr extends CoqType {
     return this.sprintf(super.pprint(indent), output);
   }
 }
+
+export default VernacExpr;
