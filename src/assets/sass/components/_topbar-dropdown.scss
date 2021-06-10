@@ -1,5 +1,8 @@
 /** Contains the components of each dropdown menu
         (so buttons, list items and links). */
+
+@import '../colors.scss';
+
 .topbar-dropdown {
   /** The menu buttons (File, Edit, Coq, Help) */
   button {
@@ -7,7 +10,7 @@
     border-radius: 0;
     box-shadow: none !important;
     height: 100%;
-    background-color: $color-primary;
+    @include theme(background-color, color-primary);
 
     @include respond-to(sm-lower) {
       font-size: 13px;
@@ -15,12 +18,12 @@
 
     &:hover {
       border: none;
-      background-color: $color-primary-light;
+      @include theme(background-color, color-primary-light);
     }
 
     &:active {
       border: none;
-      background-color: $color-primary-dark !important;
+      @include theme(background-color, color-primary-dark, null, !important);
     }
   }
 
@@ -30,8 +33,8 @@
     border-radius: 0;
     padding: 0;
     margin: 0;
-    background-color: $color-primary-dark;
-    color: $color-on-primary;
+    @include theme(background-color, color-primary-dark);
+    @include theme(color, color-on-primary);
   }
 
   /** The actions of each item*/
@@ -40,13 +43,13 @@
     flex-flow: row nowrap;
     justify-content: space-between;
     color: white !important;
-    font-family: Century Gothic;
+    @include theme(font-family, font-stack-headers);
 
     &:hover {
-      background-color: $color-primary-light;
+      @include theme(background-color, color-primary-light);
     }
     &:focus {
-      background-color: $color-primary-light;
+      @include theme(background-color, color-primary-light);
     }
     &.disabled {
       color: gray;

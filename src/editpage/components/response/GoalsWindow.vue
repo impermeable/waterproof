@@ -47,19 +47,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+  @import "../../../assets/sass/_colors.scss";
   .load-dot {
       animation: 0.9s blink step-end infinite;
-      color: black;
+      @include theme(color, color-black);
       margin-left: -4px;
   }
 
   @keyframes blink {
       from, to {
-          color: transparent;
+          @include theme(color, color-transparent);
       }
       50% {
-          color: black;
+          @include theme(color, color-black);
       }
   }
 </style>

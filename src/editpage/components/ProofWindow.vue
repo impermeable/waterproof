@@ -323,22 +323,6 @@ export default {
       this.eventBus.$emit('on-coq-message', {text: message, id: sentenceId});
     },
 
-    zoomIn: function() {
-      this.zoomChange(.1);
-    },
-
-    zoomOut: function() {
-      this.zoomChange(-.1);
-    },
-
-    zoomChange: function(factor) {
-      const wf = require('electron').webFrame;
-      const newZoom = wf.getZoomFactor() + factor;
-
-      const boundedZoom = Math.max(0.3, Math.min(newZoom, 3.0));
-      wf.setZoomFactor(boundedZoom);
-    },
-
     findAndReplace: function() {
       this.showFind = !this.showFind;
       if (this.showFind) {
@@ -471,8 +455,6 @@ export default {
     this.eventBus.$on('nextInput', this.nextInput);
     this.eventBus.$on('previousInput', this.previousInput);
     this.eventBus.$on('findAndReplace', this.findAndReplace);
-    this.eventBus.$on('zoomIn', this.zoomIn);
-    this.eventBus.$on('zoomOut', this.zoomOut);
     this.eventBus.$on('saveFile', this.saveFile);
     this.eventBus.$on('saveAsFile', this.saveAsFile);
     this.eventBus.$on('exportToCoq', this.exportToCoq);
@@ -498,6 +480,8 @@ export default {
 
 
 <style lang="scss">
+  @import '../../assets/sass/_colors.scss';
+
   .proof-and-side-window {
     width: 100%;
     display: flex;
@@ -514,10 +498,10 @@ export default {
         flex-direction: column;
       }
     }
-  }
 
-  .highlight-mode {
-    background-color: #fff6bf;
+    .side-window {
+      @include theme(background-color, color-gray-light);
+    }
   }
 
   .executeError {
@@ -525,7 +509,7 @@ export default {
   }
 
   .error-message {
-    background-color: #FF6060;
+    @include theme(background-color, color-error-message);
     padding: 5px;
   }
 

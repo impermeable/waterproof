@@ -86,7 +86,7 @@ export default {
       this.messages = [];
     },
     addMessage: function(message) {
-      if (message.hasOwnProperty('text')) {
+      if (Object.prototype.hasOwnProperty.call(message, 'text')) {
         for (let i = this.messages.length - 1; i >= 0; --i) {
           const oldMessage = this.messages[i];
           if (oldMessage.id === message.id) {
@@ -178,6 +178,7 @@ export default {
 
 
 <style lang="scss" scoped>
+  @import "../../../assets/sass/_colors.scss";
     .message {
         margin: 0 19px;
         border-bottom: 1px solid gray;
@@ -191,6 +192,7 @@ export default {
             width: 15px;
             height: 15px;
 
+            // TODO: Somehow make this part work with theming?
             $cross-lines-color: $color-primary;
             $cross-background-color: $color-on-primary;
 
@@ -214,24 +216,25 @@ export default {
                             $cross-background-color 100%);
 
             &:hover {
-                color: $color-primary-dark;
+                @include theme(color, color-primary-dark);
                 cursor: pointer;
             }
         }
     }
 
     .message-error {
-        border: 3px solid red;
-        background: red;
-        color: white;
+      @include theme(border, color-error, 3px solid);
+      @include theme(background-color, color-error);
+      @include theme(color, color-error-text);
     }
 
     .load-dot {
         animation: 0.9s blink step-end infinite;
-        color: black;
+        @include theme(color, color-black);
         margin-left: -4px;
     }
 
+    // TODO understand how to map this to a theme
     @keyframes blink {
         from, to {
             color: transparent;
@@ -256,6 +259,7 @@ export default {
 </style>
 
 <style lang="scss">
+// TODO understand how to map this to a theme
 @keyframes blinkColors {
   0% {
     background: $color-primary-light;

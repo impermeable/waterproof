@@ -5,8 +5,11 @@ const defaultConfigData = {
   sertopPath: '',
   serapiVersion: '',
   libraryVersion: '',
+  zoom: '',
+  theme: '',
 };
-const possibleKeys = ['sertopPath', 'serapiVersion', 'libraryVersion'];
+const possibleKeys = [
+  'sertopPath', 'serapiVersion', 'libraryVersion', 'zoom', 'theme'];
 
 /**
  * Read in the configuration file. The function looks for the file

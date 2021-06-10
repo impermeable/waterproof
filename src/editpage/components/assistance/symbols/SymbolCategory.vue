@@ -8,6 +8,7 @@
     <div class="symbol-list" v-if="unfolded">
       <maths-symbol
         v-for="(symbol, index) in item.elements"
+        v-b-tooltip.hover :title="symbol.name"
         v-bind:item="symbol" :event-bus="eventBus"
         v-bind:key="'symbol' + index" />
     </div>
@@ -37,11 +38,16 @@ export default {
 </script>
 
 <style lang="scss">
+@import './../../../../assets/sass/_colors.scss';
   .symbol-list {
       display: flex;
       flex-flow: row wrap;
       justify-content: space-evenly;
-      background-color: $color-gray-light;
       padding: 4px;
+  }
+  .symbol-button {
+    &:hover {
+      @include theme(background-color, color-gray-dark);
+    }
   }
 </style>

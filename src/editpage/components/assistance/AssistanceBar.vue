@@ -103,6 +103,8 @@ export default {
 </script>
 
 <style lang="scss">
+  @import '../../../assets/sass/_colors.scss';
+
   .assistance-bar {
     width: 100%;
     border-top: 0;
@@ -119,7 +121,7 @@ export default {
       }
 
       #query-input {
-        background-color: whitesmoke;
+        @include theme(background-color, color-gray-light);
         width: 100%;
         flex-basis: 50%;
         margin: 0;

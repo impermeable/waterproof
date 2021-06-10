@@ -1,6 +1,14 @@
 @charset "UTF-8";
 
 /** Contains all imports */
+@import 'colors.scss';
+
+@import 'abstracts/colorDefinitions';
+@import 'abstracts/functions';
+@import 'abstracts/light';
+@import 'abstracts/dark';
+@import 'abstracts/light_roboto';
+@import 'abstracts/dark_roboto';
 @import 'abstracts/variables';
 @import 'abstracts/mixins';
 

@@ -28,7 +28,7 @@ class SerapiWorkerTCP extends SerapiWorker {
             JSON.stringify({path: sertopPath,
               args: ['--implicit',
                 `--load-path=${wplibPath},wplib`,
-              ]}))
+              ]})),
     );
   }
 
@@ -56,7 +56,7 @@ class SerapiWorkerTCP extends SerapiWorker {
    */
   postMessage(message) {
     this.sendMessage(
-        this.createWrapperMessage('forward', message)
+        this.createWrapperMessage('forward', message),
     );
   }
 
@@ -83,7 +83,7 @@ class SerapiWorkerTCP extends SerapiWorker {
    */
   terminate() {
     this.sendMessage(
-        this.createWrapperMessage('destroy')
+        this.createWrapperMessage('destroy'),
     );
   }
 }

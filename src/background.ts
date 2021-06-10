@@ -3,12 +3,15 @@
 /* global __static */
 
 import {app, BrowserWindow, ipcMain, protocol} from 'electron';
+import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer';
+
 import {execFile} from 'child_process';
 import path from 'path';
 import {
   createProtocol,
 } from 'vue-cli-plugin-electron-builder/lib';
 
+// declare const __static: string;
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -63,6 +66,7 @@ function createWindow() {
     title: 'Waterproof',
     webPreferences: {
       nodeIntegration: true,
+      contextIsolation: false,
       enableRemoteModule: true,
     },
     icon: path.join(__static, 'icon.png'),
@@ -75,7 +79,12 @@ function createWindow() {
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
     win.loadURL(process.env.WEBPACK_DEV_SERVER_URL);
-    if (!process.env.IS_TEST) win.webContents.openDevTools();
+    if (!process.env.IS_TEST) {
+      installExtension(VUEJS_DEVTOOLS)
+        .then((name) => console.log(`Added Extension:  ${name}`))
+        .catch((err) => console.log('An error occurred: ', err));
+      win.webContents.openDevTools();
+    }
   } else {
     createProtocol('app');
     // Load the index.html when not in development

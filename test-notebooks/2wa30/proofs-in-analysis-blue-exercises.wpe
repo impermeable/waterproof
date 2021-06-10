@@ -1,0 +1,62 @@
+{
+  "exerciseSheet": true,
+  "blocks": [
+    {
+      "type": "text",
+      "text": "# **Proofs in Analysis**\n\nThis file contains the blue exercises from the chapter \"Proofs in Analysis\"."
+    },
+    {
+      "type": "code",
+      "text": "Require Import Reals.\nRequire Import Qreals.\nRequire Import wplib.Definitions.SetDefinitions.\nRequire Import wplib.Tactics.AdditionalLemmas.\nRequire Import wplib.Notations.Notations.\n(*Require Import wplib.Notations.SetNotations.*)\nRequire Import wplib.Tactics.Tactics.\n\nOpen Scope R_scope.\nHint Resolve Rplus_lt_compat : reals.\n\nSection proofs_in_analysis."
+    },
+    {
+      "type": "text",
+      "text": "## **Exercise 1: upper bound**\n\nShow that there exists an $M ∈ ℝ$ such that for all $x∈ [0, 5]$ it holds that $x ≤ M$.\nIn WaterProof, you should prove the following lemma."
+    },
+    {
+      "type": "hint",
+      "text": "Click to open hint.\n<hint>\nIf you want to show that an element exists, one way to do that is by picking a specific element and by showing that it satisfies some properties.\nIn WaterProof, you can specify a value by using\n\n```Choose``` <name> ```:=``` <value>```.```"
+    },
+    {
+      "type": "code",
+      "text": "Lemma upper_bound :\n  ∃ M : ℝ,\n    ∀ x : [0,5], x ≤ M.\nProof."
+    },
+    {
+      "type": "input",
+      "start": true,
+      "id": "input-1"
+    },
+    {
+      "type": "code",
+      "text": "Admitted."
+    },
+    {
+      "type": "input",
+      "start": false,
+      "id": "input-1",
+      "text": "Take"
+    },
+    {
+      "type": "text",
+      "text": "## **Exercise 2**\n\nNext, show that for all $x ∈ ℝ$, there exists $y ∈ ℝ$ such that for all $u∈ ℝ$, if $u >0$ then there exists an $v ∈ \\mathbb{R}$ such that $x + u < y + v$."
+    },
+    {
+      "type": "code",
+      "text": "Lemma exercise_2 :\n  ∀ x : ℝ,\n    ∃ y : ℝ,\n      ∀ u : ℝ,\n        u > 0 ⇒\n          ∃ v : ℝ,\n            v > 0 ∧ x + u < y + v.\nProof."
+    },
+    {
+      "type": "input",
+      "start": true,
+      "id": "input-2"
+    },
+    {
+      "type": "code",
+      "text": "Admitted."
+    },
+    {
+      "type": "input",
+      "start": false,
+      "id": "input-2"
+    }
+  ]
+}

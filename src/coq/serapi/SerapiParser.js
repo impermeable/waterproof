@@ -110,7 +110,7 @@ function parseErrorResponse(response) {
 
   const responseContent = flatResponse[1];
 
-  if (responseContent.hasOwnProperty('loc')) {
+  if (Object.prototype.hasOwnProperty.call(responseContent, 'loc')) {
     const locationInfo = responseContent.loc;
     if (locationInfo != null && locationInfo.length > 0) {
       bp = +locationInfo[0].bp;
@@ -118,20 +118,20 @@ function parseErrorResponse(response) {
     }
   }
 
-  if (responseContent.hasOwnProperty('stm_ids')) {
-    if (Array.isArray(responseContent.stm_ids)
-          && responseContent.stm_ids.length > 0) {
+  if (Object.prototype.hasOwnProperty.call(responseContent, 'stm_ids')) {
+    if (Array.isArray(responseContent.stm_ids) &&
+          responseContent.stm_ids.length > 0) {
       const stms = responseContent.stm_ids[0];
       lastSentenceIdCorrect = +stms[0];
       failureSentenceId = +stms[1];
     }
   }
 
-  if (responseContent.hasOwnProperty('str')) {
+  if (Object.prototype.hasOwnProperty.call(responseContent, 'str')) {
     message = String(responseContent.str);
   }
 
-  if (responseContent.hasOwnProperty('exn')) {
+  if (Object.prototype.hasOwnProperty.call(responseContent, 'exn')) {
     exception = '(' + responseContent.exn.join(',') + ')';
   }
 
@@ -239,11 +239,11 @@ function parseToSentence(response) {
 function isReadyFeedback(response) {
   // this is not great... but there is nothing really unique about so it will
   // suffice
-  return response[0] === 'Feedback'
-      && response[1].length === 4
-      && response[1][3].length === 2
-      && response[1][3][0] === 'contents'
-      && response[1][3][1] === 'Processed';
+  return response[0] === 'Feedback' &&
+      response[1].length === 4 &&
+      response[1][3].length === 2 &&
+      response[1][3][0] === 'contents' &&
+      response[1][3][1] === 'Processed';
 }
 
 /**
