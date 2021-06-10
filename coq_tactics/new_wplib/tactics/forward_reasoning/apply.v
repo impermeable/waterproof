@@ -1,4 +1,4 @@
-(*
+(** * apply.v
 Authors: 
     - Cosmin Manea (1298542)
 
@@ -36,6 +36,8 @@ From Ltac2 Require Import Ltac2.
 *)
 Local Ltac2 apply_lemma (lemma: constr) :=
     apply $lemma.
+
+
 
 Ltac2 Notation "Apply" t(constr) :=
     apply_lemma t.

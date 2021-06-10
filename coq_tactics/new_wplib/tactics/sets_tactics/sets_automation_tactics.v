@@ -56,7 +56,7 @@ Ltac2 set_power () :=
               | solve [eauto with sets]
               | ltac1:(solve [firstorder (auto with sets)])
               | ltac1:(solve [firstorder (eauto with sets)])
-              | print (of_string "Waterproof could not find a proof of "); fail_automation_in_sets ()
+              | print (of_string "Waterproof could not find a proof.")
               ]
     in
     match Control.case result with
@@ -101,7 +101,7 @@ Ltac2 destruct_sets () :=
           in this order, in order to automatically prove a set inclusion.
 *)
 Ltac2 trivial_set_inclusion () :=
-    try intro; try intro; try (destruct_sets ()); ltac1:(try contradiction); try (set_power ()).
+    try (intro x); try (intro h); try (destruct_sets ()); ltac1:(try contradiction); try (set_power ()).
 
 
 
@@ -117,9 +117,9 @@ Ltac2 trivial_set_inclusion () :=
           in order to prove a set equality.
 *)
 Ltac2 trivial_set_equality () :=
-    try intros; try intros; try (apply Extensionality_Ensembles); try (unfold Same_set);
-    try (unfold Included); split; trivial_set_inclusion (); trivial_set_inclusion ().
-
+    try (intros A); try (intros B); try (apply Extensionality_Ensembles); try (unfold Same_set); 
+    try (unfold Included); try (split); try (split); try (trivial); try (split);
+    try (trivial_set_inclusion ()); try (trivial_set_inclusion ()).
 
 
 Ltac2 Notation "This" "set" "equality" "is" "trivial" :=

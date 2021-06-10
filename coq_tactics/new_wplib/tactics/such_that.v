@@ -1,4 +1,4 @@
-(*
+(** * such_that.v
 Authors: 
     - Lulof Pirée (1363638)
 Creation date: 1 June 2021

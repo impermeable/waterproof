@@ -1,4 +1,4 @@
-(*
+(** * test_defined.v
 Authors: 
     - Cosmin Manea (1298542)
 Creation date: 06 June 2021
@@ -28,14 +28,14 @@ From Ltac2 Require Import Ltac2.
 Add LoadPath "C:/Users/cosmi/Desktop/SEP - CM forward reasoning/waterproof/coq_tactics/new_wplib" as wplib2.
 Load define.
 
-(** Test 0: This should work fine *)
+(** Test 0: This should work just fine *)
 Goal forall n : nat, ((n = n) /\ (n + 1 = n + 1)).
     intro n.
     Define m := n.
 Abort.
 
 
-(** Test 1: This should also work fine *)
+(** Test 1: This should also work *)
 Goal forall n : nat, ((n = n) \/ (n + 1 = n + 1)).
     intro n.
     Define m := n.

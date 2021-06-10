@@ -1,4 +1,4 @@
-(*
+(** * test_we_show_both_statements.v
 Authors: 
     - Cosmin Manea (1298542)
 Creation date: 22 May 2021
@@ -29,14 +29,14 @@ Add LoadPath "C:/Users/cosmi/Desktop/SEP/waterproof/coq_tactics/new_wplib" as wp
 Load we_show_both_statements.
 Load test_auxiliary.
 
-(** Test 0: This should work fine *)
+(** Test 0: This should work *)
 Goal forall n : nat, ((n = n) /\ (n + 1 = n + 1)).
     intro n.
     We show both statements.
 Abort.
 
 
-(** Test 1: This should also work fine *)
+(** Test 1: This should also work *)
 Goal forall n : nat, ((n = n) /\ (n + 1 = n + 1)).
     intro n.
     We prove both statements.

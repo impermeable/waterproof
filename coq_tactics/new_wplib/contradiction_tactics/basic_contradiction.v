@@ -1,10 +1,10 @@
-(** * string_of_inequalities.v
-Authors: 
+(** * basic_contradiction.v
+Author: 
     - Cosmin Manea (1298542)
+Creation date: 09 June 2021
 
-Creation date: 06 June 2021
-
-Tactics for strings of inequalities.
+Two tactics for instantiating a variable according to a specific rule:
+choose a specific value or when the hypothesis reads ``∃ n : N``, one can define such an `n`.
 --------------------------------------------------------------------------------
 
 This file is part of Waterproof-lib.
@@ -23,12 +23,11 @@ You should have received a copy of the GNU General Public License
 along with Waterproof-lib.  If not, see <https://www.gnu.org/licenses/>.
 *)
 
-From Ltac2 Require Import Ltac2.
-From Ltac2 Require Import Option.
 
+From Ltac2 Require Import Ltac2.
+From Ltac2 Require Import Message.
 
 Require Import Rbase.
-Require Import Qreals.
 Require Import Rfunctions.
 Require Import SeqSeries.
 Require Import Rtrigo.
@@ -37,23 +36,40 @@ Require Import Integration.
 Require Import micromega.Lra.
 Require Import Omega.
 Require Import Max.
+Require Import Classical.
 
 
-(** Functions for proving a step *)
+(** * contra
+    Starts a proof by contradiction.
 
-Ltac2 extended_reflexivity () :=
-    try (reflexivity); try (apply Rle_refl); try (apply Rge_refl).
+    Arguments:
+        - no arguments.
 
-Ltac2 extended_assumption () :=
-    try (assumption); try (apply Rlt_le; assumption); try (apply Rgt_ge; assumption).
-
-Ltac2 rewrite_all_tac () :=
-    match! goal with
-        | [h : _ = _ |- _] => let h_val := Control.hyp h in try (rewrite $h_val); extended_reflexivity ()
+    Does:
+        - starts a proof by contradiction.
+*)
+Ltac2 contra () :=
+    lazy_match! goal with
+        | [ |- ?x] => destruct (classic $x); try (assumption)
     end.
 
-Ltac2 prove_step ():=
-    try (auto with *); try (rewrite_all_tac ()); try (extended_assumption ()).
+
+(** * contradiction
+    Calls the Ltac1 [contradiction] tactic.
+
+    Arguments:
+        - no arguments.
+
+    Does:
+        - calls the Ltac1 [contradiction] tactic, as this tactic does not exist in Ltac2.
+*)
+Ltac2 contradiction () :=
+    ltac1:(contradiction).
 
 
-(** Functions for performing transitivity *)
+Ltac2 Notation "We" "argue" "by" "contradiction" :=
+  contra ().
+
+
+Ltac2 Notation "Contradiction" :=
+    contradiction ().

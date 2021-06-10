@@ -1,9 +1,11 @@
-(** * induction.v
-Author: 
+(** * test_either.v
+Authors: 
     - Cosmin Manea (1298542)
-Creation date: 06 June 2021
 
-Tactic for proving by mathematical induction.
+Creation date: 08 June 2021
+
+Testcases for the [Either] tactic.
+Tests pass if they can be run without unhandled errors.
 --------------------------------------------------------------------------------
 
 This file is part of Waterproof-lib.
@@ -22,23 +24,21 @@ You should have received a copy of the GNU General Public License
 along with Waterproof-lib.  If not, see <https://www.gnu.org/licenses/>.
 *)
 
-
 From Ltac2 Require Import Ltac2.
+Add LoadPath "C:/Users/cosmi/Desktop/SEP - CM forward reasoning/waterproof/coq_tactics/new_wplib/tactics/" as wplib.
+Load either.
 
-(** * induction_with_hypothesis_naming
-    Performs mathematical induction.
+Local Open Scope R_scope.
 
-    Arguments:
-        - [x: ident], the variable to perform the induction on.
-        - [y: ident], the name of the induction hypothesis.
-
-    Does:
-        - performs induction on [x].
-*)
-Local Ltac2 induction_with_hypothesis_naming (x: ident) (y: ident) :=
-    let x_val := Control.hyp x in induction $x_val.
+(** Test 0: This tests to see if x > 0 or x <= 0 *)
+Goal forall x : R, exists n : nat, INR(n) > x.
+    intro x.
+    Either (x <= 0) or (0 < x).
+Abort.
 
 
-Ltac2 Notation "We" "prove" "by" "induction" "on" x(ident) "," 
-               "calling" "the" "induction" "hypothesis" y(ident) := 
-    induction_with_hypothesis_naming x y.
+(** Test 1: This tests to see if x > 1 or x <= 1 *)
+Goal forall x : R, exists n : nat, INR(n) > x.
+    intro x.
+    Either (x <= 1) or (1 < x).
+Abort.

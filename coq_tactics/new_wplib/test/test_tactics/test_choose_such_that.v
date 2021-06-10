@@ -1,8 +1,8 @@
-(*
+(** * test_choose_such_that.v
 Authors: 
     - Cosmin Manea (1298542)
 
-Creation date: 30 May 2021
+Creation date: 09 June 2021
 
 Testcases for the [Choose ... such that ...] tactic.
 Tests pass if they can be run without unhandled errors.
@@ -36,7 +36,35 @@ Require Import micromega.Lra.
 Require Import Omega.
 Require Import Max.
 
+
+Add LoadPath "C:/Users/cosmi/Desktop/SEP - CM forward reasoning/waterproof/coq_tactics/new_wplib/tactics/" as wplib.
+Load choose_such_that.
+
+
+(** Test 0: introducing a variable in an exists definition *)
+Goal forall n : nat, n = n.
+Proof.
+    assert (forall n : nat, exists m : nat, forall t : nat, (n = m)) as X.
+    {
+        intro n.
+        pose (m := n); exists m.
+        intro t.
+        reflexivity.
+    }
+    intro n.
+    Choose m such that u according to (X n). 
+Abort.
+
+
+(** Test 1: more advanced use of the [Choose...such that...] in the context of limits of sequences *)
 Local Open Scope R_scope.
 
-Add LoadPath "C:/Users/cosmi/Desktop/SEP/waterproof/coq_tactics/new_wplib/tactics/" as wplib.
-Load choose_such_that.
+Definition evt_eq_sequences (a b : nat -> R) := (exists k : nat, forall n : nat, (n >= k)%nat -> a n = b n).
+
+Goal forall (a b : nat -> R) (l : R), evt_eq_sequences a b -> (Un_cv a l) -> (Un_cv b l).
+Proof.
+    intros.
+    intro.
+    intro.
+    Choose n1 such that a_close_to_l according to (H0 eps H1).
+Abort.

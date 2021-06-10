@@ -1,10 +1,11 @@
-(*
+(** * we_need_to_show_test.v
 Authors: 
-    * Lulof Pirée (1363638)
+    - Lulof Pirée (1363638)
+    - Cosmin Manea (refactored file)
 
 Creation date: 18 May 2021
 
-Testcases for the "We need to show" tactic.
+Testcases for the [We need to show] tactic.
 Tests pass if they can be run without unhandled errors.
 --------------------------------------------------------------------------------
 
@@ -27,11 +28,13 @@ along with Waterproof-lib.  If not, see <https://www.gnu.org/licenses/>.
 From Ltac2 Require Import Ltac2.
 From Ltac2 Require Option.
 From Ltac2 Require Import Message.
-Add LoadPath "./coq_tactics/new_wplib/" as wplib.
+Add LoadPath "C:/Users/cosmi/Desktop/SEP/waterproof/coq_tactics/new_wplib" as wplib2.
 Load test_auxiliary.
 Load we_need_to_show.
 
-(* Base case: test all syntax variants*)
+
+
+(** First test: test all syntax variants **)
 Lemma one_is_one: 1 = 1.
 Proof.
   We need to show (1 = 1).
@@ -45,9 +48,11 @@ Proof.
   reflexivity.
 Qed.
 
-(* Corner case: function definitions are judgementally equal
-  to the function name. So they should be interchangeable. *)
+
+(** Second test: function definitions are judgementally equal to the function name. 
+    So they should be interchangeable. *)
 Definition double := fun (x: nat) => 2*x.
+
 Lemma with_function_definition: double 2 = 4.
 Proof.
   We need to show (double 2 = 4).
@@ -55,7 +60,8 @@ Proof.
   trivial.
 Qed.
 
-(* Error case: wrong goal supplied. *)
+
+(** Third test: this should raise an error, as the wrong goal is supplied. *)
 Lemma two_is_two: 2 = 2.
 Proof.
   assert_raises_error (fun () => We need to show (1 = 1)).

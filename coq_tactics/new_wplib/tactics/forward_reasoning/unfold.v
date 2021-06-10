@@ -1,4 +1,4 @@
-(*
+(** * unfold.v
 Authors: 
     - Cosmin Manea (1298542)
 
@@ -43,5 +43,5 @@ Local Ltac2 unfolding (t: constr) (s: constr option) :=
     end.
 
 
-Ltac2 Notation "Unfold" t(constr) inn(opt("in")) s(opt(constr)) :=
+Ltac2 Notation "Unfold" t(constr) inn(opt("in")) s(opt(constr)):=
     unfolding t s.

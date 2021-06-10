@@ -1,9 +1,11 @@
-(** * induction.v
-Author: 
+(** * test_basic_contradiction.v
+Authors: 
     - Cosmin Manea (1298542)
-Creation date: 06 June 2021
 
-Tactic for proving by mathematical induction.
+Creation date: 09 June 2021
+
+Testcases for the [basic_contradiction.v] file.
+Tests pass if they can be run without unhandled errors.
 --------------------------------------------------------------------------------
 
 This file is part of Waterproof-lib.
@@ -22,23 +24,23 @@ You should have received a copy of the GNU General Public License
 along with Waterproof-lib.  If not, see <https://www.gnu.org/licenses/>.
 *)
 
-
 From Ltac2 Require Import Ltac2.
-
-(** * induction_with_hypothesis_naming
-    Performs mathematical induction.
-
-    Arguments:
-        - [x: ident], the variable to perform the induction on.
-        - [y: ident], the name of the induction hypothesis.
-
-    Does:
-        - performs induction on [x].
-*)
-Local Ltac2 induction_with_hypothesis_naming (x: ident) (y: ident) :=
-    let x_val := Control.hyp x in induction $x_val.
+Add LoadPath "C:/Users/cosmi/Desktop/SEP - CM forward reasoning/waterproof/coq_tactics/new_wplib/" as wplib.
+Load basic_contradiction.
 
 
-Ltac2 Notation "We" "prove" "by" "induction" "on" x(ident) "," 
-               "calling" "the" "induction" "hypothesis" y(ident) := 
-    induction_with_hypothesis_naming x y.
+
+(** Test 0: this should start wiht the proof by contradicition. *)
+Goal forall n : nat, n = n.
+Proof.
+    We argue by contradiction.
+Abort.
+
+
+(** Test 1: this should work and completely finish the proof. *)
+Goal forall n : nat, n = n.
+Proof.
+    intro n.
+    We argue by contradiction.
+    Contradiction.
+Qed.

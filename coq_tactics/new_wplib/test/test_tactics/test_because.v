@@ -1,4 +1,4 @@
-(*
+(** * test_because.v
 Authors: 
     - Cosmin Manea (1298542)
 
@@ -25,11 +25,11 @@ along with Waterproof-lib.  If not, see <https://www.gnu.org/licenses/>.
 *)
 
 From Ltac2 Require Import Ltac2.
-Add LoadPath "C:/Users/cosmi/Desktop/SEP/waterproof/coq_tactics/new_wplib/tactics/" as wplib.
+Add LoadPath "C:/Users/cosmi/Desktop/SEP - CM forward reasoning/waterproof/coq_tactics/new_wplib/tactics/" as wplib.
 Load because.
 
 
-(** Test 0: This should work fine *)
+(** Test 0: This should work *)
 Goal forall n : nat, ( ( (n = n) /\ (n + 1 = n + 1) ) -> (n + 1 = n + 1)).
     intro n.
     intro H.
@@ -37,7 +37,7 @@ Goal forall n : nat, ( ( (n = n) /\ (n + 1 = n + 1) ) -> (n + 1 = n + 1)).
 Abort.
 
 
-(** Test 1: This should work fine *)
+(** Test 1: This should also work *)
 Goal forall n : nat, ( ( (n = n) /\ (n + 1 = n + 1) ) -> (n + 1 = n + 1)).
     intro n.
     intro H.
@@ -45,7 +45,7 @@ Goal forall n : nat, ( ( (n = n) /\ (n + 1 = n + 1) ) -> (n + 1 = n + 1)).
 Abort.
 
 
-(** Test 2: This should work fine *)
+(** Test 2: This should also just work *)
 Goal forall n : nat, ( ( (n = n) \/ (n + 1 = n + 1) ) -> (n + 1 = n + 1)).
     intro n.
     intro H.

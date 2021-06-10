@@ -1,4 +1,4 @@
-(*
+(** * waterprove.v
 Authors: 
     - Cosmin Manea (1298542)
     - Lulof Pirée (added error)
@@ -54,7 +54,7 @@ try making a smaller step.").
         - If no proof is found, print a message conveying the failture.
 
     Raises exceptions:
-        - [AutomationFailure], if 
+        - [AutomationFailure], if no proof of [t] was found.
 *)
 Ltac2 waterprove (t:constr) (s:constr) (n:int) :=
     let result () :=

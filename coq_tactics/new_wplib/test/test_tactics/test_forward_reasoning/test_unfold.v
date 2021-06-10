@@ -1,9 +1,10 @@
-(** * test_simplify.v
+(** * test_unfold.v
 Authors: 
     - Cosmin Manea (1298542)
-Creation date: 06 June 2021
 
-Testcases for the [Simplify] tactic.
+Creation date: 09 June 2021
+
+Testcases for the [Choose ... such that ...] tactic.
 Tests pass if they can be run without unhandled errors.
 --------------------------------------------------------------------------------
 
@@ -24,12 +25,29 @@ along with Waterproof-lib.  If not, see <https://www.gnu.org/licenses/>.
 *)
 
 From Ltac2 Require Import Ltac2.
+Require Import Rbase.
+Require Import Qreals.
+Require Import Rfunctions.
+Require Import SeqSeries.
+Require Import Rtrigo.
+Require Import Ranalysis.
+Require Import Integration.
+Require Import micromega.Lra.
+Require Import Omega.
+Require Import Max.
+
+
 Add LoadPath "C:/Users/cosmi/Desktop/SEP - CM forward reasoning/waterproof/coq_tactics/new_wplib/tactics/" as wplib.
-Load simplify.
+Load unfold.
 
 
-(** Test 0: This should work fine *)
-Goal forall n : nat, (n + 1 + 1 = n + 1 + 1) -> (n + 1 + 2 + 3 = n + 6).
-  intro n.
-  Simplify what we need to show.
+
+(** Test 1: more advanced use of the [Choose...such that...] in the context of limits of sequences *)
+Local Open Scope R_scope.
+
+Definition evt_eq_sequences (a b : nat -> R) := (exists k : nat, forall n : nat, (n >= k)%nat -> a n = b n).
+
+Goal forall (a b : nat -> R) (l : R), evt_eq_sequences a b -> (Un_cv a l) -> (Un_cv b l).
+Proof.
+    Unfold evt_eq_sequences.
 Abort.
