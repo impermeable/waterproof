@@ -42,7 +42,7 @@ From Ltac2 Require Import Ltac2.
         - splits [s] into its two respective parts.
 *)
 Ltac2 and_hypothesis_destruct (s:ident) (u:ident) (v:ident) :=
-    let s_val := Control.hyp s in (destruct $s_val as [u v]).
+    let s_val := Control.hyp s in (destruct $s_val as [$u $v]).
 
 
 
@@ -58,7 +58,7 @@ Ltac2 and_hypothesis_destruct (s:ident) (u:ident) (v:ident) :=
         - splits [s] into its two respective parts.
 *)
 Ltac2 or_hypothesis_destruct s u v :=
-    let s_val := Control.hyp s in (destruct $s_val as [u | v]).
+    let s_val := Control.hyp s in (destruct $s_val as [$u | $v]).
 
 
 

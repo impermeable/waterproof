@@ -42,7 +42,7 @@ From Ltac2 Require Option.
         - destructs the constr [v] under the names [s] and [u].
 *)
 Ltac2 choose_destruct_without_extra_hypothesis (s:ident) (u:ident) (v:constr) :=
-   destruct $v as [s u].
+   destruct $v as [$s $u].
 
 
 

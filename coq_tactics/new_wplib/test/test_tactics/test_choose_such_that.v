@@ -52,7 +52,7 @@ Proof.
         reflexivity.
     }
     intro n.
-    Choose m such that u according to (X n). 
+    Choose m such that exists_m_i_dunno according to (X n). 
 Abort.
 
 
