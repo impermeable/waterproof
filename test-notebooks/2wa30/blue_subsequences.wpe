@@ -1,0 +1,135 @@
+{
+  "exerciseSheet": true,
+  "blocks": [
+    {
+      "type": "text",
+      "text": "# **Subsequences**\nThis file contains the exercises from the Chapter on _Subsequences, lim sup and lim inf_ in the course notes."
+    },
+    {
+      "type": "code",
+      "text": "Require Import Reals.\nRequire Import Arith.Even.\nRequire Import wplib.Tactics.Tactics.\nRequire Import wplib.Notations.Notations.\nRequire Import wplib.Tactics.AdditionalLemmas.\nRequire Import wplib.Definitions.Subsequences.\nRequire Import wplib.Lib.subsequences.\nOpen Scope metric_scope."
+    },
+    {
+      "type": "text",
+      "text": "We use the same definitions for index sequences (`is_index_sequence`), subsequences (`is_subsequence`) and accumulation points (`is_accumulation_point`) as in the course notes. Moreover, we have the following proposition which also proven in the course notes. It might be useful to see what such a proof looks like in Waterproof."
+    },
+    {
+      "type": "code",
+      "text": "Lemma subsequence_of_convergent_sequence : ∀ a : (ℕ → X), ∀ p : X, a ⟶ p ⇒ ∀ (n : ℕ → ℕ), is_index_sequence n ⇒ (a ◦ n) ⟶ p.\nProof.\nTake a : (ℕ → X) and p : X.\nAssume a_converges_to_p : (a ⟶ p).\nTake n : (ℕ → ℕ).\nAssume n_is_index_sequence : (is_index_sequence n).\nWe need to show that (∀ ε : ℝ, ε > 0 ⇒ ∃ N : ℕ, ∀ k : ℕ, (k ≥ N)%nat ⇒ dist (a (n k)) p < ε).\n\nTake ε : ℝ. Assume ε_pos : (ε > 0).\nChoose K such that k_le_K_a_k_to_p according to (a_converges_to_p ε ε_pos).\nChoose N := K.\nTake k : ℕ. Assume k_ge_N : (k ≥ N)%nat.\nBy index_sequence_property2 it holds that (n k ≥ n K)%nat (H).\nBy index_sequence_property it holds that (n K ≥ K)%nat (H2).\nIt holds that (dist (a (n k)) p < ε).\nQed."
+    },
+    {
+      "type": "text",
+      "text": "We also show this equivalent statement, which you will need in Exercise 2."
+    },
+    {
+      "type": "code",
+      "text": "Lemma equivalent_subsequence_convergence : \n  ∀ (x y : ℕ → X), is_subsequence y x ⇒ \n    ∀ p : X, x ⟶ p ⇒\n      y ⟶ p.\nProof.\nTake x and y : (ℕ → X).\nAssume y_subsequence_of_x : (is_subsequence y x).\nTake p : X.\nAssume x_converges_to_p : (x ⟶ p).\n\nWe need to show that (y ⟶ p).\nIt holds that (∃ m : ℕ → ℕ, is_index_sequence m ∧ ∀ k : ℕ, y k = (x ◦ m) k) (y_sub_x).\nChoose m such that m_is_index_and_y_eq_x_m according to y_sub_x.\nBecause m_is_index_and_y_eq_x_m both m_is_index and y_eq_x_m.\n\nWe need to show that (∀ ε : ℝ, ε > 0 ⇒ ∃ N : ℕ, ∀ k : ℕ, (k ≥ N)%nat ⇒ dist (y k) p < ε).\n\nTake ε : ℝ. Assume ε_pos : (ε > 0).\nChoose K such that k_le_K_x_k_to_p according to (x_converges_to_p ε ε_pos).\nChoose N := K.\nTake k : ℕ. Assume k_ge_N : (k ≥ N)%nat.\nIt holds that (y k = x (m k)) (y_k_eq_x_m_k).\nWrite goal using (y k = x (m k)) as (dist (x (m k)) p < ε).\n\nBy index_sequence_property2 it holds that (m k ≥ m K)%nat (H).\nBy index_sequence_property it holds that (m K ≥ K)%nat (H2).\nIt holds that (dist (x (m k)) p < ε).\nQed."
+    },
+    {
+      "type": "text",
+      "text": "### **Exercise 1: subsubsequences**\n\nLet $a : ℕ \\to X$ be a sequence and let $n : ℕ \\to ℕ$ be an index sequence.\nSuppose that the subsequence $a~◦ ~n$ is convergent."
+    },
+    {
+      "type": "code",
+      "text": "Variable a : ℕ → X.\nVariable n : ℕ → ℕ.\nHypothesis n_is_index_sequence : is_index_sequence n.\nHypothesis a_n_convergent : ∃ p : X, (a ◦ n) ⟶ p."
+    },
+    {
+      "type": "text",
+      "text": "Show that every subsequence of $a~◦~n$ is convergent."
+    },
+    {
+      "type": "hint",
+      "text": "Click to open hint.\n<hint>\nRecall, you can use `By ` (lemma/hypothesis name) `it holds that` (statement) (name) `.` to prove an intermediate statement.\n\nYou can apply existing lemmas by using\n\n`Apply` (name of lemma)`.`\n\nIt might be useful to also give an 'argument' to the lemma.\n\nFor instance, if you need to show that `5 > 0` and you know of a lemma that says\n`n_ge_0 : ∀ n : ℕ, n ≥ 0.`, you can use\n\n`Apply (n_ge_0 5).`"
+    },
+    {
+      "type": "code",
+      "text": "Lemma subsubsequences_of_convergent_subsequences : \n    ∀ m : (ℕ → ℕ), is_index_sequence m ⇒ \n      ∃ q : X, ((a ◦ n) ◦ m) ⟶ q.\nProof."
+    },
+    {
+      "type": "input",
+      "start": true,
+      "id": "input-1"
+    },
+    {
+      "type": "code",
+      "text": "Admitted."
+    },
+    {
+      "type": "input",
+      "start": false,
+      "id": "input-1"
+    },
+    {
+      "type": "text",
+      "text": "### **Exercise 2: switch sequence**\nLet $a, b : ℕ \\to X$ be sequences and let $a \\to p ∈ X$."
+    },
+    {
+      "type": "code",
+      "text": "Variable b : (ℕ → X).\nVariable p : X.\nHypothesis a_converges_to_p : a ⟶ p.\n\n"
+    },
+    {
+      "type": "text",
+      "text": "Consider the sequence $c := \\begin{cases}a_k &\\text{if } k \\text{ even}\\\\b_k &\\text{if } k \\text{ odd}\\end{cases}$."
+    },
+    {
+      "type": "code",
+      "text": "Definition switch_sequence (a b : ℕ → X) := n ↦ if (Nat.even n) then a n else b n.\nDefinition c := switch_sequence a b."
+    },
+    {
+      "type": "text",
+      "text": "Show that $p$ is an accumulation point of $c$."
+    },
+    {
+      "type": "text",
+      "text": "\nWe break the proof down in two steps.\nFirst, show that $(t_k)_k$ defined by $t_k = 2k$ is an index sequence."
+    },
+    {
+      "type": "code",
+      "text": "Definition t : ℕ → ℕ := (k) ↦ (2 * k)%nat.\n\nLemma t_is_index_sequence : is_index_sequence t.\nProof."
+    },
+    {
+      "type": "input",
+      "start": true,
+      "id": "input-3"
+    },
+    {
+      "type": "code",
+      "text": "Admitted."
+    },
+    {
+      "type": "input",
+      "start": false,
+      "id": "input-3"
+    },
+    {
+      "type": "text",
+      "text": "Now, for any $k$ we know that $n_k$ is even, and thus we also know that $c_{n_k}$ is equal to $a_{n_k}$.\nThis step is quite tedious in Waterproof, so we have shown that for you."
+    },
+    {
+      "type": "code",
+      "text": "Lemma c_t_k_eq_a_t_k : ∀ k : ℕ, c (t k) = a (t k).\nProof.\nTake k : ℕ.\nExpand the definition of c.\nExpand the definition of switch_sequence.\nBy double_is_even it holds that \n  (Nat.even (t k) = true) (t_k_even).\nWrite goal using (Nat.even (t k) = true)\n  as ((if true then a (t k) else b (n k)) = a (t k)).\nIt holds that (a (t k) = a (t k)).\nQed."
+    },
+    {
+      "type": "text",
+      "text": "Finally, show that $p$ is an accumulation point of $c$."
+    },
+    {
+      "type": "code",
+      "text": "Lemma merged_sequence_accumulation : is_accumulation_point p (c).\nProof."
+    },
+    {
+      "type": "input",
+      "start": true,
+      "id": "input-2"
+    },
+    {
+      "type": "code",
+      "text": "Admitted."
+    },
+    {
+      "type": "input",
+      "start": false,
+      "id": "input-2"
+    }
+  ]
+}

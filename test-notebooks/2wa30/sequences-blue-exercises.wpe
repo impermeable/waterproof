@@ -1,0 +1,133 @@
+{
+  "exerciseSheet": true,
+  "blocks": [
+    {
+      "type": "text",
+      "text": "# **Sequences (! requires Waterproof version 0.5.1 or up !)**\n\nThis file contains the blue exercises from the chapter \"Sequences\"."
+    },
+    {
+      "type": "code",
+      "text": "Require Import Reals.\nRequire Import wplib.Tactics.Tactics.\nRequire Import wplib.Notations.Notations.\n\nOpen Scope R_scope.\n\nOpen Scope metric_scope.\n\nSection sequence_exercises."
+    },
+    {
+      "type": "text",
+      "text": "## **Exercise 1: a constant sequence**\n\nLet $(X, \\text{dist})$ be a metric space.\nLet $p ∈ X$ and assume that the sequence $(z_n)$ is given by $z_n = p$ for every $n ∈ ℕ$.\nWe also say that $(z_n)$ is a constant sequence.\n\nIn WaterProof, we create this setup as follows. We let $(X, \\mathrm{dist})$ be a metric space."
+    },
+    {
+      "type": "code",
+      "text": "Variable M : Metric_Space.\nDefinition X := Base M.\nDefinition dist := dist M.\n"
+    },
+    {
+      "type": "text",
+      "text": "We now record the five properties of a distance."
+    },
+    {
+      "type": "code",
+      "text": "Definition dist_positive : ∀ x y : X, dist x y ≥ 0\n  := dist_pos M."
+    },
+    {
+      "type": "code",
+      "text": "\nDefinition dist_non_degenerate : ∀ x y : X, (dist x y = 0) ⇒ (x = y). \n  Take x, y : X. Apply (dist_refl M). Defined."
+    },
+    {
+      "type": "code",
+      "text": "Definition dist_symmetric : ∀ x y : X, dist x y = dist y x\n  := dist_sym M."
+    },
+    {
+      "type": "code",
+      "text": "Definition dist_triangle_inequality : ∀ x y z : X, dist x z ≤ dist x y + dist y z.\n  Take x, y and z : X. Apply (dist_tri M). Qed."
+    },
+    {
+      "type": "code",
+      "text": "Definition dist_reflexive : ∀ x : X, dist x x = 0.\n  Take x : X. Apply (dist_refl M). We need to show that (x = x). It holds that (x = x). Defined."
+    },
+    {
+      "type": "code",
+      "text": "Variable p : X.\nDefinition z := fun (n : nat) ↦ p."
+    },
+    {
+      "type": "text",
+      "text": "Note that also in WaterProof, ```z``` is a sequence. That is, it is a function from $ℕ \\to ℝ$.\n\nNow, show that $\\lim_{n \\to \\infty} z_n = p$.\n\nA small remark is necessary. To write $n ≥ N$ for natural numbers $n, N$, you need to write\n```(n ≥ N)%nat``` in WaterProof.\n\nSimilarly, if you wish to define a natural number $N$, you should write ```Choose N := ..%nat```."
+    },
+    {
+      "type": "text",
+      "text": "In the next exercise, you will show that the constat sequence $z$ converges to $p$. **Note that in Waterproof, this is denoted as `z ⟶ p`, whereas on paper we would often write $z_n \\to p$ as $n \\to \\infty$.** And btw, you can write `\\converges` and then the long arrow symbol will pop up.\n\nThe definitions of convergence in Waterproof and the lecture notes have a small difference. Where in the lecture notes, as is customary in Mathematics, the definition reads\n$$∀ ε > 0, ...$$\nin Waterproof it starts with `∀ ε : ℝ, ε > 0 ⇒ ...`. These formulations are equivalent."
+    },
+    {
+      "type": "code",
+      "text": "Lemma limit_constant_sequence : z ⟶ p.\nProof."
+    },
+    {
+      "type": "hint",
+      "text": "Click to open hint.\n<hint>\nIf you want to state what you need to show, you can use the tactic\n\n```We need to show that``` (statement) ```.```\n\nFor example, if you want to state that you need to show that a sequence converges to some number, you can write\n\n```We need to show that``` (∀ε : ℝ, ε > 0 ⇒ ...)```.```"
+    },
+    {
+      "type": "input",
+      "start": true,
+      "id": "input-1"
+    },
+    {
+      "type": "code",
+      "text": "Admitted."
+    },
+    {
+      "type": "input",
+      "start": false,
+      "id": "input-1"
+    },
+    {
+      "type": "text",
+      "text": "## **Exercise 2: a shifted sequence**\nLet $(a_n)_n$ be a sequence.\nLet $k ∈ ℕ$.\nShow that $(a_n)_n$ converges to some number $L$ if and only if the sequence $(a_{n+k})_n$ converges to $L$."
+    },
+    {
+      "type": "code",
+      "text": "Variable a : ℕ → X.\nVariable k : ℕ.\nDefinition a_k_shift := fun (n : nat) => a (n + k).\n"
+    },
+    {
+      "type": "text",
+      "text": "The following lemma will be useful."
+    },
+    {
+      "type": "code",
+      "text": "Lemma relation_shift : forall (n : nat), (n ≥ k)%nat ⇒ a_k_shift (n - k)%nat = a n.\nProof.\nTake n : ℕ. Assume n_ge_k : (n ≥ k)%nat.\nIt holds that (n - k + k = n)%nat (H1).\nRewrite (a_k_shift (n-k)) = (a ((n - k) + k)) = (a n).\nQed.\n\nHint Resolve relation_shift : reals.\n\n\nVariable L : X."
+    },
+    {
+      "type": "text",
+      "text": "We now have the ingredients to formulate the lemma."
+    },
+    {
+      "type": "code",
+      "text": "Lemma limit_shifted_sequence : (a ⟶ L) ⇔ (a_k_shift ⟶ L).\nProof."
+    },
+    {
+      "type": "hint",
+      "text": "Click to open hint.\n<hint>\nRecall: to show an 'if and only if', you can use \n\n`We show both statements.`\n\nFor clarity, we recommend to describe the case you are dealing with.\nHere, you can do that by writing a (* comment *), by using a text block (alt+T) or by using\n\n`We need to show that (` goal `).`"
+    },
+    {
+      "type": "hint",
+      "text": "Click to open hint.\n<hint>\nIn case a hypothesis `H` starts with 'there exists' such that some property holds, then you can use\n\n`Choose ` name of variable ` such that ` name of property ` according to ` name of hypothesis`.`\n\nNote the absence of brackets here! For instance, if there is a hypothesis\n\n`my_hyp : ∃ r : ℝ, r > 0`,\n\nyou can use \n\n`Choose r such that r_pos according to (my_hyp).`\n\nThen, a variable `r` will be defined. Moreover, the property `r > 0` then holds for this specific `r`, and is added to the context with the name `r_pos`."
+    },
+    {
+      "type": "hint",
+      "text": "Click to open hint.\n<hint>\nIn the following proof you will have to choose specific values for `N`.\nThe maximum function would be a bit tricky to deal with in Waterproof, but luckily it is not necessary for this proof.\nSo, try to choose a value **avoiding** the maximum function!"
+    },
+    {
+      "type": "input",
+      "start": true,
+      "id": "input-2"
+    },
+    {
+      "type": "code",
+      "text": "Admitted."
+    },
+    {
+      "type": "input",
+      "start": false,
+      "id": "input-2"
+    },
+    {
+      "type": "code",
+      "text": "Section sequence_exercises."
+    }
+  ]
+}
