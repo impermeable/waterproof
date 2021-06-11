@@ -13,6 +13,8 @@ The easiest way to get started with Waterproof is to follow the steps:
 * Step 1. Install SerAPI following the steps below
 * Step 2. Install Waterproof using the installer from the [release page](http://github.com/impermeable/waterproof/releases)
 
+**Note**: If you cannot get the installation to work, see the bottom of this page for an alternative fool-proof installation, where we give a virtual disk image with waterproof and its dependencies preinstalled. However, we do not recommend doing this firstly, as it is slow solution and requires a lot more disk space.
+
 ### Step 1 for Windows. Installation of SerAPI.
 
 * Download the _graphical installer_ for Ocaml for Windows from https://fdopen.github.io/opam-repository-mingw/installation/.
@@ -80,6 +82,13 @@ Finally, execute again
 eval `opam env`
 ```
 
+#### Step 1 common errors
+When installing opam packages in linux, a common error is caused by missing system packages. You will have to check the error message to find out which package this is. For instance, it could be you are missing one of these packages: m4, build, dune-configurator. In which case, these can be installed using, for instance:
+
+```
+sudo apt-get install m4
+``` 
+
 ### Step 2. Install Waterproof with the installer from the release page
 
 After installing SerAPI, you are ready to install Waterproof using your preferred installer from the [release page](http://github.com/impermeable/waterproof/releases).
@@ -89,3 +98,34 @@ After installing SerAPI, you are ready to install Waterproof using your preferre
 ---
 
 If you rather build the application yourself, you can follow [these steps](documentation/Cloning-the-repository.md).
+
+#### Step 2 common errors
+Upon launch of Waterproof, a common fault yields a file viewer titled 'Please select the program named sertop'. Waterproof depends on `sertop` (which was installed with `coq-serapi` in Step 1), so we need to find it. It is installed in a switch (a folder called `4.11.1` perhaps) in opam. Opam packages are installed in a `.opam\[switch]\bin` folder, usually found under your user's base folder.
+
+Note that `.opam` is a hidden folder, so you will need to show hidden files, which is done differently per operating system. To show hidden folders:
+* on Windows: Open File Explorer, Select View > Options > Change folder and search options. Select the View tab and, in Advanced settings, select Show hidden files, folders, and drives and OK.
+* on Linux: From a GUI file manager, go to View and check the option Show Hidden Files
+* on Mac: Press Cmd + Space to open a Terminal. In here, type:
+```
+defaults write com.apple.Finder AppleShowAllFiles true
+killall Finder
+```
+> **Note for Mac users**: The latter setting can be undone by replacing `true` with `false`, should you want to hide your hidden folders again, but this is totally unnecessary. On Mac we recommend searching for Sertop in a separate file viewer (Finder) window instead of the pop-up, as hidden folders are not always shown here despite enabling the setting.
+
+Common places to look for `.opam` and then `.opam\[switch]\bin\sertop` are:
+* on Windows `C:\OCaml64\home\[your user]`
+* on Linux/MacOs: `\home\[your user]`
+
+Finally, if you still cannot find sertop, but you can find `.opam\[switch]\bin`, then there was likely an error in Step 1 and the installation of coq-serapi was not completed.
+
+### Alternative installation
+
+The alternative installation works only on 64-bit OS's, but not really recommend as it requires a few gigabytes of disk space. 
+
+* Download and install [Virtual Box](https://www.virtualbox.org/) or similar VM software.
+* [Download the VM image](https://drive.google.com/file/d/1xo7wNrn7UfhYTh6eakgSqSB84nmHsntc/view?usp=sharing)
+* Open Virtual Box. Then, press File > Import Appliance > Choose file. Navigate to the extracted VM image called `Preinstalled_Waterproof.ova`. Choose this file, and press next. The settings should be fine, so just press Import. This may take a while...
+* You should be welcomed by a log in screen. The username and password is: `waterproof`. On the desktop, you can find a shortcut to Waterproof which you can double-click to execute.
+* You may want to change the monitor settings. For this, go to the bottom left menu button > Preferences > Monitor settings
+
+> **Note** In order to transfer files between the virtual machine and your own filesystem, you could use Google Drive or something similar. An more sleak alternative is creating a shared disk partition, but it defeats the purpose of a simple installation.
