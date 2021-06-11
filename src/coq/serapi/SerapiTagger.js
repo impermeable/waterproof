@@ -1,4 +1,5 @@
 import parse from 's-expression';
+import {writeToFile} from './processors/SerapiASTProcessor';
 import {
   isReadyFeedback,
   MESSAGE_ACK,
@@ -107,6 +108,11 @@ class SerapiTagger {
       return;
     }
 
+    if (message.includes('CoqAst')) {
+      const sexp = message.slice(message.indexOf('ObjList(') + 8,
+          message.length-3);
+      writeToFile(sexp, '\n');
+    }
     const data = message.replace(/,\)/g, ' ",")');
     const parsedData = parse(data);
     if (parsedData instanceof Error) {

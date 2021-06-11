@@ -5,12 +5,12 @@ p = Path('.')
 flatten = lambda t: [item for sublist in t for item in sublist]
 
 nb_paths = flatten([
+    list(p.glob('test-notrbooks/2wa30/*.wpe')),
     # list(p.glob('wrapper/wplib/Notebooks/Tutorial.wpn')),
-    list(p.glob('wrapper/wplib/Exercise_sheets/Lec_*.wpe')),
+    # list(p.glob('wrapper/wplib/Exercise_sheets/Lec_*.wpe')),
 ])
 
-del nb_paths[1] # currently breaking
-del nb_paths[1] # currently breaking
+# del nb_paths[1] # currently breaking
 
 
 def nb_from_blocks(blocks):

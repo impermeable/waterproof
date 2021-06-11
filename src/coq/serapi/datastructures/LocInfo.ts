@@ -22,6 +22,7 @@ class LocInfo extends CoqType {
    */
   constructor( array ) {
     super();
+    console.log(array);
     const result = flatten(array)[1][0];
     this.fname = result.fname;
     this.line_nb = result.line_nb;
