@@ -219,6 +219,35 @@ class SerapiState extends CoqState {
     return text.slice(this.sentences[sentenceNr].beginIndex,
         this.sentences[sentenceNr].endIndex);
   }
+
+  /**
+   * TEMP
+   * @param {Number} index a
+   * @return {null}
+   */
+  getFlatAST(index) {
+    if (this.sentences[index].ast == null) {
+      return null;
+    }
+    if (this.sentences[index].flatAst == null) {
+      let i = 0;
+      this.sentences[index].flatAst = this.sentences[index].text
+          .slice(0, this.sentences[index].text.length - 1)
+          .split(' ')
+          .map((str) => {
+            const start = i;
+            i += str.length;
+            const end = i;
+            i++;
+            return {
+              start,
+              end,
+              type: str,
+            };
+          });
+    }
+    return this.sentences[index].flatAst;
+  }
 }
 
 export default SerapiState;
