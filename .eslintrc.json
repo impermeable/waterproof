@@ -3,17 +3,27 @@
     "es6": true,
     "node": true
   },
-  "extends": ["eslint:recommended", "plugin:vue/essential", "google"],
+  "extends": ["eslint:recommended", "plugin:vue/base", "plugin:vue/essential", "plugin:@typescript-eslint/recommended", "google"],
   "globals": {
     "Atomics": "readonly",
     "SharedArrayBuffer": "readonly"
   },
+  "parser": "vue-eslint-parser",
   "parserOptions": {
+     "parser": "@typescript-eslint/parser",
     "ecmaVersion": 2018,
     "sourceType": "module"
   },
+  "plugins": [
+    "vue"
+  ],
   "rules": {
     "linebreak-style": 0,
-    "no-console": 0
+    "no-console": 0,
+    "vue/no-mutating-props": 0, // TODO - fix this anti-pattern
+    "vue/return-in-computed-property": 0, // TODO - fix this one too
+    "@typescript-eslint/explicit-module-boundary-types": 0,
+    "@typescript-eslint/no-var-requires": 0,
+    "@typescript-eslint/no-empty-function": 0
   }
 }

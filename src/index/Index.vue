@@ -7,7 +7,7 @@
             Loading...
         </li>
         <recent-file
-          v-else=""
+          v-else
           v-for="file in this.recents.filelist"
           v-bind:fileInfo="file"
           v-bind:key="file.id"
@@ -36,12 +36,12 @@ import RecentFile from './components/RecentFile';
 import HomepageButton from './components/HomepageButton';
 import Recents from '../io/recents';
 import ShortKeys from '../io/shortKey';
-import Loader from '../pageless/Loader';
+// import Loader from '../pageless/Loader';
 
 export default {
   name: 'app',
   components: {
-    Loader,
+    // Loader,
     RecentFile,
     HomepageButton,
   },
@@ -96,6 +96,8 @@ export default {
 </script>
 
 <style lang="scss">
+@import '../assets/sass/_colors.scss';
+
 .app#home {
   @include flex-style(row);
   height: 100vh;
@@ -107,16 +109,16 @@ export default {
     padding: 1.5rem;
     width: 250px;
 
-    background: $color-primary;
-    color: $color-on-primary;
+    @include theme(background-color, color-primary);
+    @include theme(color, color-text-in-primary);
 
     @include respond-to(xs) {
       display: none;
     }
 
     .recent-files {
-      border-bottom: 1px solid $color-on-primary;
-      border-top: 1px solid $color-on-primary;
+      @include theme(border-bottom, color-text-in-primary, 1px solid);
+      @include theme(border-top, color-text-in-primary, 1px solid);
       padding-inline-start: 0;
 
       .recent-file {

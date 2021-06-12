@@ -15,7 +15,7 @@ import {COQ_EXCEPTION, parseErrorResponse} from '../SerapiParser';
  * @private
  */
 function _processResults(result, onResult, ignoredResults) {
-  if (result.hasOwnProperty('error')) {
+  if (Object.prototype.hasOwnProperty.call(result, 'error')) {
     return;
   }
 
@@ -224,7 +224,7 @@ class SerapiSearchProcessor extends SerapiProcessor {
           };
         })
         .then((result) => {
-          if (result.hasOwnProperty('result')) {
+          if (Object.prototype.hasOwnProperty.call(result, 'result')) {
             this.editor.message(result.result);
           }
           if (result.error) {

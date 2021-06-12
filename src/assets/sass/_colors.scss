@@ -1,0 +1,30 @@
+@import './abstracts/_mixins.scss';
+
+/** this section generates a theme map for each theme **/
+$themes: ();
+$themeValues: ();
+
+@import './abstracts/_light.scss';
+@include generateThemeMappings(light, $light);
+
+@import './abstracts/_dark.scss';
+@include generateThemeMappings(dark, $dark);
+
+@import './abstracts/_light_roboto.scss';
+@include generateThemeMappings(light_roboto, $light_roboto);
+
+@import './abstracts/_dark_roboto.scss';
+@include generateThemeMappings(dark_roboto, $dark_roboto);
+/** end theme generation **/
+
+/** To add another theme:
+- Create file like light.scss in src/sass/abstracts
+- Add reference in src/sass/main
+- Add reference and generateThemeMapping in this file
+- Go to SettingsModal.vue and add map name to styles list
+    (For simplicity, we only check in SettingsModal whether the map exists)
+
+NOTE: The default theme is light, and to change this:
+- Go to src/store/store.js and change default
+- Change class of <html> element
+*/

@@ -1,0 +1,58 @@
+@import './_functions';
+
+$light_roboto: (
+    // Primary brand color and variants.
+    // TODO: These colors are very similar, and used interchangeably for navigation
+    //  items. Should probably merge these.
+    color-primary: #2b3990,
+    color-primary-dark: #232d73,
+    // TODO: Both of these colors are used for hover effects, it would be better to
+    //  just stick to one color. Should probably use the dark variant on light
+    //  surfaces and vice versa.
+    color-primary-light: #5561a6,
+    color-primary-extra-light: #aab0d3,
+    color-primary-ultra-light: #eceeff,
+
+    // Surface colors, for elements that are not typically styled using our brand
+    // colors.
+    color-background: #ffffff,
+    color-surface: #ffffff,
+    color-error: #ff0000,
+    color-error-message: #FF6060,
+    color-error-text: #ffffff,
+
+    // Colors for typography and iconography. These colors are meant for elements
+    // that appear on top of elements styled using the primary/surface colors.
+    color-on-primary: #ffffff,
+    color-on-background: #000000,
+    color-on-surface: #000000,
+    color-on-error: #ffffff,
+
+    // Color for multiple areas in a notebook, like search interface,
+    // code blocks
+    color-gray-darkest: #707070,
+    color-gray-dark: #b1b1b1,
+    color-gray-light: #ececec,
+    color-gray: #c9c9c9,
+    color-black: #000000,
+    color-red: red,
+    color-white: white,
+    color-text-in-primary: white, // meant for text in primary coloured buttons
+    color-transparent: transparent,
+
+    color-highlight-mode: #fff6bf,
+    color-highlight-mode-text: black,
+
+    /** Fonts used in branding (logos, application title, etc.) */
+    font-stack-brand: 'Roboto',
+
+    // Fonts used in page headers (h1-h6). Separate to allow easy modification in
+    // the future.
+    font-stack-headers: 'Roboto',
+
+    // Fonts used in body text. Separate to allow easy modification in the future.
+    font-stack-body: 'Roboto',
+
+    // Fonts used for displaying code.
+    font-stack-code: 'Roboto Mono'
+);

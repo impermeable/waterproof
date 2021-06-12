@@ -1,7 +1,9 @@
 /** Basic typography styles */
+@import '../_colors.scss';
+
 body {
-  color: $color-on-surface;
-  font: normal 125% / 1.4 $font-stack-body;
+  @include theme(color, color-on-surface);
+  @include theme(font, font-stack-body, normal 125% / 1.4);
 }
 
 h1 {
@@ -31,7 +33,7 @@ h6 {
 h1, h2, h3, h4, h5, h6 {
   margin-top: 0;
   margin-bottom: 0.5rem;
-  font-family: $font-stack-headers;
+  //@include theme(font-family, font-stack-headers); // Not quite sure why this does not work...
 }
 
 p {

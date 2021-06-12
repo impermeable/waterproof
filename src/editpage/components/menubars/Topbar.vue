@@ -287,6 +287,13 @@ export default {
             shortkeyTag: '',
             requires: ['notebook', 'coq-ready'],
           },
+          {
+            text: 'Log currently unparsed types',
+            event: 'coqUnparsedAST',
+            eventType: 'on-proof-window',
+            shortkeyTag: '',
+            requires: ['notebook', 'coq-ready'],
+          },
         ] : []),
         help: [
           // 0,1,2 are magical constants from store.js
@@ -367,7 +374,7 @@ export default {
               continue;
             }
             const isEnabled = button.requires.every(
-                (requirement) => status.includes(requirement)
+                (requirement) => status.includes(requirement),
             );
             this.$set(button, 'disabled', !isEnabled);
           }
@@ -380,8 +387,9 @@ export default {
 </script>
 
 <style lang="scss">
+@import '../../../assets/sass/_colors.scss';
   .show > .btn-secondary.dropdown-toggle {
-    background-color: $color-primary-dark!important;
+    @include theme(background-color, color-primary-dark, null, !important);
     border: none;
   }
 </style>

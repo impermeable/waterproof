@@ -23,7 +23,7 @@ function saveNotebook(file) {
         },
         (err) => {
           reject(err);
-        }
+        },
     );
   });
 }

@@ -40,7 +40,7 @@ class TCPManager {
     if (ipc.of[this.socketId] !== undefined) {
       ipc.of[this.socketId].on(
           'data',
-          (data) => this.handleBuffer(data)
+          (data) => this.handleBuffer(data),
       );
       // socket already started
       return;
@@ -61,7 +61,7 @@ class TCPManager {
         () => {
           ipc.of[this.socketId].on(
               'data',
-              (data) => this.handleBuffer(data)
+              (data) => this.handleBuffer(data),
           );
         });
 
@@ -111,7 +111,7 @@ class TCPManager {
 
         if (this.charLeftToRead <= 0) {
           this.handleMessage(
-              this.bufferToString(this.bufferSoFar)
+              this.bufferToString(this.bufferSoFar),
           );
           this.charLeftToRead = -1;
           this.bufferSoFar = null;

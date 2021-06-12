@@ -24,7 +24,7 @@ function loadNotebook(file) {
         },
         (err) => {
           reject(err);
-        }
+        },
     );
   });
 }
@@ -44,7 +44,7 @@ function saveNotebook(file) {
         },
         (err) => {
           reject(err);
-        }
+        },
     );
   });
 }

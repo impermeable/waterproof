@@ -95,7 +95,7 @@ class UndoRedo {
       return;
     }
     this.executeNewCommand(
-        new InputCommand(index, newText)
+        new InputCommand(index, newText),
     );
   }
 
@@ -110,7 +110,7 @@ class UndoRedo {
       blocks = [blocks];
     }
     this.executeNewCommand(
-        new AddBlocksCommand(index, blocks)
+        new AddBlocksCommand(index, blocks),
     );
   }
 
@@ -121,7 +121,7 @@ class UndoRedo {
    */
   removeBlocks(index, count) {
     this.executeNewCommand(
-        new RemoveBlocksCommand(index, count)
+        new RemoveBlocksCommand(index, count),
     );
   }
 
@@ -138,7 +138,7 @@ class UndoRedo {
       new AddBlocksCommand(index, blocks),
     ]);
     this.executeNewCommand(
-        command
+        command,
     );
   }
 
@@ -307,7 +307,7 @@ class CompoundCommand {
   reverse() {
     const newList = this.commands.map((command) => command.reverse());
     return new CompoundCommand(
-        newList.reverse()
+        newList.reverse(),
     );
   }
 }

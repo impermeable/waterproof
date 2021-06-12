@@ -15,16 +15,17 @@ export default {
 </script>
 
 <style lang="scss">
+@import './../../../../assets/sass/_colors.scss';
   .symbol-button {
     height: 40px;
     width: 40px;
     cursor: copy;
     text-align: center;
-    font-family: monospace, monospace;
+    @include theme(font-family, font-stack-code);
     font-size: larger;
 
     &:hover {
-      background-color: $color-gray-dark;
+      @include theme(background-color, color-gray-dark);
       font-weight: bold;
     }
   }

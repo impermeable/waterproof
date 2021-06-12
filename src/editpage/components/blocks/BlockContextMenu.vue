@@ -109,9 +109,9 @@ export default {
      * @return {Boolean} Whether select all should be active
      */
     canSelectAll: function() {
-      return this.selectedCount < this.blocks.length
-          && document.activeElement.nodeName !== 'TEXTAREA'
-          && document.activeElement.nodeName !== 'INPUT';
+      return this.selectedCount < this.blocks.length &&
+          document.activeElement.nodeName !== 'TEXTAREA' &&
+          document.activeElement.nodeName !== 'INPUT';
     },
 
     /**
@@ -158,9 +158,9 @@ export default {
 
       // Make sure all elements are blocks
       for (const block of clipboardBlocks) {
-        if (!block.hasOwnProperty('type') ||
-            !block.hasOwnProperty('text') &&
-            !block.hasOwnProperty('id')) {
+        if (!Object.prototype.hasOwnProperty.call(block, 'type') ||
+            !Object.prototype.hasOwnProperty.call(block, 'text') &&
+            !Object.prototype.hasOwnProperty.call(block, 'id')) {
           return null;
         }
       }
@@ -422,7 +422,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '../../../assets/sass/_colors.scss';
   .v-context {
-    background-color: $color-gray-light;
+    @include theme(background-color, color-gray-light);
   }
 </style>

@@ -29,6 +29,8 @@ export default {
     this.eventBus.$on('coqAST', this.coqAST);
     this.eventBus.$on('coqLog', this.coqToggleLog);
     this.eventBus.$on('coqTime', this.coqToggleTiming);
+
+    this.eventBus.$on('coqUnparsedAST', this.logNotParsed);
     // TODO: TEMP
     this.eventBus.$on('coqLogAST', this.coqToggleASTLog);
   },
@@ -100,6 +102,17 @@ export default {
      */
     coqAST: function() {
       this.coq.getAllASTs();
+    },
+
+    logNotParsed: function() {
+      const unparsed = this.coq.getUnparsedTypes();
+      if (unparsed.size > 0) {
+        console.log(`${unparsed.size} types still left to parse:`);
+        console.log(new Map([...unparsed.entries()]
+            .sort((a, b) => b[1] - a[1])));
+      } else {
+        console.log('No types left to parse! 🎉');
+      }
     },
 
     coqToggleASTLog: function() {

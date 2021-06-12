@@ -68,7 +68,7 @@ describe('serapi ast during content processor', () => {
       'Ack',
       '(Canceled(2 3))',
       'Completed',
-    ]
+    ],
     );
 
     await proc.getAstForSentence(proc.state.indexOfSentence(id));
