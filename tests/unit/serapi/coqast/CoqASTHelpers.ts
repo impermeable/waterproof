@@ -11,38 +11,39 @@ const parse = require('s-expression');
  */
 function toAST(sExpr: string, logging=false): CoqAST {
   const arrayData = parse(sExpr);
-  console.warn(sExpr);
-  // if (logging) {
-  //   console.log('array data:', arrayData);
-  // }
+  if (logging) {
+    console.log('toAST - array data:', arrayData);
+  }
   const ast = extractCoqAST(arrayData);
   if (logging) {
-    console.warn('CoqAst', ast);
+    console.warn('toAST - CoqAst', ast);
   }
   return ast;
 }
 
-function astHasChild(ast: CoqType, target: string) {
-  console.log(keyify(ast));
-  // const parts = propStr.split('.');
-  // const cur = ast;
-  // for (var i=0; i<parts.length; i++) {
-  //     if (!cur[parts[i]])
-  //         return false;
-  //     cur = cur[parts[i]];
-  // }
-  // return true;
+/**
+ * Given a coqtype, check if a child exists in the
+ * child hierarchy.
+ * @param {CoqType} ast
+ * @param {string} target
+ * @return {boolean}
+ */
+function astHasChild(ast: CoqType, target: string) : boolean {
+  const pathSet : Set<string>= new Set(keyify(ast));
+  return [...pathSet].some((path) => path.includes(target));
 }
 
-const keyify = (obj, prefix = '') =>
+const keyify = (obj, prefix = '') : string[] =>
   Object.keys(obj).reduce((res, el) : any => {
     if ( Array.isArray(obj[el]) ) {
-      return res;
+      return [...res, ...keyify(obj[el], prefix)];
     } else if ( typeof obj[el] === 'object' && obj[el] !== null ) {
-      console.log('res', res, obj);
-      return [...res, ...keyify(obj[el], prefix + el + '.')];
+      // console.log('res', res, obj);
+      const e = ['Object', 'String'].includes(obj[el].constructor.name) ?
+          '' : obj[el].constructor.name+'.';
+      return [...res, ...keyify(obj[el], prefix + e)];
     }
-    return [...res, prefix + el];
+    return [...res, prefix];
   }, []);
 
 export {

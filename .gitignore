@@ -54,3 +54,4 @@ wrapper/**/*.v
 *.vok
 *.vos
 *.aux
+*.log

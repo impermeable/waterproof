@@ -5,7 +5,7 @@ import FlattenVisitor from '../datastructures/visitor/FlattenVisitor';
 
 const fs = require('fs');
 const util = require('util');
-const logFile = fs.createWriteStream('log.txt', {flags: 'w'});
+const logFile = fs.createWriteStream('log.log', {flags: 'w'});
 
 // eslint-disable-next-line require-jsdoc
 function writeToFile(...args) {
