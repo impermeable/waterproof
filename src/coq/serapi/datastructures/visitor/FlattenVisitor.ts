@@ -108,6 +108,8 @@ class FlattenVisitor implements ASTVisitor {
 
   visitVernacEndProof(term: VernacEndProof): void {
     // can be empty
+    console.log('vEndproof', term);
+    throw Error(term);
   }
 
   visitVernacExpr(term: VernacExpr): void {

@@ -31,7 +31,6 @@ class CoqAST extends CoqType implements Visitable {
 
   // eslint-disable-next-line require-jsdoc
   pprint(indent = 0): string {
-    // TODO 1: sanity check - is content an CoqType ...
     // (could be null or something)
     // Call the method to pprint on the child(ren)
     const tab = '\n'.concat('\t'.repeat(indent + 1));

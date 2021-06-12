@@ -16,6 +16,7 @@ class VernacExpr extends CoqType {
     super();
     // TODO fixme
     // console.log('In the constructor of VernacExpr...');
+    return Error(array);
     const data = array;
     data[2] = convertToASTComp(array[2]);
     this.content = data[2];
