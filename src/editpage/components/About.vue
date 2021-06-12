@@ -8,12 +8,14 @@
           It is built as an Electron app, using the Vue.js and
           Bootstrap frameworks.
         </p>
-        <p>SEP Group #2 2020-2021 was Here!</p>
-        <p><strong>TODO:</strong> add our names bellow 😊</p>
         <p>
           Waterproof was originally created and developed by Team ChefCoq as a
           Software Engineering Project at Eindhoven University of Technology.
           The project was created for Dr. J.W. Portegies.
+        </p>
+        <p>
+          The project was subsequently imporved as part of Team Waterfowl's
+          Software Engineering Project at Eindhoven University of Technology.
         </p>
         <p>
           Waterproof uses the following technologies:
@@ -24,8 +26,22 @@
           <li>Markdown</li>
           <li><a href="#" @click="openPage('https://github.com/KaTeX/KaTeX')">KaTeX</a></li>
         </ul>
-        <p>
-          <b>Team ChefCoq</b><br>
+        <div class="row">
+        <p class="col">
+          <b>Team Waterfowl 🦆</b><br>
+          A. Castella <br>
+          A. Cucoș<br>
+          C. Manea<br>
+          N. van der Meer<br>
+          L. Pirée<br>
+          T. Trouwen<br>
+          T. Voicu<br>
+          M. Țifrea<br>
+          A. S. Vrămuleț<br>
+          Y. Zeng<br>
+        </p>
+        <p class="col">
+          <b>Team ChefCoq 🧑‍🍳</b><br>
           T.P.J. Beurskens<br>
           B.W.T. Gieling<br>
           S.P. Gunter<br>
@@ -38,6 +54,7 @@
           R.F.A. Verhaegh<br>
           G.C. van Wordragen<br>
         </p>
+        </div>
         <p>
           Version: {{versionNumber}}
         </p>
@@ -68,6 +85,18 @@ export default {
   }
   .logo {
     max-height: 80px;
+  }
+
+  .col {
+    float: left;
+    width: 50%;
+  }
+
+  /* Clear floats after the columns */
+  .row:after {
+    content: "";
+    display: table;
+    clear: both;
   }
 </style>
 
