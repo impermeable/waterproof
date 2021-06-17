@@ -6,8 +6,10 @@ const {emptyAst, empty, sexp1, sexpRequire, sexpHint, Ltac2NB} =
   require('./helpers/SExprList');
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const expect = chai.expect;
+const suppressLogs = require('mocha-suppress-logs');
 
 describe('Parsing CoqASTs', () => {
+  suppressLogs();
   it('should parse an empty Coq AST s-expr correctly', (done) => {
     const ast = toAST(emptyAst);
 
