@@ -10,7 +10,7 @@ class CLambdaN extends CoqType {
   localExprs: any;
   expr: { locinfo: LocInfo; content: any; };
   constructor( array ) {
-    super();
+    super(array);
     this.localExprs = array[1].map((el) => extractCoqAST(el));
     this.expr = {
       locinfo: new LocInfo(['loc', array[2].loc]),

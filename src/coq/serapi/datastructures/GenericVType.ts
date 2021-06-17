@@ -13,7 +13,7 @@ class GenericVType extends CoqType implements Visitable {
    * @param {*} array
    */
   constructor( array ) {
-    super();
+    super(array);
     const {attrs, control, expr} = flatten(array[1]);
 
     this.attributes = {'attrs': attrs, 'control': control};

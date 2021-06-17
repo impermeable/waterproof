@@ -51,4 +51,16 @@ export {
   toAST,
   astHasChild,
   keyify,
+  objHasKeys,
+  BAD_CONST_INPUTS,
 };
+
+const BAD_CONST_INPUTS = [
+  {}, ' ', null, undefined, 42,
+];
+
+function objHasKeys(obj, ...args) {
+  return args.every((key) =>
+    Object.prototype.hasOwnProperty.call(obj, key),
+  );
+}

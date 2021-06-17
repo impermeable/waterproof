@@ -10,7 +10,7 @@ class DefineBody extends CoqType {
   exprOption: any;
 
   constructor( array ) {
-    super();
+    super(array);
     this.localExprList = array[1];
     this.rawRedExprOption = array[2];
     this.expr = {

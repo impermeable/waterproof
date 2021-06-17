@@ -9,7 +9,7 @@ class CLocalAssum extends CoqType {
   expr: { locinfo: LocInfo; content: any; };
 
   constructor( array ) {
-    super();
+    super(array);
     console.warn('CLocalAssum', array);
     this.names = array[1].map((name) => ({
       locinfo: new LocInfo(['loc', name.loc]),

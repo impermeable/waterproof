@@ -17,7 +17,7 @@ class CNotation extends CoqType {
    */
   constructor( array ) {
     // TODO not sure what array[1] is
-    super();
+    super(array);
     this.notation = convertToASTComp(array[2]);
 
     // object of type List<> * List<List> * List<patterns> * List<List<binder>>

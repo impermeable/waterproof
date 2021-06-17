@@ -13,7 +13,7 @@ class VernacExpr extends CoqType {
    * @param {Array} array Array as parsed from SerAPI message
    */
   constructor( array ) {
-    super();
+    super(array);
     // TODO fixme
     // console.log('In the constructor of VernacExpr...');
     const data = array;

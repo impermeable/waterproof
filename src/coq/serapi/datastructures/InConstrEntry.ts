@@ -8,7 +8,7 @@ class InConstrEntry extends CoqType {
   data: any;
   // eslint-disable-next-line require-jsdoc
   constructor( array ) {
-    super();
+    super(array);
     this.data = array[1];
   }
 

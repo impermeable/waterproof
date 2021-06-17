@@ -8,7 +8,7 @@ class CRef extends CoqType {
   instanceExpr: any;
   // eslint-disable-next-line require-jsdoc
   constructor( array ) {
-    super();
+    super(array);
     this.libNames = {
       locinfo: new LocInfo(['loc', array[1].loc]),
       content: convertToASTComp(array[1].v),

@@ -4,7 +4,7 @@ import CoqType from './CoqType';
 class IDt extends CoqType {
   name: any;
   constructor( array ) {
-    super();
+    super(array);
     this.name = array[1];
   }
 

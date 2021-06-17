@@ -7,7 +7,7 @@ class VernacHints extends CoqType implements Visitable {
   strings: any;
   hintExpr: any;
   constructor( array ) {
-    super();
+    super(array);
     console.log('VernacHints', array);
     this.strings = array[1];
     this.hintExpr = convertToASTComp(array[2]);

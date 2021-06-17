@@ -16,7 +16,7 @@ class CoqAST extends CoqType implements Visitable {
    * @param {*} array The array with the CoqAST information
    */
   constructor( array ) {
-    super();
+    super(array);
     // this.representation = convertSexpToString(array, 0, '');
     this.locinfo = new LocInfo(array[1][1]);
     this.content = convertToASTComp(array[1][0]);

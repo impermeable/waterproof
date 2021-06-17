@@ -9,7 +9,7 @@ class SerQualid extends CoqType {
   id: any;
   // eslint-disable-next-line require-jsdoc
   constructor( array ) {
-    super();
+    super(array);
     this.dirPath = array[1][1];
     this.id = array[2][1];
   }

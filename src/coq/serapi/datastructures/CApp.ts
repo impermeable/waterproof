@@ -10,7 +10,7 @@ class CApp extends CoqType {
   [x: string]: any;
   first: { projFlag: any; expr: { locinfo: LocInfo; content: any; }; };
   constructor( array ) {
-    super();
+    super(array);
     // TODO not really sure about these arguments
     this.first = {
       projFlag: array[1][0],

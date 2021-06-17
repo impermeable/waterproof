@@ -7,7 +7,7 @@ import LocInfo from './LocInfo';
 class HintsResolve extends CoqType {
   hintList: any;
   constructor( array ) {
-    super();
+    super(array);
     this.hintList = array[1].map((el) => {
       return {
         info: el[0],
@@ -32,7 +32,7 @@ export class HintsReference extends CoqType {
   locinfo: any;
   content: any;
   constructor( array ) {
-    super();
+    super(array);
     this.locinfo = new LocInfo(['loc', array[1].loc]);
     this.content = convertToASTComp(array[1].v);
   }

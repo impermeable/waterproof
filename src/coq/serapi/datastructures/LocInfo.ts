@@ -21,8 +21,7 @@ class LocInfo extends CoqType {
    * @param {Array} array Array containing location info
    */
   constructor( array ) {
-    super();
-    console.log(array);
+    super(array);
     const result = flatten(array)[1][0];
     this.fname = result.fname;
     this.line_nb = result.line_nb;

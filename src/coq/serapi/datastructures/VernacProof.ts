@@ -10,7 +10,7 @@ class VernacProof extends CoqType implements Visitable {
   // eslint-disable-next-line require-jsdoc
   constructor( array ) {
     // TODO fixme
-    super();
+    super(array);
     this.rawGenericArg = array[0] || {};
     this.sectionSubsetExpr = array[1] || {};
   }

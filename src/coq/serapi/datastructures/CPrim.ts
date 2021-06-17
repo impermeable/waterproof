@@ -12,7 +12,7 @@ class CPrim extends CoqType {
   // eslint-disable-next-line require-jsdoc
   constructor( array : string | ['Number' | [string,
     Record<string, unknown>]] ) {
-    super();
+    super(array);
     // console.warn('CPrim', array);
     this.isNumeric = array[1][0] === 'Numeric';
     if (this.isNumeric) {
