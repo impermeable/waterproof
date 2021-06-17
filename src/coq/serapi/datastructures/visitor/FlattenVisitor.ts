@@ -15,6 +15,7 @@ import IDt from '../IDt';
 import InConstrEntry from '../InConstrEntry';
 import LocInfo from '../LocInfo';
 import SerQualid from '../SerQualid';
+import VernacAssumption from '../VernacAssumption';
 import VernacDefinition from '../VernacDefinition';
 import VernacEndProof from '../VernacEndProof';
 import VernacExpr from '../VernacExpr';
@@ -73,9 +74,15 @@ class FlattenVisitor implements ASTVisitor {
   visitDefineBody(term: DefineBody): void {
     throw new Error('Method not implemented.');
   }
+
   visitHintsResolve(term: HintsResolve): void {
     throw new Error('Method not implemented.');
   }
+
+  visitVernacAssumption(term: VernacAssumption): void {
+    // No location info, so let it be
+  }
+
   visitIDt(term: IDt): void {
     throw new Error('Method not implemented.');
   }
@@ -108,8 +115,8 @@ class FlattenVisitor implements ASTVisitor {
 
   visitVernacEndProof(term: VernacEndProof): void {
     // can be empty
-    console.log('vEndproof', term);
-    throw Error(term);
+    // console.log('vEndproof', term);
+    // throw Error(term);
   }
 
   visitVernacExpr(term: VernacExpr): void {
@@ -147,3 +154,9 @@ class FlattenVisitor implements ASTVisitor {
 }
 
 export default FlattenVisitor;
+
+export function flattenAST(ast: CoqType) {
+  const v = new FlattenVisitor();
+  ast.accept(v);
+  return v.get();
+}

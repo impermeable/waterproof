@@ -16,6 +16,7 @@ import IDt from '../IDt';
 import InConstrEntry from '../InConstrEntry';
 import LocInfo from '../LocInfo';
 import SerQualid from '../SerQualid';
+import VernacAssumption from '../VernacAssumption';
 import VernacDefinition from '../VernacDefinition';
 import VernacEndProof from '../VernacEndProof';
 import VernacExpr from '../VernacExpr';
@@ -61,6 +62,7 @@ interface ASTVisitor {
   visitVernacProof(term: VernacProof): void;
   visitVernacRequire(term: VernacRequire): void;
   visitVernacStartTheoremProof(term: VernacStartTheoremProof): void;
+  visitVernacAssumption(term: VernacAssumption): void;
 }
 
 export default ASTVisitor;

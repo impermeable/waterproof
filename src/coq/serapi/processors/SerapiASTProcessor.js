@@ -15,6 +15,8 @@ class SerapiASTProcessor extends SerapiProcessor {
    */
   constructor(tagger, state, editor) {
     super(tagger, state, editor);
+
+    this.getAllAsts();
   }
 
   /**

@@ -1,5 +1,6 @@
 import {Mutex} from 'async-mutex';
 import CoqState from '../../CoqState';
+import {flattenAST} from '../datastructures/visitor/FlattenVisitor';
 
 /**
  * Class for holding all the shared state of an active serapi! instance
@@ -227,8 +228,13 @@ class SerapiState extends CoqState {
    */
   getFlatAST(index) {
     if (this.sentences[index].ast == null) {
+      console.warn(`NO AST for sentece ${index}.`);
       return null;
     }
+    if (this.sentences[index].ast) {
+      this.sentences[index].flatAst = flattenAST(this.sentences[index].ast);
+    }
+    // console.log()
     if (this.sentences[index].flatAst == null) {
       let i = 0;
       this.sentences[index].flatAst = this.sentences[index].text

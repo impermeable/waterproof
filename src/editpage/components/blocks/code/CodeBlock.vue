@@ -70,11 +70,12 @@ export default {
 
       const parts = [];
       // sentences.sort((obj1, obj2) => obj1.at - obj2.at);
-      console.log(sentences);
+      // console.log(sentences); // TODO uncomment and deal with this next.
       let index = 0;
       // let inError = false;
       for (const obj of sentences) {
-        console.log(obj);
+        // console.log(obj); // TODO uncomment and deal with this next.
+        // console.log('AST', obj.ast);
         const newIndex = obj.at;
         // prefix
         parts.push({

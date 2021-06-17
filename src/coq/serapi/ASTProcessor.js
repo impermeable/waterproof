@@ -21,6 +21,7 @@ import VernacExtend from './datastructures/VernacExtend';
 import VernacProof from './datastructures/VernacProof';
 // import CoqType from './datastructures/CoqType';
 import GenericVType from './datastructures/GenericVType';
+import VernacAssumption from './datastructures/VernacAssumption';
 
 // const flatten = require('./flatten-expr').flatten;
 
@@ -283,6 +284,7 @@ const constrDict = {
   'VernacHints': VernacHints,
   'HintsResolve': HintsResolve,
   'HintsReference': HintsReference,
+  'VernacAssumption': VernacAssumption,
 };
 
 // const currentlyNotParsedTypes = new Set();

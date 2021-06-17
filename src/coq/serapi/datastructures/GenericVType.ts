@@ -23,6 +23,7 @@ class GenericVType extends CoqType implements Visitable {
 
   // eslint-disable-next-line require-jsdoc
   pprint(indent = 0) {
+    console.warn('data', this.data);
     const s = this.data != null ? this.data.pprint(indent+1) : '';
     // NOTE: we want an unscrict check here
     return super.sprintf(super.pprint(indent), s);
