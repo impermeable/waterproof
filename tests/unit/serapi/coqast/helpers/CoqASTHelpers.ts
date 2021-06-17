@@ -1,5 +1,6 @@
-import {CoqAST, extractCoqAST} from '../../../../src/coq/serapi/ASTProcessor';
-import CoqType from '../../../../src/coq/serapi/datastructures/CoqType';
+import {CoqAST, extractCoqAST} from
+  '../../../../../src/coq/serapi/ASTProcessor';
+import CoqType from '../../../../../src/coq/serapi/datastructures/CoqType';
 const parse = require('s-expression');
 // const flatten = require('../../../../src/coq/serapi/flatten-expr').flatten;
 
@@ -49,4 +50,5 @@ const keyify = (obj, prefix = '') : string[] =>
 export {
   toAST,
   astHasChild,
+  keyify,
 };

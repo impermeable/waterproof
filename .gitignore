@@ -47,6 +47,8 @@ scripts/unit_tests.tex
 
 # compiled Coq libraries
 *.vo
+*.vos
+*.vok
 
 wrapper/**/*.v
 
@@ -55,3 +57,9 @@ wrapper/**/*.v
 *.vos
 *.aux
 *.log
+# Some files that Coq produces sometimes,
+# probably when compiling a .v file
+*.*.aux
+
+# Some auxiliary file produced by some build-in tactic
+.lia.cache

@@ -17,8 +17,14 @@ class HintsResolve extends CoqType {
     });
   }
 
-  pprint(): string {
-    throw new Error('Method not implemented.');
+  pprint(indent = 0): string {
+    const tab = '\n'.concat('\t'.repeat(indent+1));
+    let output = '';
+    this.hintList.forEach((hint) => {
+      output = output.concat(`Hint: ${hint.info}
+          ${hint.refOrConstr.pprint(indent+1)}`, tab);
+    });
+    return this.sprintf(super.pprint(indent), output);
   }
 }
 

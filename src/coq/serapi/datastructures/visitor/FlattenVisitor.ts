@@ -97,8 +97,10 @@ class FlattenVisitor implements ASTVisitor {
 
     const defExpr = term.defitionExpr.expr;
 
-    this._state.push([defExpr.locinfo,
-      defExpr?.content.constructor.name]);
+    if (defExpr != null) {
+      this._state.push([defExpr.locinfo,
+        defExpr?.content.constructor.name]);
+    }
 
     if (defExpr?.content.expr != null) {
       this._state.push([defExpr?.content.expr.locinfo,
@@ -135,8 +137,10 @@ class FlattenVisitor implements ASTVisitor {
     const {proofExprs} = term;
     this._state.push([proofExprs[0]?.ident_decl.locinfo,
       proofExprs[0]?.ident_decl.ident]);
-    this._state.push([proofExprs[1]?.data.locinfo,
-      proofExprs[1]?.data.content.constructor.name]);
+    if ( proofExprs[1]?.data != null) {
+      this._state.push([proofExprs[1]?.data.locinfo,
+        proofExprs[1]?.data.content.constructor.name]);
+    }
   }
 
   public get(): LocData[] {
