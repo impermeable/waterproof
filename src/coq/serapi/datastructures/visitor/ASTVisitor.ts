@@ -11,7 +11,7 @@ import CProdN from '../CProdN';
 import CRef from '../CRef';
 import DefineBody from '../DefineBody';
 import GenericVType from '../GenericVType';
-import HintsResolve from '../HintsResolve';
+import HintsResolve, { HintsReference } from '../HintsResolve';
 import IDt from '../IDt';
 import InConstrEntry from '../InConstrEntry';
 import LocInfo from '../LocInfo';
@@ -49,6 +49,7 @@ interface ASTVisitor {
   visitCRef(term: CRef): void;
   visitDefineBody(term: DefineBody): void;
   visitHintsResolve(term: HintsResolve): void;
+  visitHintsReference(term: HintsReference): void;
   visitIDt(term: IDt): void;
   visitInConstrEntry(term: InConstrEntry): void;
   visitLocInfo(term: LocInfo): void;

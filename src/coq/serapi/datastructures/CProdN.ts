@@ -2,6 +2,7 @@
 import {convertToASTComp} from '../ASTProcessor';
 import CoqType from './CoqType';
 import LocInfo from './LocInfo';
+import ASTVisitor from './visitor/ASTVisitor';
 
 /** Represents the Coq CProdN type
  *  CProdN = local_binder_expr list * constr_expr
@@ -35,6 +36,10 @@ class CProdN extends CoqType {
     output = output.concat('Loc: ', this.expr.locinfo.pprint(indent + 1), tab);
     output = output.concat(this.cprint(this.expr.content, indent));
     return this.sprintf(super.pprint(indent), output);
+  }
+
+  accept(v: ASTVisitor): void {
+    v.visitCProdN(this);
   }
 }
 

@@ -1,8 +1,10 @@
+import {CoqAST} from '../../../../../src/coq/serapi/ASTProcessor';
 import CApp from '../../../../../src/coq/serapi/datastructures/CApp';
 import CLambdaN from '../../../../../src/coq/serapi/datastructures/CLambdaN';
 import CLocalAssum from
   '../../../../../src/coq/serapi/datastructures/CLocalAssum';
 import CNotation from '../../../../../src/coq/serapi/datastructures/CNotation';
+// import Co/qType from '../../../../../src/coq/serapi/datastructures/CoqType';
 import CPrim from '../../../../../src/coq/serapi/datastructures/CPrim';
 import CProdN from '../../../../../src/coq/serapi/datastructures/CProdN';
 import CRef from '../../../../../src/coq/serapi/datastructures/CRef';
@@ -143,5 +145,46 @@ export const coqTypes = {
     class: HintsReference,
     goodIn: ['HintsReference', {loc: baseLoc, v: empty}],
     badIn: [],
+  },
+};
+
+export const withLocInfo = {
+  'CoqAst': {
+    class: CoqAST,
+    data: ['CoqAst', [['VernacExtend', '', ''], ['loc', baseLoc]]],
+  },
+  'CApp': {
+    class: CApp,
+    data: ['CApp', ['', {loc: baseLoc, v: empty}], []],
+  },
+  'CLambdaN': {
+    class: CLambdaN,
+    data: ['CLambdaN', [], {loc: baseLoc, v: empty}],
+  },
+  'CLocalAssum': {
+    class: CLocalAssum,
+    data: ['CLocalAssum', [], [], {loc: baseLoc, v: empty}],
+  },
+  'CProdN': {
+    class: CProdN,
+    data: ['CProdN', [], {loc: baseLoc, v: empty}],
+  },
+  'CRef': {
+    class: CRef,
+    data: ['CRef', {loc: baseLoc, v: empty}, {}],
+  },
+  'HintsReference': {
+    class: HintsReference,
+    data: ['HintsReference', {loc: baseLoc, v: ['VernacExtend', '', '']}],
+  },
+  // 'VernacDefinition': {
+  //   class: VernacDefinition,
+  // eslint-disable-next-line max-len
+  //   data: ['VernacDefinition', ['DoDischarge', ''], [{loc: baseLoc, v: empty},
+  //     []], empty],
+  // },
+  'DefineBody': {
+    class: DefineBody,
+    data: ['DefineBody', [], [], {loc: baseLoc, v: empty}, []],
   },
 };

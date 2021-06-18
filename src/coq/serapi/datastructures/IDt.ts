@@ -1,5 +1,6 @@
 /* eslint-disable require-jsdoc */
 import CoqType from './CoqType';
+import ASTVisitor from './visitor/ASTVisitor';
 
 class IDt extends CoqType {
   name: any;
@@ -14,6 +15,10 @@ class IDt extends CoqType {
     output = output.concat('Name: ', this.name.toString(), tab);
     return this.sprintf(super.pprint(indent), output);
     // throw new Error('Method not implemented.');
+  }
+
+  accept(v: ASTVisitor) : void {
+    v.visitIDt(this);
   }
 }
 

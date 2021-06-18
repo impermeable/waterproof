@@ -2,6 +2,7 @@
 import {convertToASTComp} from '../ASTProcessor';
 import CoqType from './CoqType';
 import LocInfo from './LocInfo';
+import ASTVisitor from './visitor/ASTVisitor';
 
 class DefineBody extends CoqType {
   localExprList: any;
@@ -30,6 +31,10 @@ class DefineBody extends CoqType {
     output = output.concat('Expr option: ', this.exprOption.toString(), tab);
     return this.sprintf(super.pprint(indent), output);
     // throw new Error('Method not implemented.');
+  }
+
+  accept(v: ASTVisitor) : void {
+    v.visitDefineBody(this);
   }
 }
 

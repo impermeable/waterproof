@@ -2,6 +2,7 @@
 import {convertToASTComp} from '../ASTProcessor';
 import CoqType from './CoqType';
 import LocInfo from './LocInfo';
+import ASTVisitor from './visitor/ASTVisitor';
 
 /**
  * @see https://coq.github.io/doc/v8.12/api/coq/Constrexpr/index.html#type-constr_expr_r.CApp
@@ -44,6 +45,10 @@ class CApp extends CoqType {
     }
     return super.sprintf(super.pprint(indent), output);
     // throw new Error('Method not implemented.');
+  }
+
+  accept(v : ASTVisitor): void {
+    v.visitCApp(this);
   }
 }
 

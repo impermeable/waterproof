@@ -3,6 +3,7 @@
 import {convertToASTComp} from '../ASTProcessor';
 import CoqType from './CoqType';
 import LocInfo from './LocInfo';
+import ASTVisitor from './visitor/ASTVisitor';
 
 class HintsResolve extends CoqType {
   hintList: any;
@@ -26,6 +27,10 @@ class HintsResolve extends CoqType {
     });
     return this.sprintf(super.pprint(indent), output);
   }
+
+  accept(v: ASTVisitor) : void {
+    v.visitHintsResolve(this);
+  }
 }
 
 export class HintsReference extends CoqType {
@@ -43,6 +48,10 @@ export class HintsReference extends CoqType {
     output = output.concat('Loc: ', this.locinfo.pprint(indent+1), tab);
     output = output.concat(this.cprint(this.content, indent));
     return this.sprintf(super.pprint(indent), output);
+  }
+
+  accept(v: ASTVisitor) : void {
+    v.visitHintsReference(this);
   }
 }
 

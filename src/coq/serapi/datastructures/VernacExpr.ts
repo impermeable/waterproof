@@ -1,6 +1,7 @@
 /* eslint-disable require-jsdoc */
 import {convertToASTComp} from '../ASTProcessor';
 import CoqType from './CoqType';
+import ASTVisitor from './visitor/ASTVisitor';
 
 /**
  * A JavaScript equivalent of a VernacExpr object
@@ -25,6 +26,10 @@ class VernacExpr extends CoqType {
     const output = '';
     output.concat(this.cprint(this.content, indent));
     return this.sprintf(super.pprint(indent), output);
+  }
+
+  accept(v: ASTVisitor): void {
+    v.visitVernacExpr(this);
   }
 }
 
