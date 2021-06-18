@@ -15,7 +15,7 @@ class VernacRequire extends CoqType implements Visitable {
   list: any;
   // eslint-disable-next-line require-jsdoc
   constructor( array ) {
-    super();
+    super(array);
     // console.log('VernacRequire', (JSON.stringify(array[3])));
     this.qualid = array[1];
     this.export_flag = array[2] === 'true';

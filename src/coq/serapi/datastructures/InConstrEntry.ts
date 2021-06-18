@@ -1,4 +1,5 @@
 import CoqType from './CoqType';
+import ASTVisitor from './visitor/ASTVisitor';
 
 /**
  * Class to represent a Coq InConstrEntry type
@@ -8,7 +9,7 @@ class InConstrEntry extends CoqType {
   data: any;
   // eslint-disable-next-line require-jsdoc
   constructor( array ) {
-    super();
+    super(array);
     this.data = array[1];
   }
 
@@ -18,6 +19,11 @@ class InConstrEntry extends CoqType {
     let output = '';
     output = output.concat('Data: ', this.data.toString(), tab);
     return this.sprintf(super.pprint(indent), output);
+  }
+
+  // eslint-disable-next-line require-jsdoc
+  accept(v: ASTVisitor) {
+    v.visitInConstrEntry(this);
   }
 }
 

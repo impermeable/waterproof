@@ -13,7 +13,7 @@ class GenericVType extends CoqType implements Visitable {
    * @param {*} array
    */
   constructor( array ) {
-    super();
+    super(array);
     const {attrs, control, expr} = flatten(array[1]);
 
     this.attributes = {'attrs': attrs, 'control': control};
@@ -23,9 +23,17 @@ class GenericVType extends CoqType implements Visitable {
 
   // eslint-disable-next-line require-jsdoc
   pprint(indent = 0) {
-    const s = this.data != null ? this.data.pprint(indent+1) : '';
-    // NOTE: we want an unscrict check here
-    return super.sprintf(super.pprint(indent), s);
+    if (this.data == null) {
+      console.warn('Cannot pprint this.data, see', this.data);
+      return '';
+    }
+    try {
+      const s = this.data.pprint(indent+1);
+      return super.sprintf(super.pprint(indent), s);
+    } catch {
+      console.warn('Cannot pprint this.data, see', this.data);
+      return '';
+    }
   }
 
   // eslint-disable-next-line require-jsdoc

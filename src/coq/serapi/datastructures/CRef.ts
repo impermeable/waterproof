@@ -1,6 +1,7 @@
 import {convertToASTComp} from '../ASTProcessor';
 import CoqType from './CoqType';
 import LocInfo from './LocInfo';
+import ASTVisitor from './visitor/ASTVisitor';
 
 // eslint-disable-next-line require-jsdoc
 class CRef extends CoqType {
@@ -8,7 +9,7 @@ class CRef extends CoqType {
   instanceExpr: any;
   // eslint-disable-next-line require-jsdoc
   constructor( array ) {
-    super();
+    super(array);
     this.libNames = {
       locinfo: new LocInfo(['loc', array[1].loc]),
       content: convertToASTComp(array[1].v),
@@ -29,6 +30,11 @@ class CRef extends CoqType {
     output = output.concat('Instance: ', this.instanceExpr.toString(), tab);
     return this.sprintf(super.pprint(indent), output);
     // throw new Error('Method not implemented.');
+  }
+
+  // eslint-disable-next-line require-jsdoc
+  accept(v: ASTVisitor): void {
+    v.visitCRef(this);
   }
 }
 

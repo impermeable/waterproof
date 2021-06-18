@@ -2,6 +2,7 @@
 import {convertToASTComp} from '../ASTProcessor';
 import CoqType from './CoqType';
 import LocInfo from './LocInfo';
+import ASTVisitor from './visitor/ASTVisitor';
 
 class CLocalAssum extends CoqType {
   names: any;
@@ -9,7 +10,7 @@ class CLocalAssum extends CoqType {
   expr: { locinfo: LocInfo; content: any; };
 
   constructor( array ) {
-    super();
+    super(array);
     console.warn('CLocalAssum', array);
     this.names = array[1].map((name) => ({
       locinfo: new LocInfo(['loc', name.loc]),
@@ -20,6 +21,10 @@ class CLocalAssum extends CoqType {
       locinfo: new LocInfo(['loc', array[3].loc]),
       content: convertToASTComp(array[3].v),
     };
+  }
+
+  accept(v: ASTVisitor): void {
+    v.visitCLocalAssum(this);
   }
 
   pprint(indent = 0): string {

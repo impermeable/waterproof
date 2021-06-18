@@ -1,4 +1,6 @@
+/* eslint-disable require-jsdoc */
 import CoqType from './CoqType';
+import ASTVisitor from './visitor/ASTVisitor';
 
 /**
  * Class to represent a Coq (SerApi) SerQualid type.
@@ -9,7 +11,7 @@ class SerQualid extends CoqType {
   id: any;
   // eslint-disable-next-line require-jsdoc
   constructor( array ) {
-    super();
+    super(array);
     this.dirPath = array[1][1];
     this.id = array[2][1];
   }
@@ -21,6 +23,10 @@ class SerQualid extends CoqType {
     output = output.concat('Path: ', this.dirPath.toString(), tab);
     output = output.concat('Id: ', this.id.toString(), tab);
     return this.sprintf(super.pprint(indent), output);
+  }
+
+  accept(v: ASTVisitor) : void {
+    v.visitSerQualid(this);
   }
 }
 

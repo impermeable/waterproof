@@ -7,6 +7,12 @@ import ASTVisitor from './visitor/ASTVisitor';
 abstract class CoqType implements Visitable {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   // abstract pprint() : string; // TODO add parameter indent.
+  constructor(array) {
+    if (!Array.isArray(array)) {
+      throw new TypeError(
+          `Wrong arguments provided to ${this.constructor.name}`);
+    }
+  }
 
   pprint(indent = 0): string {
     const tab = '\n'.concat('\t'.repeat(indent));
