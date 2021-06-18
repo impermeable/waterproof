@@ -7,7 +7,9 @@ const expect = chai.expect;
 const suppressLogs = require('mocha-suppress-logs');
 const {performance} = require('perf_hooks');
 
-describe('Parsing CoqASTs', () => {
+const TIME_LIMIT_MS = 40;
+
+describe('Parsing efficiency', () => {
   suppressLogs();
 
   it(`should parse a long SExpr (${veryLongSexpr.length} chars) quickly`,
@@ -16,7 +18,7 @@ describe('Parsing CoqASTs', () => {
         const ast = toAST(veryLongSexpr);
         const end = performance.now();
 
-        expect(end - start).to.be.at.most(40);
+        expect(end - start).to.be.at.most(TIME_LIMIT_MS);
         done();
       });
 
@@ -27,7 +29,7 @@ describe('Parsing CoqASTs', () => {
       expect(ast.constructor.name).to.equal('CoqAST');
     });
     const end = performance.now();
-    expect(end - start).to.be.at.most(40);
+    expect(end - start).to.be.at.most(TIME_LIMIT_MS);
     done();
   });
 });
