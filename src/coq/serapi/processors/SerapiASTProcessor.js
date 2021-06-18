@@ -3,6 +3,15 @@ import {createASTCommand} from '../util/SerapiCommandFactory';
 import {extractCoqAST, currentlyNotParsedTypes} from '../ASTProcessor';
 import FlattenVisitor from '../datastructures/visitor/FlattenVisitor';
 
+const fs = require('fs');
+const util = require('util');
+const logFile = fs.createWriteStream('log.log', {flags: 'w'});
+
+// eslint-disable-next-line require-jsdoc
+function writeToFile(...args) {
+  logFile.write(util.format.apply(null, args)+'\n');
+}
+
 /**
  * Processor for ast handling
  */
@@ -91,3 +100,4 @@ class SerapiASTProcessor extends SerapiProcessor {
 
 
 export default SerapiASTProcessor;
+export {writeToFile};

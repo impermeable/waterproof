@@ -19,7 +19,7 @@ class VernacEndProof extends CoqType implements Visitable {
    * @param {Array} array: Array to parse
    */
   constructor( array: [string, string] | [string, [string, string, CoqType]] ) {
-    super();
+    super(array);
     if (typeof array[1] === 'string') {
       this.proofEnd = array[1];
     } else {

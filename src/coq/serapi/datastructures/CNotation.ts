@@ -1,6 +1,7 @@
 import {convertToASTComp} from '../ASTProcessor';
 import CoqType from './CoqType';
 import LocInfo from './LocInfo';
+import ASTVisitor from './visitor/ASTVisitor';
 
 /**
  * Class to  represent a Coq CNotation type
@@ -17,7 +18,7 @@ class CNotation extends CoqType {
    */
   constructor( array ) {
     // TODO not sure what array[1] is
-    super();
+    super(array);
     this.notation = convertToASTComp(array[2]);
 
     // object of type List<> * List<List> * List<patterns> * List<List<binder>>
@@ -50,6 +51,11 @@ class CNotation extends CoqType {
     }
     return this.sprintf(super.pprint(indent), output);
     // throw new Error('Method not implemented.');
+  }
+
+  // eslint-disable-next-line require-jsdoc
+  accept(v: ASTVisitor): void {
+    v.visitCNotation(this);
   }
 }
 

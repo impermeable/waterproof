@@ -27,7 +27,7 @@ class VernacDefinition extends CoqType implements Visitable {
   nameDecl: { name: { locinfo: LocInfo; content: any; }; options: any; };
   defitionExpr: any;
   constructor( array ) {
-    super();
+    super(array);
 
     this.discharge = array[1][0] === 'DoDischarge';
     this.defintionObjectKind = array[1][1];

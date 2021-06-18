@@ -10,7 +10,7 @@ import CProdN from '../CProdN';
 import CRef from '../CRef';
 import DefineBody from '../DefineBody';
 import GenericVType from '../GenericVType';
-import HintsResolve from '../HintsResolve';
+import HintsResolve, {HintsReference} from '../HintsResolve';
 import IDt from '../IDt';
 import InConstrEntry from '../InConstrEntry';
 import LocInfo from '../LocInfo';
@@ -35,6 +35,7 @@ class FlattenVisitor implements ASTVisitor {
     // throw new Error('Method not implemented.');
     this._state.push([term.locinfo, term.constructor.name]);
   }
+
   visitCoqType(term: CoqType): void {
     const className = term.constructor.name;
     throw new Error(`Method not implemented for type of ${className}.`);
@@ -45,38 +46,44 @@ class FlattenVisitor implements ASTVisitor {
   }
 
   visitCApp(term: CApp): void {
-    throw new Error('Method not implemented.');
+    // throw new Error('Method not implemented.');
+    this._state.push([term.first.expr.locinfo, term.constructor.name]);
   }
 
   visitCLambdaN(term: CLambdaN): void {
-    throw new Error('Method not implemented.');
+    this._state.push([term.expr.locinfo, term.constructor.name]);
   }
 
   visitCLocalAssum(term: CLocalAssum): void {
-    throw new Error('Method not implemented.');
+    this._state.push([term.expr.locinfo, term.constructor.name]);
   }
 
   visitCNotation(term: CNotation): void {
-    throw new Error('Method not implemented.');
+    // no LocInfo present
   }
+
   visitCoqAst(term: CoqAst): void {
     throw new Error('Method not implemented.');
   }
+
   visitCPrim(term: CPrim): void {
-    throw new Error('Method not implemented.');
+    // no locinfo
   }
   visitCProdN(term: CProdN): void {
-    throw new Error('Method not implemented.');
+    this._state.push([term.expr.locinfo, term.constructor.name]);
   }
   visitCRef(term: CRef): void {
-    throw new Error('Method not implemented.');
+    this._state.push([term.libNames.locinfo, term.constructor.name]);
   }
   visitDefineBody(term: DefineBody): void {
-    throw new Error('Method not implemented.');
+    this._state.push([term.expr.locinfo, term.constructor.name]);
   }
 
   visitHintsResolve(term: HintsResolve): void {
-    throw new Error('Method not implemented.');
+    //
+  }
+  visitHintsReference(term: HintsReference): void {
+    this._state.push([term.locinfo, term.constructor.name]);
   }
 
   visitVernacAssumption(term: VernacAssumption): void {
@@ -104,8 +111,10 @@ class FlattenVisitor implements ASTVisitor {
 
     const defExpr = term.defitionExpr.expr;
 
-    this._state.push([defExpr.locinfo,
-      defExpr?.content.constructor.name]);
+    if (defExpr != null) {
+      this._state.push([defExpr.locinfo,
+        defExpr?.content.constructor.name]);
+    }
 
     if (defExpr?.content.expr != null) {
       this._state.push([defExpr?.content.expr.locinfo,
@@ -144,8 +153,10 @@ class FlattenVisitor implements ASTVisitor {
     const {proofExprs} = term;
     this._state.push([proofExprs[0]?.ident_decl.locinfo,
       proofExprs[0]?.ident_decl.ident]);
-    this._state.push([proofExprs[1]?.data.locinfo,
-      proofExprs[1]?.data.content.constructor.name]);
+    if ( proofExprs[1]?.data != null) {
+      this._state.push([proofExprs[1]?.data.locinfo,
+        proofExprs[1]?.data.content.constructor.name]);
+    }
   }
 
   public get(): LocData[] {
@@ -155,8 +166,8 @@ class FlattenVisitor implements ASTVisitor {
 
 export default FlattenVisitor;
 
-export function flattenAST(ast: CoqType) {
-  const v = new FlattenVisitor();
-  ast.accept(v);
-  return v.get();
+export function flattenAST(ast: CoqType) : [LocInfo, string][] {
+  const visitor = new FlattenVisitor();
+  ast.accept(visitor);
+  return visitor.get();
 }

@@ -23,7 +23,7 @@ class VernacStartTheoremProof extends CoqType
 
   // eslint-disable-next-line require-jsdoc
   constructor( array ) {
-    super();
+    super(array);
     this.theoremKind = array[1];
 
     this.proofExprs = array[2][0].map((el) => {

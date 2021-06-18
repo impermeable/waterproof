@@ -13,7 +13,7 @@ class VernacExtend extends CoqType implements Visitable {
    * @param {Array} array Array as parsed from SerAPI message
    */
   constructor( array ) {
-    super();
+    super(array);
     // console.log('In the constructor of VernacExtend...');
     // TODO fixme - use convertToAstComp
     this.data = array;

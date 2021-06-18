@@ -1,5 +1,6 @@
 import SerapiCallbacks from './SerapiCallbacks';
 import {isGeneralMessage, MESSAGE_COMPLETED} from '../SerapiParser';
+// import {writeToFile} from '../processors/SerapiASTProcessor';
 
 /**
  * The interface for a SerapiProcessor (And SerapiCallbacks)
