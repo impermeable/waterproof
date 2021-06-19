@@ -5,7 +5,8 @@
   "description": "The Waterproof proof assistant.",
   "main": "background.ts",
   "scripts": {
-    "test-ast": "npx vue-cli-service test:unit \"tests/unit/serapi/coqast/**/*.(js|ts)\"",
+    "test-ast:cov": "cross-env coverage=true nyc vue-cli-service test:unit \"tests/unit/serapi/coqast/**/*.(js|ts)\"",
+    "test-ast": "vue-cli-service test:unit \"tests/unit/serapi/coqast/**/*.(js|ts)\"",
     "doc": "jsdoc src -r -d doc",
     "lint": "vue-cli-service lint",
     "test:unit": "vue-cli-service test:unit \"tests/unit/**/*.spec.(js|ts)\"",
@@ -59,6 +60,7 @@
     "eslint": "^7.24.0",
     "eslint-config-google": "^0.14.0",
     "eslint-plugin-vue": "^7.9.0",
+    "istanbul-instrumenter-loader": "^3.0.1",
     "jsdoc": "^3.6.6",
     "mocha-junit-reporter": "^2.0.0",
     "mocha-multi-reporters": "^1.5.1",
