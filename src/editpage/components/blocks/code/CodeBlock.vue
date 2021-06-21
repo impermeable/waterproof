@@ -38,7 +38,7 @@ export default {
     formattedText: function() {
       let text = this.block.text.trimStart();
       const diff = this.block.text.length - text.length;
-      console.log('diff', diff);
+      // console.log('diff', diff);
       text = text.trimEnd();
 
       // Determine where to insert error, tick, or both
@@ -200,15 +200,36 @@ export default {
         return 4 * (hash % 90) + hash % 4;
       };
 
-      console.warn('COLORING!!!', ast.flatAst);
+      let i = 1;
       for (const range of ast) {
-        html += part(range.start);
+        const ex = html.slice(index, range.start);
+        const prt = part(range.start);
+        // html += prt; // TODO fixme
+        if (prt !== '') {
+          html = html.replace(ex, prt);
+        }
         const pp = part(range.end);
         const h = toHue(range.type);
-        html += `<span style="color: hsl(${h}, 60%, 50%)">${pp}</span>`;
+
+        if ( i === 1) {
+          html += `<span style="color: hsl(${h}, 60%, 50%)">${pp}</span>`;
+          i++;
+        } else {
+          html = this.replaceHtml(html, pp, h);
+        }
       }
       html += `<span class="final-append">${part(text.length)}</span>`;
 
+      return html;
+    },
+    replaceHtml: function(html, text, h) {
+      const start = html.indexOf(text);
+      if (start !== -1) {
+        const newH = html.replace(text,
+            `<span style="color: hsl(${h}, 60%, 50%)">${text}`+
+            `</span>`);
+        return newH;
+      }
       return html;
     },
     highlight: function(text) {

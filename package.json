@@ -3,7 +3,7 @@
   "version": "0.5.3-sep-beta",
   "private": true,
   "description": "The Waterproof proof assistant.",
-  "main": "background.ts",
+  "main": "background.js",
   "scripts": {
     "test-ast:cov": "cross-env coverage=true nyc vue-cli-service test:unit \"tests/unit/serapi/coqast/**/*.(js|ts)\"",
     "test-ast": "vue-cli-service test:unit \"tests/unit/serapi/coqast/**/*.(js|ts)\"",

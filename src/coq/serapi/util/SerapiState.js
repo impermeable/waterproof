@@ -224,76 +224,69 @@ class SerapiState extends CoqState {
 
   /**
    * TEMP
-   * @param {Number} index a
+   * @param {Number} index
    * @return {null}
    */
   getFlatAST(index) {
     if (this.sentences[index].ast == null) {
-      console.warn('no ast found');
       return null;
-    } else {
-      console.log('ast found...', this.sentences[index].ast );
     }
-    // if (this.sentences[index].ast) {
-    //   this.sentences[index].flatAst = flattenAST(this.sentences[index].ast);
-    // }
-    // console.log()
-
-    // if (this.sentences[index].flatAst == null) {
-    //   console.warn(`Flattening ast of sentence #${index}.`);
-    //   this.senteces[index].flatAst = flattenAST(this.senteces[index].ast)
-    //       .map((content) => {
-    //         console.warn('jeeeere');
-    //         return {
-    //           start: content[0].bp,
-    //           end: content[0].ep,
-    //           type: content[1],
-    //         };
-    //       });
-    // } else {
-    //   console.warn(
-    //       'WTF, this shouldn\'t happenn', this.senteces[index].flatAst);
-    // }
 
     if (this.sentences[index].flatAst == null) {
-      try {
-        const tempFlat = flattenAST(this.senteces[index].ast);
-        console.warn(`Flattening ast of sentence #${index}.`, tempFlat);
-      } catch (e) {
-        console.log('wtf is going on', this.senteces);
-        console.log(e);
-      }
-      // this.senteces[index].flatAst = tempFlat
-      //     .map((content) => {
-      //       console.warn('jeeeere');
-      //       return {
-      //         start: content[0].bp,
-      //         end: content[0].ep,
-      //         type: content[1],
-      //       };
-      //     });
+      const tempFlat = flattenAST(this.sentences[index].ast);
 
-      // console.log(tempFlat);
+      this.sentences[index].flatAst = tempFlat
+          .map((content) => {
+            let startOffset = content[0].bol_pos;
+            const isParent = content[1] === 'CoqAST';
+            if (isParent) {
+              this.sentences[index].stats = {
+                startIdx: content[0].bp,
+                endIdx: content[0].ep,
+              };
+            } else {
+              startOffset = this.sentences[index].stats.startIdx;
+            }
+            // const s = (content[0].bp - content[0].bol_pos) /
+            //     (content[0].line_nb+1);
 
-      let i = 0;
-      this.sentences[index].flatAst = this.sentences[index].text
-          .slice(0, this.sentences[index].text.length - 1)
-          .split(' ')
-          .map((str) => {
-            const start = i;
-            i += str.length;
-            const end = i;
-            i++;
+            const start = isParent ? 0 : content[0].bp - startOffset;
+            const len = content[0].ep - content[0].bp;
             return {
-              start,
-              end,
-              type: str,
+            //   start: content[0].bp - content[0].bol_pos,
+              start: start,
+              // end: content[0].ep - content[0].bp - 1,
+              end: start + len - (isParent ? 1 : 0),
+              type: content[1],
+              locinfo: content[0],
+              comp: this.getFlatASTBySplitting(index),
             };
           });
+      console.warn(`for ast ${index}`, this.sentences[index].flatAst);
+      // console.log();
     }
 
-    console.warn(this.sentences[index].flatAst);
     return this.sentences[index].flatAst;
+  }
+
+
+  // eslint-disable-next-line require-jsdoc
+  getFlatASTBySplitting(index) {
+    let i = 0;
+    return this.sentences[index].text
+        .slice(0, this.sentences[index].text.length - 1)
+        .split(' ')
+        .map((str) => {
+          const start = i;
+          i += str.length;
+          const end = i;
+          i++;
+          return {
+            start,
+            end,
+            type: str,
+          };
+        });
   }
 }
 
