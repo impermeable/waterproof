@@ -3,7 +3,7 @@
 /* global __static */
 
 import {app, BrowserWindow, ipcMain, protocol} from 'electron';
-import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer';
+import installExtension, {VUEJS_DEVTOOLS} from 'electron-devtools-installer';
 
 import {execFile} from 'child_process';
 import path from 'path';
@@ -81,8 +81,8 @@ function createWindow() {
     win.loadURL(process.env.WEBPACK_DEV_SERVER_URL);
     if (!process.env.IS_TEST) {
       installExtension(VUEJS_DEVTOOLS)
-        .then((name) => console.log(`Added Extension:  ${name}`))
-        .catch((err) => console.log('An error occurred: ', err));
+          .then((name) => console.log(`Added Extension:  ${name}`))
+          .catch((err) => console.log('An error occurred: ', err));
       win.webContents.openDevTools();
     }
   } else {
