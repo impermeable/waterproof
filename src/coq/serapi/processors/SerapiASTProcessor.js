@@ -1,7 +1,7 @@
 import SerapiProcessor from '../util/SerapiProcessor';
 import {createASTCommand} from '../util/SerapiCommandFactory';
 import {extractCoqAST, currentlyNotParsedTypes} from '../ASTProcessor';
-import FlattenVisitor from '../datastructures/visitor/FlattenVisitor';
+import {flattenAST} from '../datastructures/visitor/FlattenVisitor';
 
 const fs = require('fs');
 const util = require('util');
@@ -74,10 +74,7 @@ class SerapiASTProcessor extends SerapiProcessor {
           console.log(result.ast.pprint());
           console.log(`Flattening:\n`);
 
-          // TODO make using a visitor cleaner
-          const v = new FlattenVisitor();
-          result.ast.accept(v);
-          console.log(v.get());
+          console.log(flattenAST(result.ast));
 
           console.groupEnd();
         });

@@ -200,6 +200,7 @@ export default {
         return 4 * (hash % 90) + hash % 4;
       };
 
+      console.warn('COLORING!!!', ast.flatAst);
       for (const range of ast) {
         html += part(range.start);
         const pp = part(range.end);

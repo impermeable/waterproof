@@ -7,7 +7,7 @@ class VernacAssumption extends CoqType implements Visitable {
   inline: string;
 
   constructor( array ) {
-    super();
+    super(array);
     this.discharge = array[1];
     this.inline = array[2];
   }

@@ -1,5 +1,6 @@
 import {Mutex} from 'async-mutex';
 import CoqState from '../../CoqState';
+// eslint-disable-next-line no-unused-vars
 import {flattenAST} from '../datastructures/visitor/FlattenVisitor';
 
 /**
@@ -228,14 +229,52 @@ class SerapiState extends CoqState {
    */
   getFlatAST(index) {
     if (this.sentences[index].ast == null) {
-      console.warn(`NO AST for sentece ${index}.`);
+      console.warn('no ast found');
       return null;
+    } else {
+      console.log('ast found...', this.sentences[index].ast );
     }
-    if (this.sentences[index].ast) {
-      this.sentences[index].flatAst = flattenAST(this.sentences[index].ast);
-    }
+    // if (this.sentences[index].ast) {
+    //   this.sentences[index].flatAst = flattenAST(this.sentences[index].ast);
+    // }
     // console.log()
+
+    // if (this.sentences[index].flatAst == null) {
+    //   console.warn(`Flattening ast of sentence #${index}.`);
+    //   this.senteces[index].flatAst = flattenAST(this.senteces[index].ast)
+    //       .map((content) => {
+    //         console.warn('jeeeere');
+    //         return {
+    //           start: content[0].bp,
+    //           end: content[0].ep,
+    //           type: content[1],
+    //         };
+    //       });
+    // } else {
+    //   console.warn(
+    //       'WTF, this shouldn\'t happenn', this.senteces[index].flatAst);
+    // }
+
     if (this.sentences[index].flatAst == null) {
+      try {
+        const tempFlat = flattenAST(this.senteces[index].ast);
+        console.warn(`Flattening ast of sentence #${index}.`, tempFlat);
+      } catch (e) {
+        console.log('wtf is going on', this.senteces);
+        console.log(e);
+      }
+      // this.senteces[index].flatAst = tempFlat
+      //     .map((content) => {
+      //       console.warn('jeeeere');
+      //       return {
+      //         start: content[0].bp,
+      //         end: content[0].ep,
+      //         type: content[1],
+      //       };
+      //     });
+
+      // console.log(tempFlat);
+
       let i = 0;
       this.sentences[index].flatAst = this.sentences[index].text
           .slice(0, this.sentences[index].text.length - 1)
@@ -252,6 +291,8 @@ class SerapiState extends CoqState {
             };
           });
     }
+
+    console.warn(this.sentences[index].flatAst);
     return this.sentences[index].flatAst;
   }
 }
