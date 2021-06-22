@@ -22,6 +22,13 @@ function toAST(sExpr: string, logging=false): CoqAST {
   return ast;
 }
 
+function toASTWithTime(sExpr: string, logging=false): [CoqAST, number] {
+  const start = performance.now();
+  const ast = toAST(sExpr);
+  const end = performance.now();
+  return [ast, end-start];
+}
+
 /**
  * Given a coqtype, check if a child exists in the
  * child hierarchy.
@@ -49,6 +56,7 @@ const keyify = (obj, prefix = '') : string[] =>
 
 export {
   toAST,
+  toASTWithTime,
   astHasChild,
   keyify,
   objHasKeys,

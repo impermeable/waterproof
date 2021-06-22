@@ -1,7 +1,7 @@
 const repl = require('repl');
 
 const ds = require('../../../../../src/coq/serapi/datastructures/index.ts');
-import {toAST} from './CoqASTHelpers';
+import {toAST, toASTWithTime} from './CoqASTHelpers';
 import {emptyAst, sexp1} from './SExprList';
 
 function addToContext(repl, k, v, options) {
@@ -19,6 +19,7 @@ const r = repl.start({prompt: '\u001b[35mλ\u001b[0m ', useColors: true});
 
 addToContext(r, 'm', msg, {});
 addToContext(r, 'toAST', toAST, {});
+addToContext(r, 'toASTWithTime', toASTWithTime, {});
 addToContext(r, 'goodSExp', sexp1, {});
 addToContext(r, 'badSExp', emptyAst, {});
 
