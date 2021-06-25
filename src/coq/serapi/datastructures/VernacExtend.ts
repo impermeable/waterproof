@@ -15,17 +15,17 @@ class VernacExtend extends CoqType implements Visitable {
    */
   constructor( array ) {
     super(array);
-    this.data = array.slice(1);
-    this.data.forEach((items) => {
-      console.warn('items', items);
-      if (Array.isArray(items[0])) {
-        items.forEach((e) => {
-          e = convertToASTComp(e);
-        });
-      } else {
-        items = convertToASTComp(items);
+    // console.log('In the constructor of VernacExtend...');
+    // TODO fixme - use convertToAstComp
+    const list = array[2];
+    this.data = [];
+    for (let i = 0; i < list.length; i++) {
+      if (Array.isArray(list[i][3])) {
+        if (list[i][3].length > 0) {
+          this.data.push(convertToASTComp(list[i][3]));
+        }
       }
-    });
+    }
   }
   /**
    * Pretty print the current type.
@@ -34,34 +34,16 @@ class VernacExtend extends CoqType implements Visitable {
    * added to the front
    */
   pprint(indent = 0) {
-    const tab = '\n'.concat('\t'.repeat(indent+1));
+    // const tab = '\n'.concat('\t'.repeat(indent+1));
     let output = '';
-    output = output.concat('Data: ', this.data.toString(), tab);
+    for (let i = 0; i < this.data.length; i++) {
+      output = output.concat(this.cprint(this.data[i], indent));
+    }
     return this.sprintf(super.pprint(indent), output);
   }
 
   accept(visitor: ASTVisitor): void {
     visitor.visitVernacExtend(this);
-  }
-}
-
-export class GenArg extends CoqType implements Visitable {
-  level: string;
-  optArgs: [];
-
-  constructor( array ) {
-    super(array);
-    this.level = array[1];
-    this.optArgs = array[2];
-  }
-}
-
-export class VernacSolve extends CoqType implements Visitable {
-  data: any;
-
-  constructor( array ) {
-    super(array);
-    this.data = array.slice();
   }
 }
 

@@ -15,6 +15,7 @@ import IDt from '../IDt';
 import InConstrEntry from '../InConstrEntry';
 import LocInfo from '../LocInfo';
 import SerQualid from '../SerQualid';
+import VernacOpenCloseScope from '../TacAlias';
 import VernacAssumption from '../VernacAssumption';
 import VernacDefinition from '../VernacDefinition';
 import VernacEndProof from '../VernacEndProof';
@@ -24,6 +25,7 @@ import VernacHints from '../VernacHints';
 import VernacProof from '../VernacProof';
 import VernacRequire from '../VernacRequire';
 import VernacStartTheoremProof from '../VernacStartTheoremProof';
+import TacAlias from '../TacAlias';
 import ASTVisitor from './ASTVisitor';
 
 type LocData = [LocInfo, string];
@@ -88,6 +90,14 @@ class FlattenVisitor implements ASTVisitor {
 
   visitVernacAssumption(term: VernacAssumption): void {
     // No location info, so let it be
+  }
+
+  visitVernacOpenCloseScope(term: VernacOpenCloseScope): void {
+    // No location info
+  }
+
+  visitTacAlias(term: TacAlias): void {
+    // TODO
   }
 
   visitIDt(term: IDt): void {
