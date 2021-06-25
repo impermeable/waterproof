@@ -12,6 +12,12 @@ class VernacAssumption extends CoqType implements Visitable {
     this.inline = array[2];
   }
 
+  /**
+   * allows the ASTVisitor to traverse the current type
+   * (part of the visitor pattern)
+   * @param {ASTVisitor} visitor the visitor requiring
+   * access to content of the current type
+   */
   accept(visitor: ASTVisitor): void {
     visitor.visitVernacAssumption(this);
   }
