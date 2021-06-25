@@ -44,8 +44,8 @@ class CProdN extends CoqType {
    * @param {ASTVisitor} visitor the visitor requiring
    * access to content of the current type
    */
-  accept(v: ASTVisitor): void {
-    v.visitCProdN(this);
+  accept(visitor: ASTVisitor): void {
+    visitor.visitCProdN(this);
   }
 }
 
