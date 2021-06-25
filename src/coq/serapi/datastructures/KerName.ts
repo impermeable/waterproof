@@ -9,8 +9,8 @@ class KerName extends CoqType {
 
   constructor( array ) {
     super(array);
-    const temp = array[2][1].toString().split('_#_');
-    this.Id = temp[1];
+    const temp = array[2][1].toString().replaceAll('_', '').split('#');
+    this.Id = temp[temp.length - 1];
     this.type = temp[0];
   }
 

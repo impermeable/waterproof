@@ -29,6 +29,8 @@ import TacAlias from './datastructures/TacAlias';
 import TacAtom from './datastructures/TacAtom';
 import KerName from './datastructures/KerName';
 import TacApply from './datastructures/TacApply';
+import TacReduce from './datastructures/TacReduce';
+import TacticDefinition from './datastructures/TacticDefinition';
 // const flatten = require('./flatten-expr').flatten;
 
 /**
@@ -304,6 +306,8 @@ const constrDict = {
   'TacAtom': TacAtom,
   'TacApply': TacApply,
   'VernacDefinition': VernacDefinition,
+  'TacReduce': TacReduce,
+  'TacticDefinition': TacticDefinition,
 };
 
 // const currentlyNotParsedTypes = new Set();
