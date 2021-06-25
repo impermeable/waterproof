@@ -223,11 +223,16 @@ export default {
       return html;
     },
     replaceHtml: function(html, text, h) {
-      const start = html.indexOf(text);
+      const mx = Math.max(html.indexOf('>'), 0);
+      console.log(mx);
+      const start = html.indexOf(text, mx);
+      console.warn('Inserting at index...', start, html, text);
       if (start !== -1) {
         const newH = html.replace(text,
             `<span style="color: hsl(${h}, 60%, 50%)">${text}`+
             `</span>`);
+
+        console.warn('Result', newH);
         return newH;
       }
       return html;
