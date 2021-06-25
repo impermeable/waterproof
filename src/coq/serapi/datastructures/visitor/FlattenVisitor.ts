@@ -15,7 +15,7 @@ import IDt from '../IDt';
 import InConstrEntry from '../InConstrEntry';
 import LocInfo from '../LocInfo';
 import SerQualid from '../SerQualid';
-import VernacOpenCloseScope from '../TacAlias';
+import VernacOpenCloseScope from '../VernacOpenCloseScope';
 import VernacAssumption from '../VernacAssumption';
 import VernacDefinition from '../VernacDefinition';
 import VernacEndProof from '../VernacEndProof';
