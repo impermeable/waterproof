@@ -2,7 +2,7 @@
 
 /* global __static */
 
-import {app, BrowserWindow, ipcMain, protocol} from 'electron';
+import {app, BrowserWindow, ipcMain, protocol, dialog} from 'electron';
 import installExtension, {VUEJS_DEVTOOLS} from 'electron-devtools-installer';
 
 import {execFile} from 'child_process';
@@ -10,6 +10,8 @@ import path from 'path';
 import {
   createProtocol,
 } from 'vue-cli-plugin-electron-builder/lib';
+
+import { autoUpdater } from "electron-updater"
 
 // declare const __static: string;
 const isDevelopment = process.env.NODE_ENV !== 'production';
@@ -95,6 +97,37 @@ function createWindow() {
     } else {
       win.loadURL('app://./index.html');
     }
+
+    /*  When not in development, check for updates  */
+    const log = require("electron-log");
+    log.transports.file.level = "info";
+    autoUpdater.logger = log;
+
+    /*  Note: the official documentation of Vue Electron Builder (which is used to build Waterproof) 
+          recommends placing the updating code here  */
+    autoUpdater.on('update-available', (info) => {
+
+      const feedback = dialog.showMessageBox(win, {
+        type: 'question',
+        buttons: ['Remind me later', 'Yes, please'],
+        /*  Option 1 ('Yes, please') is the default option */
+        defaultId: 1,
+        title: 'Update available',
+        message: 'A new version of Waterproof is available. Would you like to update?',
+        detail: 'If you agree, the update will be applied the next time you start Waterproof.'
+      });
+      feedback.then(
+        function(ret) {
+          if (ret.response == 1) {  /*  user has accepted the update  */
+            autoUpdater.downloadUpdate();
+          }
+        }
+      );
+    });
+
+    /*  Check for available updates, but only download after the user confirms this */
+    autoUpdater.autoDownload = false;
+    autoUpdater.checkForUpdates();
   }
 
   win.on('closed', () => {
