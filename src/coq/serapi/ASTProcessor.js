@@ -24,6 +24,7 @@ import GenericVType from './datastructures/GenericVType';
 import VernacAssumption from './datastructures/VernacAssumption';
 
 import VernacOpenCloseScope from './datastructures/VernacOpenCloseScope';
+// import TacAlias from './dataqstructures/TacAlias';
 import TacAlias from './datastructures/TacAlias';
 import TacAtom from './datastructures/TacAtom';
 import KerName from './datastructures/KerName';
@@ -299,13 +300,10 @@ const constrDict = {
   'VernacSolve': VernacSolve,
   'TacAlias': TacAlias,
   'VernacOpenCloseScope': VernacOpenCloseScope,
-<<<<<<< HEAD
-  'VernacDefinition': VernacDefinition,
-=======
   'KerName': KerName,
   'TacAtom': TacAtom,
   'TacApply': TacApply,
->>>>>>> a93340db7481a4e4cfb2bcd95535f525e651daff
+  'VernacDefinition': VernacDefinition,
 };
 
 // const currentlyNotParsedTypes = new Set();

@@ -43,14 +43,13 @@ import TacApply from '../TacApply';
  * per each type we visit.
  */
 interface ASTVisitor {
-  visitCoqAST(term: CoqAST): void;
+  visitCoqAst(term: CoqAST): void;
   visitGenericVType(term: GenericVType): void;
   visitCoqType(term: CoqType): void;
   visitCApp(term: CApp): void;
   visitCLambdaN(term: CLambdaN): void;
   visitCLocalAssum(term: CLocalAssum): void;
   visitCNotation(term: CNotation): void;
-  visitCoqAst(term: CoqAst): void;
   visitCPrim(term: CPrim): void;
   visitCProdN(term: CProdN): void;
   visitCRef(term: CRef): void;

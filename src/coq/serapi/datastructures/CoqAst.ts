@@ -25,7 +25,7 @@ class CoqAST extends CoqType implements Visitable {
   // eslint-disable-next-line require-jsdoc
   accept(visitor: ASTVisitor): void {
     // throw new Error('Method not implemented.');
-    visitor.visitCoqAST(this);
+    visitor.visitCoqAst(this);
     (this.content).accept(visitor);
   }
 

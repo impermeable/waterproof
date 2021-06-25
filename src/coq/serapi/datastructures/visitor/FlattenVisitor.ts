@@ -44,7 +44,7 @@ class FlattenVisitor implements ASTVisitor {
    * Visit a CoqAST type.
    * @param {CoqAst} term a CoqAST type
    */
-  visitCoqAST(term: CoqAst): void {
+  visitCoqAst(term: CoqAst): void {
     this._state.push([term.locinfo, term.constructor.name]);
   }
 
