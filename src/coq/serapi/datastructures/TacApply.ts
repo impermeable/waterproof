@@ -4,15 +4,18 @@ import CoqType from './CoqType';
 import LocInfo from './LocInfo';
 import ASTVisitor from './visitor/ASTVisitor';
 
-class TacAlias extends CoqType {
-  locinfo: LocInfo;
+class TacApply extends CoqType {
+  arg1: boolean;
+  arg2: boolean;
   content: any;
+  locinfo: LocInfo;
 
   constructor( array ) {
     super(array);
-    this.locinfo = new LocInfo(['loc', array[1]['loc'][0]]);
-    // console.log(array[1]);
-    this.content = convertToASTComp(array[1]['v'][0]);
+    this.arg1 = ('true' === array[1].toString());
+    this.arg2 = ('true' === array[2].toString());
+    this.locinfo = new LocInfo(['loc', array[3][0][1][0]['loc'][0]]);
+    this.content = convertToASTComp(array[3][0][1][0]['v']);
   }
 
   pprint(indent = 0): string {
@@ -25,15 +28,9 @@ class TacAlias extends CoqType {
     // throw new Error('Method not implemented.');
   }
 
-  /**
-   * Allows an ASTVisitor to traverse the current type
-   * (part of the visitor pattern)
-   * @param {ASTVisitor} visitor the visitor requiring
-   * access to content of the current type
-   */
-  accept(visitor: ASTVisitor) : void {
-    visitor.visitTacAlias(this);
+  accept(v: ASTVisitor) : void {
+    v.visitTacApply(this);
   }
 }
 
-export default TacAlias;
+export default TacApply;

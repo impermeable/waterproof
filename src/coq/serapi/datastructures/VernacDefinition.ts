@@ -26,6 +26,7 @@ class VernacDefinition extends CoqType implements Visitable {
   defintionObjectKind: DefinitionObjectKind;
   nameDecl: { name: { locinfo: LocInfo; content: any; }; options: any; };
   defitionExpr: any;
+
   constructor( array ) {
     super(array);
 
@@ -63,8 +64,9 @@ class VernacDefinition extends CoqType implements Visitable {
     return this.sprintf(super.pprint(indent), output);
     // throw new Error('Method not implemented.');
   }
+
   /**
-   * allows the ASTVisitor to traverse the current type
+   * Allows an ASTVisitor to traverse the current type
    * (part of the visitor pattern)
    * @param {ASTVisitor} visitor the visitor requiring
    * access to content of the current type

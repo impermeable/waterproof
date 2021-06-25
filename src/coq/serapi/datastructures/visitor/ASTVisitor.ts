@@ -16,7 +16,7 @@ import IDt from '../IDt';
 import InConstrEntry from '../InConstrEntry';
 import LocInfo from '../LocInfo';
 import SerQualid from '../SerQualid';
-import VernacOpenCloseScope from '../TacAlias';
+import VernacOpenCloseScope from '../VernacOpenCloseScope';
 import VernacAssumption from '../VernacAssumption';
 import VernacDefinition from '../VernacDefinition';
 import VernacEndProof from '../VernacEndProof';
@@ -27,6 +27,9 @@ import VernacProof from '../VernacProof';
 import VernacRequire from '../VernacRequire';
 import VernacStartTheoremProof from '../VernacStartTheoremProof';
 import TacAlias from '../TacAlias';
+import KerName from '../KerName';
+import TacAtom from '../TacAtom';
+import TacApply from '../TacApply';
 // import CApp from '../CApp';
 // import CLambdaN from '../CLambdaN';
 // import CLocalAssum from '../CLocalAssum';
@@ -69,6 +72,9 @@ interface ASTVisitor {
   visitVernacAssumption(term: VernacAssumption): void;
   visitVernacOpenCloseScope(term: VernacOpenCloseScope): void;
   visitTacAlias(term: TacAlias): void;
+  visitKerName(term: KerName): void;
+  visitTacAtom(term: TacAtom): void;
+  visitTacApply(term: TacApply): void;
 }
 
 export default ASTVisitor;

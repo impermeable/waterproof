@@ -28,6 +28,12 @@ class HintsResolve extends CoqType {
     return this.sprintf(super.pprint(indent), output);
   }
 
+  /**
+   * Allows an ASTVisitor to traverse the current type
+   * (part of the visitor pattern)
+   * @param {ASTVisitor} v the visitor requiring
+   * access to content of the current type
+   */
   accept(v: ASTVisitor) : void {
     v.visitHintsResolve(this);
   }
@@ -50,6 +56,12 @@ export class HintsReference extends CoqType {
     return this.sprintf(super.pprint(indent), output);
   }
 
+  /**
+   * Allows an ASTVisitor to traverse the current type
+   * (part of the visitor pattern)
+   * @param {ASTVisitor} v the visitor requiring
+   * access to content of the current type
+   */
   accept(v: ASTVisitor) : void {
     v.visitHintsReference(this);
   }

@@ -25,6 +25,9 @@ import VernacAssumption from './datastructures/VernacAssumption';
 
 import VernacOpenCloseScope from './datastructures/VernacOpenCloseScope';
 import TacAlias from './datastructures/TacAlias';
+import TacAtom from './datastructures/TacAtom';
+import KerName from './datastructures/KerName';
+import TacApply from './datastructures/TacApply';
 // const flatten = require('./flatten-expr').flatten;
 
 /**
@@ -296,7 +299,13 @@ const constrDict = {
   'VernacSolve': VernacSolve,
   'TacAlias': TacAlias,
   'VernacOpenCloseScope': VernacOpenCloseScope,
+<<<<<<< HEAD
   'VernacDefinition': VernacDefinition,
+=======
+  'KerName': KerName,
+  'TacAtom': TacAtom,
+  'TacApply': TacApply,
+>>>>>>> a93340db7481a4e4cfb2bcd95535f525e651daff
 };
 
 // const currentlyNotParsedTypes = new Set();

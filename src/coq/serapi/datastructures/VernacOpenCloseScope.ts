@@ -12,7 +12,7 @@ class VernacOpenCloseScope extends CoqType implements Visitable {
    */
   constructor( array ) {
     super(array);
-    this.open = ('true' == array[1]);
+    this.open = ('true' === array[1].toString());
     this.scope = array[2];
   }
 

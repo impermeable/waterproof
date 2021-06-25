@@ -25,6 +25,9 @@ import VernacProof from '../VernacProof';
 import VernacRequire from '../VernacRequire';
 import VernacStartTheoremProof from '../VernacStartTheoremProof';
 import TacAlias from '../TacAlias';
+import KerName from '../KerName';
+import TacAtom from '../TacAtom';
+import TacApply from '../TacApply';
 import ASTVisitor from './ASTVisitor';
 
 type LocData = [LocInfo, string];
@@ -164,6 +167,22 @@ class FlattenVisitor implements ASTVisitor {
    * @param {VernacAssumption} term - a VernacAssumption term
    */
   visitTacAlias(term: TacAlias): void {
+    // TODO
+  }
+
+  // eslint-disable-next-line require-jsdoc
+  visitKerName(term: KerName): void {
+    // No location info
+  }
+
+  // eslint-disable-next-line require-jsdoc
+  visitTacAtom(term: TacAtom): void {
+    // TODO
+  }
+
+  // eslint-disable-next-line require-jsdoc
+  visitTacApply(term: TacApply): void {
+    // TODO
   }
 
   /**
