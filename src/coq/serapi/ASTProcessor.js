@@ -100,7 +100,6 @@ function printVernacExpr( array, s ) {
  */
 function printVernacExtend( array, s ) {
   console.log(array);
-  // TODO: implement
   return prettyPrint( array[2][2][3], s);
 }
 
@@ -230,8 +229,15 @@ function convertToASTComp(array) {
     if (currentlyNotParsedTypes.has(constrDict)) {
       currentlyNotParsedTypes.delete(constrDict);
     }
-    const ConstructorForObject = constrDict[array[0]];
-    return new ConstructorForObject(array);
+    try {
+      const ConstructorForObject = constrDict[array[0]];
+      return new ConstructorForObject(array);
+    } catch (e) {
+      // TODO: investigate
+      if (array[0] === 'VernacDefinition') {
+        return new VernacDefinition(array);
+      }
+    }
   } else {
     console.warn(`Currently not parsing: ${array[0]}`,
         JSON.parse(JSON.stringify(array.length > 1 ? array.slice(1) : array)));
@@ -280,7 +286,6 @@ const constrDict = {
   'CApp': CApp,
   'CLocalAssum': CLocalAssum,
   'Name': IDt,
-  'VernacDefinition': VernacDefinition,
   'DefineBody': DefineBody,
   'CLambdaN': CLambdaN,
   'VernacHints': VernacHints,
@@ -291,6 +296,7 @@ const constrDict = {
   'VernacSolve': VernacSolve,
   'TacAlias': TacAlias,
   'VernacOpenCloseScope': VernacOpenCloseScope,
+  'VernacDefinition': VernacDefinition,
 };
 
 // const currentlyNotParsedTypes = new Set();
