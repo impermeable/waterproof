@@ -34,6 +34,11 @@ import TacticDefinition from './datastructures/TacticDefinition';
 import TacFun from './datastructures/TacFun';
 import TacThen from './datastructures/TacThen';
 import TacIntroPattern from './datastructures/TacIntroPattern';
+import TacRewrite from './datastructures/TacRewrite';
+import TacArg from './datastructures/TacArg';
+import TacCall from './datastructures/TacCall';
+import IntroNaming from './datastructures/IntroNaming';
+import IntroIdentifier from './datastructures/IntroIdentifier';
 // const flatten = require('./flatten-expr').flatten;
 
 /**
@@ -242,6 +247,7 @@ function convertToASTComp(array) {
       const ConstructorForObject = constrDict[array[0]];
       return new ConstructorForObject(array);
     } catch (e) {
+      console.log(e);
       // TODO: investigate
       if (array[0] === 'VernacDefinition') {
         return new VernacDefinition(array);
@@ -314,6 +320,11 @@ const constrDict = {
   'TacFun': TacFun,
   'TacThen': TacThen,
   'TacIntroPattern': TacIntroPattern,
+  'TacRewrite': TacRewrite,
+  'TacArg': TacArg,
+  'TacCall': TacCall,
+  'IntroNaming': IntroNaming,
+  'IntroIdentifier': IntroIdentifier,
 };
 
 // const currentlyNotParsedTypes = new Set();

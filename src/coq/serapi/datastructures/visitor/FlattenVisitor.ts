@@ -34,6 +34,11 @@ import TacticDefinition from '../TacticDefinition';
 import TacFun from '../TacFun';
 import TacThen from '../TacThen';
 import TacIntroPattern from '../TacIntroPattern';
+import TacRewrite from '../TacRewrite';
+import TacArg from '../TacArg';
+import TacCall from '../TacCall';
+import IntroNaming from '../IntroNaming';
+import IntroIdentifier from '../IntroIdentifier';
 
 type LocData = [LocInfo, string];
 
@@ -216,6 +221,31 @@ class FlattenVisitor implements ASTVisitor {
     // TODO
   }
 
+  // eslint-disable-next-line require-jsdoc
+  visitTacRewrite(term: TacRewrite): void {
+    // TODO
+  }
+
+  // eslint-disable-next-line require-jsdoc
+  visitTacArg(term: TacArg): void {
+    // TODO
+  }
+
+  // eslint-disable-next-line require-jsdoc
+  visitTacCall(term: TacCall): void {
+    // TODO
+  }
+
+  // eslint-disable-next-line require-jsdoc
+  visitIntroNaming(term: IntroNaming): void {
+    // TODO
+  }
+
+  // eslint-disable-next-line require-jsdoc
+  visitIntroIdentifier(term: IntroIdentifier): void {
+    // TODO
+  }
+
   /**
    * Visit a IDt type.
    * @param {IDt} term - a IDt term
@@ -245,7 +275,7 @@ class FlattenVisitor implements ASTVisitor {
    * @param {SerQualid} term - a SerQualid term
    */
   visitSerQualid(term: SerQualid): void {
-    throw new Error('Method not implemented.');
+    // No location provided
   }
 
   /**
