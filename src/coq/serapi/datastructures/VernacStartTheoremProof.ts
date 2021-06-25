@@ -55,7 +55,12 @@ class VernacStartTheoremProof extends CoqType
     });
   }
 
-  // eslint-disable-next-line require-jsdoc
+  /**
+   * Pretty print the current type.
+   * @param {number} indent current indentation
+   * @return {string} representation of the current type with indentation
+   * added to the front
+   */
   pprint(indent = 0): string {
     const tab = '\n'.concat('\t'.repeat(indent + 1));
     let output = '';

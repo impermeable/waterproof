@@ -14,6 +14,7 @@ import IDt from '../IDt';
 import InConstrEntry from '../InConstrEntry';
 import LocInfo from '../LocInfo';
 import SerQualid from '../SerQualid';
+import VernacOpenCloseScope from '../VernacOpenCloseScope';
 import VernacAssumption from '../VernacAssumption';
 import VernacDefinition from '../VernacDefinition';
 import VernacEndProof from '../VernacEndProof';
@@ -23,6 +24,7 @@ import VernacHints from '../VernacHints';
 import VernacProof from '../VernacProof';
 import VernacRequire from '../VernacRequire';
 import VernacStartTheoremProof from '../VernacStartTheoremProof';
+import TacAlias from '../TacAlias';
 import ASTVisitor from './ASTVisitor';
 
 type LocData = [LocInfo, string];
@@ -149,6 +151,19 @@ class FlattenVisitor implements ASTVisitor {
   visitVernacAssumption(term: VernacAssumption): void {
     // no LocInfo present, skipping
     console.log(`${term.constructor.name} has no LocInfo present. Skipping...`);
+  }
+
+
+  // eslint-disable-next-line require-jsdoc
+  visitVernacOpenCloseScope(term: VernacOpenCloseScope): void {
+    // No location info
+  }
+
+  /**
+   * Visit a HintsReference type.
+   * @param {VernacAssumption} term - a VernacAssumption term
+   */
+  visitTacAlias(term: TacAlias): void {
   }
 
   /**

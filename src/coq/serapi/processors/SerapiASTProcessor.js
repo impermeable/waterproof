@@ -2,7 +2,7 @@ import SerapiProcessor from '../util/SerapiProcessor';
 import {createASTCommand} from '../util/SerapiCommandFactory';
 import {extractCoqAST, currentlyNotParsedTypes} from '../ASTProcessor';
 import {flattenAST} from '../datastructures/visitor/FlattenVisitor';
-import {ppAST} from '../datastructures/visitor/PrettyVisitor';
+// import {ppAST} from '../datastructures/visitor/PrettyVisitor';
 
 const fs = require('fs');
 const util = require('util');
@@ -75,8 +75,6 @@ class SerapiASTProcessor extends SerapiProcessor {
 
           console.warn('Adrien\'s pp:');
           console.log(result.ast.pprint());
-          console.warn('Sadjeep\'s pp:');
-          console.log(ppAST(result.ast));
 
           console.log(`Flattening:\n`);
 
