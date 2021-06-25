@@ -2,6 +2,7 @@ import {CoqAST, extractCoqAST} from
   '../../../../../src/coq/serapi/ASTProcessor';
 import CoqType from '../../../../../src/coq/serapi/datastructures/CoqType';
 const parse = require('s-expression');
+const {performance} = require('perf_hooks');
 // const flatten = require('../../../../src/coq/serapi/flatten-expr').flatten;
 
 /**

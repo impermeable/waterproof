@@ -336,6 +336,14 @@ class FlattenVisitor implements ASTVisitor {
     if ( proofExprs[1]?.data != null) {
       this._state.push([proofExprs[1]?.data.locinfo,
         proofExprs[1]?.data.content.constructor.name]);
+
+      // const exprList = proofExprs[1]?.data.content.constrNotationSubstitution
+      //     .exprList;
+      // if (exprList != null) {
+      //   exprList.forEach((exp) => {
+      //     this._state.push([exp.locinfo, exp.content.notation]);
+      //   });
+      // }
     }
   }
 
