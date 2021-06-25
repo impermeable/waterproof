@@ -11,7 +11,7 @@ import CProdN from '../CProdN';
 import CRef from '../CRef';
 import DefineBody from '../DefineBody';
 import GenericVType from '../GenericVType';
-import HintsResolve, { HintsReference } from '../HintsResolve';
+import HintsResolve, {HintsReference} from '../HintsResolve';
 import IDt from '../IDt';
 import InConstrEntry from '../InConstrEntry';
 import LocInfo from '../LocInfo';
@@ -30,7 +30,8 @@ import VernacStartTheoremProof from '../VernacStartTheoremProof';
 // import CLocalAssum from '../CLocalAssum';
 
 /**
- * Implements the vistor pattern.
+ * Defines an interface the vistor pattern over ASTs
+ * generated from SerApi - CoqTypes
  *
  * Gotchas: In JS you cannot do type-based overloading,
  * only paramater number-based; So we need diffrent function names
@@ -67,6 +68,3 @@ interface ASTVisitor {
 }
 
 export default ASTVisitor;
-// Note to self: quick hack to get all classes in a folder
-// eslint-disable-next-line max-len
-// ls src/coq/serapi/datastructures/**.ts | sed 's/\.[a-z]*//g' | awk -F '/' '{print $NF}'
