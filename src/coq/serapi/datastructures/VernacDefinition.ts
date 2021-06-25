@@ -58,9 +58,9 @@ class VernacDefinition extends CoqType implements Visitable {
     output = output.concat('Def: ', this.defintionObjectKind.toString(), tab);
     output = output.concat('Name: ', tab);
     output = output.concat('\tLoc: ',
-        this.nameDecl.name.locinfo.pprint(indent+1), tab);
+        this.nameDecl.name.locinfo.pprint(indent+2), tab);
     output = output.concat('\t', this.cprint(this.nameDecl.name.content,
-        indent+1));
+        indent+2));
     return this.sprintf(super.pprint(indent), output);
     // throw new Error('Method not implemented.');
   }

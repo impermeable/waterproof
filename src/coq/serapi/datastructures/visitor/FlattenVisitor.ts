@@ -29,6 +29,8 @@ import KerName from '../KerName';
 import TacAtom from '../TacAtom';
 import TacApply from '../TacApply';
 import ASTVisitor from './ASTVisitor';
+import TacReduce from '../TacReduce';
+import TacticDefinition from '../TacticDefinition';
 
 type LocData = [LocInfo, string];
 
@@ -182,6 +184,16 @@ class FlattenVisitor implements ASTVisitor {
 
   // eslint-disable-next-line require-jsdoc
   visitTacApply(term: TacApply): void {
+    // TODO
+  }
+
+  // eslint-disable-next-line require-jsdoc
+  visitTacReduce(term: TacReduce): void {
+    // TODO
+  }
+
+  // eslint-disable-next-line require-jsdoc
+  visitTacticDefinition(term: TacticDefinition): void {
     // TODO
   }
 

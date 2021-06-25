@@ -30,9 +30,8 @@ import TacAlias from '../TacAlias';
 import KerName from '../KerName';
 import TacAtom from '../TacAtom';
 import TacApply from '../TacApply';
-// import CApp from '../CApp';
-// import CLambdaN from '../CLambdaN';
-// import CLocalAssum from '../CLocalAssum';
+import TacReduce from '../TacReduce';
+import TacticDefinition from '../TacticDefinition';
 
 /**
  * Defines an interface the vistor pattern over ASTs
@@ -74,6 +73,8 @@ interface ASTVisitor {
   visitKerName(term: KerName): void;
   visitTacAtom(term: TacAtom): void;
   visitTacApply(term: TacApply): void;
+  visitTacReduce(term: TacReduce): void;
+  visitTacticDefinition(term: TacticDefinition): void;
 }
 
 export default ASTVisitor;

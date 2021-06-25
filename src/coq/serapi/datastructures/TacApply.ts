@@ -30,6 +30,7 @@ class TacApply extends CoqType {
 
   accept(v: ASTVisitor) : void {
     v.visitTacApply(this);
+    (this.content).accept(v);
   }
 }
 

@@ -22,7 +22,11 @@ class VernacExtend extends CoqType implements Visitable {
     for (let i = 0; i < list.length; i++) {
       if (Array.isArray(list[i][3])) {
         if (list[i][3].length > 0) {
-          this.data.push(convertToASTComp(list[i][3]));
+          if (typeof list[i][3][0] === 'string') {
+            this.data.push(convertToASTComp(list[i][3]));
+          } else {
+            this.data.push(convertToASTComp(list[i][3][0]));
+          }
         }
       }
     }

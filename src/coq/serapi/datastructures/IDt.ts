@@ -6,7 +6,11 @@ class IDt extends CoqType {
   name: any;
   constructor( array ) {
     super(array);
-    this.name = array[1];
+    if (typeof array[1] === 'string') {
+      this.name = array[1];
+    } else {
+      this.name = array[1][1];
+    }
   }
 
   pprint(indent = 0): string {
