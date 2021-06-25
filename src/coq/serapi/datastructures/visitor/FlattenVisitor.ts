@@ -167,7 +167,7 @@ class FlattenVisitor implements ASTVisitor {
    * @param {VernacAssumption} term - a VernacAssumption term
    */
   visitTacAlias(term: TacAlias): void {
-    // TODO
+    this._state.push([term.locinfo, term.constructor.name]);
   }
 
   // eslint-disable-next-line require-jsdoc
@@ -177,12 +177,13 @@ class FlattenVisitor implements ASTVisitor {
 
   // eslint-disable-next-line require-jsdoc
   visitTacAtom(term: TacAtom): void {
-    // TODO
+    console.log('tacatom');
+    this._state.push([term.locinfo, term.constructor.name]);
   }
 
   // eslint-disable-next-line require-jsdoc
   visitTacApply(term: TacApply): void {
-    // TODO
+    this._state.push([term.locinfo, term.constructor.name]);
   }
 
   /**
