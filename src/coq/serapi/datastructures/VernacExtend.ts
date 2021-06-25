@@ -27,7 +27,12 @@ class VernacExtend extends CoqType implements Visitable {
       }
     }
   }
-
+  /**
+   * Pretty print the current type.
+   * @param {number} indent current indentation
+   * @return {string} representation of the current type with indentation
+   * added to the front
+   */
   pprint(indent = 0) {
     // const tab = '\n'.concat('\t'.repeat(indent+1));
     let output = '';

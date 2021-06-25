@@ -23,7 +23,6 @@ addToContext(r, 'toASTWithTime', toASTWithTime, {});
 addToContext(r, 'goodSExp', sexp1, {});
 addToContext(r, 'badSExp', emptyAst, {});
 
-// console.log(`Loaded datastrcutures: ${Object.keys(ds.default).length}`);
 Object.keys(ds.default).forEach((prop) => {
   addToContext(r, prop, ds.default[prop], {});
 });

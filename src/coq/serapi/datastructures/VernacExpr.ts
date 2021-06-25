@@ -22,15 +22,20 @@ class VernacExpr extends CoqType {
     data[2] = convertToASTComp(array[2]);
     this.content = data[2];
   }
-
   print(indent = 0) {
     const output = '';
     output.concat(this.cprint(this.content, indent));
     return this.sprintf(super.pprint(indent), output);
   }
 
-  accept(v: ASTVisitor): void {
-    v.visitVernacExpr(this);
+  /**
+   * allows the ASTVisitor to traverse the current type
+   * (part of the visitor pattern)
+   * @param {ASTVisitor} visitor the visitor requiring
+   * access to content of the current type
+   */
+  accept(visitor: ASTVisitor): void {
+    visitor.visitVernacExpr(this);
   }
 }
 

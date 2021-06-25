@@ -4,15 +4,14 @@ import CoqType from './CoqType';
 import LocInfo from './LocInfo';
 import ASTVisitor from './visitor/ASTVisitor';
 
-class TacAlias extends CoqType {
+class TacAtom extends CoqType {
   locinfo: LocInfo;
   content: any;
 
   constructor( array ) {
     super(array);
     this.locinfo = new LocInfo(['loc', array[1]['loc'][0]]);
-    // console.log(array[1]);
-    this.content = convertToASTComp(array[1]['v'][0]);
+    this.content = convertToASTComp(array[1]['v']);
   }
 
   pprint(indent = 0): string {
@@ -26,8 +25,8 @@ class TacAlias extends CoqType {
   }
 
   accept(v: ASTVisitor) : void {
-    v.visitTacAlias(this);
+    v.visitTacAtom(this);
   }
 }
 
-export default TacAlias;
+export default TacAtom;
