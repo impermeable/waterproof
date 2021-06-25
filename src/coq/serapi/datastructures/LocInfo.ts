@@ -15,6 +15,7 @@ class LocInfo extends CoqType {
   bol_pos_last: number;
   bp: number;
   ep: number;
+
   /**
    * Construct a LocInfo object from an array containing
    * serAPI location info

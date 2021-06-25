@@ -24,8 +24,14 @@ class TacAlias extends CoqType {
     // throw new Error('Method not implemented.');
   }
 
-  accept(v: ASTVisitor) : void {
-    v.visitTacAlias(this);
+  /**
+   * Allows an ASTVisitor to traverse the current type
+   * (part of the visitor pattern)
+   * @param {ASTVisitor} visitor the visitor requiring
+   * access to content of the current type
+   */
+  accept(visitor: ASTVisitor) : void {
+    visitor.visitTacAlias(this);
   }
 }
 

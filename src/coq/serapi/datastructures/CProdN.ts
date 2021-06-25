@@ -38,6 +38,12 @@ class CProdN extends CoqType {
     return this.sprintf(super.pprint(indent), output);
   }
 
+  /**
+   * Allows an ASTVisitor to traverse the current type
+   * (part of the visitor pattern)
+   * @param {ASTVisitor} visitor the visitor requiring
+   * access to content of the current type
+   */
   accept(v: ASTVisitor): void {
     v.visitCProdN(this);
   }
