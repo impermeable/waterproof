@@ -73,7 +73,6 @@ class SerapiASTProcessor extends SerapiProcessor {
           console.log(`Got AST for ${sentenceId}: `,
               JSON.parse(JSON.stringify(result.ast)));
 
-          console.warn('Adrien\'s pp:');
           console.log(result.ast.pprint());
 
           console.log(`Flattening:\n`);

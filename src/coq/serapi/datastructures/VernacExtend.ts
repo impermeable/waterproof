@@ -54,6 +54,13 @@ class VernacExtend extends CoqType implements Visitable {
    */
   accept(visitor: ASTVisitor): void {
     visitor.visitVernacExtend(this);
+    console.log(this.data);
+
+    this.data.forEach((item) => {
+      if (!Array.isArray(item)) {
+        item.accept(visitor);
+      }
+    });
   }
 }
 
