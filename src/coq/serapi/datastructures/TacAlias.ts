@@ -1,34 +1,32 @@
-import CoqType, {Visitable} from './CoqType';
+/* eslint-disable require-jsdoc */
+import {convertToASTComp} from '../ASTProcessor';
+import CoqType from './CoqType';
+import LocInfo from './LocInfo';
 import ASTVisitor from './visitor/ASTVisitor';
 
-// eslint-disable-next-line require-jsdoc
-class VernacOpenCloseScope extends CoqType implements Visitable {
-  open: boolean;
-  scope: string;
+class TacAlias extends CoqType {
+  locinfo: LocInfo;
+  content: any;
 
-  /**
-   *
-   * @param {*} array
-   */
   constructor( array ) {
     super(array);
-    this.open = ('true' == array[1]);
-    this.scope = array[2];
+    this.locinfo = new LocInfo(['loc', array[1]['loc'][0]]);
+    this.content = convertToASTComp(array[1][0][0]);
   }
 
-  // eslint-disable-next-line require-jsdoc
-  pprint(indent = 0) {
+  pprint(indent = 0): string {
     const tab = '\n'.concat('\t'.repeat(indent + 1));
     let output = '';
-    output = output.concat('Open: ', this.open.toString(), tab);
-    output = output.concat('Scope: ', this.scope, tab);
+    output = output.concat('Loc: ', this.locinfo.pprint(indent+1),
+        tab);
+    output = output.concat(this.cprint(this.content, indent));
     return this.sprintf(super.pprint(indent), output);
+    // throw new Error('Method not implemented.');
   }
 
-  // eslint-disable-next-line require-jsdoc
-  accept(visitor: ASTVisitor): void {
-    visitor.visitVernacOpenCloseScope(this);
+  accept(v: ASTVisitor) : void {
+    v.visitTacAlias(this);
   }
 }
 
-export default VernacOpenCloseScope;
+export default TacAlias;
