@@ -1,4 +1,5 @@
 /* eslint-disable require-jsdoc */
+import {convertToASTComp} from '../ASTProcessor';
 import CoqType, {Visitable} from './CoqType';
 import ASTVisitor from './visitor/ASTVisitor';
 
@@ -14,9 +15,17 @@ class VernacExtend extends CoqType implements Visitable {
    */
   constructor( array ) {
     super(array);
-    // console.log('In the constructor of VernacExtend...');
-    // TODO fixme - use convertToAstComp
-    this.data = array;
+    this.data = array.slice(1);
+    this.data.forEach((items) => {
+      console.warn('items', items);
+      if (Array.isArray(items[0])) {
+        items.forEach((e) => {
+          e = convertToASTComp(e);
+        });
+      } else {
+        items = convertToASTComp(items);
+      }
+    });
   }
 
   pprint(indent = 0) {
@@ -28,6 +37,26 @@ class VernacExtend extends CoqType implements Visitable {
 
   accept(visitor: ASTVisitor): void {
     visitor.visitVernacExtend(this);
+  }
+}
+
+export class GenArg extends CoqType implements Visitable {
+  level: string;
+  optArgs: [];
+
+  constructor( array ) {
+    super(array);
+    this.level = array[1];
+    this.optArgs = array[2];
+  }
+}
+
+export class VernacSolve extends CoqType implements Visitable {
+  data: any;
+
+  constructor( array ) {
+    super(array);
+    this.data = array.slice();
   }
 }
 

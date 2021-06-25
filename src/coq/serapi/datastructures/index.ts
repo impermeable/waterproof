@@ -19,7 +19,7 @@ import VernacAssumption from './VernacAssumption';
 import VernacDefinition from './VernacDefinition';
 import VernacEndProof from './VernacEndProof';
 import VernacExpr from './VernacExpr';
-import VernacExtend from './VernacExpr';
+import VernacExtend, {GenArg, VernacSolve} from './VernacExtend';
 import VernacHints from './VernacHints';
 import VernacProof from './VernacProof';
 import VernacRequire from './VernacRequire';
@@ -52,4 +52,6 @@ export default {
   VernacProof,
   VernacRequire,
   VernacStartTheoremProof,
+  GenArg,
+  VernacSolve,
 };

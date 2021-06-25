@@ -17,7 +17,7 @@ import VernacHints from './datastructures/VernacHints';
 import HintsResolve, {HintsReference} from './datastructures/HintsResolve';
 import CoqAST from './datastructures/CoqAst';
 import VernacExpr from './datastructures/VernacExpr';
-import VernacExtend from './datastructures/VernacExtend';
+import VernacExtend, {GenArg, VernacSolve} from './datastructures/VernacExtend';
 import VernacProof from './datastructures/VernacProof';
 // import CoqType from './datastructures/CoqType';
 import GenericVType from './datastructures/GenericVType';
@@ -285,6 +285,8 @@ const constrDict = {
   'HintsResolve': HintsResolve,
   'HintsReference': HintsReference,
   'VernacAssumption': VernacAssumption,
+  'GenArg': GenArg,
+  'VernacSolve': VernacSolve,
 };
 
 // const currentlyNotParsedTypes = new Set();

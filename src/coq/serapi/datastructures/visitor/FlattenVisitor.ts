@@ -145,7 +145,9 @@ class FlattenVisitor implements ASTVisitor {
   }
 
   visitVernacRequire(term: VernacRequire): void {
-    console.warn('Please fix the VernacRequire constructor :(');
+    term.list.forEach((i) => {
+      this._state.push([i.locinfo, i.content.id]);
+    });
   }
 
   visitVernacStartTheoremProof(term: VernacStartTheoremProof): void {
