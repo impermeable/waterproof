@@ -103,22 +103,25 @@ function createWindow() {
     log.transports.file.level = "info";
     autoUpdater.logger = log;
 
+    /*  Note: the official documentation of Vue Electron Builder (which is used to build Waterproof) 
+          recommends placing the updating code here  */
     autoUpdater.on('update-available', (info) => {
 
       const feedback = dialog.showMessageBox(win, {
         type: 'question',
         buttons: ['Remind me later', 'Yes, please'],
-        defaultId: 2,
+        /*  Option 1 ('Yes, please') is the default option */
+        defaultId: 1,
         title: 'Update available',
         message: 'A new version of Waterproof is available. Would you like to update?',
         detail: 'If you agree, the update will be applied the next time you start Waterproof.'
       });
       feedback.then(
-          function(x) {
-            if (x.response == 1) {
-              autoUpdater.downloadUpdate();
-            }
+        function(ret) {
+          if (ret.response == 1) {  /*  user has accepted the update  */
+            autoUpdater.downloadUpdate();
           }
+        }
       );
     });
 
