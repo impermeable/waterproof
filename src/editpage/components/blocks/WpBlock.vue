@@ -4,6 +4,8 @@ const mk = require('@iktakahiro/markdown-it-katex');
 md.use(mk);
 const regExp = /<p>(.*)<\/p>/si;
 
+import CoqState from '../../../coq/CoqState';
+
 export default {
   props: {
     block: Object,
@@ -13,6 +15,7 @@ export default {
     sentences: Array,
     executedIndex: Number,
     runningIndex: Number,
+    state: CoqState,
   },
   data: function() {
     return {

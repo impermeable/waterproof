@@ -17,11 +17,20 @@ import VernacHints from './datastructures/VernacHints';
 import HintsResolve, {HintsReference} from './datastructures/HintsResolve';
 import CoqAST from './datastructures/CoqAst';
 import VernacExpr from './datastructures/VernacExpr';
-import VernacExtend from './datastructures/VernacExtend';
+import VernacExtend, {GenArg, VernacSolve} from './datastructures/VernacExtend';
 import VernacProof from './datastructures/VernacProof';
 // import CoqType from './datastructures/CoqType';
 import GenericVType from './datastructures/GenericVType';
+import VernacAssumption from './datastructures/VernacAssumption';
 
+import VernacOpenCloseScope from './datastructures/VernacOpenCloseScope';
+// import TacAlias from './dataqstructures/TacAlias';
+import TacAlias from './datastructures/TacAlias';
+import TacAtom from './datastructures/TacAtom';
+import KerName from './datastructures/KerName';
+import TacApply from './datastructures/TacApply';
+import TacReduce from './datastructures/TacReduce';
+import TacticDefinition from './datastructures/TacticDefinition';
 // const flatten = require('./flatten-expr').flatten;
 
 /**
@@ -97,7 +106,6 @@ function printVernacExpr( array, s ) {
  */
 function printVernacExtend( array, s ) {
   console.log(array);
-  // TODO: implement
   return prettyPrint( array[2][2][3], s);
 }
 
@@ -227,8 +235,15 @@ function convertToASTComp(array) {
     if (currentlyNotParsedTypes.has(constrDict)) {
       currentlyNotParsedTypes.delete(constrDict);
     }
-    const ConstructorForObject = constrDict[array[0]];
-    return new ConstructorForObject(array);
+    try {
+      const ConstructorForObject = constrDict[array[0]];
+      return new ConstructorForObject(array);
+    } catch (e) {
+      // TODO: investigate
+      if (array[0] === 'VernacDefinition') {
+        return new VernacDefinition(array);
+      }
+    }
   } else {
     console.warn(`Currently not parsing: ${array[0]}`,
         JSON.parse(JSON.stringify(array.length > 1 ? array.slice(1) : array)));
@@ -277,12 +292,22 @@ const constrDict = {
   'CApp': CApp,
   'CLocalAssum': CLocalAssum,
   'Name': IDt,
-  'VernacDefinition': VernacDefinition,
   'DefineBody': DefineBody,
   'CLambdaN': CLambdaN,
   'VernacHints': VernacHints,
   'HintsResolve': HintsResolve,
   'HintsReference': HintsReference,
+  'VernacAssumption': VernacAssumption,
+  'GenArg': GenArg,
+  'VernacSolve': VernacSolve,
+  'TacAlias': TacAlias,
+  'VernacOpenCloseScope': VernacOpenCloseScope,
+  'KerName': KerName,
+  'TacAtom': TacAtom,
+  'TacApply': TacApply,
+  'VernacDefinition': VernacDefinition,
+  'TacReduce': TacReduce,
+  'TacticDefinition': TacticDefinition,
 };
 
 // const currentlyNotParsedTypes = new Set();

@@ -15,6 +15,12 @@ class VernacProof extends CoqType implements Visitable {
     this.sectionSubsetExpr = array[1] || {};
   }
 
+  /**
+   * Pretty print the current type.
+   * @param {number} indent current indentation
+   * @return {string} representation of the current type with indentation
+   * added to the front
+   */
   pprint(indent = 0) {
     const tab = '\n'.concat('\t'.repeat(indent+1));
     let output = '';
@@ -23,6 +29,12 @@ class VernacProof extends CoqType implements Visitable {
     return this.sprintf(super.pprint(indent), output);
   }
 
+  /**
+   * Allows an ASTVisitor to traverse the current type
+   * (part of the visitor pattern)
+   * @param {ASTVisitor} visitor the visitor requiring
+   * access to content of the current type
+   */
   accept(visitor: ASTVisitor): void {
     visitor.visitVernacProof(this);
   }

@@ -18,6 +18,7 @@ class GenericVType extends CoqType implements Visitable {
 
     this.attributes = {'attrs': attrs, 'control': control};
     // this.data = convertToASTComp(expr);
+    // console.log(expr);
     this.data = convertToASTComp(expr);
   }
 
@@ -36,7 +37,12 @@ class GenericVType extends CoqType implements Visitable {
     }
   }
 
-  // eslint-disable-next-line require-jsdoc
+  /**
+   * Allows an ASTVisitor to traverse the current type
+   * (part of the visitor pattern)
+   * @param {ASTVisitor} visitor the visitor requiring
+   * access to content of the current type
+   */
   accept(visitor: ASTVisitor) : void {
     if (Array.isArray(this.data)) return;
     this.data.accept(visitor);

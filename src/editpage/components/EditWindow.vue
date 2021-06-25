@@ -22,7 +22,7 @@
         <component v-show="!block.state.foldStatus.isFolded"
                   :is="toComponent(block.type)" :block="block"
                   :key="block.type + index" :index="index"
-                  :sentences="sentenceIndices"
+                  :sentences="sentenceIndices" :state="coq.getState()"
                   :executedIndex="executeIndex" :runningIndex="runningIndex"
                   :exercise="exercise" :event-bus="eventBus">
         </component>

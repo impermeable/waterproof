@@ -36,7 +36,6 @@ class CPrim extends CoqType {
    * TODO: implement me
    */
   pprint(indent = 0): string {
-    // TODO
     const tab = '\n'.concat('\t'.repeat(indent + 1));
     let output = '';
     output = output.concat('Is numeric: ', this.isNumeric.toString(), tab);

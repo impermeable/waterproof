@@ -33,6 +33,12 @@ class DefineBody extends CoqType {
     // throw new Error('Method not implemented.');
   }
 
+  /**
+   * Allows an ASTVisitor to traverse the current type
+   * (part of the visitor pattern)
+   * @param {ASTVisitor} v the visitor requiring
+   * access to content of the current type
+   */
   accept(v: ASTVisitor) : void {
     v.visitDefineBody(this);
   }
