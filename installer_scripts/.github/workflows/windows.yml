@@ -1,0 +1,100 @@
+# Main doc: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/introduction-to-github-actions
+# Runners spec: https://docs.github.com/en/free-pro-team@latest/actions/reference/specifications-for-github-hosted-runners
+# Glob expressions: https://github.com/actions/toolkit/tree/main/packages/glob
+
+name: Windows
+
+###############################################################################
+# Schedule:
+# - push on any branch whose name matches v** or master
+# - any pull request
+###############################################################################
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - '**'
+  schedule:
+    - cron: "0 0 * * *"
+  workflow_dispatch:
+    inputs:
+      platform:
+        description: 'Arguments for the platform script:'
+        required: true
+        default: '-extent=b -parallel=p -jobs=2 -vst=n -compcert=n'
+
+###############################################################################
+# Platform script options shared among all jobs
+###############################################################################
+env:
+  PLATFORM_ARGS: -extent=b -parallel=p -jobs=2 -vst=n -compcert=n
+  COQREGTESTING: y
+
+###############################################################################
+# Windows
+#
+# 2 jobs, the former builds the installer, the second tests it
+#
+# CAVEATS:
+# - git is misconfigured, by default it puts \r in between \n\n
+###############################################################################
+jobs:
+  Windows_platform:
+    name: Windows
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        architecture:
+          - '32'
+          - '64'
+
+    steps:
+      - name: Set git to use LF
+        run: |
+          git config --global core.autocrlf false
+          git config --global core.eol lf
+          
+      - name: Git checkout install scripts
+        uses: actions/checkout@v2
+        with:
+          path: main
+          
+      - name: Git checkout Coq platform
+        uses: actions/checkout@v2
+        with:
+          repository: coq/platform
+          path: platform
+        
+      - name: Set PLATFORM
+        if: ${{ github.event.inputs.platform != '' }}
+        run: echo "PLATFORM=${{ github.event.inputs.platform }}" >> $GITHUB_ENV
+
+      - name: Run common platform script
+        shell: cmd
+        run: platform\coq_platform_make_windows.bat -destcyg=C:\cygwin_coq_platform -arch=${{matrix.architecture}} %PLATFORM_ARGS%
+          
+      - name: Install packages specified in cfg file
+        shell: cmd
+        run: |
+          copy main\* C:\cygwin_coq_platform\home\runneradmin\coq-platform\
+          C:\cygwin_coq_platform\bin\bash --login -c "cd coq-platform && ./install_packages.sh"
+        
+      - name: Patch SerAPI
+        shell: cmd
+        run: |
+          copy main\patch_serapi.sh C:\cygwin_coq_platform\home\runneradmin\
+          C:\cygwin_coq_platform\bin\bash --login -c "./patch_serapi.sh"
+         
+      - name: Create installer
+        shell: cmd
+        run: C:\cygwin_coq_platform\bin\bash --login -c "cd coq-platform/ && windows/create_installer_windows.sh && mkdir /cygdrive/c/installer && cp windows_installer/*exe /cygdrive/c/installer/"
+
+      - name: 'Upload Artifact'
+        uses: actions/upload-artifact@v2
+        with:
+          name: 'Windows installer ${{matrix.architecture}} bits'
+          path: C:\installer\*.exe
+          retention-days: 5
