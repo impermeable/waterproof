@@ -11,7 +11,8 @@ class TacAlias extends CoqType {
   constructor( array ) {
     super(array);
     this.locinfo = new LocInfo(['loc', array[1]['loc'][0]]);
-    this.content = convertToASTComp(array[1][0][0]);
+    // console.log(array[1]);
+    this.content = convertToASTComp(array[1]['v'][0]);
   }
 
   pprint(indent = 0): string {

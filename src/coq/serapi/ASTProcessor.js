@@ -23,6 +23,8 @@ import VernacProof from './datastructures/VernacProof';
 import GenericVType from './datastructures/GenericVType';
 import VernacAssumption from './datastructures/VernacAssumption';
 
+import VernacOpenCloseScope from './datastructures/VernacOpenCloseScope';
+import TacAlias from './datastructures/TacAlias';
 // const flatten = require('./flatten-expr').flatten;
 
 /**
@@ -287,6 +289,8 @@ const constrDict = {
   'VernacAssumption': VernacAssumption,
   'GenArg': GenArg,
   'VernacSolve': VernacSolve,
+  'TacAlias': TacAlias,
+  'VernacOpenCloseScope': VernacOpenCloseScope,
 };
 
 // const currentlyNotParsedTypes = new Set();
