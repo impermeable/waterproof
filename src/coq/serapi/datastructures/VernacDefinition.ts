@@ -26,6 +26,7 @@ class VernacDefinition extends CoqType implements Visitable {
   defintionObjectKind: DefinitionObjectKind;
   nameDecl: { name: { locinfo: LocInfo; content: any; }; options: any; };
   defitionExpr: any;
+
   constructor( array ) {
     super(array);
 
@@ -44,6 +45,12 @@ class VernacDefinition extends CoqType implements Visitable {
     this.defitionExpr = convertToASTComp(array[3]);
   }
 
+  /**
+   * Pretty print the current type.
+   * @param {number} indent current indentation
+   * @return {string} representation of the current type with indentation
+   * added to the front
+   */
   pprint(indent = 0): string {
     const tab = '\n'.concat('\t'.repeat(indent+1));
     let output = '';
@@ -51,13 +58,19 @@ class VernacDefinition extends CoqType implements Visitable {
     output = output.concat('Def: ', this.defintionObjectKind.toString(), tab);
     output = output.concat('Name: ', tab);
     output = output.concat('\tLoc: ',
-        this.nameDecl.name.locinfo.pprint(indent+1), tab);
+        this.nameDecl.name.locinfo.pprint(indent+2), tab);
     output = output.concat('\t', this.cprint(this.nameDecl.name.content,
-        indent+1));
+        indent+2));
     return this.sprintf(super.pprint(indent), output);
     // throw new Error('Method not implemented.');
   }
 
+  /**
+   * Allows an ASTVisitor to traverse the current type
+   * (part of the visitor pattern)
+   * @param {ASTVisitor} visitor the visitor requiring
+   * access to content of the current type
+   */
   accept(visitor: ASTVisitor) {
     visitor.visitVernacDefinition(this);
     // visitor.visitCNotation(this.);

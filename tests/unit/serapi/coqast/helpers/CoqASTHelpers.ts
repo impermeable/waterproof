@@ -2,6 +2,7 @@ import {CoqAST, extractCoqAST} from
   '../../../../../src/coq/serapi/ASTProcessor';
 import CoqType from '../../../../../src/coq/serapi/datastructures/CoqType';
 const parse = require('s-expression');
+const {performance} = require('perf_hooks');
 // const flatten = require('../../../../src/coq/serapi/flatten-expr').flatten;
 
 /**
@@ -20,6 +21,13 @@ function toAST(sExpr: string, logging=false): CoqAST {
     console.warn('toAST - CoqAst', ast);
   }
   return ast;
+}
+
+function toASTWithTime(sExpr: string, logging=false): [CoqAST, number] {
+  const start = performance.now();
+  const ast = toAST(sExpr);
+  const end = performance.now();
+  return [ast, end-start];
 }
 
 /**
@@ -49,6 +57,7 @@ const keyify = (obj, prefix = '') : string[] =>
 
 export {
   toAST,
+  toASTWithTime,
   astHasChild,
   keyify,
   objHasKeys,

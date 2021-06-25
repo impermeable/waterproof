@@ -1,0 +1,29 @@
+{
+  "exerciseSheet": false,
+  "blocks": [
+    {
+      "type": "text",
+      "text": "Syntax Highlighting and Pretty Printer.\n"
+    },
+    {
+      "type": "code",
+      "text": "Require Import Reals.\nRequire Import Qreals.\nRequire Import wplib.Definitions.SetDefinitions.\nRequire Import wplib.Tactics.AdditionalLemmas.\nRequire Import wplib.Notations.Notations.\n(*Require Import wplib.Notations.SetNotations.*)\nRequire Import wplib.Tactics.Tactics.\n\nOpen Scope R_scope.\nHint Resolve Rplus_lt_compat : reals.\n\nSection proofs_in_analysis."
+    },
+    {
+      "type": "code",
+      "text": "Lemma a_simple_lemma : 0 = 0.\nProof.\nAdmitted."
+    },
+    {
+      "type": "code",
+      "text": "Theorem a_simple_theorem: 1 = 1.\nProof.\n  auto.\nQed."
+    },
+    {
+      "type": "text",
+      "text": "## Flattening and unparsed types.\n"
+    },
+    {
+      "type": "code",
+      "text": "Lemma exercise_wp :\n  ∀ x : ℝ,\n    ∃ y : ℝ,\n      ∀ u : ℝ,\n        u > 0 ⇒\n          ∃ v : ℝ,\n            v > 0 ∧ x + u < y + v.\nProof."
+    }
+  ]
+}

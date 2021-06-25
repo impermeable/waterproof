@@ -17,7 +17,6 @@ class CoqAST extends CoqType implements Visitable {
    */
   constructor( array ) {
     super(array);
-    console.warn('AAA', array);
     // this.representation = convertSexpToString(array, 0, '');
     this.locinfo = new LocInfo(array[1][1]);
     this.content = convertToASTComp(array[1][0]);
@@ -26,13 +25,12 @@ class CoqAST extends CoqType implements Visitable {
   // eslint-disable-next-line require-jsdoc
   accept(visitor: ASTVisitor): void {
     // throw new Error('Method not implemented.');
-    visitor.visitCoqAST(this);
+    visitor.visitCoqAst(this);
     (this.content).accept(visitor);
   }
 
   // eslint-disable-next-line require-jsdoc
   pprint(indent = 0): string {
-    // TODO 1: sanity check - is content an CoqType ...
     // (could be null or something)
     // Call the method to pprint on the child(ren)
     const tab = '\n'.concat('\t'.repeat(indent + 1));

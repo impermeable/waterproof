@@ -6,7 +6,11 @@ class IDt extends CoqType {
   name: any;
   constructor( array ) {
     super(array);
-    this.name = array[1];
+    if (typeof array[1] === 'string') {
+      this.name = array[1];
+    } else {
+      this.name = array[1][1];
+    }
   }
 
   pprint(indent = 0): string {
@@ -17,8 +21,14 @@ class IDt extends CoqType {
     // throw new Error('Method not implemented.');
   }
 
-  accept(v: ASTVisitor) : void {
-    v.visitIDt(this);
+  /**
+   * Allows an ASTVisitor to traverse the current type
+   * (part of the visitor pattern)
+   * @param {ASTVisitor} visitor the visitor requiring
+   * access to content of the current type
+   */
+  accept(visitor: ASTVisitor) : void {
+    visitor.visitIDt(this);
   }
 }
 

@@ -9,14 +9,23 @@ import ASTVisitor from './visitor/ASTVisitor';
 class SerQualid extends CoqType {
   dirPath: any;
   id: any;
-  // eslint-disable-next-line require-jsdoc
+
+  /**
+   * Parses an input array into a proper datastructure.
+   * @param {Array} array: Array to parse
+   */
   constructor( array ) {
     super(array);
     this.dirPath = array[1][1];
     this.id = array[2][1];
   }
 
-  // eslint-disable-next-line require-jsdoc
+  /**
+   * Pretty print the current type.
+   * @param {number} indent current indentation
+   * @return {string} representation of the current type with indentation
+   * added to the front
+   */
   pprint(indent = 0) : string {
     const tab = '\n'.concat('\t'.repeat(indent+1));
     let output = '';
@@ -25,8 +34,14 @@ class SerQualid extends CoqType {
     return this.sprintf(super.pprint(indent), output);
   }
 
-  accept(v: ASTVisitor) : void {
-    v.visitSerQualid(this);
+  /**
+   * Allows an ASTVisitor to traverse the current type
+   * (part of the visitor pattern)
+   * @param {ASTVisitor} visitor the visitor requiring
+   * access to content of the current type
+   */
+  accept(visitor: ASTVisitor) : void {
+    visitor.visitSerQualid(this);
   }
 }
 

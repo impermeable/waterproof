@@ -17,19 +17,25 @@ class VernacExpr extends CoqType {
     super(array);
     // TODO fixme
     // console.log('In the constructor of VernacExpr...');
+    // return Error(array);
     const data = array;
     data[2] = convertToASTComp(array[2]);
     this.content = data[2];
   }
-
   print(indent = 0) {
     const output = '';
     output.concat(this.cprint(this.content, indent));
     return this.sprintf(super.pprint(indent), output);
   }
 
-  accept(v: ASTVisitor): void {
-    v.visitVernacExpr(this);
+  /**
+   * Allows an ASTVisitor to traverse the current type
+   * (part of the visitor pattern)
+   * @param {ASTVisitor} visitor the visitor requiring
+   * access to content of the current type
+   */
+  accept(visitor: ASTVisitor): void {
+    visitor.visitVernacExpr(this);
   }
 }
 

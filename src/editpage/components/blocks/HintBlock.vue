@@ -34,7 +34,7 @@
    * {
    *  type: 'hint',
    *  title: 'Shown on unopened hint',
-   *  text: 'Maybe you could use Proof. (IDIOT)',
+   *  text: 'Maybe you could use Proof.',
    * }
    */
 import WpBlock from './WpBlock';

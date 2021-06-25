@@ -7,6 +7,14 @@ module.exports = {
     // config.plugins.delete('preload-editpage');
     // config.plugins.delete('prefetch-editpage');
     config.plugins.delete('hmr');
+    if (process.env.coverage === 'true') {
+      config.module
+          .rule('ts')
+          .use('istanbul')
+          .loader('istanbul-instrumenter-loader')
+          .options({esModules: true})
+          .before('ts-loader');
+    }
   },
   configureWebpack: {
     module: {
