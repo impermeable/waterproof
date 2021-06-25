@@ -89,7 +89,12 @@ class VernacStartTheoremProof extends CoqType
     return this.sprintf(super.pprint(indent), output);
   }
 
-  // eslint-disable-next-line require-jsdoc
+  /**
+   * Allows an ASTVisitor to traverse the current type
+   * (part of the visitor pattern)
+   * @param {ASTVisitor} visitor the visitor requiring
+   * access to content of the current type
+   */
   accept(visitor: ASTVisitor): void {
     visitor.visitVernacStartTheoremProof(this);
   }

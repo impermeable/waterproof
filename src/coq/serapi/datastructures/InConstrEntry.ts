@@ -21,9 +21,14 @@ class InConstrEntry extends CoqType {
     return this.sprintf(super.pprint(indent), output);
   }
 
-  // eslint-disable-next-line require-jsdoc
-  accept(v: ASTVisitor) {
-    v.visitInConstrEntry(this);
+  /**
+   * Allows an ASTVisitor to traverse the current type
+   * (part of the visitor pattern)
+   * @param {ASTVisitor} visitor the visitor requiring
+   * access to content of the current type
+   */
+  accept(visitor: ASTVisitor) {
+    visitor.visitInConstrEntry(this);
   }
 }
 

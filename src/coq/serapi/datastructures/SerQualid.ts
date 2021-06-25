@@ -35,7 +35,7 @@ class SerQualid extends CoqType {
   }
 
   /**
-   * allows the ASTVisitor to traverse the current type
+   * Allows an ASTVisitor to traverse the current type
    * (part of the visitor pattern)
    * @param {ASTVisitor} visitor the visitor requiring
    * access to content of the current type
