@@ -45,7 +45,9 @@ class GenericVType extends CoqType implements Visitable {
    */
   accept(visitor: ASTVisitor) : void {
     if (Array.isArray(this.data)) return;
-    this.data.accept(visitor);
+    if (!Array.isArray(this.data)) {
+      this.data.accept(visitor);
+    }
   }
 }
 

@@ -29,7 +29,9 @@ class TacticDefinition extends CoqType {
 
   accept(v: ASTVisitor) : void {
     v.visitTacticDefinition(this);
-    (this.content).accept(v);
+    if (!Array.isArray(this.content)) {
+      (this.content).accept(v);
+    }
   }
 }
 

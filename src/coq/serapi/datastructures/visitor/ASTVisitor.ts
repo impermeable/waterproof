@@ -31,6 +31,9 @@ import TacAtom from '../TacAtom';
 import TacApply from '../TacApply';
 import TacReduce from '../TacReduce';
 import TacticDefinition from '../TacticDefinition';
+import TacFun from '../TacFun';
+import TacThen from '../TacThen';
+import TacIntroPattern from '../TacIntroPattern';
 
 /**
  * Defines an interface the vistor pattern over ASTs
@@ -74,6 +77,9 @@ interface ASTVisitor {
   visitTacApply(term: TacApply): void;
   visitTacReduce(term: TacReduce): void;
   visitTacticDefinition(term: TacticDefinition): void;
+  visitTacFun(term: TacFun): void;
+  visitTacThen(term: TacThen): void;
+  visitTacIntroPattern(term: TacIntroPattern): void;
 }
 
 export default ASTVisitor;

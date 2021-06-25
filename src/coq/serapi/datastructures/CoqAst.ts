@@ -26,7 +26,9 @@ class CoqAST extends CoqType implements Visitable {
   accept(visitor: ASTVisitor): void {
     // throw new Error('Method not implemented.');
     visitor.visitCoqAst(this);
-    (this.content).accept(visitor);
+    if (!Array.isArray(this.content)) {
+      (this.content).accept(visitor);
+    }
   }
 
   // eslint-disable-next-line require-jsdoc

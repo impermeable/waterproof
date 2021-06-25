@@ -31,6 +31,9 @@ import TacApply from '../TacApply';
 import ASTVisitor from './ASTVisitor';
 import TacReduce from '../TacReduce';
 import TacticDefinition from '../TacticDefinition';
+import TacFun from '../TacFun';
+import TacThen from '../TacThen';
+import TacIntroPattern from '../TacIntroPattern';
 
 type LocData = [LocInfo, string];
 
@@ -195,6 +198,21 @@ class FlattenVisitor implements ASTVisitor {
 
   // eslint-disable-next-line require-jsdoc
   visitTacticDefinition(term: TacticDefinition): void {
+    // TODO
+  }
+
+  // eslint-disable-next-line require-jsdoc
+  visitTacFun(term: TacFun): void {
+    // TODO
+  }
+
+  // eslint-disable-next-line require-jsdoc
+  visitTacThen(term: TacThen): void {
+    // TODO
+  }
+
+  // eslint-disable-next-line require-jsdoc
+  visitTacIntroPattern(term: TacIntroPattern): void {
     // TODO
   }
 

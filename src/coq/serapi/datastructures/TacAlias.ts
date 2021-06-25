@@ -33,7 +33,9 @@ class TacAlias extends CoqType {
    */
   accept(visitor: ASTVisitor) : void {
     visitor.visitTacAlias(this);
-    (this.content).accept(visitor);
+    if (!Array.isArray(this.content)) {
+      (this.content).accept(visitor);
+    }
   }
 }
 

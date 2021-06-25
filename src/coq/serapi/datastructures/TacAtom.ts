@@ -26,7 +26,9 @@ class TacAtom extends CoqType {
 
   accept(v: ASTVisitor) : void {
     v.visitTacAtom(this);
-    (this.content).accept(v);
+    if (!Array.isArray(this.content)) {
+      (this.content).accept(v);
+    }
   }
 }
 
