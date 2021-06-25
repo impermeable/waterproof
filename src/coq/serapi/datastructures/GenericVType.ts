@@ -18,7 +18,7 @@ class GenericVType extends CoqType implements Visitable {
 
     this.attributes = {'attrs': attrs, 'control': control};
     // this.data = convertToASTComp(expr);
-    console.log(expr);
+    // console.log(expr);
     this.data = convertToASTComp(expr);
   }
 
