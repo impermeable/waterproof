@@ -147,6 +147,7 @@ class FlattenVisitor implements ASTVisitor {
    */
   visitHintsResolve(term: HintsResolve): void {
     // no LocInfo present, skipping
+    console.log(`${term.constructor.name} has no LocInfo present. Skipping...`);
   }
 
   /**
@@ -158,7 +159,7 @@ class FlattenVisitor implements ASTVisitor {
   }
 
   /**
-   * Visit a HintsReference type.
+   * Visit a VernacAssumption type.
    * @param {VernacAssumption} term - a VernacAssumption term
    */
   visitVernacAssumption(term: VernacAssumption): void {
@@ -167,83 +168,127 @@ class FlattenVisitor implements ASTVisitor {
   }
 
 
-  // eslint-disable-next-line require-jsdoc
+  /**
+   * Visit a VernacOpenCloseScope type.
+   * @param {VernacOpenCloseScope} term - a VernacOpenCloseScope term
+   */
   visitVernacOpenCloseScope(term: VernacOpenCloseScope): void {
     // No location info
+    console.log(`${term.constructor.name} has no LocInfo present. Skipping...`);
   }
 
   /**
-   * Visit a HintsReference type.
-   * @param {VernacAssumption} term - a VernacAssumption term
+   * Visit a TacAlias type.
+   * @param {TacAlias} term - a TacAlias term
    */
   visitTacAlias(term: TacAlias): void {
     this._state.push([term.locinfo, term.constructor.name]);
   }
 
-  // eslint-disable-next-line require-jsdoc
+  /**
+   * Visit a KerName type.
+   * @param {KerName} term - a KerName term
+   */
   visitKerName(term: KerName): void {
     // No location info
+    console.log(`${term.constructor.name} has no LocInfo present. Skipping...`);
   }
 
-  // eslint-disable-next-line require-jsdoc
+  /**
+   * Visit a TacAtom type.
+   * @param {TacAtom} term - a TacAtom term
+   */
   visitTacAtom(term: TacAtom): void {
     console.log('tacatom');
     this._state.push([term.locinfo, term.constructor.name]);
   }
 
-  // eslint-disable-next-line require-jsdoc
+  /**
+   * Visit a TacApply type.
+   * @param {TacApply} term - a TacApply term
+   */
   visitTacApply(term: TacApply): void {
     this._state.push([term.locinfo, term.constructor.name]);
   }
 
-  // eslint-disable-next-line require-jsdoc
+  /**
+   * Visit a TacReduce type.
+   * @param {TacReduce} term - a TacReduce term
+   */
   visitTacReduce(term: TacReduce): void {
-    // TODO
+    throw new Error('Method not implemented.');
   }
 
-  // eslint-disable-next-line require-jsdoc
+  /**
+   * Visit a TacticDefinition type.
+   * @param {TacticDefinition} term - a TacticDefinition term
+   */
   visitTacticDefinition(term: TacticDefinition): void {
-    // TODO
+    throw new Error('Method not implemented.');
   }
 
-  // eslint-disable-next-line require-jsdoc
+  /**
+   * Visit a TacFun type.
+   * @param {TacFun} term - a TacFun term
+   */
   visitTacFun(term: TacFun): void {
     // TODO
   }
 
-  // eslint-disable-next-line require-jsdoc
+  /**
+   * Visit a TacThen type.
+   * @param {TacThen} term - a TacThen term
+   */
   visitTacThen(term: TacThen): void {
     // TODO
   }
 
-  // eslint-disable-next-line require-jsdoc
+  /**
+   * Visit a TacIntroPattern type.
+   * @param {TacIntroPattern} term - a TacIntroPattern term
+   */
   visitTacIntroPattern(term: TacIntroPattern): void {
-    // TODO
+    throw new Error('Method not implemented.');
   }
 
-  // eslint-disable-next-line require-jsdoc
+  /**
+   * Visit a TacRewrite type.
+   * @param {TacRewrite} term - a TacRewrite term
+   */
   visitTacRewrite(term: TacRewrite): void {
-    // TODO
+    throw new Error('Method not implemented.');
   }
 
-  // eslint-disable-next-line require-jsdoc
+  /**
+   * Visit a TacArg type.
+   * @param {TacArg} term - a TacArg term
+   */
   visitTacArg(term: TacArg): void {
-    // TODO
+    throw new Error('Method not implemented.');
   }
 
-  // eslint-disable-next-line require-jsdoc
+  /**
+   * Visit a TacCall type.
+   * @param {TacCall} term - a TacCall term
+   */
   visitTacCall(term: TacCall): void {
-    // TODO
+    throw new Error('Method not implemented.');
   }
 
-  // eslint-disable-next-line require-jsdoc
+  /**
+   * Visit a IntroNaming type.
+   * @param {IntroNaming} term - a IntroNaming term
+   */
   visitIntroNaming(term: IntroNaming): void {
     // TODO
   }
 
-  // eslint-disable-next-line require-jsdoc
+  /**
+   * Visit a IntroIdentifier type.
+   * @param {IntroIdentifier} term - a IntroIdentifier term
+   */
   visitIntroIdentifier(term: IntroIdentifier): void {
-    // TODO
+    // No location info
   }
 
   /**
@@ -276,6 +321,7 @@ class FlattenVisitor implements ASTVisitor {
    */
   visitSerQualid(term: SerQualid): void {
     // No location provided
+    console.log(`${term.constructor.name} has no LocInfo present. Skipping...`);
   }
 
   /**
@@ -307,9 +353,7 @@ class FlattenVisitor implements ASTVisitor {
    * @param {VernacEndProof} term - a VernacEndProof term
    */
   visitVernacEndProof(term: VernacEndProof): void {
-    // can be empty
-    // console.log('vEndproof', term);
-    // throw Error(term);
+    console.log(`Skipping ${term.constructor.name}...`);
   }
 
   /**
@@ -325,7 +369,7 @@ class FlattenVisitor implements ASTVisitor {
    * @param {VernacExtend} term - a VernacExtend term
    */
   visitVernacExtend(term: VernacExtend): void {
-    // TODO handle VernacExtend
+    console.log(`Skipping ${term.constructor.name}...`);
   }
 
   /**
@@ -334,6 +378,7 @@ class FlattenVisitor implements ASTVisitor {
    */
   visitVernacHints(term: VernacHints): void {
     // Doesn't have a location, ignore.
+    console.log(`${term.constructor.name} has no LocInfo present. Skipping...`);
   }
 
   /**
@@ -342,6 +387,7 @@ class FlattenVisitor implements ASTVisitor {
    */
   visitVernacProof(term: VernacProof): void {
     // console.log('Visit vernac proof is empty, skipping', term);
+    console.log(`${term.constructor.name} has no LocInfo present. Skipping...`);
   }
 
   /**
@@ -366,14 +412,6 @@ class FlattenVisitor implements ASTVisitor {
     if ( proofExprs[1]?.data != null) {
       this._state.push([proofExprs[1]?.data.locinfo,
         proofExprs[1]?.data.content.constructor.name]);
-
-      // const exprList = proofExprs[1]?.data.content.constrNotationSubstitution
-      //     .exprList;
-      // if (exprList != null) {
-      //   exprList.forEach((exp) => {
-      //     this._state.push([exp.locinfo, exp.content.notation]);
-      //   });
-      // }
     }
   }
 
