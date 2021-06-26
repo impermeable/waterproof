@@ -4,7 +4,7 @@ import LocInfo from './LocInfo';
 import ASTVisitor from './visitor/ASTVisitor';
 
 /**
- * Class to  represent a Coq CNotation type
+ * A JavaScript equivalent of a Coq CNotation object.
  * @see https://coq.github.io/doc/v8.12/api/coq/Constrexpr/index.html#type-constr_expr_r.CNotation
  */
 class CNotation extends CoqType {
@@ -17,7 +17,6 @@ class CNotation extends CoqType {
    * @param {Array} array the array to be parsed
    */
   constructor( array ) {
-    // TODO not sure what array[1] is
     super(array);
     this.notation = convertToASTComp(array[2]);
 
@@ -32,10 +31,14 @@ class CNotation extends CoqType {
       locinfo: new LocInfo(['loc', el.loc]),
       content: convertToASTComp(el.v),
     }));
-    // this.notation = array[1];
   }
 
-  // eslint-disable-next-line require-jsdoc
+  /**
+   * Pretty print the current type.
+   * @param {number} indent current indentation
+   * @return {string} representation of the current type with indentation
+   * added to the front
+   */
   pprint(indent = 0): string {
     const tab = '\n'.concat('\t'.repeat(indent + 1));
     let output = '';
@@ -50,10 +53,14 @@ class CNotation extends CoqType {
           this.constrNotationSubstitution['exprList'][i].content, indent));
     }
     return this.sprintf(super.pprint(indent), output);
-    // throw new Error('Method not implemented.');
   }
 
-  // eslint-disable-next-line require-jsdoc
+  /**
+   * Allows an ASTVisitor to traverse the current type
+   * (part of the visitor pattern)
+   * @param {ASTVisitor} v the visitor requiring
+   * access to content of the current type
+   */
   accept(v: ASTVisitor): void {
     v.visitCNotation(this);
   }

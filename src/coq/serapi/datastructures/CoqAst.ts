@@ -13,34 +13,39 @@ class CoqAST extends CoqType implements Visitable {
   /**
    * Construct CoqAST object from array containing the
    * AST information given back by serAPI.
-   * @param {*} array The array with the CoqAST information
+   * @param {Array} array The array with the CoqAST information
    */
   constructor( array ) {
     super(array);
-    // this.representation = convertSexpToString(array, 0, '');
     this.locinfo = new LocInfo(array[1][1]);
     this.content = convertToASTComp(array[1][0]);
   }
 
-  // eslint-disable-next-line require-jsdoc
-  accept(visitor: ASTVisitor): void {
-    // throw new Error('Method not implemented.');
-    visitor.visitCoqAst(this);
-    if (!Array.isArray(this.content)) {
-      (this.content).accept(visitor);
-    }
-  }
-
-  // eslint-disable-next-line require-jsdoc
+  /**
+   * Pretty print the current type.
+   * @param {number} indent current indentation
+   * @return {string} representation of the current type with indentation
+   * added to the front
+   */
   pprint(indent = 0): string {
-    // (could be null or something)
-    // Call the method to pprint on the child(ren)
     const tab = '\n'.concat('\t'.repeat(indent + 1));
     let output = '';
     output = output.concat('Loc: ', this.locinfo.pprint(indent+1), tab);
     output = output.concat(this.cprint(this.content, indent));
     return this.sprintf(super.pprint(indent), output);
-    //  return `(${this.constructor.name}\n\t(TODO)\n)\n`;
+  }
+
+  /**
+   * Allows an ASTVisitor to traverse the current type
+   * (part of the visitor pattern)
+   * @param {ASTVisitor} visitor the visitor requiring
+   * access to content of the current type
+   */
+  accept(visitor: ASTVisitor): void {
+    visitor.visitCoqAst(this);
+    if (!Array.isArray(this.content)) {
+      (this.content).accept(visitor);
+    }
   }
 }
 

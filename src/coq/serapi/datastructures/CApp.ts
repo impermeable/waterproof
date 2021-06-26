@@ -5,6 +5,7 @@ import LocInfo from './LocInfo';
 import ASTVisitor from './visitor/ASTVisitor';
 
 /**
+ * A JavaScript equivalent of a Coq CApp object.
  * @see https://coq.github.io/doc/v8.12/api/coq/Constrexpr/index.html#type-constr_expr_r.CApp
  */
 class CApp extends CoqType {

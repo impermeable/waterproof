@@ -1,12 +1,17 @@
-/* eslint-disable require-jsdoc */
 import CoqType from './CoqType';
 import ASTVisitor from './visitor/ASTVisitor';
 
+/**
+ * A JavaScript equivalent of a Coq KerName object.
+ */
 class KerName extends CoqType {
-//   MPfile: any;
   Id: string;
   type: string;
 
+  /**
+   * Constructor for KerName type.
+   * @param {array} array Array to parse
+   */
   constructor( array ) {
     super(array);
     const temp = array[2][1].toString().replaceAll('_', '').split('#');
@@ -14,16 +19,26 @@ class KerName extends CoqType {
     this.type = temp[0];
   }
 
+  /**
+   * Pretty print the current type.
+   * @param {number} indent current indentation
+   * @return {string} representation of the current type with indentation
+   * added to the front
+   */
   pprint(indent = 0): string {
     const tab = '\n'.concat('\t'.repeat(indent + 1));
     let output = '';
-    // output = output.concat('MPfile: ', this.MPfile.toString(), tab);
     output = output.concat('Id: ', this.Id, tab);
     output = output.concat('Type: ', this.type, tab);
     return this.sprintf(super.pprint(indent), output);
-    // throw new Error('Method not implemented.');
   }
 
+  /**
+   * Allows an ASTVisitor to traverse the current type
+   * (part of the visitor pattern)
+   * @param {ASTVisitor} v the visitor requiring
+   * access to content of the current type
+   */
   accept(v: ASTVisitor) : void {
     v.visitKerName(this);
   }

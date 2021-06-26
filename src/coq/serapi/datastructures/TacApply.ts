@@ -1,15 +1,21 @@
-/* eslint-disable require-jsdoc */
 import {convertToASTComp} from '../ASTProcessor';
 import CoqType from './CoqType';
 import LocInfo from './LocInfo';
 import ASTVisitor from './visitor/ASTVisitor';
 
+/**
+ * A JavaScript equivalent of a Coq TacApply object.
+ */
 class TacApply extends CoqType {
   arg1: boolean;
   arg2: boolean;
   content: any;
   locinfo: LocInfo;
 
+  /**
+   * Constructor for the TacApply type.
+   * @param {Array} array Array to parse.
+   */
   constructor( array ) {
     super(array);
     this.arg1 = ('true' === array[1].toString());
@@ -18,6 +24,12 @@ class TacApply extends CoqType {
     this.content = convertToASTComp(array[3][0][1][0]['v']);
   }
 
+  /**
+   * Pretty print the current type.
+   * @param {number} indent current indentation
+   * @return {string} representation of the current type with indentation
+   * added to the front
+   */
   pprint(indent = 0): string {
     const tab = '\n'.concat('\t'.repeat(indent + 1));
     let output = '';
@@ -25,9 +37,14 @@ class TacApply extends CoqType {
         tab);
     output = output.concat(this.cprint(this.content, indent));
     return this.sprintf(super.pprint(indent), output);
-    // throw new Error('Method not implemented.');
   }
 
+  /**
+   * Allows an ASTVisitor to traverse the current type
+   * (part of the visitor pattern)
+   * @param {ASTVisitor} v the visitor requiring
+   * access to content of the current type
+   */
   accept(v: ASTVisitor) : void {
     v.visitTacApply(this);
     if (!Array.isArray(this.content)) {

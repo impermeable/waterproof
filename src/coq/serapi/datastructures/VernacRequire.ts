@@ -1,24 +1,25 @@
-/* eslint-disable require-jsdoc */
-/* eslint-disable camelcase */
 import {convertToASTComp} from '../ASTProcessor';
 import CoqType, {Visitable} from './CoqType';
 import LocInfo from './LocInfo';
 import ASTVisitor from './visitor/ASTVisitor';
 
 /**
- * Class to represent a Coq VernacRequire type.
+ * A JavaScript equivalent of a Coq VernacRequire object.
  * @see https://coq.github.io/doc/v8.12/api/coq/Vernacexpr/index.html#type-vernac_expr.VernacRequire
  */
 class VernacRequire extends CoqType implements Visitable {
   qualid: any;
-  export_flag: boolean;
+  exportFlag: boolean;
   list: any;
-  // eslint-disable-next-line require-jsdoc
+
+  /**
+   * Constructor for the VernacRequire type.
+   * @param {array} array Array to parse
+   */
   constructor( array ) {
     super(array);
-    // console.log('VernacRequire', (JSON.stringify(array[3])));
     this.qualid = array[1];
-    this.export_flag = array[2] === 'true';
+    this.exportFlag = array[2] === 'true';
     this.list = array[3].map((el) => {
       return {
         locinfo: new LocInfo(['loc', el.loc]),
@@ -37,7 +38,7 @@ class VernacRequire extends CoqType implements Visitable {
     const tab = '\n'.concat('\t'.repeat(indent+1));
     let output = '';
     output = output.concat('Qualid: ', this.qualid.toString(), tab);
-    output = output.concat('Flag: ', this.export_flag.toString(), tab);
+    output = output.concat('Flag: ', this.exportFlag.toString(), tab);
     for (let i = 0; i < this.list.length; i++) {
       output = output.concat('Loc: ', this.list[i].locinfo.pprint(indent+1),
           tab);

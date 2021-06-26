@@ -1,5 +1,4 @@
 /* eslint-disable no-unused-vars */
-/* eslint-disable require-jsdoc */
 import {convertToASTComp} from '../ASTProcessor';
 import CoqType, {Visitable} from './CoqType';
 import LocInfo from './LocInfo';
@@ -21,12 +20,20 @@ enum DefinitionObjectKind {
   Let = 'Let',
 }
 
+/**
+ * A JavaScript equivalent of a Coq VernacDefinition object.
+ * @see https://coq.github.io/doc/v8.12/api/coq/Vernacexpr/index.html#type-vernac_expr.VernacDefinition
+ */
 class VernacDefinition extends CoqType implements Visitable {
   discharge: boolean;
   defintionObjectKind: DefinitionObjectKind;
   nameDecl: { name: { locinfo: LocInfo; content: any; }; options: any; };
   defitionExpr: any;
 
+  /**
+   * Constructor for the VernacDefinition type
+   * @param {Array} array Array to parse
+   */
   constructor( array ) {
     super(array);
 
@@ -41,7 +48,6 @@ class VernacDefinition extends CoqType implements Visitable {
       options: array[2][1],
     };
 
-    // ProofBody | DefineBody
     this.defitionExpr = convertToASTComp(array[3]);
   }
 
@@ -62,7 +68,6 @@ class VernacDefinition extends CoqType implements Visitable {
     output = output.concat('\t', this.cprint(this.nameDecl.name.content,
         indent+2));
     return this.sprintf(super.pprint(indent), output);
-    // throw new Error('Method not implemented.');
   }
 
   /**
@@ -73,7 +78,6 @@ class VernacDefinition extends CoqType implements Visitable {
    */
   accept(visitor: ASTVisitor) {
     visitor.visitVernacDefinition(this);
-    // visitor.visitCNotation(this.);
   }
 }
 

@@ -1,12 +1,18 @@
-/* eslint-disable require-jsdoc */
-
 import {convertToASTComp} from '../ASTProcessor';
 import CoqType from './CoqType';
 import LocInfo from './LocInfo';
 import ASTVisitor from './visitor/ASTVisitor';
 
+/**
+ * A JavaScript equivalent of a Coq HintsResolve object.
+ */
 class HintsResolve extends CoqType {
   hintList: any;
+
+  /**
+   * Constructor for HintsResolve type.
+   * @param {array} array Array to parse
+   */
   constructor( array ) {
     super(array);
     this.hintList = array[1].map((el) => {
@@ -18,6 +24,12 @@ class HintsResolve extends CoqType {
     });
   }
 
+  /**
+   * Pretty print the current type.
+   * @param {number} indent current indentation
+   * @return {string} representation of the current type with indentation
+   * added to the front
+   */
   pprint(indent = 0): string {
     const tab = '\n'.concat('\t'.repeat(indent+1));
     let output = '';
@@ -39,15 +51,29 @@ class HintsResolve extends CoqType {
   }
 }
 
+/**
+ * A JavaScript equivalent of a Coq HintsResolve object.
+ */
 export class HintsReference extends CoqType {
   locinfo: any;
   content: any;
+
+  /**
+   * Constructor for HintsReference type.
+   * @param {array} array Array to parse
+   */
   constructor( array ) {
     super(array);
     this.locinfo = new LocInfo(['loc', array[1].loc]);
     this.content = convertToASTComp(array[1].v);
   }
 
+  /**
+   * Pretty print the current type.
+   * @param {number} indent current indentation
+   * @return {string} representation of the current type with indentation
+   * added to the front
+   */
   pprint(indent = 0): string {
     const tab = '\n'.concat('\t'.repeat(indent+1));
     let output = '';

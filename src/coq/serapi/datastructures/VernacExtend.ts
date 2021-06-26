@@ -1,22 +1,20 @@
-/* eslint-disable require-jsdoc */
 import {convertToASTComp} from '../ASTProcessor';
 import CoqType, {Visitable} from './CoqType';
 import ASTVisitor from './visitor/ASTVisitor';
 
 /**
- * A JavaScript equivalent of a Coq VernacExtend object
+ * A JavaScript equivalent of a Coq VernacExtend object.
+ * @see https://coq.github.io/doc/v8.12/api/coq/Vernacexpr/index.html#type-vernac_expr.VernacExtend
  */
 class VernacExtend extends CoqType implements Visitable {
   data: any;
+
   /**
-   * Construct a VernacExtend object from a nested array
-   * with the representation of the object
-   * @param {Array} array Array as parsed from SerAPI message
+   * Construct for the VernacExtend type
+   * @param {Array} array Array to parse
    */
   constructor( array ) {
     super(array);
-    // console.log('In the constructor of VernacExtend...');
-    // TODO fixme - use convertToAstComp
     const list = array[2];
     this.data = [];
     for (let i = 0; i < list.length; i++) {
@@ -31,6 +29,7 @@ class VernacExtend extends CoqType implements Visitable {
       }
     }
   }
+
   /**
    * Pretty print the current type.
    * @param {number} indent current indentation
@@ -38,7 +37,6 @@ class VernacExtend extends CoqType implements Visitable {
    * added to the front
    */
   pprint(indent = 0) {
-    // const tab = '\n'.concat('\t'.repeat(indent+1));
     let output = '';
     for (let i = 0; i < this.data.length; i++) {
       output = output.concat(this.cprint(this.data[i], indent));

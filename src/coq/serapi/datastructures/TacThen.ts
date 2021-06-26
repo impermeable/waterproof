@@ -1,11 +1,17 @@
-/* eslint-disable require-jsdoc */
 import {convertToASTComp} from '../ASTProcessor';
 import CoqType from './CoqType';
 import ASTVisitor from './visitor/ASTVisitor';
 
+/**
+ * A JavaScript equivalent of a Coq TacThen object.
+ */
 class TacThen extends CoqType {
   content: any;
 
+  /**
+   * Constructor for the TacThen type.
+   * @param {Array} array Array to be parsed.
+   */
   constructor( array ) {
     super(array);
     this.content = [];
@@ -14,16 +20,26 @@ class TacThen extends CoqType {
     }
   }
 
+  /**
+   * Pretty print the current type.
+   * @param {number} indent current indentation
+   * @return {string} representation of the current type with indentation
+   * added to the front
+   */
   pprint(indent = 0): string {
-    // const tab = '\n'.concat('\t'.repeat(indent + 1));
     let output = '';
     for (let i = 0; i < this.content.length; i++) {
       output = output.concat(this.cprint(this.content[i], indent));
     }
     return this.sprintf(super.pprint(indent), output);
-    // throw new Error('Method not implemented.');
   }
 
+  /**
+   * Allows an ASTVisitor to traverse the current type
+   * (part of the visitor pattern)
+   * @param {ASTVisitor} v the visitor requiring
+   * access to content of the current type
+   */
   accept(v: ASTVisitor) : void {
     v.visitTacThen(this);
     for (let i = 0; i < this.content.length; i++) {

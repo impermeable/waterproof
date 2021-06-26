@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 import CoqType from './CoqType';
 
 const flatten = require('../flatten-expr').flatten;
@@ -9,10 +8,10 @@ const flatten = require('../flatten-expr').flatten;
  */
 class LocInfo extends CoqType {
   fname: string;
-  line_nb: number;
-  bol_pos: number;
-  line_nb_last: number;
-  bol_pos_last: number;
+  lineNb: number;
+  bolPos: number;
+  lineNbLast: number;
+  bolPosLast: number;
   bp: number;
   ep: number;
 
@@ -32,27 +31,31 @@ class LocInfo extends CoqType {
     }
 
     this.fname = result.fname;
-    this.line_nb = result.line_nb;
-    this.bol_pos = result.bol_pos;
-    this.line_nb_last = result.line_nb_last;
-    this.bol_pos_last = result.bol_pos_last;
+    this.lineNb = result.line_nb;
+    this.bolPos = result.bol_pos;
+    this.lineNbLast = result.line_nb_last;
+    this.bolPosLast = result.bol_pos_last;
     this.bp = result.bp;
     this.ep = result.ep;
   }
 
-  // eslint-disable-next-line require-jsdoc
+  /**
+   * Pretty print the current type.
+   * @param {number} indent current indentation
+   * @return {string} representation of the current type with indentation
+   * added to the front
+   */
   pprint(indent = 0): string {
     const tab = '\n'.concat('\t'.repeat(indent + 1));
     let output = '';
     output = output.concat('Name: ', this.fname, tab);
-    output = output.concat('Start line: ', this.line_nb.toString(), tab);
-    output = output.concat('Start pos: ', this.bol_pos.toString(), tab);
-    output = output.concat('End line: ', this.line_nb_last.toString(), tab);
-    output = output.concat('End pos: ', this.bol_pos_last.toString(), tab);
+    output = output.concat('Start line: ', this.lineNb.toString(), tab);
+    output = output.concat('Start pos: ', this.bolPos.toString(), tab);
+    output = output.concat('End line: ', this.lineNbLast.toString(), tab);
+    output = output.concat('End pos: ', this.bolPosLast.toString(), tab);
     output = output.concat('Bp: ', this.bp.toString(), tab);
     output = output.concat('Ep: ', this.ep.toString(), tab);
     return this.sprintf(super.pprint(indent), output);
-    // throw new Error('Method not implemented.');
   }
 }
 

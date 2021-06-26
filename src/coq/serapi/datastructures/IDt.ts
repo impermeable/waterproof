@@ -1,9 +1,16 @@
-/* eslint-disable require-jsdoc */
 import CoqType from './CoqType';
 import ASTVisitor from './visitor/ASTVisitor';
 
+/**
+ * A JavaScript equivalent of a Coq IDt object.
+ */
 class IDt extends CoqType {
   name: any;
+
+  /**
+   * Constructor for IDt type.
+   * @param {array} array Array to parse
+   */
   constructor( array ) {
     super(array);
     if (typeof array[1] === 'string') {
@@ -13,6 +20,12 @@ class IDt extends CoqType {
     }
   }
 
+  /**
+   * Pretty print the current type.
+   * @param {number} indent current indentation
+   * @return {string} representation of the current type with indentation
+   * added to the front
+   */
   pprint(indent = 0): string {
     const tab = '\n'.concat('\t'.repeat(indent+1));
     let output = '';

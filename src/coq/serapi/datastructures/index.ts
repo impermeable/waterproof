@@ -1,4 +1,3 @@
-// import CApp from {}
 import CApp from './CApp';
 import CLambdaN from './CLambdaN';
 import CLocalAssum from './CLocalAssum';
@@ -52,6 +51,4 @@ export default {
   VernacProof,
   VernacRequire,
   VernacStartTheoremProof,
-  // GenArg,
-  // VernacSolve,
 };

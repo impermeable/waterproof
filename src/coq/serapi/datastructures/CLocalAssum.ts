@@ -4,11 +4,19 @@ import CoqType from './CoqType';
 import LocInfo from './LocInfo';
 import ASTVisitor from './visitor/ASTVisitor';
 
+/**
+ * A JavaScript equivalent of a Coq CLocalAssum object.
+ * @see https://coq.github.io/doc/v8.12/api/coq/Constrexpr/index.html#type-constr_expr_r.CLocalAssum
+ */
 class CLocalAssum extends CoqType {
   names: any;
   binderKind: any;
   expr: { locinfo: LocInfo; content: any; };
 
+  /**
+   * Constructor for CLocalAssum type.
+   * @param {array} array Array to parse
+   */
   constructor( array ) {
     super(array);
     console.warn('CLocalAssum', array);
@@ -23,10 +31,12 @@ class CLocalAssum extends CoqType {
     };
   }
 
-  accept(v: ASTVisitor): void {
-    v.visitCLocalAssum(this);
-  }
-
+  /**
+   * Pretty print the current type.
+   * @param {number} indent current indentation
+   * @return {string} representation of the current type with indentation
+   * added to the front
+   */
   pprint(indent = 0): string {
     const tab = '\n'.concat('\t'.repeat(indent + 1));
     let output = '';
@@ -39,6 +49,16 @@ class CLocalAssum extends CoqType {
     output = output.concat('Loc: ', this.expr.locinfo.pprint(indent + 1), tab);
     output = output.concat(this.cprint(this.expr.content, indent));
     return this.sprintf(super.pprint(indent), output);
+  }
+
+  /**
+   * Allows an ASTVisitor to traverse the current type
+   * (part of the visitor pattern)
+   * @param {ASTVisitor} v the visitor requiring
+   * access to content of the current type
+   */
+  accept(v: ASTVisitor): void {
+    v.visitCLocalAssum(this);
   }
 }
 

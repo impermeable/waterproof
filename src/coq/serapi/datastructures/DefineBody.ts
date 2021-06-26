@@ -1,15 +1,21 @@
-/* eslint-disable require-jsdoc */
 import {convertToASTComp} from '../ASTProcessor';
 import CoqType from './CoqType';
 import LocInfo from './LocInfo';
 import ASTVisitor from './visitor/ASTVisitor';
 
+/**
+ * A JavaScript equivalent of a Coq DefineBody object.
+ */
 class DefineBody extends CoqType {
   localExprList: any;
   rawRedExprOption: any;
   expr: { locinfo: LocInfo; content: any; };
   exprOption: any;
 
+  /**
+   * Constructor for DefineBody type.
+   * @param {array} array Array to parse
+   */
   constructor( array ) {
     super(array);
     this.localExprList = array[1];
@@ -21,6 +27,12 @@ class DefineBody extends CoqType {
     this.exprOption = array[4];
   }
 
+  /**
+   * Pretty print the current type.
+   * @param {number} indent current indentation
+   * @return {string} representation of the current type with indentation
+   * added to the front
+   */
   pprint(indent = 0): string {
     const tab = '\n'.concat('\t'.repeat(indent + 1));
     let output = '';
@@ -30,7 +42,6 @@ class DefineBody extends CoqType {
     output = output.concat(this.cprint(this.expr.content, indent));
     output = output.concat('Expr option: ', this.exprOption.toString(), tab);
     return this.sprintf(super.pprint(indent), output);
-    // throw new Error('Method not implemented.');
   }
 
   /**
