@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import CApp from '../CApp';
 import CLambdaN from '../CLambdaN';
 import CLocalAssum from '../CLocalAssum';
@@ -63,8 +64,8 @@ class FlattenVisitor implements ASTVisitor {
    * @param {CoqAst} term - a CoqAST term
    */
   visitCoqType(term: CoqType): void {
-    const className = term.constructor.name;
-    throw new Error(`Method not implemented for type of ${className}.`);
+    // const className = term.constructor.name;
+    // throw new Error(`Method not implemented for type of ${className}.`);
   }
 
   /**
@@ -182,7 +183,11 @@ class FlattenVisitor implements ASTVisitor {
    * @param {TacAlias} term - a TacAlias term
    */
   visitTacAlias(term: TacAlias): void {
-    this._state.push([term.locinfo, term.constructor.name]);
+    if (term.content instanceof KerName) {
+      this._state.push([term.locinfo, term.content.type]);
+    } else {
+      this._state.push([term.locinfo, term.constructor.name]);
+    }
   }
 
   /**
@@ -216,7 +221,7 @@ class FlattenVisitor implements ASTVisitor {
    * @param {TacReduce} term - a TacReduce term
    */
   visitTacReduce(term: TacReduce): void {
-    throw new Error('Method not implemented.');
+    // throw new Error('Method not implemented.');
   }
 
   /**
@@ -224,7 +229,7 @@ class FlattenVisitor implements ASTVisitor {
    * @param {TacticDefinition} term - a TacticDefinition term
    */
   visitTacticDefinition(term: TacticDefinition): void {
-    throw new Error('Method not implemented.');
+    // throw new Error('Method not implemented.');
   }
 
   /**
@@ -248,7 +253,7 @@ class FlattenVisitor implements ASTVisitor {
    * @param {TacIntroPattern} term - a TacIntroPattern term
    */
   visitTacIntroPattern(term: TacIntroPattern): void {
-    throw new Error('Method not implemented.');
+    // throw new Error('Method not implemented.');
   }
 
   /**
@@ -256,7 +261,7 @@ class FlattenVisitor implements ASTVisitor {
    * @param {TacRewrite} term - a TacRewrite term
    */
   visitTacRewrite(term: TacRewrite): void {
-    throw new Error('Method not implemented.');
+    // throw new Error('Method not implemented.');
   }
 
   /**
@@ -264,7 +269,7 @@ class FlattenVisitor implements ASTVisitor {
    * @param {TacArg} term - a TacArg term
    */
   visitTacArg(term: TacArg): void {
-    throw new Error('Method not implemented.');
+    // throw new Error('Method not implemented.');
   }
 
   /**
@@ -272,7 +277,7 @@ class FlattenVisitor implements ASTVisitor {
    * @param {TacCall} term - a TacCall term
    */
   visitTacCall(term: TacCall): void {
-    throw new Error('Method not implemented.');
+    // throw new Error('Method not implemented.');
   }
 
   /**
@@ -296,7 +301,7 @@ class FlattenVisitor implements ASTVisitor {
    * @param {IDt} term - a IDt term
    */
   visitIDt(term: IDt): void {
-    throw new Error('Method not implemented.');
+    // throw new Error('Method not implemented.');
   }
 
   /**
@@ -304,7 +309,7 @@ class FlattenVisitor implements ASTVisitor {
    * @param {InConstrEntry} term - a InConstrEntry term
    */
   visitInConstrEntry(term: InConstrEntry): void {
-    throw new Error('Method not implemented.');
+    // throw new Error('Method not implemented.');
   }
 
   /**
@@ -312,7 +317,7 @@ class FlattenVisitor implements ASTVisitor {
    * @param {LocInfo} term - a LocInfo term
    */
   visitLocInfo(term: LocInfo): void {
-    throw new Error('Method not implemented.');
+    // throw new Error('Method not implemented.');
   }
 
   /**
@@ -361,7 +366,7 @@ class FlattenVisitor implements ASTVisitor {
    * @param {VernacExpr} term - a VernacExpr term
    */
   visitVernacExpr(term: VernacExpr): void {
-    throw new Error('Method not implemented.');
+    // throw new Error('Method not implemented.');
   }
 
   /**
