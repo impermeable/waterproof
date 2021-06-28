@@ -9,7 +9,7 @@ import ASTVisitor from './visitor/ASTVisitor';
  * @see https://coq.github.io/doc/v8.12/api/coq/Constrexpr/index.html#type-constr_expr_r.CApp
  */
 class CApp extends CoqType {
-  [x: string]: any;
+  list: { option: any, expr: { locinfo: LocInfo, content: any}}[];
   first: { projFlag: any; expr: { locinfo: LocInfo; content: any; }; };
   constructor( array ) {
     super(array);
@@ -40,8 +40,8 @@ class CApp extends CoqType {
         indent + 1), tab);
     output = output.concat(this.cprint(this.first.expr.content, indent));
     for (let i = 0; i < this.list.length; i++) {
-      output = output.concat('Loc: ', this.list[i].locinfo.pprint(indent + 1),
-          tab);
+      output = output.concat('Loc: ', this.list[i].expr.locinfo
+          .pprint(indent + 1), tab);
       output = output.concat(this.cprint(this.list[i].expr.content, indent));
     }
     return super.sprintf(super.pprint(indent), output);

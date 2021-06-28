@@ -8,7 +8,6 @@ import ASTVisitor from './visitor/ASTVisitor';
 class VernacProof extends CoqType implements Visitable {
   sectionSubsetExpr: any;
   rawGenericArg: any;
-  // TODO: check why this crap is always empty...
 
   /**
    * Constructor for the VernacProof type.

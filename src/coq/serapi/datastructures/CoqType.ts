@@ -37,8 +37,17 @@ abstract class CoqType implements Visitable {
    */
   sprintf(format, ...args): string {
     let i = 0;
+    if (args.length === 0) {
+      return format;
+    }
+    let skip = false;
     return format.replace(/%s/g, function() {
-      return args[i++];
+      if (!skip && args[i] !== undefined) {
+        return args[i++];
+      } else {
+        skip = true;
+        return '%s';
+      }
     });
   }
 
@@ -70,6 +79,10 @@ abstract class CoqType implements Visitable {
   }
 }
 
+/**
+ * Visitable interface, implemented
+ * by all traverse-able subtypes of {CoqType}
+ */
 export interface Visitable {
   accept(visitor: ASTVisitor) : void;
 }

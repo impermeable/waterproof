@@ -17,7 +17,6 @@ class CProdN extends CoqType {
    */
   constructor( array ) {
     super(array);
-    console.warn('CProdN', array);
     this.localExprs = array[1].map((e) => convertToASTComp(e));
     this.expr = {
       locinfo: new LocInfo(['loc', array[2].loc]),

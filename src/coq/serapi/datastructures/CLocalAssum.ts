@@ -19,7 +19,6 @@ class CLocalAssum extends CoqType {
    */
   constructor( array ) {
     super(array);
-    console.warn('CLocalAssum', array);
     this.names = array[1].map((name) => ({
       locinfo: new LocInfo(['loc', name.loc]),
       content: convertToASTComp(name.v),
