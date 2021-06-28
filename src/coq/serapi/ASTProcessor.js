@@ -19,12 +19,10 @@ import CoqAST from './datastructures/CoqAst';
 import VernacExpr from './datastructures/VernacExpr';
 import VernacExtend, {GenArg, VernacSolve} from './datastructures/VernacExtend';
 import VernacProof from './datastructures/VernacProof';
-// import CoqType from './datastructures/CoqType';
 import GenericVType from './datastructures/GenericVType';
 import VernacAssumption from './datastructures/VernacAssumption';
 
 import VernacOpenCloseScope from './datastructures/VernacOpenCloseScope';
-// import TacAlias from './dataqstructures/TacAlias';
 import TacAlias from './datastructures/TacAlias';
 import TacAtom from './datastructures/TacAtom';
 import KerName from './datastructures/KerName';
@@ -39,7 +37,6 @@ import TacArg from './datastructures/TacArg';
 import TacCall from './datastructures/TacCall';
 import IntroNaming from './datastructures/IntroNaming';
 import IntroIdentifier from './datastructures/IntroIdentifier';
-// const flatten = require('./flatten-expr').flatten;
 
 /**
  * The ppDict assigns to every name of an object appearing in an AST a function
@@ -247,7 +244,6 @@ function convertToASTComp(array) {
       const ConstructorForObject = constrDict[array[0]];
       return new ConstructorForObject(array);
     } catch (e) {
-      console.log(e);
       // TODO: investigate
       if (array[0] === 'VernacDefinition') {
         return new VernacDefinition(array);
@@ -262,7 +258,6 @@ function convertToASTComp(array) {
       currentlyNotParsedTypes.set(array[0],
           currentlyNotParsedTypes.get(array[0]) + 1);
     }
-    // currentlyNotParsedTypes.add(array[0]);
   }
   return array;
 }

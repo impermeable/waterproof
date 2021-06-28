@@ -4,7 +4,6 @@ import ASTVisitor from './visitor/ASTVisitor';
  * Abstract class representing a generic type returned by SerApi
  */
 abstract class CoqType implements Visitable {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   /**
    * Constructor for abstract Coq type.
    * @param {Array} array Array to prarse.
@@ -32,7 +31,7 @@ abstract class CoqType implements Visitable {
   /**
    * Replaces the ith %s in format with args[i] for each i
    * @param {string} format A string with %s appearing args.length times
-   * @param {string} args list of string arguments
+   * @param {...string} args list of string arguments to put in place of %s
    * @return {string} format with each %s repalced by an element in args
    */
   sprintf(format, ...args): string {
@@ -53,7 +52,8 @@ abstract class CoqType implements Visitable {
 
   /**
    * Returns the pretty printer string for the Coq type child in content
-   * @param {CoqType} content A Coq type object
+   * @param {CoqType|Array} content A Coq type object or an array for an
+   * unknown type
    * @param {number} indent The amount of indent needed in the output
    * @return {string} pretty printed Coq Type starting with 'Content'
    */
@@ -61,9 +61,9 @@ abstract class CoqType implements Visitable {
     const tab = '\n'.concat('\t'.repeat(indent+1));
     let output = 'Content: ';
     if (!Array.isArray(content)) {
-      output = output.concat(content.pprint(indent+1), tab);
+      output = output.concat(content.pprint(indent+1));
     } else {
-      output = output.concat(tab, '\t', content.toString(), tab);
+      output = output.concat(tab, '\t', content.toString());
     }
     return output;
   }
