@@ -1,25 +1,25 @@
 import {convertToASTComp} from '../ASTProcessor';
 import CoqType from './CoqType';
-import LocInfo from './LocInfo';
 import ASTVisitor from './visitor/ASTVisitor';
 
 /**
- * A JavaScript equivalent of a Coq TacticDefinition object.
+ * A JavaScript equivalent of a Coq TacFun object.
  */
-class TacticDefinition extends CoqType {
-  type: string;
+class TacFun extends CoqType {
   content: any;
-  locinfo: LocInfo;
+  name: string;
 
   /**
-   * Constructor for the TacticDefinition type.
-   * @param {Array} array Array to be parsed.
+   * Constructor for TacFun type.
+   * @param {array} array Array to parse
    */
   constructor( array ) {
     super(array);
-    this.type = array[1]['v'][1];
-    this.locinfo = new LocInfo(['loc', array[1]['loc'][0]]);
-    this.content = convertToASTComp(array[2]);
+    this.name = array[1][0]['Name'][1].toString();
+    this.content = [];
+    for (let i = 0; i < array[1].length - 1; i++) {
+      this.content.push(convertToASTComp(array[1][i+1]));
+    }
   }
 
   /**
@@ -31,11 +31,12 @@ class TacticDefinition extends CoqType {
   pprint(indent = 0): string {
     const tab = '\n'.concat('\t'.repeat(indent + 1));
     let output = '';
-    output = output.concat('Type: ', this.type, tab);
-    output = output.concat('Loc: ', this.locinfo.pprint(indent+1),
-        tab);
-    output = output.concat(this.cprint(this.content, indent));
+    output = output.concat('Name: ', this.name, tab);
+    for (let i = 0; i < this.content.length; i++) {
+      output = output.concat(this.cprint(this.content[i], indent));
+    }
     return this.sprintf(super.pprint(indent), output);
+    // throw new Error('Method not implemented.');
   }
 
   /**
@@ -45,12 +46,14 @@ class TacticDefinition extends CoqType {
    * access to content of the current type
    */
   accept(v: ASTVisitor) : void {
-    v.visitTacticDefinition(this);
-    if (!Array.isArray(this.content)) {
-      (this.content).accept(v);
+    v.visitTacFun(this);
+    for (let i = 0; i < this.content.length; i++) {
+      if (!Array.isArray(this.content[i])) {
+        (this.content[i]).accept(v);
+      }
     }
   }
 }
 
 /* istanbul ignore next */
-export default TacticDefinition;
+export default TacFun;

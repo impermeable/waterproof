@@ -31,6 +31,14 @@ import TacApply from '../TacApply';
 import ASTVisitor from './ASTVisitor';
 import TacReduce from '../TacReduce';
 import TacticDefinition from '../TacticDefinition';
+import TacFun from '../TacFun';
+import TacThen from '../TacThen';
+import TacIntroPattern from '../TacIntroPattern';
+import TacRewrite from '../TacRewrite';
+import TacArg from '../TacArg';
+import TacCall from '../TacCall';
+import IntroNaming from '../IntroNaming';
+import IntroIdentifier from '../IntroIdentifier';
 
 type LocData = [LocInfo, string];
 
@@ -55,8 +63,8 @@ class FlattenVisitor implements ASTVisitor {
    * @param {CoqAst} term - a CoqAST term
    */
   visitCoqType(term: CoqType): void {
-    const className = term.constructor.name;
-    throw new Error(`Method not implemented for type of ${className}.`);
+    // const className = term.constructor.name;
+    // throw new Error(`Method not implemented for type of ${className}.`);
   }
 
   /**
@@ -139,6 +147,7 @@ class FlattenVisitor implements ASTVisitor {
    */
   visitHintsResolve(term: HintsResolve): void {
     // no LocInfo present, skipping
+    console.log(`${term.constructor.name} has no LocInfo present. Skipping...`);
   }
 
   /**
@@ -150,7 +159,7 @@ class FlattenVisitor implements ASTVisitor {
   }
 
   /**
-   * Visit a HintsReference type.
+   * Visit a VernacAssumption type.
    * @param {VernacAssumption} term - a VernacAssumption term
    */
   visitVernacAssumption(term: VernacAssumption): void {
@@ -159,43 +168,134 @@ class FlattenVisitor implements ASTVisitor {
   }
 
 
-  // eslint-disable-next-line require-jsdoc
+  /**
+   * Visit a VernacOpenCloseScope type.
+   * @param {VernacOpenCloseScope} term - a VernacOpenCloseScope term
+   */
   visitVernacOpenCloseScope(term: VernacOpenCloseScope): void {
     // No location info
+    console.log(`${term.constructor.name} has no LocInfo present. Skipping...`);
   }
 
   /**
-   * Visit a HintsReference type.
-   * @param {VernacAssumption} term - a VernacAssumption term
+   * Visit a TacAlias type.
+   * @param {TacAlias} term - a TacAlias term
    */
   visitTacAlias(term: TacAlias): void {
-    this._state.push([term.locinfo, term.constructor.name]);
+    if (term.content instanceof KerName) {
+      this._state.push([term.locinfo, term.content.type]);
+    } else {
+      this._state.push([term.locinfo, term.constructor.name]);
+    }
   }
 
-  // eslint-disable-next-line require-jsdoc
+  /**
+   * Visit a KerName type.
+   * @param {KerName} term - a KerName term
+   */
   visitKerName(term: KerName): void {
     // No location info
+    console.log(`${term.constructor.name} has no LocInfo present. Skipping...`);
   }
 
-  // eslint-disable-next-line require-jsdoc
+  /**
+   * Visit a TacAtom type.
+   * @param {TacAtom} term - a TacAtom term
+   */
   visitTacAtom(term: TacAtom): void {
-    console.log('tacatom');
     this._state.push([term.locinfo, term.constructor.name]);
   }
 
-  // eslint-disable-next-line require-jsdoc
+  /**
+   * Visit a TacApply type.
+   * @param {TacApply} term - a TacApply term
+   */
   visitTacApply(term: TacApply): void {
     this._state.push([term.locinfo, term.constructor.name]);
   }
 
-  // eslint-disable-next-line require-jsdoc
+  /**
+   * Visit a TacReduce type.
+   * @param {TacReduce} term - a TacReduce term
+   */
   visitTacReduce(term: TacReduce): void {
+    // throw new Error('Method not implemented.');
+  }
+
+  /**
+   * Visit a TacticDefinition type.
+   * @param {TacticDefinition} term - a TacticDefinition term
+   */
+  visitTacticDefinition(term: TacticDefinition): void {
+    this._state.push([term.locinfo, term.constructor.name]);
+  }
+
+  /**
+   * Visit a TacFun type.
+   * @param {TacFun} term - a TacFun term
+   */
+  visitTacFun(term: TacFun): void {
     // TODO
   }
 
-  // eslint-disable-next-line require-jsdoc
-  visitTacticDefinition(term: TacticDefinition): void {
+  /**
+   * Visit a TacThen type.
+   * @param {TacThen} term - a TacThen term
+   */
+  visitTacThen(term: TacThen): void {
     // TODO
+  }
+
+  /**
+   * Visit a TacIntroPattern type.
+   * @param {TacIntroPattern} term - a TacIntroPattern term
+   */
+  visitTacIntroPattern(term: TacIntroPattern): void {
+    // throw new Error('Method not implemented.');
+  }
+
+  /**
+   * Visit a TacRewrite type.
+   * @param {TacRewrite} term - a TacRewrite term
+   */
+  visitTacRewrite(term: TacRewrite): void {
+    // throw new Error('Method not implemented.');
+  }
+
+  /**
+   * Visit a TacArg type.
+   * @param {TacArg} term - a TacArg term
+   */
+  visitTacArg(term: TacArg): void {
+    // throw new Error('Method not implemented.');
+  }
+
+  /**
+   * Visit a TacCall type.
+   * @param {TacCall} term - a TacCall term
+   */
+  visitTacCall(term: TacCall): void {
+    if ( term.content.constructor.name === 'SerQualid') {
+      this._state.push([term.locinfo, term.content.id]);
+    } else {
+      this._state.push([term.locinfo, term.constructor.name]);
+    }
+  }
+
+  /**
+   * Visit a IntroNaming type.
+   * @param {IntroNaming} term - a IntroNaming term
+   */
+  visitIntroNaming(term: IntroNaming): void {
+    // TODO
+  }
+
+  /**
+   * Visit a IntroIdentifier type.
+   * @param {IntroIdentifier} term - a IntroIdentifier term
+   */
+  visitIntroIdentifier(term: IntroIdentifier): void {
+    // No location info
   }
 
   /**
@@ -203,7 +303,7 @@ class FlattenVisitor implements ASTVisitor {
    * @param {IDt} term - a IDt term
    */
   visitIDt(term: IDt): void {
-    throw new Error('Method not implemented.');
+    // throw new Error('Method not implemented.');
   }
 
   /**
@@ -211,7 +311,7 @@ class FlattenVisitor implements ASTVisitor {
    * @param {InConstrEntry} term - a InConstrEntry term
    */
   visitInConstrEntry(term: InConstrEntry): void {
-    throw new Error('Method not implemented.');
+    // throw new Error('Method not implemented.');
   }
 
   /**
@@ -219,7 +319,7 @@ class FlattenVisitor implements ASTVisitor {
    * @param {LocInfo} term - a LocInfo term
    */
   visitLocInfo(term: LocInfo): void {
-    throw new Error('Method not implemented.');
+    // throw new Error('Method not implemented.');
   }
 
   /**
@@ -227,7 +327,8 @@ class FlattenVisitor implements ASTVisitor {
    * @param {SerQualid} term - a SerQualid term
    */
   visitSerQualid(term: SerQualid): void {
-    throw new Error('Method not implemented.');
+    // No location provided
+    console.log(`${term.constructor.name} has no LocInfo present. Skipping...`);
   }
 
   /**
@@ -259,9 +360,7 @@ class FlattenVisitor implements ASTVisitor {
    * @param {VernacEndProof} term - a VernacEndProof term
    */
   visitVernacEndProof(term: VernacEndProof): void {
-    // can be empty
-    // console.log('vEndproof', term);
-    // throw Error(term);
+    console.log(`Skipping ${term.constructor.name}...`);
   }
 
   /**
@@ -269,7 +368,7 @@ class FlattenVisitor implements ASTVisitor {
    * @param {VernacExpr} term - a VernacExpr term
    */
   visitVernacExpr(term: VernacExpr): void {
-    throw new Error('Method not implemented.');
+    // throw new Error('Method not implemented.');
   }
 
   /**
@@ -277,7 +376,7 @@ class FlattenVisitor implements ASTVisitor {
    * @param {VernacExtend} term - a VernacExtend term
    */
   visitVernacExtend(term: VernacExtend): void {
-    // TODO handle VernacExtend
+    console.log(`Skipping ${term.constructor.name}...`);
   }
 
   /**
@@ -286,6 +385,7 @@ class FlattenVisitor implements ASTVisitor {
    */
   visitVernacHints(term: VernacHints): void {
     // Doesn't have a location, ignore.
+    console.log(`${term.constructor.name} has no LocInfo present. Skipping...`);
   }
 
   /**
@@ -294,6 +394,7 @@ class FlattenVisitor implements ASTVisitor {
    */
   visitVernacProof(term: VernacProof): void {
     // console.log('Visit vernac proof is empty, skipping', term);
+    console.log(`${term.constructor.name} has no LocInfo present. Skipping...`);
   }
 
   /**

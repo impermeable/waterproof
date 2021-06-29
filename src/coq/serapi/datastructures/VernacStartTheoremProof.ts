@@ -14,14 +14,19 @@ enum TheoremKind {
   Corollary = 'Corollary',
 }
 
-// eslint-disable-next-line require-jsdoc
+/**
+ * A JavaScript equivalent of a Coq VernacStartTheoremProof object.
+ * @see https://coq.github.io/doc/v8.12/api/coq/Vernacexpr/index.html#type-vernac_expr.VernacStartTheoremProof
+ */
 class VernacStartTheoremProof extends CoqType
   implements Visitable {
   theoremKind: TheoremKind;
-  // proofExprs: [any, any];
   proofExprs: any[];
 
-  // eslint-disable-next-line require-jsdoc
+  /**
+   * Constructor for VeracStartTheoremProof type.
+   * @param {array} array Array to parse
+   */
   constructor( array ) {
     super(array);
     this.theoremKind = array[1];
@@ -41,7 +46,6 @@ class VernacStartTheoremProof extends CoqType
             ident: ident,
           };
         } else {
-          // console.warn('TODO: PARSE', id);
           result['unparsed'] = id.map((i) => convertToASTComp(i));
         }
       }
@@ -100,4 +104,5 @@ class VernacStartTheoremProof extends CoqType
   }
 }
 
+/* istanbul ignore next */
 export default VernacStartTheoremProof;

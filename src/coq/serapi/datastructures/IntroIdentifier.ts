@@ -2,21 +2,18 @@ import CoqType from './CoqType';
 import ASTVisitor from './visitor/ASTVisitor';
 
 /**
- * A JavaScript equivalent of a Coq KerName object.
+ * A JavaScript equivalent of a Coq IntroIdentifier object.
  */
-class KerName extends CoqType {
-  Id: string;
-  type: string;
+class IntroIdentifier extends CoqType {
+  id: string;
 
   /**
-   * Constructor for KerName type.
+   * Constructor for IntroIdentifier type.
    * @param {array} array Array to parse
    */
   constructor( array ) {
     super(array);
-    const temp = array[2][1].toString().split('#');
-    this.Id = temp[temp.length - 1].replace(/_/g, '');
-    this.type = temp[0].replace(/_/g, ' ');
+    this.id = array[1][1].toString();
   }
 
   /**
@@ -28,9 +25,9 @@ class KerName extends CoqType {
   pprint(indent = 0): string {
     const tab = '\n'.concat('\t'.repeat(indent + 1));
     let output = '';
-    output = output.concat('Id: ', this.Id, tab);
-    output = output.concat('Type: ', this.type, tab);
+    output = output.concat('Id: ', this.id, tab);
     return this.sprintf(super.pprint(indent), output);
+    // throw new Error('Method not implemented.');
   }
 
   /**
@@ -40,9 +37,9 @@ class KerName extends CoqType {
    * access to content of the current type
    */
   accept(v: ASTVisitor) : void {
-    v.visitKerName(this);
+    v.visitIntroIdentifier(this);
   }
 }
 
 /* istanbul ignore next */
-export default KerName;
+export default IntroIdentifier;

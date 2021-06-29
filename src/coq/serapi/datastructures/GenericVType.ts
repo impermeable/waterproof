@@ -3,26 +3,31 @@ import {flatten} from '../flatten-expr';
 import CoqType, {Visitable} from './CoqType';
 import ASTVisitor from './visitor/ASTVisitor';
 
-// eslint-disable-next-line require-jsdoc
+/**
+ * A JavaScript equivalent of a Coq GenericVType object.
+ */
 class GenericVType extends CoqType implements Visitable {
   attributes: { attrs: any; control: any; };
   data: any;
 
   /**
-   *
-   * @param {*} array
+   * Constructor for GenericVType type.
+   * @param {array} array Array to parse
    */
   constructor( array ) {
     super(array);
     const {attrs, control, expr} = flatten(array[1]);
 
     this.attributes = {'attrs': attrs, 'control': control};
-    // this.data = convertToASTComp(expr);
-    // console.log(expr);
     this.data = convertToASTComp(expr);
   }
 
-  // eslint-disable-next-line require-jsdoc
+  /**
+   * Pretty print the current type.
+   * @param {number} indent current indentation
+   * @return {string} representation of the current type with indentation
+   * added to the front
+   */
   pprint(indent = 0) {
     if (this.data == null) {
       console.warn('Cannot pprint this.data, see', this.data);
@@ -45,8 +50,11 @@ class GenericVType extends CoqType implements Visitable {
    */
   accept(visitor: ASTVisitor) : void {
     if (Array.isArray(this.data)) return;
-    this.data.accept(visitor);
+    if (!Array.isArray(this.data)) {
+      this.data.accept(visitor);
+    }
   }
 }
 
+/* istanbul ignore next */
 export default GenericVType;

@@ -1,14 +1,17 @@
 import CoqType, {Visitable} from './CoqType';
 import ASTVisitor from './visitor/ASTVisitor';
 
-// eslint-disable-next-line require-jsdoc
+/**
+ * A JavaScript equivalent of a Coq VernacOpenCloseScope object.
+ * @see https://coq.github.io/doc/v8.12/api/coq/Vernacexpr/index.html#type-vernac_expr.VernacOpenCloseScope
+ */
 class VernacOpenCloseScope extends CoqType implements Visitable {
   open: boolean;
   scope: string;
 
   /**
-   *
-   * @param {*} array
+   * Constructor for the VernacOpenCloseScope tpye
+   * @param {array} array Array to parse
    */
   constructor( array ) {
     super(array);
@@ -16,7 +19,12 @@ class VernacOpenCloseScope extends CoqType implements Visitable {
     this.scope = array[2];
   }
 
-  // eslint-disable-next-line require-jsdoc
+  /**
+   * Pretty print the current type.
+   * @param {number} indent current indentation
+   * @return {string} representation of the current type with indentation
+   * added to the front
+   */
   pprint(indent = 0) {
     const tab = '\n'.concat('\t'.repeat(indent + 1));
     let output = '';
@@ -25,10 +33,16 @@ class VernacOpenCloseScope extends CoqType implements Visitable {
     return this.sprintf(super.pprint(indent), output);
   }
 
-  // eslint-disable-next-line require-jsdoc
+  /**
+   * Allows an ASTVisitor to traverse the current type
+   * (part of the visitor pattern)
+   * @param {ASTVisitor} visitor the visitor requiring
+   * access to content of the current type
+   */
   accept(visitor: ASTVisitor): void {
     visitor.visitVernacOpenCloseScope(this);
   }
 }
 
+/* istanbul ignore next */
 export default VernacOpenCloseScope;
