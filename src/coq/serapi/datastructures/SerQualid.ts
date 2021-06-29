@@ -1,9 +1,8 @@
-/* eslint-disable require-jsdoc */
 import CoqType from './CoqType';
 import ASTVisitor from './visitor/ASTVisitor';
 
 /**
- * Class to represent a Coq (SerApi) SerQualid type.
+ * A JavaScript equivalent of a Coq SerQualid object.
  * @see https://github.com/ejgallego/coq-serapi/blob/v8.13/serlib/ser_libnames.ml#L24
  */
 class SerQualid extends CoqType {
@@ -45,4 +44,5 @@ class SerQualid extends CoqType {
   }
 }
 
+/* istanbul ignore next */
 export default SerQualid;

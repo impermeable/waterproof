@@ -1,22 +1,23 @@
+import {convertToASTComp} from '../ASTProcessor';
 import CoqType from './CoqType';
 import ASTVisitor from './visitor/ASTVisitor';
 
 /**
- * A JavaScript equivalent of a Coq KerName object.
+ * A JavaScript equivalent of a Coq TacThen object.
  */
-class KerName extends CoqType {
-  Id: string;
-  type: string;
+class TacThen extends CoqType {
+  content: any;
 
   /**
-   * Constructor for KerName type.
-   * @param {array} array Array to parse
+   * Constructor for the TacThen type.
+   * @param {Array} array Array to be parsed.
    */
   constructor( array ) {
     super(array);
-    const temp = array[2][1].toString().split('#');
-    this.Id = temp[temp.length - 1].replace(/_/g, '');
-    this.type = temp[0].replace(/_/g, ' ');
+    this.content = [];
+    for (let i = 0; i < array.length - 1; i++) {
+      this.content.push(convertToASTComp(array[i+1]));
+    }
   }
 
   /**
@@ -26,10 +27,10 @@ class KerName extends CoqType {
    * added to the front
    */
   pprint(indent = 0): string {
-    const tab = '\n'.concat('\t'.repeat(indent + 1));
     let output = '';
-    output = output.concat('Id: ', this.Id, tab);
-    output = output.concat('Type: ', this.type, tab);
+    for (let i = 0; i < this.content.length; i++) {
+      output = output.concat(this.cprint(this.content[i], indent));
+    }
     return this.sprintf(super.pprint(indent), output);
   }
 
@@ -40,9 +41,14 @@ class KerName extends CoqType {
    * access to content of the current type
    */
   accept(v: ASTVisitor) : void {
-    v.visitKerName(this);
+    v.visitTacThen(this);
+    for (let i = 0; i < this.content.length; i++) {
+      if (!Array.isArray(this.content[i])) {
+        (this.content[i]).accept(v);
+      }
+    }
   }
 }
 
 /* istanbul ignore next */
-export default KerName;
+export default TacThen;

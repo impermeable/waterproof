@@ -1,15 +1,19 @@
 import CoqType, {Visitable} from './CoqType';
 import ASTVisitor from './visitor/ASTVisitor';
 
-/* eslint-disable require-jsdoc */
+/**
+ * A JavaScript equivalent of a Coq VernacProof object.
+ * @see https://coq.github.io/doc/v8.12/api/coq/Vernacexpr/index.html#type-vernac_expr.VernacProof
+ */
 class VernacProof extends CoqType implements Visitable {
   sectionSubsetExpr: any;
   rawGenericArg: any;
-  // TODO: check why this crap is always empty...
 
-  // eslint-disable-next-line require-jsdoc
+  /**
+   * Constructor for the VernacProof type.
+   * @param {array} array Array to parse
+   */
   constructor( array ) {
-    // TODO fixme
     super(array);
     this.rawGenericArg = array[0] || {};
     this.sectionSubsetExpr = array[1] || {};
@@ -40,4 +44,5 @@ class VernacProof extends CoqType implements Visitable {
   }
 }
 
+/* istanbul ignore next */
 export default VernacProof;

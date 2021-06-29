@@ -4,20 +4,24 @@ import LocInfo from './LocInfo';
 import ASTVisitor from './visitor/ASTVisitor';
 
 /**
- * A JavaScript equivalent of a Coq TacAtom object.
+ * A JavaScript equivalent of a Coq TacIntroPattern object.
  */
-class TacAtom extends CoqType {
-  locinfo: LocInfo;
+class TacIntroPattern extends CoqType {
   content: any;
+  locinfo: any;
 
   /**
-   * Constructor for TacAtom type.
+   * Constructor for TacIntroPattern type.
    * @param {array} array Array to parse
    */
   constructor( array ) {
     super(array);
-    this.locinfo = new LocInfo(['loc', array[1]['loc'][0]]);
-    this.content = convertToASTComp(array[1]['v']);
+    this.content = [];
+    this.locinfo = [];
+    for (let i = 0; i < array[2].length; i++) {
+      this.content.push(convertToASTComp(array[2][i]['v']));
+      this.locinfo.push(new LocInfo(['loc', array[2][i]['loc'][0]]));
+    }
   }
 
   /**
@@ -27,11 +31,11 @@ class TacAtom extends CoqType {
    * added to the front
    */
   pprint(indent = 0): string {
-    const tab = '\n'.concat('\t'.repeat(indent + 1));
     let output = '';
-    output = output.concat('Loc: ', this.locinfo.pprint(indent+1),
-        tab);
-    output = output.concat(this.cprint(this.content, indent));
+    for (let i = 0; i < this.content.length; i++) {
+      output = output.concat('Loc: ', this.locinfo[i].pprint(indent+1));
+      output = output.concat(this.cprint(this.content[i], indent));
+    }
     return this.sprintf(super.pprint(indent), output);
   }
 
@@ -42,12 +46,14 @@ class TacAtom extends CoqType {
    * access to content of the current type
    */
   accept(v: ASTVisitor) : void {
-    v.visitTacAtom(this);
-    if (!Array.isArray(this.content)) {
-      (this.content).accept(v);
+    v.visitTacIntroPattern(this);
+    for (let i = 0; i < this.content.length; i++) {
+      if (!Array.isArray(this.content[i])) {
+        (this.content[i]).accept(v);
+      }
     }
   }
 }
 
 /* istanbul ignore next */
-export default TacAtom;
+export default TacIntroPattern;

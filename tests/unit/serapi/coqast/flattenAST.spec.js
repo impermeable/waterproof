@@ -6,14 +6,14 @@ const {toAST} = require('./helpers/CoqASTHelpers');
 const {empty, emptyAst} = require('./helpers/SExprList');
 const expect = chai.expect;
 const suppressLogs = require('mocha-suppress-logs');
-const {withLocInfo, coqTypes} = require('./helpers/classList');
+const {withLocInfo, coqTypes, woLocInfoKeys} = require('./helpers/classList');
 
 const baseLocation = {
   fname: 'ToplevelInput',
-  line_nb: 0,
-  line_nb_last: 0,
-  bol_pos: 0,
-  bol_pos_last: 0,
+  lineNb: 0,
+  lineNbLast: 0,
+  bolPos: 0,
+  bolPosLast: 0,
   bp: 0,
   ep: 0,
 };
@@ -33,10 +33,26 @@ describe('AST flattening', () => {
         const Constructor = value.class;
         const flatAST = flattenAST(new Constructor(value.data));
         // expect(flattenAST(ast)).to.eql([]);
-        expect(flattenAST.length).to.equal(1);
+        let count = 1;
+        if (value.count) count = value.count;
+        expect(flatAST.length).to.equal(count);
         const [loc, name] = flatAST[0];
-        expect(name.toLowerCase()).to.equal(key.toLowerCase());
+        if (!value.skip) {
+          expect(name.toLowerCase()).to.equal(key.toLowerCase());
+        }
         expect(loc).to.include(baseLocation);
+        done();
+      });
+    }
+  });
+
+  describe('types without locinfo should return empty', () => {
+    for (const key of woLocInfoKeys) {
+      it(`${key} should return no location`, (done) => {
+        const value = coqTypes[key];
+        const Constructor = value.class;
+        const flatAST = flattenAST(new Constructor(value.goodIn));
+        expect(flatAST.length).to.equal(0);
         done();
       });
     }

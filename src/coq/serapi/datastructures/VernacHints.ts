@@ -1,11 +1,19 @@
-/* eslint-disable require-jsdoc */
 import {convertToASTComp} from '../ASTProcessor';
 import CoqType, {Visitable} from './CoqType';
 import ASTVisitor from './visitor/ASTVisitor';
 
+/**
+ * A JavaScript equivalent of a Coq VernacHints object.
+ * @see https://coq.github.io/doc/v8.12/api/coq/Vernacexpr/index.html#type-vernac_expr.VernacHints
+ */
 class VernacHints extends CoqType implements Visitable {
   strings: any;
   hintExpr: any;
+
+  /**
+   * Constructor for the VernacHints type
+   * @param {Array} array Array to parse
+   */
   constructor( array ) {
     super(array);
     console.log('VernacHints', array);
@@ -43,4 +51,5 @@ class VernacHints extends CoqType implements Visitable {
   }
 }
 
+/* istanbul ignore next */
 export default VernacHints;

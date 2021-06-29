@@ -7,17 +7,28 @@ import ASTVisitor from './visitor/ASTVisitor';
  */
 class InConstrEntry extends CoqType {
   data: any;
-  // eslint-disable-next-line require-jsdoc
+
+  /**
+   * Constructor for InConstrEntry type.
+   * @param {array} array Array to parse
+   */
   constructor( array ) {
     super(array);
     this.data = array[1];
   }
 
-  // eslint-disable-next-line require-jsdoc
+  /**
+   * Pretty print the current type.
+   * @param {number} indent current indentation
+   * @return {string} representation of the current type with indentation
+   * added to the front
+   */
   pprint(indent = 0): string {
     const tab = '\n'.concat('\t'.repeat(indent+1));
     let output = '';
-    output = output.concat('Data: ', this.data.toString(), tab);
+    if (this.data !== undefined) {
+      output = output.concat('Data: ', this.data.toString(), tab);
+    }
     return this.sprintf(super.pprint(indent), output);
   }
 

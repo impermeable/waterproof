@@ -2,11 +2,8 @@ import CoqType, {Visitable} from './CoqType';
 import ASTVisitor from './visitor/ASTVisitor';
 
 /**
- * Class to represent a Coq VernacEndProof
+ * A JavaScript equivalent of a Coq VernacEndProof object.
  * @see https://coq.github.io/doc/v8.10/api/coq/Vernacexpr/index.html#type-proof_end
- * proofEnd =
- *  | Admitted
- *  | Proved
  */
 class VernacEndProof extends CoqType implements Visitable {
   proofEnd: string;
@@ -15,7 +12,7 @@ class VernacEndProof extends CoqType implements Visitable {
   proofFinished: boolean;
 
   /**
-   * Parses an input array into a proper datastructure.
+   * Constructor for the VernacEndProof type.
    * @param {Array} array: Array to parse
    */
   constructor( array: [string, string] | [string, [string, string, CoqType]] ) {
@@ -63,4 +60,5 @@ class VernacEndProof extends CoqType implements Visitable {
   }
 }
 
+/* istanbul ignore next */
 export default VernacEndProof;
