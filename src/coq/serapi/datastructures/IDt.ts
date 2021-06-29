@@ -45,4 +45,5 @@ class IDt extends CoqType {
   }
 }
 
+/* istanbul ignore next */
 export default IDt;

@@ -44,4 +44,5 @@ class VernacAssumption extends CoqType implements Visitable {
   }
 }
 
+/* istanbul ignore next */
 export default VernacAssumption;

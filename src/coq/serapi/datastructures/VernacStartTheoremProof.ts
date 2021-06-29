@@ -104,4 +104,5 @@ class VernacStartTheoremProof extends CoqType
   }
 }
 
+/* istanbul ignore next */
 export default VernacStartTheoremProof;

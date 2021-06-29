@@ -44,4 +44,5 @@ class SerQualid extends CoqType {
   }
 }
 
+/* istanbul ignore next */
 export default SerQualid;

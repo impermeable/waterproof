@@ -50,4 +50,5 @@ class TacThen extends CoqType {
   }
 }
 
+/* istanbul ignore next */
 export default TacThen;

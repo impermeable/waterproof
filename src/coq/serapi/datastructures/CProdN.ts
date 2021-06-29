@@ -58,4 +58,5 @@ class CProdN extends CoqType {
   }
 }
 
+/* istanbul ignore next */
 export default CProdN;

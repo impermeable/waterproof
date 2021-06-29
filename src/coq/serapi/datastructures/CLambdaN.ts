@@ -54,4 +54,5 @@ class CLambdaN extends CoqType {
   }
 }
 
+/* istanbul ignore next */
 export default CLambdaN;

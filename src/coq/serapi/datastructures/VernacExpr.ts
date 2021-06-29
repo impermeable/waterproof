@@ -43,4 +43,5 @@ class VernacExpr extends CoqType {
   }
 }
 
+/* istanbul ignore next */
 export default VernacExpr;

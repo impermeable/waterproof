@@ -93,4 +93,5 @@ export class HintsReference extends CoqType {
   }
 }
 
+/* istanbul ignore next */
 export default HintsResolve;

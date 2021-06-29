@@ -47,4 +47,5 @@ class TacArg extends CoqType {
   }
 }
 
+/* istanbul ignore next */
 export default TacArg;

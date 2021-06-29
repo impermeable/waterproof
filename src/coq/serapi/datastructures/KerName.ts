@@ -15,8 +15,8 @@ class KerName extends CoqType {
   constructor( array ) {
     super(array);
     const temp = array[2][1].toString().split('#');
-    this.Id = temp[temp.length - 1].replaceAll('_', '');
-    this.type = temp[0].replaceAll('_', ' ');
+    this.Id = temp[temp.length - 1].replace(/_/g, '');
+    this.type = temp[0].replace(/_/g, ' ');
   }
 
   /**
@@ -44,4 +44,5 @@ class KerName extends CoqType {
   }
 }
 
+/* istanbul ignore next */
 export default KerName;

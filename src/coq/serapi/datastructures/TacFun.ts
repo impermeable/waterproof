@@ -55,4 +55,5 @@ class TacFun extends CoqType {
   }
 }
 
+/* istanbul ignore next */
 export default TacFun;

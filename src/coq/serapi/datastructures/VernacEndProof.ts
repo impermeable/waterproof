@@ -60,4 +60,5 @@ class VernacEndProof extends CoqType implements Visitable {
   }
 }
 
+/* istanbul ignore next */
 export default VernacEndProof;

@@ -18,9 +18,10 @@ class TacApply extends CoqType {
    */
   constructor( array ) {
     super(array);
+    console.log('BUGGG', array);
     this.arg1 = ('true' === array[1].toString());
     this.arg2 = ('true' === array[2].toString());
-    this.locinfo = new LocInfo(['loc', array[3][0][1][0]['loc'][0]]);
+    this.locinfo = new LocInfo(['loc', array[3][0][1][0]['loc']]);
     this.content = convertToASTComp(array[3][0][1][0]['v']);
   }
 
@@ -53,4 +54,5 @@ class TacApply extends CoqType {
   }
 }
 
+/* istanbul ignore next */
 export default TacApply;

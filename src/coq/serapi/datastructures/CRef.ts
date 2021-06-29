@@ -54,4 +54,5 @@ class CRef extends CoqType {
   }
 }
 
+/* istanbul ignore next */
 export default CRef;

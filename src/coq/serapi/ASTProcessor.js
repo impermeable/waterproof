@@ -5,7 +5,8 @@ import VernacRequire from './datastructures/VernacRequire';
 import SerQualid from './datastructures/SerQualid';
 import InConstrEntry from './datastructures/InConstrEntry';
 import CRef from './datastructures/CRef';
-import VernacStartTheoremProof from './datastructures/VernacStartTheoremProof';
+// import VernacStartTheoremProof
+// from './datastructures/VernacStartTheoremProof';
 import CProdN from './datastructures/CProdN';
 import CApp from './datastructures/CApp';
 import CLocalAssum from './datastructures/CLocalAssum';
@@ -285,7 +286,7 @@ const constrDict = {
   'v': GenericVType,
   'VernacRequire': VernacRequire,
   'Ser_Qualid': SerQualid,
-  'VernacStartTheoremProof': VernacStartTheoremProof,
+  // 'VernacStartTheoremProof': VernacStartTheoremProof,
   'VernacProof': VernacProof,
   'VernacEndProof': VernacEndProof,
   'CNotation': CNotation,

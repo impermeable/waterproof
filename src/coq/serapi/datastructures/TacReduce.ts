@@ -54,4 +54,5 @@ class TacReduce extends CoqType {
   }
 }
 
+/* istanbul ignore next */
 export default TacReduce;

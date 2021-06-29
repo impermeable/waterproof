@@ -49,4 +49,5 @@ class CPrim extends CoqType {
   }
 }
 
+/* istanbul ignore next */
 export default CPrim;

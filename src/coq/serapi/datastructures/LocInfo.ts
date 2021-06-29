@@ -59,4 +59,5 @@ class LocInfo extends CoqType {
   }
 }
 
+/* istanbul ignore next */
 export default LocInfo;

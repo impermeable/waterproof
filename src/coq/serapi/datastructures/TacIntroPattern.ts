@@ -55,4 +55,5 @@ class TacIntroPattern extends CoqType {
   }
 }
 
+/* istanbul ignore next */
 export default TacIntroPattern;

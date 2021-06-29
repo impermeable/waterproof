@@ -51,4 +51,5 @@ class VernacHints extends CoqType implements Visitable {
   }
 }
 
+/* istanbul ignore next */
 export default VernacHints;

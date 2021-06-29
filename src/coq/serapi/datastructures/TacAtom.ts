@@ -49,4 +49,5 @@ class TacAtom extends CoqType {
   }
 }
 
+/* istanbul ignore next */
 export default TacAtom;

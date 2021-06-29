@@ -68,4 +68,5 @@ class CApp extends CoqType {
   }
 }
 
+/* istanbul ignore next */
 export default CApp;

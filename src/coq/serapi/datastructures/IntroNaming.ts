@@ -50,4 +50,5 @@ class IntroNaming extends CoqType {
   }
 }
 
+/* istanbul ignore next */
 export default IntroNaming;

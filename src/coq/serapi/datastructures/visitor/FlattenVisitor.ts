@@ -229,12 +229,8 @@ class FlattenVisitor implements ASTVisitor {
    * @param {TacticDefinition} term - a TacticDefinition term
    */
   visitTacticDefinition(term: TacticDefinition): void {
-<<<<<<< HEAD
     // throw new Error('www');
     this._state.push([term.locinfo, term.constructor.name]);
-=======
-    // throw new Error('Method not implemented.');
->>>>>>> ef44c981f0dc606ff6054a8295fde6125e542f80
   }
 
   /**
@@ -282,15 +278,11 @@ class FlattenVisitor implements ASTVisitor {
    * @param {TacCall} term - a TacCall term
    */
   visitTacCall(term: TacCall): void {
-<<<<<<< HEAD
     if ( term.content.constructor.name === 'SerQualid') {
       this._state.push([term.locinfo, term.content.id]);
     } else {
       this._state.push([term.locinfo, term.constructor.name]);
     }
-=======
-    // throw new Error('Method not implemented.');
->>>>>>> ef44c981f0dc606ff6054a8295fde6125e542f80
   }
 
   /**

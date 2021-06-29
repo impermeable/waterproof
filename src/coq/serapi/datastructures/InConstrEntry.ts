@@ -26,7 +26,9 @@ class InConstrEntry extends CoqType {
   pprint(indent = 0): string {
     const tab = '\n'.concat('\t'.repeat(indent+1));
     let output = '';
-    output = output.concat('Data: ', this.data.toString(), tab);
+    if (this.data !== undefined) {
+      output = output.concat('Data: ', this.data.toString(), tab);
+    }
     return this.sprintf(super.pprint(indent), output);
   }
 

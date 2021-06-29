@@ -62,4 +62,5 @@ class TacCall extends CoqType {
   }
 }
 
+/* istanbul ignore next */
 export default TacCall;

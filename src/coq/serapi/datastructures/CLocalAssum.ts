@@ -61,4 +61,5 @@ class CLocalAssum extends CoqType {
   }
 }
 
+/* istanbul ignore next */
 export default CLocalAssum;

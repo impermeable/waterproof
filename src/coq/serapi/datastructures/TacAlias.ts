@@ -49,4 +49,5 @@ class TacAlias extends CoqType {
   }
 }
 
+/* istanbul ignore next */
 export default TacAlias;

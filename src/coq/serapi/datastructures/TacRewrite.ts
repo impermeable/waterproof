@@ -47,4 +47,5 @@ class TacRewrite extends CoqType {
   }
 }
 
+/* istanbul ignore next */
 export default TacRewrite;

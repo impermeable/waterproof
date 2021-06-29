@@ -56,4 +56,5 @@ class GenericVType extends CoqType implements Visitable {
   }
 }
 
+/* istanbul ignore next */
 export default GenericVType;

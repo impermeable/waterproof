@@ -59,4 +59,5 @@ class VernacRequire extends CoqType implements Visitable {
   }
 }
 
+/* istanbul ignore next */
 export default VernacRequire;

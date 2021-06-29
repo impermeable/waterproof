@@ -52,4 +52,5 @@ class TacticDefinition extends CoqType {
   }
 }
 
+/* istanbul ignore next */
 export default TacticDefinition;

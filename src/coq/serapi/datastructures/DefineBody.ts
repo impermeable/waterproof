@@ -55,4 +55,5 @@ class DefineBody extends CoqType {
   }
 }
 
+/* istanbul ignore next */
 export default DefineBody;

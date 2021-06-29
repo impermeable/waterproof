@@ -87,4 +87,5 @@ export interface Visitable {
   accept(visitor: ASTVisitor) : void;
 }
 
+/* istanbul ignore next */
 export default CoqType;

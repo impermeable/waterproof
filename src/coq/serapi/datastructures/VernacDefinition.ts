@@ -81,4 +81,5 @@ class VernacDefinition extends CoqType implements Visitable {
   }
 }
 
+/* istanbul ignore next */
 export default VernacDefinition;

@@ -66,4 +66,5 @@ class CNotation extends CoqType {
   }
 }
 
+/* istanbul ignore next */
 export default CNotation;
