@@ -1,10 +1,11 @@
 const chai = require('chai');
+const expect = chai.expect;
+const {coqTypes} = require('./helpers/classList');
 const {default: CoqType} =
   require('../../../../src/coq/serapi/datastructures/CoqType');
-const expect = chai.expect;
 const suppressLogs = require('mocha-suppress-logs');
-const { default: GenericVType } = require('../../../../src/coq/serapi/datastructures/GenericVType');
-const { default: VernacExtend } = require('../../../../src/coq/serapi/datastructures/VernacExtend');
+const {default: VernacExtend} =
+  require('../../../../src/coq/serapi/datastructures/VernacExtend');
 
 
 describe('Pretty-printer', ()=> {
@@ -39,15 +40,31 @@ describe('Pretty-printer', ()=> {
     it('cprint with array', (done) => {
       const t = new CoqType([]);
       console.log(t.cprint([1, 2, 3]));
-      expect(t.cprint([1, 2, 3], -1)).to.equal('Content: \n\t1,2,3\n');
+      expect(t.cprint([1, 2, 3], -1)).to.equal('Content: \n\t1,2,3');
       done();
     });
     it('cprint with object', (done) => {
       const t = new CoqType([]);
       const v = new VernacExtend(['VernacExtend', '', '']);
       console.log(t.cprint([1, 2, 3]));
-      expect(t.cprint(v, -1)).to.equal('Content: \n'+v.data);
+      expect(t.cprint(v, -1)).to.equal('Content: \n(VernacExtend)\n\t()\n');
       done();
     });
+
+    for (const [key, value] of Object.entries(coqTypes)) {
+      it(`should pprint ${key} correctly`, (done) => {
+        const ConstructorForObject = value.class;
+        const array = value.goodIn;
+        try {
+          const astObj = new ConstructorForObject(array);
+          console.log('ast!!', astObj);
+          expect(astObj.pprint(0)).to.equal(value.pprint);
+        } catch (e) {
+          // console.log(e);
+          expect.fail('something went wrong: ' + e);
+        }
+        done();
+      });
+    }
   });
 });

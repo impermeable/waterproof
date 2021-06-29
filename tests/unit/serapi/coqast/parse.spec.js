@@ -14,8 +14,9 @@ describe('Parsing CoqASTs', () => {
     const ast = toAST(emptyAst);
 
     expect(ast.constructor.name).to.equal('CoqAST');
+    console.log('AST!!!', ast);
     expect(ast.content).to.eql([]);
-    expect(ast.locinfo.line_nb).to.equal(1);
+    expect(ast.locinfo.lineNb).to.equal(1);
 
     done();
   });
@@ -30,7 +31,7 @@ describe('Parsing CoqASTs', () => {
     const ast = toAST(sexp1);
     // expect(ast.constructor.name).to.equal('CoqAST');
     // astHasChild(ast, '');
-    ['LocInfo', 'VernacStartTheoremProof', 'CLocalAssum']
+    ['LocInfo', 'GenericVType']
         .forEach(
             (child) => expect(astHasChild(ast, child)).to.be.true);
     expect(astHasChild(ast, 'Object')).not.to.be.true;
