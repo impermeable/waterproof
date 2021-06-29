@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import CApp from '../CApp';
 import CLambdaN from '../CLambdaN';
 import CLocalAssum from '../CLocalAssum';
@@ -204,7 +203,6 @@ class FlattenVisitor implements ASTVisitor {
    * @param {TacAtom} term - a TacAtom term
    */
   visitTacAtom(term: TacAtom): void {
-    console.log('tacatom');
     this._state.push([term.locinfo, term.constructor.name]);
   }
 
@@ -229,7 +227,6 @@ class FlattenVisitor implements ASTVisitor {
    * @param {TacticDefinition} term - a TacticDefinition term
    */
   visitTacticDefinition(term: TacticDefinition): void {
-    // throw new Error('www');
     this._state.push([term.locinfo, term.constructor.name]);
   }
 
@@ -422,6 +419,14 @@ class FlattenVisitor implements ASTVisitor {
     if ( proofExprs[1]?.data != null) {
       this._state.push([proofExprs[1]?.data.locinfo,
         proofExprs[1]?.data.content.constructor.name]);
+
+      // const exprList = proofExprs[1]?.data.content.constrNotationSubstitution
+      //     .exprList;
+      // if (exprList != null) {
+      //   exprList.forEach((exp) => {
+      //     this._state.push([exp.locinfo, exp.content.notation]);
+      //   });
+      // }
     }
   }
 

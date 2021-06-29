@@ -18,9 +18,6 @@ class VernacExtend extends CoqType implements Visitable {
     const list = array[2];
     this.data = [];
     for (let i = 0; i < list.length; i++) {
-      // console.log(list);
-      console.log(list[i]);
-      console.log(list[i][3]);
       if (Array.isArray(list[i][3])) {
         if (list[i][3].length > 0) {
           if (typeof list[i][3][0] === 'string') {
@@ -29,8 +26,6 @@ class VernacExtend extends CoqType implements Visitable {
             this.data.push(convertToASTComp(list[i][3][0]));
           }
         }
-      } else {
-        throw new Error(`wtff #${i} ${list} == ${list[i]}`);
       }
     }
   }

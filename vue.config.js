@@ -44,6 +44,7 @@ module.exports = {
         productName: 'Waterproof',
         remoteBuild: true,
         extraFiles: ['wrapper/assistance', 'wrapper/wplib'],
+        publish: ['github'],
         win: {
           extraFiles: ['wrapper/win'],
         },
@@ -52,6 +53,7 @@ module.exports = {
         },
         linux: {
           extraFiles: ['wrapper/lin'],
+          target: "AppImage",
         },
         fileAssociations: [
           {

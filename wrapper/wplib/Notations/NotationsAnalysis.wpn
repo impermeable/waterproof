@@ -1,0 +1,85 @@
+{
+  "exerciseSheet": false,
+  "blocks": [
+    {
+      "type": "text",
+      "text": "# **Definitions and Notations for Waterproof**\n\nThis file contains a list of additional notation that can be used in writing mathematical proofs."
+    },
+    {
+      "type": "code",
+      "text": "Require Import Qreals.\nRequire Import Reals.\nRequire Import Rbase.\nRequire Import Rfunctions.\nRequire Import SeqSeries.\nRequire Import Rtrigo.\nRequire Import Ranalysis.\nRequire Import Integration.\nRequire Import micromega.Lra.\nRequire Import Omega.\nRequire Import Max.\n\nRequire Import wplib.Notations.Notations.\nRequire Export wplib.Definitions.SetDefinitions.\n\nOpen Scope nat_scope.\nOpen Scope R_scope."
+    },
+    {
+      "type": "text",
+      "text": "## **Sequences**"
+    },
+    {
+      "type": "code",
+      "text": "Definition converges_to (a : ℕ → ℝ) (c : ℝ) :=\n  ∀ ε : ℝ, ε > 0 ⇒ \n    ∃ N : ℕ, ∀ n : ℕ, (n ≥ N)%nat ⇒\n      R_dist (a n) c < ε.\n      \nNotation \"a ⟶ c\" := (converges_to a c) (at level 20).\n\nDefinition convergence {M : Metric_Space} (a : ℕ → Base M) (c : Base M) :=\n  ∀ ε : ℝ, ε > 0 ⇒\n    ∃ N : ℕ, ∀ n : ℕ, (n ≥ N)%nat ⇒\n      dist M (a n) c < ε.\n      \n \nDefinition bounded {X : Metric_Space} (a : ℕ → Base X) :=\n  ∃ q : Base X,\n    ∃ M : ℝ, M > 0 ⇒\n      ∀ n : ℕ, dist X (a n) q ≤ M.\n\nNotation \"a ⟶ c\" := (convergence a c) (at level 20) : metric_scope.\n\nDefinition cv_implies_cv_abs_to_l_abs := \n  cv_cvabs."
+    },
+    {
+      "type": "text",
+      "text": "## Real numbers\n\nWe have to take care with the associative leve.\nWhen using this in rewrites, $<$, $>$, etc. should bind stronger."
+    },
+    {
+      "type": "code",
+      "text": "Notation \"| x |\" := (Rabs x) (at level 69, x at level 200).\nNotation \"｜ x - y ｜\" := (R_dist x y) (at level 69, x at level 48, y at level 48) : extra."
+    },
+    {
+      "type": "text",
+      "text": "## Subsets and intervals"
+    },
+    {
+      "type": "code",
+      "text": "Notation \"{ x : R | P }\" := (mk_subset_R (fun x : R => P)).\n\nNotation \"[ x , y ]\" := { r : R | x <= r <= y }.\nNotation \"[ x , y )\" := { r : R | x <= r <  y }.\nNotation \"( x , y ]\" := { r : R | x <  r <= y }.\nNotation \"( x , y )\" := { r : R | x <  r <  y }."
+    },
+    {
+      "type": "code",
+      "text": ""
+    },
+    {
+      "type": "text",
+      "text": "## Suprema and infima"
+    },
+    {
+      "type": "code",
+      "text": "Notation is_sup := is_lub.\nNotation is_bdd_above := bound."
+    },
+    {
+      "type": "text",
+      "text": "## Sums and series"
+    },
+    {
+      "type": "code",
+      "text": "Notation \"'Σ' Cn 'equals' x\" := \n  (infinite_sum Cn x) (at level 50).\n  \n(*Notation \"'Σ' 'of' Cn 'up' 'to' n\" := \n  (sum_f_R0 Cn n) (at level 50). \n (*Sum and series also defined in series.wpn. What to adapt?*)*)\n \nDefinition finite_triangle_inequalty := \n  sum_f_R0_triangle."
+    },
+    {
+      "type": "text",
+      "text": "## Functions"
+    },
+    {
+      "type": "text",
+      "text": "For the composition of a sequence and a function (e.g. for the sequence of measures of a sequence of sets):"
+    },
+    {
+      "type": "code",
+      "text": "(*Notation \"μ ◦ C\" := \n  (fun (n:ℕ) ↦ (μ (C n))) (at level 45).*)"
+    },
+    {
+      "type": "text",
+      "text": "## Sets"
+    },
+    {
+      "type": "code",
+      "text": "Definition is_in {D : Set} := fun (A : (D → Prop)) ↦ (fun (x : D) ↦ A x).\nNotation \"x ∈ A\" := (@is_in _ A x) (at level 50) : analysis_scope."
+    },
+    {
+      "type": "code",
+      "text": "Notation \"b 'seen' 'as' 'element' 'of' A 'by' u\" := \n  (mk_element_R (is_in A) b u) (at level 50).\n"
+    },
+    {
+      "type": "code",
+      "text": "\n(* We might want a notation like the following to clean \n   up the environment after using previous notation:\nNotation \"'element' 'of' 'ℝ' 'that' 'is' 'in' A\" := \n  (elements_R_satisfying (is_in A)) (at level 50).\n  (*only to clean up environment*)\n*)  "
+    }
+  ]
+}

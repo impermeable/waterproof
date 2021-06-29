@@ -1,0 +1,25 @@
+{
+  "exerciseSheet": false,
+  "blocks": [
+    {
+      "type": "text",
+      "text": "## Tactics for Set Theory and Algebra\nThis file contains custom tactics for the course set theory and algebra.\n"
+    },
+    {
+      "type": "code",
+      "text": "Require Import Ring."
+    },
+    {
+      "type": "text",
+      "text": "\nNote, preferably, these tactics are made in Ltac2."
+    },
+    {
+      "type": "code",
+      "text": "Ltac goal_check_vena t := \n  auto with VenA nocore;\n  tryif (change t)\n    then (idtac \"We indeed need to show that\" t)\n    else fail \"This is not the current goal\".\n\nTactic Notation \"To\" \"show:\" constr(t) := \n  goal_check_vena t."
+    },
+    {
+      "type": "code",
+      "text": "Ltac resolve_ring t := \n  match goal with\n    | [ |- t ] => ring\n    | _ => idtac \"This is not the current goal\"\n  end.\n  \nLtac resolve_ring_hypothesis t s :=\n  tryif (assert (s : t); ring) \n    then (idtac t \" indeed holds.\")\n    else fail \"This does not follow from the properties of a ring\".\n\nTactic Notation \"Since\" constr(R) \"is\" \"a\" \"ring,\" constr(t) := \n  resolve_ring t.\n\nTactic Notation \"Since\" constr(R) \"is\" \"a\" \"ring,\" constr(t) \"(\"ident(s)\")\" := \n  resolve_ring_hypothesis t s.\n(*add check that R is ring*)"
+    }
+  ]
+}
