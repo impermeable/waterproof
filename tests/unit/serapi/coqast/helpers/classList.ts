@@ -98,7 +98,7 @@ export const coqTypes = {
     badIn: [],
     class: CProdN,
     goodIn: ['CProdN', [empty, empty], {loc: baseLoc, v: empty}],
-    pprint: '\n(CProdN)\n\t(Loc: \n\t(LocInfo)\n\t\t(Name: ToplevelInput\n\t\tStart line: 0\n\t\tStart pos: 0\n\t\tEnd line: 0\n\t\tEnd pos: 0\n\t\tBp: 0\n\t\tEp: 0\n\t\t)\n\t\n\tContent: \n\t\tEmpty,)\n',
+    pprint: '\n(CProdN)\n\t(Local expr: \n\t\tEmpty,\n\tLocal expr: \n\t\tEmpty,\n\tLoc: \n\t(LocInfo)\n\t\t(Name: ToplevelInput\n\t\tStart line: 0\n\t\tStart pos: 0\n\t\tEnd line: 0\n\t\tEnd pos: 0\n\t\tBp: 0\n\t\tEp: 0\n\t\t)\n\t\n\tContent: \n\t\tEmpty,)\n',
   },
   'CRef': {
     badIn: [],
