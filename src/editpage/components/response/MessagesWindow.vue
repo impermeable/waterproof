@@ -86,7 +86,7 @@ export default {
       this.messages = [];
     },
     addMessage: function(message) {
-      if (message.hasOwnProperty('text')) {
+      if (Object.prototype.hasOwnProperty.call(message, 'text')) {
         for (let i = this.messages.length - 1; i >= 0; --i) {
           const oldMessage = this.messages[i];
           if (oldMessage.id === message.id) {

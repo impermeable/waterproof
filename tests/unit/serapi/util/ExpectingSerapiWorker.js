@@ -60,8 +60,8 @@ class ExpectingSerapiWorker extends SerapiWorker {
 
   sendMessages(messages, tag) {
     for (const partialResult of messages) {
-      if (partialResult.startsWith('(Feedback')
-        || partialResult.startsWith('(Answer')) {
+      if (partialResult.startsWith('(Feedback') ||
+        partialResult.startsWith('(Answer')) {
         this.onMessage(partialResult);
       } else {
         if (!partialResult.startsWith('(')) {

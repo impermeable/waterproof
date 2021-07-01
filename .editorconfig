@@ -11,12 +11,12 @@ indent_style = space
 indent_size = 2
 continuation_indent_size = 4
 
-[src/**.js]
+[src/**.{ts,js}]
 indent_style = space
 indent_size = 2
 continuation_indent_size = 4
 
-[test/**.js]
+[test/**.{js,ts}]
 indent_style = space
 indent_size = 2
 continuation_indent_size = 4

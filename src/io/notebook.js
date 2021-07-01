@@ -605,11 +605,11 @@ function blockToCoqText(blocks) {
       coqContent += block.text;
     } else if (block.type === 'input') {
       if (block.start) {
-        coqContent += COQ_SPECIAL_COMMENT_START + COQ_INPUT_START
-          + COQ_COMMENT_END;
+        coqContent += COQ_SPECIAL_COMMENT_START + COQ_INPUT_START +
+          COQ_COMMENT_END;
       } else {
-        coqContent += COQ_SPECIAL_COMMENT_START + COQ_INPUT_END
-          + COQ_COMMENT_END;
+        coqContent += COQ_SPECIAL_COMMENT_START + COQ_INPUT_END +
+          COQ_COMMENT_END;
       }
     } else {
       coqContent += COQ_SPECIAL_COMMENT_START + block.text + COQ_COMMENT_END;

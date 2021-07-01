@@ -22,7 +22,7 @@
         <component v-show="!block.state.foldStatus.isFolded"
                   :is="toComponent(block.type)" :block="block"
                   :key="block.type + index" :index="index"
-                  :sentences="sentenceIndices"
+                  :sentences="sentenceIndices" :state="coq.getState()"
                   :executedIndex="executeIndex" :runningIndex="runningIndex"
                   :exercise="exercise" :event-bus="eventBus">
         </component>
@@ -207,7 +207,7 @@ export default {
             'remove-block',
             this.focusedElement,
             null,
-            this
+            this,
         );
         this.dispatchTextChange.flush();
       }
@@ -260,24 +260,24 @@ export default {
     },
     keyup: function(cm, key, event) {
       if (event.shiftKey ||
-          !(key.includes('Right')
-            || key.includes('Left')
-            || key.includes('Up')
-            || key.includes('Down'))) {
+          !(key.includes('Right') ||
+            key.includes('Left') ||
+            key.includes('Up') ||
+            key.includes('Down'))) {
         return;
       }
 
       const cursorIndex = cm.indexFromPos(this.cursorPos.from);
       const cursorLine = this.cursorPos.line;
 
-      if (key.includes('Right') && cursorIndex === cm.getValue().length
-          || key.includes('Down') && cursorLine === cm.lineCount() - 1) {
+      if (key.includes('Right') && cursorIndex === cm.getValue().length ||
+          key.includes('Down') && cursorLine === cm.lineCount() - 1) {
         this.setFocusedInterblock(this.focusedElement + 1);
-      } else if (key.includes('Left') && cursorIndex === 0
-          || key.includes('Up') && cursorLine === 0) {
+      } else if (key.includes('Left') && cursorIndex === 0 ||
+          key.includes('Up') && cursorLine === 0) {
         for (let i = this.focusedElement - 1; i >= 0; i--) {
-          if (this.blocks[i].type === 'input' && this.blocks[i].start
-              || this.isEditableBlock(this.blocks[i])) {
+          if (this.blocks[i].type === 'input' && this.blocks[i].start ||
+              this.isEditableBlock(this.blocks[i])) {
             this.setFocusedInterblock(i + 1);
             return;
           }
@@ -289,8 +289,8 @@ export default {
     },
     isEditableBlock: function(block) {
       const skippedTypes = ['input'];
-      return !skippedTypes.includes(block.type)
-          && (!this.exercise || block.state.inInputField);
+      return !skippedTypes.includes(block.type) &&
+          (!this.exercise || block.state.inInputField);
     },
     toggleAssistanceBar() {
       this.isShowingAssistance = !this.isShowingAssistance;

@@ -1,5 +1,7 @@
 import {Mutex} from 'async-mutex';
 import CoqState from '../../CoqState';
+// eslint-disable-next-line no-unused-vars
+import {flattenAST} from '../datastructures/visitor/FlattenVisitor';
 
 /**
  * Class for holding all the shared state of an active serapi! instance
@@ -218,6 +220,73 @@ class SerapiState extends CoqState {
   getSentenceAsString(text, sentenceNr) {
     return text.slice(this.sentences[sentenceNr].beginIndex,
         this.sentences[sentenceNr].endIndex);
+  }
+
+  /**
+   * TEMP
+   * @param {Number} index
+   * @return {null}
+   */
+  getFlatAST(index) {
+    if (this.sentences[index].ast == null) {
+      return null;
+    }
+
+    if (this.sentences[index].flatAst == null) {
+      const tempFlat = flattenAST(this.sentences[index].ast);
+
+      this.sentences[index].flatAst = tempFlat
+          .map((content) => {
+            let startOffset = content[0].bol_pos;
+            const isParent = content[1] === 'CoqAST';
+            if (isParent) {
+              this.sentences[index].stats = {
+                startIdx: content[0].bp,
+                endIdx: content[0].ep,
+              };
+            } else {
+              startOffset = this.sentences[index].stats.startIdx;
+            }
+            // const s = (content[0].bp - content[0].bol_pos) /
+            //     (content[0].line_nb+1);
+
+            const start = isParent ? 0 : content[0].bp - startOffset;
+            const len = content[0].ep - content[0].bp;
+            return {
+            //   start: content[0].bp - content[0].bol_pos,
+              start: start,
+              // end: content[0].ep - content[0].bp - 1,
+              end: start + len - (isParent ? 1 : 0),
+              type: content[1],
+              locinfo: content[0],
+              comp: this.getFlatASTBySplitting(index),
+            };
+          });
+      console.warn(`for ast ${index}`, this.sentences[index].flatAst);
+      // console.log();
+    }
+
+    return this.sentences[index].flatAst;
+  }
+
+
+  // eslint-disable-next-line require-jsdoc
+  getFlatASTBySplitting(index) {
+    let i = 0;
+    return this.sentences[index].text
+        .slice(0, this.sentences[index].text.length - 1)
+        .split(' ')
+        .map((str) => {
+          const start = i;
+          i += str.length;
+          const end = i;
+          i++;
+          return {
+            start,
+            end,
+            type: str,
+          };
+        });
   }
 }
 

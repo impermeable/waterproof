@@ -12,6 +12,7 @@ const execFile = util.promisify(require('child_process').execFile);
 export default {
   state: {
     done: false,
+    fail: false,
     message: 'Loading configuration...',
     lock: new Mutex,
     sertopPath: null,
@@ -27,6 +28,12 @@ export default {
     },
     setLoadingMessage(state, message) {
       state.done = false;
+      state.fail = false;
+      state.message = message;
+    },
+    failMessage(state, message) {
+      state.done = true;
+      state.fail = true;
       state.message = message;
     },
     setConfig(state, result) {
@@ -39,13 +46,13 @@ export default {
       state.sercompPath = path;
     },
     updateConfig(state, partial) {
-      if (partial.hasOwnProperty('sertopPath')) {
+      if (Object.prototype.hasOwnProperty.call(partial, 'sertopPath')) {
         state.sertopPath = partial['sertopPath'];
       }
-      if (partial.hasOwnProperty('serapiVersion')) {
+      if (Object.prototype.hasOwnProperty.call(partial, 'serapiVersion')) {
         state.serapiVersion = partial['serapiVersion'];
       }
-      if (partial.hasOwnProperty('libraryVersion')) {
+      if (Object.prototype.hasOwnProperty.call(partial, 'libraryVersion')) {
         state.libraryVersion = partial['libraryVersion'];
       }
     },
@@ -150,7 +157,7 @@ export default {
         await store.dispatch('resolveSercompPath');
 
         if (store.state.sertopPath === '' || store.state.sertopPath == null) {
-          store.commit('setLoadingMessage', 'Could not find serapi');
+          store.commit('failMessage', 'Could not find serapi');
           return;
         }
         release();
@@ -170,6 +177,12 @@ export default {
               store.commit('updateConfig', {serapiVersion: versionString});
             }
             return isNewVersion;
+          }).catch((e) => {
+            console.log('Error in version getting', e);
+            store.commit('failMessage',
+                `Failed to get sertop version.
+                Maybe sertop at ${store.state.sertopPath} is invalid?`);
+            throw e;
           });
     },
     async compileLibraries(store, forced) {
@@ -184,10 +197,23 @@ export default {
       for (const library of libFiles) {
         if (!store.state.done) {
           store.commit('setLoadingMessage',
-              `Compiling libraries ${libDone + 1}/${libTotal}`
-              + ` (${library})`);
+              `Compiling libraries ${libDone + 1}/${libTotal}` +
+              ` (${library})`);
         }
-        await compiler.compileLibrary(library);
+        try {
+          await compiler.compileLibrary(library);
+        } catch (e) {
+          console.log('Error in compiling: ', e);
+          const fullError = e.stderr;
+          // lets hide the file path to kind of anonymize
+          const first = fullError.indexOf(`File "`);
+          const last = fullError.indexOf('"', first + 6);
+          const smallError = fullError.substr(0, first) +
+              '...wplib/' + library + fullError.substr(last);
+          store.commit('failMessage',
+              `Failed to compile: ${library} with error:\n ${smallError}`);
+          return;
+        }
         libDone++;
       }
 

@@ -41,8 +41,8 @@ export default {
       if (this.notebook.exerciseSheet) {
         // Return the end of the last input area
         for (let i = this.notebook.blocks.length - 1; i >= 0; i--) {
-          if (this.notebook.blocks[i].type === 'input'
-              && !this.notebook.blocks[i].start) {
+          if (this.notebook.blocks[i].type === 'input' &&
+              !this.notebook.blocks[i].start) {
             return i;
           }
         }

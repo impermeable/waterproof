@@ -87,6 +87,7 @@ export default {
       if (this.isShowingDefinitions) {
         return this.$store.state.searchResultsDefinition;
       }
+      return [];
     },
     isVisible: function() {
       return this.$store.state.sideWindowIndex !== -1;
@@ -108,7 +109,8 @@ export default {
         return false;
       }
       for (const item of this.items) {
-        if (item.hasOwnProperty('advanced') && item.advanced) {
+        if (Object.prototype.hasOwnProperty.call(item, 'advanced') &&
+          item.advanced) {
           return true;
         }
       }

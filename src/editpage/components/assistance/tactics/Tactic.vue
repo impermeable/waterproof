@@ -46,7 +46,8 @@ export default {
   },
   computed: {
     isAdvanced() {
-      return this.item.hasOwnProperty('advanced') && this.item.advanced;
+      return Object.prototype.hasOwnProperty.call(this.item, 'advanced') &&
+          this.item.advanced;
     },
   },
 };

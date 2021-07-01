@@ -1,4 +1,5 @@
 import parse from 's-expression';
+import {writeToFile} from './processors/SerapiASTProcessor';
 import {
   isReadyFeedback,
   MESSAGE_ACK,
@@ -6,6 +7,7 @@ import {
   parseErrorableFeedback,
 } from './SerapiParser';
 
+import pprint from './util/SExpPrinter';
 /**
  * A class that wraps promises around messages send to Serapi
  * It also keep track of tags to allow differentiation of messages
@@ -79,7 +81,10 @@ class SerapiTagger {
     };
     const serapiCommand = `(${this.lastTag} ${command})`;
     if (this.logging) {
-      console.log(`Serapi <- ${serapiCommand}`);
+      console.groupCollapsed('-> Serapi');
+      // console.log(`Serapi <- ${serapiCommand}`);
+      console.log(pprint(serapiCommand));
+      console.groupEnd();
     }
     this.worker.postMessage(serapiCommand);
   }
@@ -90,7 +95,11 @@ class SerapiTagger {
    */
   handleMessage(message) {
     if (this.logging) {
-      console.log(`Serapi -> ${message}`);
+      // console.log(`Serapi -> ${message}`);
+      // console.dir([1, 2, 3, [1, 2, 3]], {depth: null});
+      console.groupCollapsed('Serapi <-');
+      console.log(pprint(message));
+      console.groupEnd();
     }
     if (!this.lastCallbacks) {
       // no callback ignore
@@ -99,12 +108,24 @@ class SerapiTagger {
       return;
     }
 
+    if (message.includes('CoqAst')) {
+      const sexp = message.slice(message.indexOf('ObjList(') + 8,
+          message.length-3);
+      writeToFile(sexp, '\n');
+    }
     const data = message.replace(/,\)/g, ' ",")');
     const parsedData = parse(data);
     if (parsedData instanceof Error) {
       console.log('Could not parse: ', data);
       console.warn(parsedData);
       return;
+    }
+
+    if (this.logging) {
+      console.group('Parsing sexp into:');
+      console.dir(parsedData, {depth: null});
+      // console.dir(parsedData);
+      console.groupEnd();
     }
 
     if (parsedData[0] !== 'Feedback') {

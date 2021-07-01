@@ -273,6 +273,27 @@ export default {
             shortkeyTag: '',
             requires: ['notebook', 'coq-ready'],
           },
+          {
+            text: 'Output all ASTs',
+            event: 'coqAST',
+            eventType: 'on-proof-window',
+            shortkeyTag: '',
+            requires: ['notebook', 'coq-ready'],
+          },
+          {
+            text: 'Auto output full ASTs',
+            event: 'coqLogAST',
+            eventType: 'on-proof-window',
+            shortkeyTag: '',
+            requires: ['notebook', 'coq-ready'],
+          },
+          {
+            text: 'Log currently unparsed types',
+            event: 'coqUnparsedAST',
+            eventType: 'on-proof-window',
+            shortkeyTag: '',
+            requires: ['notebook', 'coq-ready'],
+          },
         ] : []),
         help: [
           // 0,1,2 are magical constants from store.js
@@ -353,7 +374,7 @@ export default {
               continue;
             }
             const isEnabled = button.requires.every(
-                (requirement) => status.includes(requirement)
+                (requirement) => status.includes(requirement),
             );
             this.$set(button, 'disabled', !isEnabled);
           }

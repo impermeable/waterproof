@@ -34,7 +34,7 @@
    * {
    *  type: 'hint',
    *  title: 'Shown on unopened hint',
-   *  text: 'Maybe you could use Proof. (IDIOT)',
+   *  text: 'Maybe you could use Proof.',
    * }
    */
 import WpBlock from './WpBlock';
@@ -89,16 +89,16 @@ export default {
       }
     },
     fixError: function() {
-      this.block.text = DEFAULT_TITLE + '\n'
-        + HINT_SEPARATOR + '\n'
-        + this.block.text;
+      this.block.text = DEFAULT_TITLE + '\n' +
+        HINT_SEPARATOR + '\n' +
+        this.block.text;
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-  @import "/../../../assets/sass/_colors.scss";
+  @import "./../../../assets/sass/_colors.scss";
 
   .hint-base {
     position: relative;

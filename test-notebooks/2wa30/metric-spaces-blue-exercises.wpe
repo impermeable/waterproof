@@ -1,0 +1,464 @@
+{
+  "exerciseSheet": true,
+  "blocks": [
+    {
+      "type": "text",
+      "text": "# **Metric spaces**\nThis file contains the blue exercises from the chapter Metric Spaces.\nTo run this file we have to import some libraries. You can ignore these."
+    },
+    {
+      "type": "code",
+      "text": "Require Import Reals.\nRequire Import wplib.Notations.Notations.\nRequire Import wplib.Tactics.Tactics.\nRequire Import Coq.Logic.FinFun.\nRequire Import Coq.Reals.ROrderedType.\nRequire Import Coq.micromega.Lra.\n\nRequire Import wplib.Tactics.AdditionalLemmas.\nHint Resolve f_equal : additional.\n\nSection Metric_Spaces."
+    },
+    {
+      "type": "text",
+      "text": "## **Before we start, some syntax issues**\n\nBecause of the technology that underlies Waterproof, there are several places where unfortunately, the way we write things down in Waterproof deviates a bit from how we would normally write it in Mathematics.\n\nFor instance, whereas normally in mathematics we would often write $\\in$, in Waterproof we usually need to replace this by ':'.\n\nAnother difference is that in mathematics we would write $d(x, y)$ for the application of a function $d$ to points $x$ and $y$. In Waterproof, this doesn't work. Instead, you can write `d (x) (y)` or just `d x y`.\n\nIn general, it may take some time to get used to the syntax. Feel free to ask in the corresponding channel on MS Teams for assistance if something is unclear.\n\nBelow we give many hints, but also check out the pane that appears when you click on the 'hammer' symbol on the top right. That gives many suggestions for what you could write.\n\n## **Some definitions in WaterProof**\n\nRecall: a metric space $(X, \\text{dist})$ is a pair of a set $X$ and a distance function $\\text{dist}$ on $X$."
+    },
+    {
+      "type": "code",
+      "text": "Variable M : Metric_Space.\nDefinition X := Base M.\nDefinition dist := dist M."
+    },
+    {
+      "type": "text",
+      "text": "Remember, a distance function $\\text{dist}$ is a function $X \\times X \\to \\mathbb{R}$ satisfying the following five properties."
+    },
+    {
+      "type": "code",
+      "text": "Definition dist_positive : ∀ x y : X, dist x y ≥ 0\n  := dist_pos M."
+    },
+    {
+      "type": "code",
+      "text": "\nDefinition dist_non_degenerate : ∀ x y : X, (dist x y = 0) ⇒ (x = y). \n  Take x, y : X. Apply (dist_refl M). Defined."
+    },
+    {
+      "type": "code",
+      "text": "Definition dist_symmetric : ∀ x y : X, dist x y = dist y x\n  := dist_sym M."
+    },
+    {
+      "type": "code",
+      "text": "Definition dist_triangle_inequality : ∀ x y z : X, dist x z ≤ dist x y + dist y z.\n  Take x, y and z : X. Apply (dist_tri M). Qed."
+    },
+    {
+      "type": "code",
+      "text": "Definition dist_reflexive : ∀ x : X, dist x x = 0.\n  Take x : X. Apply (dist_refl M). We need to show that (x = x). It holds that (x = x). Defined."
+    },
+    {
+      "type": "text",
+      "text": "## **Exercise 1: injective function**\n\nLet $(X, \\text{dist})$ be a metric space, as we defined above.\nLet $Y$ be an arbitrary set and let $f : Y \\to X$ be injective.\nIn WaterProof, we write:"
+    },
+    {
+      "type": "code",
+      "text": "Variable Y : Set.\nVariable f : Y → X.\nHypothesis f_is_injective : Injective f."
+    },
+    {
+      "type": "text",
+      "text": "We define a distance function $d : Y \\times Y \\to ℝ$ as follows:\n$$ d(x, y) = \\text{dist}(f(x), f(y)), \\quad \\forall  x, y \\in Y.$$\nIn WaterProof, we define it as follows:"
+    },
+    {
+      "type": "code",
+      "text": "Definition d : Y → Y → ℝ := fun (x y : Y) ↦ dist (f x) (f y)."
+    },
+    {
+      "type": "text",
+      "text": "\nYou can read this as a function taking $x, y \\in Y$ as input and mapping them to $\\text{dist}(f(x), (y))$.\n\nShow that $d$ is a metric.\nYou can do that by proving five separate lemmas, each involving one of the properties we mentioned before.\n\nFirst, show that $d$ is positive. \n\n**Important:** when you are done with the proof, change the word `Admitted` to `Qed`."
+    },
+    {
+      "type": "hint",
+      "text": "Click to open hint.\n<hint>\nIf you want to define a variable in your proof, e.g. $x ∈ \\mathbb{R}$ , you can write\n\n```Take x : ℝ.```"
+    },
+    {
+      "type": "hint",
+      "text": "Click to open hint.\n<hint>\nIf you want to use a lemma that was already proven, you could write\n\n```By``` <name of lemma> ```it holds that (```<what you want to show with that lemma>```) (```<name of hypothesis>```).```\n\nFor instance, in this first lemma, it might be a good idea to use\n\n```dist_positive```.\n\nGood luck!"
+    },
+    {
+      "type": "code",
+      "text": "Lemma d_positive : ∀ x y : Y, d x y ≥ 0.\nProof.\n\n"
+    },
+    {
+      "type": "input",
+      "start": true,
+      "id": "input-1"
+    },
+    {
+      "type": "code",
+      "text": "Admitted."
+    },
+    {
+      "type": "input",
+      "start": false,
+      "id": "input-1"
+    },
+    {
+      "type": "text",
+      "text": "\n**Important:** Did you remember to change the `Admitted` to `Qed` after you finished the proof?\n\nNext, show that $d$ is non-degenerate.\n"
+    },
+    {
+      "type": "hint",
+      "text": "Click to open hint.\n<hint>\nIf you want to show an if and only if, you can write \n\n```We show both directions.```\n\nThis will break the goal down into two separate goals, just like in a 'normal' proof!"
+    },
+    {
+      "type": "hint",
+      "text": "Click to open hint.\n<hint>\nIn this lemma, you are going to need that $f$ is injective, and that it is well-defined!\nMoreover, if you want to specify an assumption, you can write\n\n```Assume``` <name of assumption> ``` : (```<assumption>```).```"
+    },
+    {
+      "type": "code",
+      "text": "Lemma d_non_degenerate : ∀ x y : Y, d x y = 0 ⇒ x = y.\nProof."
+    },
+    {
+      "type": "input",
+      "start": true,
+      "id": "input-2"
+    },
+    {
+      "type": "code",
+      "text": "Admitted."
+    },
+    {
+      "type": "input",
+      "start": false,
+      "id": "input-2"
+    },
+    {
+      "type": "text",
+      "text": ""
+    },
+    {
+      "type": "text",
+      "text": "\nThirdly, prove that $d(x,y) = d(y, x)$ for all $x, y ∈ Y$.\n"
+    },
+    {
+      "type": "code",
+      "text": "Lemma d_symmetric : ∀ x y : Y, d x y = d y x.\nProof.\n"
+    },
+    {
+      "type": "hint",
+      "text": "Click to open hint.\n<hint>\nSometimes, you want to conclude something by concatenating a number of (in)equalites.\nFor example, when you want to show that for $a < b, b < c$ it holds that $a < c$, you could write\n$a < b < c$.\n\nIn WaterProof, you can do that by using\n\n```Rewrite``` (statement 1) sign 1 (statement 2) sign 2 (statement 3).\n\nNote the brackets! Our example would be\n\n```Rewrite (a) < (b) < (c)```."
+    },
+    {
+      "type": "input",
+      "start": true,
+      "id": "input-3"
+    },
+    {
+      "type": "code",
+      "text": "Admitted."
+    },
+    {
+      "type": "input",
+      "start": false,
+      "id": "input-3"
+    },
+    {
+      "type": "text",
+      "text": "\nThe fourth step is to prove the triangle inequality for $d$.\n"
+    },
+    {
+      "type": "code",
+      "text": "Lemma d_triangle_inequality : ∀ x y z : Y, d x z ≤ d x y + d y z.\nProof."
+    },
+    {
+      "type": "input",
+      "start": true,
+      "id": "input-4"
+    },
+    {
+      "type": "code",
+      "text": "Admitted."
+    },
+    {
+      "type": "input",
+      "start": false,
+      "id": "input-4",
+      "text": "asd"
+    },
+    {
+      "type": "text",
+      "text": "\nFinally, show that $d$ is reflexive.\n"
+    },
+    {
+      "type": "code",
+      "text": "Lemma d_reflexive : ∀ y : Y, d y y = 0.\nProof."
+    },
+    {
+      "type": "input",
+      "start": true,
+      "id": "input-13"
+    },
+    {
+      "type": "code",
+      "text": "Admitted."
+    },
+    {
+      "type": "input",
+      "start": false,
+      "id": "input-13"
+    },
+    {
+      "type": "text",
+      "text": "\nIf you have proven these five lemmas, you have succesfully shown that $d$ is a metric!\n"
+    },
+    {
+      "type": "text",
+      "text": "## **Exercise 2: restriction**\nLet $(X, \\text{dist})$ be a metric space.\nLet $A \\subset X$ be a subset.\nDefine the function $\\text{dist}|_A : A \\times A \\to \\R$ by \n$$\\text{dist}|_A(x, y) := \\text{dist}(x, y).$$\nFirst, we define a subset $A$. "
+    },
+    {
+      "type": "code",
+      "text": "Variable in_A : X → Prop.\nDefinition A := sig in_A."
+    },
+    {
+      "type": "text",
+      "text": "You can ignore the following lines!"
+    },
+    {
+      "type": "code",
+      "text": "Definition A2X (x : A) : Base M := (proj1_sig x).\nCoercion A2X : A >-> Base.\nDefinition base_same_X_in_A := base_same X in_A.\nDefinition same_base_X_in_A := same_base X in_A.\nHint Resolve base_same_X_in_A : additional.\nHint Resolve same_base_X_in_A : additional."
+    },
+    {
+      "type": "text",
+      "text": "\nWith $A$ fixed, we define the restricted distance function to $A$:"
+    },
+    {
+      "type": "code",
+      "text": "\nDefinition dist_A : A → A → R \n  := fun (x y : A) ↦ dist x y."
+    },
+    {
+      "type": "text",
+      "text": "\nNow, the goal is to show that $\\text{dist}|_A$ is indeed a metric.\nYou can again do that by showing four smaller lemmas.\nFirst, show that $\\text{dist}|_A$ is always positive."
+    },
+    {
+      "type": "code",
+      "text": "Lemma dist_A_positive : ∀ x y : A, dist_A x y ≥ 0.\nProof."
+    },
+    {
+      "type": "input",
+      "start": true,
+      "id": "input-5"
+    },
+    {
+      "type": "code",
+      "text": "Admitted."
+    },
+    {
+      "type": "input",
+      "start": false,
+      "id": "input-5"
+    },
+    {
+      "type": "text",
+      "text": "\nNext, show that $\\mathrm{dist}|_A$ is non-degenerate.\n"
+    },
+    {
+      "type": "code",
+      "text": "Lemma dist_A_non_degenerate : ∀ x y : A, dist_A x y = 0 ⇒ x = y.\nProof."
+    },
+    {
+      "type": "input",
+      "start": true,
+      "id": "input-6"
+    },
+    {
+      "type": "code",
+      "text": "Admitted."
+    },
+    {
+      "type": "input",
+      "start": false,
+      "id": "input-6"
+    },
+    {
+      "type": "text",
+      "text": "\nNow, show that for all $x, y \\in A$ we have $\\text{dist}|_A(x, y) = \\text{dist}|_A(y, x)$.\n"
+    },
+    {
+      "type": "code",
+      "text": "Lemma dist_A_symmetric : ∀ x y : A, dist_A x y = dist_A y x.\nProof."
+    },
+    {
+      "type": "hint",
+      "text": "Click to open hint.\n<hint>\nIf you simply want to use a statement that you know holds, without using a lemma, you can try to state that by using\n\n```It holds that``` (statement) (name)```.```\n\nIf this indeed holds, a hypothesis with the name ```name``` will be added.\nHowever, sometimes WaterProof can not find a proof for the statement.\nIn that case, you can either check whether your statement is correct, or try to make a smaller step.\n\nNote that if (statement) is equivalent to the goal, you can leave out (name) and finish the proof by using\n\n```It holds that``` (goal)```.```"
+    },
+    {
+      "type": "input",
+      "start": true,
+      "id": "input-7"
+    },
+    {
+      "type": "code",
+      "text": "Admitted."
+    },
+    {
+      "type": "input",
+      "start": false,
+      "id": "input-7"
+    },
+    {
+      "type": "text",
+      "text": "\nNext, show that the triangle inequality holds for $\\text{dist}|_A$.\n"
+    },
+    {
+      "type": "code",
+      "text": "Lemma dist_A_triangle_inequality : ∀ x y z : A, dist_A x z ≤ dist_A x y + dist_A y z.\nProof."
+    },
+    {
+      "type": "input",
+      "start": true,
+      "id": "input-8"
+    },
+    {
+      "type": "code",
+      "text": "Admitted."
+    },
+    {
+      "type": "input",
+      "start": false,
+      "id": "input-8"
+    },
+    {
+      "type": "text",
+      "text": "\nFinally, show that $\\mathrm{dist}|_A$ is reflexive.\n"
+    },
+    {
+      "type": "code",
+      "text": "Lemma dist_A_reflexive: ∀ x : A, dist_A x x = 0.\nProof."
+    },
+    {
+      "type": "input",
+      "start": true,
+      "id": "input-14"
+    },
+    {
+      "type": "code",
+      "text": "Admitted."
+    },
+    {
+      "type": "input",
+      "start": false,
+      "id": "input-14"
+    },
+    {
+      "type": "text",
+      "text": "## **Exercise 3: discrete metric**\nConsider the function $d' : \\mathbb{R} \\times \\mathbb{R} \\to \\mathbb{R}$ defined by\n$$d'(x, y) = \\begin{cases}0, &\\text{if } a = b,\\\\ 1, &\\text{else}.\\end{cases}$$\n\nThe exact implementation of $d'$ in WaterProof is not important, so you can ignore the following codeblock.\n"
+    },
+    {
+      "type": "code",
+      "text": "Definition d' : ℝ → ℝ → ℝ := fun (x y : ℝ) => if Reqb x y then 0 else 1.\n\nLemma d'_eq_0 : forall x y : ℝ, d' x y = 0 -> (Reqb x y) = true.\nProof.\nTake x, y : ℝ. \nAssume d'_0 : (d' x y = 0).\nEither (x = y) or (x ≠ y).\nApply Req_true.\nApply e.\n\nunfold d' in d'_0.\nrewrite (Req_false x y n) in d'_0.\nIt holds that (1 ≠ 0) (H1).\ncontradiction.\nQed.\n\nLemma d'_eq_1 : forall x y : ℝ, d' x y = 1 -> (Reqb x y) = false.\nProof.\nTake x, y : ℝ. \nAssume d'_1 : (d' x y = 1).\nExpand the definition of d' in d'_1.\nEither (x = y) or (x ≠ y).\n\nrewrite (Req_true x y e) in d'_1.\nIt holds that (0 ≠ 1) (H1). contradiction.\napply Req_false. apply n.\nQed.\n\nHint Resolve d'_eq_0 : reals.\nHint Resolve d'_eq_1 : reals.\nHint Extern 0 => unfold d'; rewrite Req_true; lra : reals.\nHint Extern 0 => unfold d'; rewrite Req_false; lra : reals."
+    },
+    {
+      "type": "text",
+      "text": "\nThe goal is to show that $d'$ is a metric. Again, first prove that $d'$ is positive.\n"
+    },
+    {
+      "type": "code",
+      "text": "Lemma d'_positive : ∀ x y : ℝ, d' x y ≥ 0.\nProof."
+    },
+    {
+      "type": "hint",
+      "text": "Click to open hint.\n<hint>\nIn the following lemmas, you will notice that you have to distinguish cases.\nIn particular, it might be useful to distinguish on the cases $x = y$ and $x \\neq y$.\n\nIn WaterProof, you can do that by using the following:\n\n```Either``` (case 1) ```or```  (case 2)```.```"
+    },
+    {
+      "type": "input",
+      "start": true,
+      "id": "input-9"
+    },
+    {
+      "type": "code",
+      "text": "Admitted."
+    },
+    {
+      "type": "input",
+      "start": false,
+      "id": "input-9"
+    },
+    {
+      "type": "text",
+      "text": "\nNext, show that $d'$ is non-degenerate.\n"
+    },
+    {
+      "type": "code",
+      "text": "Lemma d'_non_degenerate : ∀ x y : ℝ, d' x y = 0 ⇒ x = y.\nProof."
+    },
+    {
+      "type": "input",
+      "start": true,
+      "id": "input-10"
+    },
+    {
+      "type": "code",
+      "text": "Admitted."
+    },
+    {
+      "type": "input",
+      "start": false,
+      "id": "input-10"
+    },
+    {
+      "type": "text",
+      "text": "\nNext, show that $d'$ is symmetric.\n"
+    },
+    {
+      "type": "code",
+      "text": "Lemma d'_sym : ∀ x y : ℝ, d' x y = d' y x.\nProof."
+    },
+    {
+      "type": "input",
+      "start": true,
+      "id": "input-11"
+    },
+    {
+      "type": "code",
+      "text": "Admitted."
+    },
+    {
+      "type": "input",
+      "start": false,
+      "id": "input-11"
+    },
+    {
+      "type": "text",
+      "text": "\nNext, show that the triangle inequality holds for $d'$.\nThis might be a little tedious, and you may need to consider a number of different cases, so do not be scared if the proof is a bit longer than before.\n"
+    },
+    {
+      "type": "hint",
+      "text": "Click to open hint.\n<hint>\nIf you know that $x = y$ and $y = z$, what do you know about the relation between $x$ and $z$? \nWhat do you know for the case when $x \\neq y$ and $y = z$ or when $x = y$ and $y \\neq z$?\nAnd for $x \\neq y$ and $y \\neq z$?"
+    },
+    {
+      "type": "code",
+      "text": "Lemma d'_triangle_inequality : ∀ x y z : ℝ, d' x z ≤ d' x y + d' y z.\nProof."
+    },
+    {
+      "type": "input",
+      "start": true,
+      "id": "input-12"
+    },
+    {
+      "type": "code",
+      "text": "Admitted."
+    },
+    {
+      "type": "input",
+      "start": false,
+      "id": "input-12"
+    },
+    {
+      "type": "text",
+      "text": "\nFinally, show that $d'$ is reflexive.\n"
+    },
+    {
+      "type": "code",
+      "text": "Lemma d'_reflexive : ∀ x : ℝ, d' x x = 0.\nProof."
+    },
+    {
+      "type": "input",
+      "start": true,
+      "id": "input-15"
+    },
+    {
+      "type": "code",
+      "text": "Admitted."
+    },
+    {
+      "type": "input",
+      "start": false,
+      "id": "input-15"
+    }
+  ]
+}

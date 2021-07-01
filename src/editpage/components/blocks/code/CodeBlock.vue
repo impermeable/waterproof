@@ -14,7 +14,7 @@
               <span v-else
                     :key="'code-' + index + '-part-' + index2"
                     :class="{'exec-inline-error': part.error}"
-                    v-html="codeToHtml(part.text)">
+                    v-html="part.text">
               </span>
           </template>
       </inlineable>
@@ -36,66 +36,96 @@ export default {
   mixins: [WpBlock],
   computed: {
     formattedText: function() {
-      const text = this.block.text.trim();
+      let text = this.block.text.trimStart();
+      const diff = this.block.text.length - text.length;
+      // console.log('diff', diff);
+      text = text.trimEnd();
 
       // Determine where to insert error, tick, or both
-      const splitAt = this.foundSentences.map((i) => {
-        return {at: i - 1, what: 'sentence-end'};
+      const sentences = this.localSentences.map((i) => {
+        return {
+          at: i.end - diff,
+          what: 'sentence-end',
+          ast: i.ast,
+          start: i.start - diff};
       });
-      if (this.hasError) {
-        splitAt.push({
-          at: this.block.state.error.from,
-          what: 'error-start',
-        });
-        splitAt.push({
-          at: this.block.state.error.to,
-          what: 'error-end',
-        });
+      // if (this.hasError) {
+      //   splitAt.push({
+      //     at: this.block.state.error.from,
+      //     what: 'error-start',
+      //   });
+      //   splitAt.push({
+      //     at: this.block.state.error.to,
+      //     what: 'error-end',
+      //   });
+      // }
+
+      if (sentences.length === 0) {
+        return [
+          {
+            text: this.block.text.trim(),
+          },
+        ];
       }
 
       const parts = [];
-      // Sort from last to first
-      splitAt.sort((obj1, obj2) => obj1.at - obj2.at);
+      // sentences.sort((obj1, obj2) => obj1.at - obj2.at);
+      // console.log(sentences); // TODO uncomment and deal with this next.
       let index = 0;
-      let inError = false;
-      for (const obj of splitAt) {
+      // let inError = false;
+      for (const obj of sentences) {
+        // console.log(obj); // TODO uncomment and deal with this next.
+        // console.log('AST', obj.ast);
         const newIndex = obj.at;
-        if (newIndex > index) {
+        // prefix
+        parts.push({
+          text: text.slice(index, obj.start),
+        });
+        index = obj.start;
+        const sentenceText = text.slice(index, newIndex);
+        parts.push({
+          text: this.colorText(sentenceText, obj.ast),
+        });
+        // const h = Math.floor(Math.random() * 24) * 15;
+        // parts.push({
+        //   text: `<span style="color: hsl(${h}, 90%, 50%)">` +
+        //       + '</span>',
+        // });
+        // parts.push({
+        //   text: '.',
+        // });
+        index = obj.at;
+        // if (obj.what === 'error-start') {
+        //   inError = true;
+        // } else if (obj.what === 'error-end') {
+        //   inError = false;
+        // } else if (obj.what === 'sentence-end') {
+        // console.log(index);
+        const realIndex = newIndex + this.block.state.textIndex;
+        let type = '';
+        if (realIndex === this.executedIndex) {
+          type = 'done';
+          // skip a character (the final .)
+          index++;
+        } else if (realIndex === this.runningIndex) {
+          type = 'doing';
+          // skip a character (the final .)
+          index++;
+        }
+
+        parts.push({
+          end: true,
+          index: realIndex,
+          special: type,
+        });
+
+        if (this.inline && index === text.length) {
           parts.push({
-            text: text.slice(index, newIndex),
-            error: inError,
+            text: ' ',
+            special: true,
           });
         }
-        index = newIndex;
-        if (obj.what === 'error-start') {
-          inError = true;
-        } else if (obj.what === 'error-end') {
-          inError = false;
-        } else if (obj.what === 'sentence-end') {
-          const realIndex = newIndex + this.block.state.textIndex + 1;
-          let type = '';
-          if (realIndex === this.executedIndex) {
-            type = 'done';
-            // skip a character (the final .)
-            index++;
-          } else if (realIndex === this.runningIndex) {
-            type = 'doing';
-            // skip a character (the final .)
-            index++;
-          }
-
-          parts.push({
-            end: true,
-            index: realIndex,
-            special: type,
-          });
-
-          if (this.inline && index === text.length) {
-            parts.push({
-              text: ' ',
-            });
-          }
-        }
+        // }
       }
 
       if (index < text.length) {
@@ -107,8 +137,8 @@ export default {
       return parts;
     },
     hasError: function() {
-      return this.block.state.error !== null
-        && this.block.state.error !== undefined;
+      return this.block.state.error !== null &&
+        this.block.state.error !== undefined;
     },
     hasErrorBlock: function() {
       return this.hasError && this.block.state.error.message;
@@ -124,13 +154,89 @@ export default {
         'edit-block': this.isEditable,
       };
     },
-    foundSentences() {
-      return this.sentences.map((s) => s - this.block.state.textIndex)
-          .filter((i) => i >= 0)
-          .filter((i) => i <= this.block.text.length);
+    localSentences() {
+      const allSentences = [...Array(this.state.sentenceSize()).keys()]
+          .map((i) => {
+            return {
+              ast: this.state.getFlatAST(i),
+              end: this.state.endIndexOfSentence(i) -
+                     this.block.state.textIndex,
+              start: this.state.beginIndexOfSentence(i)-
+                  this.block.state.textIndex,
+            };
+          })
+          .filter(({end}) => end >= 0 && end <= this.block.text.length);
+      // console.log(allSentences);
+      return allSentences;
+      // console.log(this.block);
+      // return this.sentences.map((s) => s - this.block.state.textIndex)
+      //     .filter((i) => i >= 0)
+      //     .filter((i) => i <= this.block.text.length);
     },
   },
   methods: {
+    colorText: function(text, ast) {
+      // console.log('Coloring', text, 'with', ast);
+      if (ast == null || ast.length === 0) {
+        return this.escapeHtml(text);
+      }
+
+      let html = '';
+      let index = 0;
+
+      const part = (to) => {
+        const val = this.escapeHtml(text.slice(index, to));
+        index = to;
+        return val;
+      };
+
+      const toHue = function(str) {
+        let hash = 0;
+        if (str.length === 0) return hash;
+        for (let i = 0; i < str.length; i++) {
+          hash = str.charCodeAt(i) + ((hash << 5) - hash);
+          hash = hash & hash;
+        }
+        return 4 * (hash % 90) + hash % 4;
+      };
+
+      let i = 1;
+      for (const range of ast) {
+        const ex = html.slice(index, range.start);
+        const prt = part(range.start);
+        // html += prt; // TODO fixme
+        if (prt !== '') {
+          html = html.replace(ex, prt);
+        }
+        const pp = part(range.end);
+        const h = toHue(range.type);
+
+        if ( i === 1) {
+          html += `<span style="color: hsl(${h}, 60%, 50%)">${pp}</span>`;
+          i++;
+        } else {
+          html = this.replaceHtml(html, pp, h);
+        }
+      }
+      html += `<span class="final-append">${part(text.length)}</span>`;
+
+      return html;
+    },
+    replaceHtml: function(html, text, h) {
+      const mx = Math.max(html.indexOf('>'), 0);
+      // console.log(mx);
+      const start = html.indexOf(text, mx);
+      // console.warn('Inserting at index...', start, html, text);
+      if (start !== -1) {
+        const newH = html.replace(text,
+            `<span style="color: hsl(${h}, 60%, 50%)">${text}`+
+            `</span>`);
+
+        // console.warn('Result', newH);
+        return newH;
+      }
+      return html;
+    },
     highlight: function(text) {
       return text
           .replace(/\bLemma\b/g, '<span style="color:#2B39A7">Lemma</span>')

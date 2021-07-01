@@ -7,6 +7,14 @@ module.exports = {
     // config.plugins.delete('preload-editpage');
     // config.plugins.delete('prefetch-editpage');
     config.plugins.delete('hmr');
+    if (process.env.coverage === 'true') {
+      config.module
+          .rule('ts')
+          .use('istanbul')
+          .loader('istanbul-instrumenter-loader')
+          .options({esModules: true})
+          .before('ts-loader');
+    }
   },
   configureWebpack: {
     module: {
@@ -36,6 +44,7 @@ module.exports = {
         productName: 'Waterproof',
         remoteBuild: true,
         extraFiles: ['wrapper/assistance', 'wrapper/wplib'],
+        publish: ['github'],
         win: {
           extraFiles: ['wrapper/win'],
         },
@@ -44,6 +53,7 @@ module.exports = {
         },
         linux: {
           extraFiles: ['wrapper/lin'],
+          target: "AppImage",
         },
         fileAssociations: [
           {

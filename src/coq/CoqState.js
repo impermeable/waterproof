@@ -122,6 +122,13 @@ class CoqState {
    */
   getSentenceAsString(text, sentenceNr) {
   }
+
+  /**
+   * TEMP
+   * @param index
+   */
+  getFlatAST(index) {
+  }
 }
 
 export default CoqState;

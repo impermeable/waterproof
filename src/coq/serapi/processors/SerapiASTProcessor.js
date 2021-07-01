@@ -1,6 +1,17 @@
 import SerapiProcessor from '../util/SerapiProcessor';
 import {createASTCommand} from '../util/SerapiCommandFactory';
-import {extractCoqAST} from '../ASTProcessor';
+import {extractCoqAST, currentlyNotParsedTypes} from '../ASTProcessor';
+import {flattenAST} from '../datastructures/visitor/FlattenVisitor';
+// import {ppAST} from '../datastructures/visitor/PrettyVisitor';
+
+const fs = require('fs');
+const util = require('util');
+const logFile = fs.createWriteStream('log.log', {flags: 'w'});
+
+// eslint-disable-next-line require-jsdoc
+function writeToFile(...args) {
+  logFile.write(util.format.apply(null, args)+'\n');
+}
 
 /**
  * Processor for ast handling
@@ -14,6 +25,8 @@ class SerapiASTProcessor extends SerapiProcessor {
    */
   constructor(tagger, state, editor) {
     super(tagger, state, editor);
+
+    this.getAllAsts();
   }
 
   /**
@@ -28,6 +41,10 @@ class SerapiASTProcessor extends SerapiProcessor {
     return Promise.resolve();
   }
 
+  // eslint-disable-next-line require-jsdoc
+  getUnparsedTypes() {
+    return currentlyNotParsedTypes;
+  }
   /**
    * Fetch the asts for a specific sentence
    * @param {Number} sentenceIndex the index of the sentence
@@ -49,6 +66,20 @@ class SerapiASTProcessor extends SerapiProcessor {
     return this.sendCommand(createASTCommand(sentenceId), 'ast')
         .then((result) => {
           this.state.setASTforSID(sentenceId, result.ast);
+          // this.state.setFlatASTforSID(sentenceId,);
+
+          console.group(`AST for sentence: ${sentenceId}`);
+          // for now just print json repr
+          console.log(`Got AST for ${sentenceId}: `,
+              JSON.parse(JSON.stringify(result.ast)));
+
+          console.log(result.ast.pprint());
+
+          console.log(`Flattening:\n`);
+
+          console.log(flattenAST(result.ast));
+
+          console.groupEnd();
         });
   }
 
@@ -69,3 +100,4 @@ class SerapiASTProcessor extends SerapiProcessor {
 
 
 export default SerapiASTProcessor;
+export {writeToFile};
