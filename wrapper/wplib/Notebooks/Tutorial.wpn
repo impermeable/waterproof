@@ -7,11 +7,11 @@
     },
     {
       "type": "code",
-      "text": "Require Import Reals.\n\nRequire Import wplib.Tactics.Tactics.\nRequire Import wplib.Tactics.TacticsContra.\nRequire Import wplib.Notations.Notations."
+      "text": "Require Import Reals.\n\nRequire Import Waterproof.AllTactics.\nRequire Import Waterproof.contradiction_tactics.basic_contradiction.\nRequire Import Waterproof.notations.notations.\nRequire Import Waterproof.load_database.RealsAndIntegers."
     },
     {
       "type": "text",
-      "text": "The code consists of four sentences. Every sentence finishes with a period. In these four sentences, libraries are imported that are necessary to make the rest of the notebook work."
+      "text": "The code consists of five sentences. Every sentence finishes with a period. In these four sentences, libraries are imported that are necessary to make the rest of the notebook work."
     },
     {
       "type": "text",
@@ -39,11 +39,11 @@
     },
     {
       "type": "text",
-      "text": "\nNext, we tell Waterproof what to do to prove the lemma. For such a simple statement, we can just write and execute the sentence `\"It holds that (0=0).\"` and Waterproof will check automatically that this holds. We will often refer to executing such a sentence as **applying a tactic.**"
+      "text": "\nNext, we tell Waterproof what to do to prove the lemma. For such a simple statement, we can just write and execute the sentence `\"We conclude that (0=0).\"` and Waterproof will check automatically that this holds. We will often refer to executing such a sentence as **applying a tactic.**"
     },
     {
       "type": "code",
-      "text": "\nIt holds that (0 = 0)."
+      "text": "\nWe conclude that (0 = 0)."
     },
     {
       "type": "text",
@@ -55,7 +55,7 @@
     },
     {
       "type": "text",
-      "text": "\n**HINT:** When writing `It holds that (...)`, it is important that at the place of the dots you write the current goal (which you can see under **Proof progress**), and not another statement.\n\n**HINT:** If you click on the hammer symbol on the top right, a list of tactics will open. You can click on any of the tactics, and the tactic will be inserted in the text, usually with some placeholders that you need to fill in."
+      "text": "\n**HINT:** When writing `We conclude that (...)`, it is important that at the place of the dots you write the current goal (which you can see under **Proof progress**), and not another statement.\n\n**HINT:** If you click on the hammer symbol on the top right, a list of tactics will open. You can click on any of the tactics, and the tactic will be inserted in the text, usually with some placeholders that you need to fill in."
     },
     {
       "type": "text",
@@ -113,7 +113,7 @@
     },
     {
       "type": "code",
-      "text": "\nIt holds that (x = x).\nQed."
+      "text": "\nWe conclude that (x = x).\nQed."
     },
     {
       "type": "text",
@@ -179,7 +179,7 @@
     },
     {
       "type": "code",
-      "text": "\nIt holds that (3 = 3).\nQed."
+      "text": "\nWe conclude that (3 = 3).\nQed."
     },
     {
       "type": "text",
@@ -253,11 +253,11 @@
     },
     {
       "type": "text",
-      "text": "\nThe **name** of this assumption is in this case **a_lt_0**. What you are actually assumping is written after the colon, namely **a < 0**. Note how after executing the sentence, the assumption $a < 0$ is added under **Proof progress** with the name **a_lt_0**.\n\nWe finish the proof."
+      "text": "\nThe **name** of this assumption is in this case **a_lt_0**. What you are actually assuming is written after the colon, namely **a < 0**. Note how after executing the sentence, the assumption $a < 0$ is added under **Proof progress** with the name **a_lt_0**.\n\nWe finish the proof."
     },
     {
       "type": "code",
-      "text": "We need to show that (-a > 0).\nIt holds that (-a > 0).\nQed."
+      "text": "We need to show that (-a > 0).\nWe conclude that (-a > 0).\nQed."
     },
     {
       "type": "text",
@@ -284,370 +284,6 @@
       "type": "input",
       "start": false,
       "id": "input-6"
-    },
-    {
-      "type": "text",
-      "text": "## Intermezzo about sets\n\nIn Waterproof, we think of subsets of the real line as functions from the real line to the type of propositions, i.e. the type of mathematical statements. An example of a subset is"
-    },
-    {
-      "type": "code",
-      "text": "\nDefinition A := fun (x : ℝ) ↦ x < 1."
-    },
-    {
-      "type": "text",
-      "text": "\nThis notation defines $A$ as a function that sends $x : ℝ$ to the proposition $x < 1$.\nTherefore, $A$ corresponds to those $x : ℝ$ such that $x < 1$, i.e. it corresponds to the interval $(-\\infty, 1)$. \n\nSimilarly, we can define the subset $B$ by"
-    },
-    {
-      "type": "code",
-      "text": "\n\nDefinition B := fun (x : ℝ) ↦ (0 ≤ x) ∧ (x ≤ 2)."
-    },
-    {
-      "type": "text",
-      "text": "\nThen, $B$ corresponds to those $x : ℝ$ such that $(0 \\leq x)$ and $(x \\leq 2)$, so it corresponds to the closed interval $[0,2]$.\n\nWe will now use simple sets and statements about them to illustrate more proof tactics in Waterproof."
-    },
-    {
-      "type": "text",
-      "text": "## Expanding definitions: example on upper bounds.\n\nRemember that we have defined $A$ in the last section as the interval $(-\\infty, 1)$. The following lemma expresses that $1$ is an upper bound for $A$. In Waterproof, the statement is encoded as `is_upper_bound A 1`."
-    },
-    {
-      "type": "code",
-      "text": "Lemma example_upper_bound :\n  is_upper_bound A 1.\n  \nProof."
-    },
-    {
-      "type": "text",
-      "text": "First we expand the definition of `is_upper_bound`."
-    },
-    {
-      "type": "code",
-      "text": "\nExpand the definition of is_upper_bound."
-    },
-    {
-      "type": "text",
-      "text": "\nIf you execute the proof to the previous sentence, you will observe that in the **Proof progress** window, `is_upper_bound` in the goal has been replaced by its definition. It is good practice to repeat the goal also in the proof itself, to increase the readability."
-    },
-    {
-      "type": "code",
-      "text": "\nWe need to show that (for all x : ℝ, A x ⇒ x ≤ 1)."
-    },
-    {
-      "type": "text",
-      "text": "\nA good way to read `A x ⇒ x ≤ 1` is \"if $x$ is in $A$, then $x \\leq 1$\". Although this may be a bit confusing at first, note that we **do not and cannot** write $x : A$ for \"$x$ is in $A$\". You could, however, write `x ∈ A`, which is just alternative notation for `A x`.\n \nSince we need to show a \"for-all\" statement, it is clear how to continue the proof."
-    },
-    {
-      "type": "code",
-      "text": "\nTake x : ℝ. Assume x_in_A : (x ∈ A)."
-    },
-    {
-      "type": "text",
-      "text": "\nA this stage, we may want to use the definition of $A$ itself. We can expand the definition of $A$ in the hypothesis `x_in_A` by writing"
-    },
-    {
-      "type": "code",
-      "text": "\nExpand the definition of A in x_in_A."
-    },
-    {
-      "type": "text",
-      "text": "\nWe can now finish the proof."
-    },
-    {
-      "type": "code",
-      "text": "\nIt holds that (x ≤ 1).\nQed."
-    },
-    {
-      "type": "text",
-      "text": "## An alternative way of expanding definitions\n\nThe disadvantage of the above way of expanding definitions is that the written proof above does not contain the result of expanding the definitions. We now present an alternative way of expanding definitions, which instead just states what the result of the expanding should be."
-    },
-    {
-      "type": "code",
-      "text": "Lemma example_upper_bound_2 :\n  is_upper_bound A 1.\n  \nProof."
-    },
-    {
-      "type": "text",
-      "text": "First, instead of writing `Expand the definition of is_upper_bound.`, we just write"
-    },
-    {
-      "type": "code",
-      "text": "\nWe need to show that (∀ x : ℝ, (x ∈ A) ⇒ x ≤ 1)."
-    },
-    {
-      "type": "text",
-      "text": "\nWaterproof checks automatically that this comes down to the same thing. We continue the proof."
-    },
-    {
-      "type": "code",
-      "text": "\nTake x : ℝ. Assume x_in_A : (x ∈ A)."
-    },
-    {
-      "type": "text",
-      "text": "\nWe now would like to expand the definition of $A$ in `x_in_A`. We can just use that the result should come down to `(x < 1)` and write"
-    },
-    {
-      "type": "code",
-      "text": "\nWrite x_in_A as (x < 1). "
-    },
-    {
-      "type": "text",
-      "text": "\nWe can now finish the proof."
-    },
-    {
-      "type": "code",
-      "text": "It follows that (x ≤ 1).\nQed."
-    },
-    {
-      "type": "text",
-      "text": "\n**HINT:** the disadvantage of expanding definitions in this way, is that you need to know beforehand what is the result of expanding the definition. In practice, you can then peek at the result by first writing `Expand the definition` to see what is the result and then add a sentence of `We need to show that ...` or `Write ... as ...`. Afterwards, you can delete the sentence with `Expand the definition`."
-    },
-    {
-      "type": "text",
-      "text": "## Try it yourself"
-    },
-    {
-      "type": "code",
-      "text": "Lemma exercise_any_upp_bd_ge_0 :\n  for all b : ℝ, is_upper_bound A b ⇒ (0 ≤ b).\n  \nProof."
-    },
-    {
-      "type": "input",
-      "start": true,
-      "id": "input-4"
-    },
-    {
-      "type": "code",
-      "text": "Admitted."
-    },
-    {
-      "type": "input",
-      "start": false,
-      "id": "input-4"
-    },
-    {
-      "type": "text",
-      "text": "## Arguing by contradiction and making small steps"
-    },
-    {
-      "type": "code",
-      "text": "Lemma example_any_upp_bd_ge_1 :\n  for all b : ℝ, is_upper_bound A b ⇒ (1 ≤ b).\n  \nProof.\nTake b : ℝ. Assume b_upp_bd : (is_upper_bound A b).\nWrite b_upp_bd as (for all x : ℝ, x ∈ A ⇒ x ≤ b).\nWrite b_upp_bd as (for all x : ℝ, x < 1 ⇒ x ≤ b)."
-    },
-    {
-      "type": "text",
-      "text": "At this stage, it is useful (though not strictly necessary) to continue with a contradiction argument."
-    },
-    {
-      "type": "code",
-      "text": "\nWe argue by contradiction."
-    },
-    {
-      "type": "text",
-      "text": "\nObserve how the hypothesis `(¬ (1 ≤ b)` has been added under 'proof progress' after executing the previous line.\n\nWe cannot finish the proof by just writing `It holds that (1 ≤ b)`: Waterproof would not be able to find a proof. Instead we have to make a smaller step in between. We can do this as follows."
-    },
-    {
-      "type": "code",
-      "text": "\nIt holds that (b < 1) (b_lt_1)."
-    },
-    {
-      "type": "text",
-      "text": "\nThe main difference is that we have added `(b_lt_1)` at the end of the sentence. This is the name we give to the hypothesis."
-    },
-    {
-      "type": "code",
-      "text": "\nIt holds that (b < (b+1)/2) (b_lt_av_b_1).\nIt holds that ((b+1)/2 < 1) (av_b_1_lt_1).\n"
-    },
-    {
-      "type": "text",
-      "text": "Sometimes Waterproof needs a little help on what to use to prove a certain step. In the following sentence we provide the help by writing `By b_upp_bd`."
-    },
-    {
-      "type": "code",
-      "text": "\nBy b_upp_bd it holds that ((b+1)/2 ≤ b) (av_b_1_le_b)."
-    },
-    {
-      "type": "text",
-      "text": "\n(Actually, Waterproof doesn't really need the help here, but the proof does get easier to read).\n\nThe last inequality implies that $1 \\leq b$, so we could just finish the proof by writing `It holds that (1 ≤ b)`. However, we will show a different way of finishing the argument. "
-    },
-    {
-      "type": "code",
-      "text": "\nIt holds that (1 ≤ b) (H_contradictory)."
-    },
-    {
-      "type": "text",
-      "text": "\nAfter executing the above line, we have two contradictory hypothesis listed under 'proof progress', one saying that `(1 ≤ b)` and one saying that `¬(1 ≤ b)`. In case you have two such contradictory hypothesis, you can finish the proof by writing"
-    },
-    {
-      "type": "code",
-      "text": "\nContradiction.\nQed."
-    },
-    {
-      "type": "code",
-      "text": ""
-    },
-    {
-      "type": "text",
-      "text": "## Applying theorems and claims: Example supremum of an interval"
-    },
-    {
-      "type": "code",
-      "text": "Lemma example_sup_interval :\n  is_sup A 1."
-    },
-    {
-      "type": "code",
-      "text": "Proof.\nExpand the definition of is_sup.\nWe need to show that\n  (is_upper_bound A 1\n     ∧ \n   (for all b : ℝ,\n     is_upper_bound A b ⇒ 1 ≤ b))."
-    },
-    {
-      "type": "text",
-      "text": "\n(Note that the first sentence of the proof is not necessary and we could delete it)."
-    },
-    {
-      "type": "text",
-      "text": "\nSometimes it can be useful to make intermediate claims. You then first focus on proving that claim, before you continue the rest of the proof. Below we claim that $1$ is an upper bound of $A$ (by writing `(is_upper_bound A 1)` and call the statement `one_upp_bd`."
-    },
-    {
-      "type": "code",
-      "text": "\nWe claim that (is_upper_bound A 1) (one_upp_bd)."
-    },
-    {
-      "type": "text",
-      "text": "\nVery conveniently, we have already showed this statement in the Lemma `example_upper_bound` above. We can now just apply the lemma by writing"
-    },
-    {
-      "type": "code",
-      "text": "\n  Apply example_upper_bound."
-    },
-    {
-      "type": "text",
-      "text": "\nWe follow a similar strategy for the second statement in the goal."
-    },
-    {
-      "type": "code",
-      "text": "\n\nWe claim that\n  (for all b : ℝ, is_upper_bound A b ⇒ 1 ≤ b)\n  (any_upp_bd_ge_1).\n  Apply example_any_upp_bd_ge_1."
-    },
-    {
-      "type": "text",
-      "text": "The two statements from the claims are now listed as hypotheses under 'proof progress', and we can finish the proof."
-    },
-    {
-      "type": "code",
-      "text": "\nIt holds that (is_upper_bound A 1\n                 ∧\n              (for all b : ℝ,\n                 is_upper_bound A b ⇒ 1 ≤ b)).\nQed."
-    },
-    {
-      "type": "text",
-      "text": "\n## Try it yourself\n\nRecall that $B$ was defined as the interval $[0,2]$. Can you show that the supremum of $B$ is $2$?"
-    },
-    {
-      "type": "code",
-      "text": "Lemma sup_B_is_2 :\n  is_sup B 2.\n  \nProof."
-    },
-    {
-      "type": "input",
-      "start": true,
-      "id": "input-5"
-    },
-    {
-      "type": "code",
-      "text": "Admitted."
-    },
-    {
-      "type": "input",
-      "start": false,
-      "id": "input-5"
-    },
-    {
-      "type": "text",
-      "text": "## Defining variables, splitting and rewriting\n\nWith help of the following lemma, we will show a few additional proof techniques."
-    },
-    {
-      "type": "code",
-      "text": "Lemma exists_real_number_in_between :\n  for all (a b : ℝ),\n    (a < b) ⇒\n      (there exists c : ℝ,\n        a < c ∧ c < b)."
-    },
-    {
-      "type": "code",
-      "text": "Proof.\nTake a : ℝ. Take b : ℝ.\nAssume a_lt_b : (a < b).\nWe need to show that\n  (there exists c : ℝ,\n    a < c ∧ c < b)."
-    },
-    {
-      "type": "text",
-      "text": "Sometimes, it is useful to define an auxiliary variable in your proof. Below, we define the real number $d$ by writing"
-    },
-    {
-      "type": "code",
-      "text": "\nDefine d := ((a + b)/2)."
-    },
-    {
-      "type": "text",
-      "text": "\nWe can now choose $c$ equal to $d$."
-    },
-    {
-      "type": "code",
-      "text": "\nChoose c := d.\nWe need to show that (a < d ∧ d < b)."
-    },
-    {
-      "type": "text",
-      "text": "We could follow the strategy of the previous section, and first showing separately that $(a < d)$ and $(d< b)$, and then concluding, but here we illustrate a different technique."
-    },
-    {
-      "type": "text",
-      "text": "\nWe "
-    },
-    {
-      "type": "code",
-      "text": "split"
-    },
-    {
-      "type": "text",
-      "text": "the goal into two separate goals"
-    },
-    {
-      "type": "code",
-      "text": "."
-    },
-    {
-      "type": "code",
-      "text": "We need to show that (a < d)."
-    },
-    {
-      "type": "code",
-      "text": "Write a_lt_b using (b = b + 0) as\n  (a < (b + 0))."
-    },
-    {
-      "type": "text",
-      "text": "\nWaterproof can not find a proof immediately. We have to help a bit, by saying that it should rewrite $d$ to $(a+b)/2$."
-    },
-    {
-      "type": "code",
-      "text": "\nWrite goal using (d = (a + b)/2) as\n  (a < (a + b)/2).\n  It holds that (a < (a + b)/2)."
-    },
-    {
-      "type": "code",
-      "text": "We need to show that (d < b).\n  Write goal using (d = (a + b)/2) as\n  ((a + b)/2 < b).\n  It holds that ((a+b)/2 < b).\nQed."
-    },
-    {
-      "type": "text",
-      "text": "\nCertainly, the above lemma could be proved more efficiently, but the main idea was to illustrate some proof tactics."
-    },
-    {
-      "type": "text",
-      "text": "## Using \"there-exists\" statements"
-    },
-    {
-      "type": "code",
-      "text": "Lemma example_using_there_exists :\n  for all x : ℝ,\n    (there exists y : ℝ, y > 10 ∧ x > y) ⇒ (x > 10)."
-    },
-    {
-      "type": "code",
-      "text": "Proof.\nTake x : ℝ.\nAssume ex_y : (there exists y:ℝ, y > 10 ∧ x > y)."
-    },
-    {
-      "type": "text",
-      "text": "The hypothesis `ex_y` now says that there exists an $y\\in \\mathbb{R}$ such that $y > 10$ and $x > y$. We can add such a $y$ with these properties to the proof progress by writing."
-    },
-    {
-      "type": "code",
-      "text": "Choose y such that \n  y_gt_10_and_x_gt_y according to ex_y."
-    },
-    {
-      "type": "text",
-      "text": "We can then finish the proof."
-    },
-    {
-      "type": "code",
-      "text": "\nIt holds that (x > 10).\nQed."
     }
   ]
 }

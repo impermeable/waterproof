@@ -7,11 +7,11 @@
     },
     {
       "type": "code",
-      "text": "Require Import Reals.\n\nRequire Import wplib.Tactics.Tactics.\nRequire Import wplib.Tactics.TacticsContra.\nRequire Import wplib.Notations.Notations."
+      "text": "Require Import Reals.\n\nRequire Import Waterproof.AllTactics.\nRequire Import Waterproof.contradiction_tactics.basic_contradiction.\nRequire Import Waterproof.notations.notations.\nRequire Import Waterproof.load_database.RealsAndIntegers."
     },
     {
       "type": "text",
-      "text": "The code consists of four sentences. Every sentence finishes with a period. In these four sentences, libraries are imported that are necessary to make the rest of the notebook work."
+      "text": "The code consists of five sentences. Every sentence finishes with a period. In these four sentences, libraries are imported that are necessary to make the rest of the notebook work."
     },
     {
       "type": "text",
@@ -39,11 +39,11 @@
     },
     {
       "type": "text",
-      "text": "\nNext, we tell Waterproof what to do to prove the lemma. For such a simple statement, we can just write and execute the sentence `\"It holds that (0=0).\"` and Waterproof will check automatically that this holds. We will often refer to executing such a sentence as **applying a tactic.**"
+      "text": "\nNext, we tell Waterproof what to do to prove the lemma. For such a simple statement, we can just write and execute the sentence `\"We conclude that (0=0).\"` and Waterproof will check automatically that this holds. We will often refer to executing such a sentence as **applying a tactic.**"
     },
     {
       "type": "code",
-      "text": "\nIt holds that (0 = 0)."
+      "text": "\nWe conclude that (0 = 0)."
     },
     {
       "type": "text",
@@ -55,7 +55,7 @@
     },
     {
       "type": "text",
-      "text": "\n**HINT:** When writing `It holds that (...)`, it is important that at the place of the dots you write the current goal (which you can see under **Proof progress**), and not another statement.\n\n**HINT:** If you click on the hammer symbol on the top right, a list of tactics will open. You can click on any of the tactics, and the tactic will be inserted in the text, usually with some placeholders that you need to fill in."
+      "text": "\n**HINT:** When writing `We conclude that (...)`, it is important that at the place of the dots you write the current goal (which you can see under **Proof progress**), and not another statement.\n\n**HINT:** If you click on the hammer symbol on the top right, a list of tactics will open. You can click on any of the tactics, and the tactic will be inserted in the text, usually with some placeholders that you need to fill in."
     },
     {
       "type": "text",
@@ -113,7 +113,7 @@
     },
     {
       "type": "code",
-      "text": "\nIt holds that (x = x).\nQed."
+      "text": "\nWe conclude that (x = x).\nQed."
     },
     {
       "type": "text",
@@ -179,7 +179,7 @@
     },
     {
       "type": "code",
-      "text": "\nIt holds that (3 = 3).\nQed."
+      "text": "\nWe conclude that (3 = 3).\nQed."
     },
     {
       "type": "text",
@@ -253,11 +253,11 @@
     },
     {
       "type": "text",
-      "text": "\nThe **name** of this assumption is in this case **a_lt_0**. What you are actually assumping is written after the colon, namely **a < 0**. Note how after executing the sentence, the assumption $a < 0$ is added under **Proof progress** with the name **a_lt_0**.\n\nWe finish the proof."
+      "text": "\nThe **name** of this assumption is in this case **a_lt_0**. What you are actually assuming is written after the colon, namely **a < 0**. Note how after executing the sentence, the assumption $a < 0$ is added under **Proof progress** with the name **a_lt_0**.\n\nWe finish the proof."
     },
     {
       "type": "code",
-      "text": "We need to show that (-a > 0).\nIt holds that (-a > 0).\nQed."
+      "text": "We need to show that (-a > 0).\nWe conclude that (-a > 0).\nQed."
     },
     {
       "type": "text",
@@ -284,5 +284,6 @@
       "type": "input",
       "start": false,
       "id": "input-6"
-    } ]
+    }
+  ]
 }
