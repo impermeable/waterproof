@@ -7,7 +7,7 @@
     },
     {
       "type": "code",
-      "text": "Require Import Reals.\n\nRequire Import Waterproof.AllTactics.\nRequire Import Waterproof.contradiction_tactics.basic_contradiction.\nRequire Import Waterproof.notations.notations.\nRequire Import Waterproof.load_database.RealsAndIntegers."
+      "text": "Set Default Goal Selector \"!\".\nSet Default Timeout 3.\n\nRequire Import Reals.\n\nRequire Import Waterproof.AllTactics.\nRequire Import Waterproof.notations.notations.\nRequire Import Waterproof.load_database.RealsAndIntegers.\n\nOpen Scope R_scope."
     },
     {
       "type": "text",
@@ -19,7 +19,7 @@
     },
     {
       "type": "text",
-      "text": "## A first example of a lemma\n\nIn the following code cell, we introduce a **lemma**. We called the lemma **example_reflexivity**."
+      "text": "* 1. Prove a lemma\n\nIn the following code cell, we introduce a **lemma**. We called the lemma **example_reflexivity**."
     },
     {
       "type": "code",
@@ -59,7 +59,7 @@
     },
     {
       "type": "text",
-      "text": "## Try it yourself\n\nYou can now try this for yourself. We prepared a lemma below, that we named **exercise_reflexivity**."
+      "text": "** Try it yourself: prove a lemma\n\nYou can now try this for yourself. We prepared a lemma below, that we named **exercise_reflexivity**."
     },
     {
       "type": "code",
@@ -85,7 +85,7 @@
     },
     {
       "type": "text",
-      "text": "## Taking arbitrary values to show *for-all* statements\n\nLet us consider the following lemma."
+      "text": "* 2. Show *for-all* statements: take arbitrary values\n\nLet us consider the following lemma."
     },
     {
       "type": "code",
@@ -117,7 +117,7 @@
     },
     {
       "type": "text",
-      "text": "## Try it yourself\n\nTry to complete the proof of the following lemma."
+      "text": "** Try it yourself: show *for-all* statements\n\nTry to complete the proof of the following lemma."
     },
     {
       "type": "code",
@@ -143,11 +143,11 @@
     },
     {
       "type": "text",
-      "text": "## Choosing values for *there-exists* statements\n\nIf you want to show that *there exists* $y : \\mathbb{R}$ such that $(\\dots)$, you need to **choose** a candidate for $y$, and continue showing $(\\dots)$ with your choice."
+      "text": "* 3. Show *there-exists* statements: choose values\n\nIf you want to show that *there exists* $y : \\mathbb{R}$ such that $(\\dots)$, you need to **choose** a candidate for $y$, and continue showing $(\\dots)$ with your choice."
     },
     {
       "type": "code",
-      "text": "Lemma example_choosing : \n  there exists y : ℝ,\n    y = 3."
+      "text": "Lemma example_choosing : \n  there exists y : ℝ,\n    y < 3."
     },
     {
       "type": "code",
@@ -159,7 +159,7 @@
     },
     {
       "type": "code",
-      "text": "\nChoose y := (3)."
+      "text": "\nChoose y := (2)."
     },
     {
       "type": "text",
@@ -167,23 +167,23 @@
     },
     {
       "type": "code",
-      "text": "\nWe need to show that (y = 3)."
+      "text": "\nWe need to show that (y < 3)."
     },
     {
       "type": "text",
-      "text": "\nWe can also use the `We need to show that ` tactic to slightly reformulate the goal."
+      "text": "\nWe might be tempted to write `We conclude that (y < 3).` but Waterproof would like us to explicitly substitute the value `2` for `y`. We can do this by using `We need to show that ` tactic to slightly reformulate the goal."
     },
     {
       "type": "code",
-      "text": "\nWe need to show that (3 = 3)."
+      "text": "\nWe need to show that (2 < 3)."
     },
     {
       "type": "code",
-      "text": "\nWe conclude that (3 = 3).\nQed."
+      "text": "\nWe conclude that (2 < 3).\nQed."
     },
     {
       "type": "text",
-      "text": "## Try it yourself: choosing values"
+      "text": "*** Try it yourself: show *there-exists* statements"
     },
     {
       "type": "code",
@@ -209,7 +209,7 @@
     },
     {
       "type": "text",
-      "text": "## Making assumptions\n\nThe following lemma expresses that for all $a : \\mathbb{R}$, if $a < 0$ then ($-a > 0$)."
+      "text": "* 4. Make an assumption\n\nThe following lemma expresses that for all $a : \\mathbb{R}$, if $a < 0$ then ($-a > 0$)."
     },
     {
       "type": "code",
@@ -261,11 +261,11 @@
     },
     {
       "type": "text",
-      "text": "## Try it yourself\n\nYou can practice making assumptions by proving the lemma below. We have added brackets in the statement to help in reading it, but we didn't have to: the lemma would have exactly the same meaning if we would have left out the brackets."
+      "text": "** Try it yourself: make an assumption\n\nYou can practice making assumptions by proving the lemma below. We have added brackets in the statement to help in reading it, but we didn't have to: the lemma would have exactly the same meaning if we would have left out the brackets."
     },
     {
       "type": "code",
-      "text": "Lemma exercise_assumptions :\n  ∀ a : ℝ, (∀ b : ℝ, ( a > 0 ⇒ (b > 0 ⇒ a + b > 0))).\n  \nProof."
+      "text": "Lemma exercise_assumptions :\n  ∀ a : ℝ, (∀ b : ℝ, ( a > 0 ⇒ (b > 0 ⇒ a + b > -1))).\n  \nProof."
     },
     {
       "type": "input",
@@ -284,6 +284,460 @@
       "type": "input",
       "start": false,
       "id": "input-6"
+    },
+    {
+      "type": "text",
+      "text": "* 5. Chains of (in)equalities\n\nAs a last step of a proof in Analysis, we often have a chain of (in)equalities. Consider for instance a case in which we would like to show that for all $ε : \\mathbb{R}$, if $ε > 0$ then $\\min(\\epsilon, 1) ≤ 2$. \n\nHere are the statement and a possible proof in Waterproof. Note that we need to write `Rmin x y` for the minimum of two real numbers $x$ and $y$."
+    },
+    {
+      "type": "code",
+      "text": "\nLemma example_inequalities :\n  ∀ ε : ℝ, ε > 0 ⇒ Rmin ε 1 ≤ 2."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake ε : ℝ.\nAssume ε_gt_0 : (ε > 0).\nRewrite inequality (Rmin ε 1) \"≤\" (1)\n                              \"≤\" (2).\nQed."
+    },
+    {
+      "type": "text",
+      "text": "\nNote how we used the tactic `Rewrite inequality` to represent the chain of inequalities\n\n$$\\min(\\epsilon, 1) ≤ 1 ≤ 2.$$\n\nThe `Rewrite inequality` tactic expects a chain of (in)equalities. the (in)equality signs need to be placed between quotes (like `\"≥\"`), and usually the terms (such as `x^2`) need to be put in between parentheses (as in `(4 + 0)` rather than just `4 + 0`)."
+    },
+    {
+      "type": "text",
+      "text": "** Try it yourself: chains of (in)equalities"
+    },
+    {
+      "type": "code",
+      "text": "Lemma exercise_inequalities :\n  ∀ ε : ℝ, ε > 0 ⇒ Rmin (ε / 2) 1 ≤ ε.\n  \nProof."
+    },
+    {
+      "type": "input",
+      "start": true,
+      "id": "input-4"
+    },
+    {
+      "type": "text",
+      "text": "Write your solution here..."
+    },
+    {
+      "type": "code",
+      "text": "\nAdmitted."
+    },
+    {
+      "type": "input",
+      "start": false,
+      "id": "input-4"
+    },
+    {
+      "type": "text",
+      "text": "* 6. Use a *there-exists* statement\n\nSuppose it is given that "
+    },
+    {
+      "type": "code",
+      "text": "\nLemma example_use_there_exists :\n  ∀ x : ℝ,\n    (∃ y : ℝ, y > 10 ∧ x > y) ⇒\n      x > 10."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake x : ℝ.\nAssume exists_y_with_prop : (∃ y : ℝ, y > 10 ∧ x > y).\n"
+    },
+    {
+      "type": "text",
+      "text": "We now would like to use that there exists a $y$ in $\\mathbb{R}$ such that $y>10$ and $x > y$. In other words, we would like to obtain such a $y$. We do this as follows."
+    },
+    {
+      "type": "code",
+      "text": "\nChoose y such that \n  y_gt_10_and_x_gt_y according to exists_y_with_prop.\n"
+    },
+    {
+      "type": "code",
+      "text": "Rewrite inequality x \">\" y \">\" 10.\nQed."
+    },
+    {
+      "type": "text",
+      "text": "** Try it yourself: use a *there-exists* statement"
+    },
+    {
+      "type": "code",
+      "text": "Lemma exercise_use_there_exists :\n  ∀ z : ℝ,\n    (∃ x : ℝ, (x < -5) ∧ (z > x^2)) ⇒\n      z > 25.\n      \nProof."
+    },
+    {
+      "type": "input",
+      "start": true,
+      "id": "input-7"
+    },
+    {
+      "type": "text",
+      "text": "Write your solution here..."
+    },
+    {
+      "type": "code",
+      "text": "\nAdmitted."
+    },
+    {
+      "type": "input",
+      "start": false,
+      "id": "input-7"
+    },
+    {
+      "type": "text",
+      "text": "* 7. Forward reasoning in smaller steps\n\nSometimes, the step to what you need to show is too big for Waterproof to find a proof. In that case, the tactic `We conclude that (...).` will not find a proof. Then it often helps to make smaller steps.\n\nHere is an example."
+    },
+    {
+      "type": "code",
+      "text": "Lemma example_smaller_steps :\n  ∀ ε : ℝ, ε > 0 ⇒\n    4 - Rmax ε 1 ≤ 3."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake ε : ℝ.\nAssume ε_gt_0 : (ε > 0).\n"
+    },
+    {
+      "type": "text",
+      "text": "\nWe now make an intermediate step. We let Waterproof automatically show that `(Rmax ε 1 ≥ 1)`, and we call that statement `Rmax_gt_1`."
+    },
+    {
+      "type": "code",
+      "text": "\nIt holds that Rmax_gt_1 : (Rmax ε 1 ≥ 1)."
+    },
+    {
+      "type": "text",
+      "text": "\nNow Waterproof can finish the proof."
+    },
+    {
+      "type": "code",
+      "text": "\nWe conclude that (4 - Rmax ε 1 ≤ 3).\nQed."
+    },
+    {
+      "type": "text",
+      "text": "\nSometimes, you also need to tell Waterproof what lemma to use in proving the intermediate step. The following line would tell Waterproof to use the lemma called `Rmax_r`.\n\n```\nBy Rmax_r it holds that Rmax_gt_1 : (Rmax ε 1 ≥ 1). \n```\n\nFor very difficult statements, it may happen that Waterproof cannot find a proof even when providing the name of a lemma. In that case you can first make an intermediate claim.\n\n```\nWe claim that Rmax_gt_1 : (Rmax ε 1 ≥ 1).\n{\n  (* proof of claim *)\n}\n```"
+    },
+    {
+      "type": "text",
+      "text": "** Try it yourself: forward reasoning in smaller steps"
+    },
+    {
+      "type": "code",
+      "text": "\nLemma exercise_smallers_steps :\n  ∀ ε : ℝ, ε > 0 ⇒\n    3 + Rmax 2 ε ≥ 5. \n    \nProof."
+    },
+    {
+      "type": "input",
+      "start": true,
+      "id": "input-5"
+    },
+    {
+      "type": "text",
+      "text": "Write your solution here..."
+    },
+    {
+      "type": "code",
+      "text": "\nAdmitted."
+    },
+    {
+      "type": "input",
+      "start": false,
+      "id": "input-5"
+    },
+    {
+      "type": "text",
+      "text": "* 8. Backward reasoning in smaller steps\n\nSometimes, what you need to show can be derived from another statement. In that case, you can tell Waterproof that it suffices to show the second statement. It will then try to verify that indeed the first statement can be derived from the second, and all that's left to do for you is show the second statement. Here is an example."
+    },
+    {
+      "type": "code",
+      "text": "Lemma example_backwards :\n  ∀ ε : ℝ,\n    ε > 0 ⇒\n      3 + Rmax ε 2 ≥ 3."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake ε : ℝ.\nAssume ε_gt_0 : (ε > 0)."
+    },
+    {
+      "type": "text",
+      "text": "\nWe now tell Waterproof that it suffices to show that ($\\max(  ε, 2)≥ 0$). It will automatically try to verify that this is indeed enough."
+    },
+    {
+      "type": "code",
+      "text": "\nIt suffices to show that (Rmax ε 2 ≥ 0)."
+    },
+    {
+      "type": "text",
+      "text": "\nWe can finish the proof."
+    },
+    {
+      "type": "code",
+      "text": "\nRewrite inequality (Rmax ε 2) \"≥\" (2) \"≥\" 0.\nQed."
+    },
+    {
+      "type": "text",
+      "text": "** Try it yourself: backward reasoning in smaller steps\n\n"
+    },
+    {
+      "type": "code",
+      "text": "Lemma exercise_backwards :\n  ∀ ε : ℝ, ε > 0 ⇒ 5 - Rmax ε 3 ≥ 5."
+    },
+    {
+      "type": "input",
+      "start": true,
+      "id": "input-8"
+    },
+    {
+      "type": "text",
+      "text": "Write your solution here..."
+    },
+    {
+      "type": "code",
+      "text": "\nAdmitted."
+    },
+    {
+      "type": "input",
+      "start": false,
+      "id": "input-8"
+    },
+    {
+      "type": "text",
+      "text": "* 9. Arguing by contradiction\n\nSometimes a direct proof is not easy to find, or maybe even impossible, and you need to use a contradiction argument. The following example illustrates how you can do this in Waterproof."
+    },
+    {
+      "type": "code",
+      "text": "Lemma example_contradiction :\n  ∀ x : ℝ,\n   (∀ ε : ℝ, ε > 0 ⇒ x < ε) ⇒\n     x ≤ 0."
+    },
+    {
+      "type": "code",
+      "text": "Proof. \nTake x : ℝ.\nAssume eps_cond : (∀ ε : ℝ, ε > 0 ⇒ x < ε).\nWe need to show that (x ≤ 0)."
+    },
+    {
+      "type": "text",
+      "text": "We will now argue by contradiction."
+    },
+    {
+      "type": "code",
+      "text": "\nWe argue by contradiction."
+    },
+    {
+      "type": "text",
+      "text": "\nNote how we need to show that $¬ (¬ (x ≤ 0))$. To do so, we first need to assume that $¬ (x ≤ 0)$ and try to arrive at a contradiction."
+    },
+    {
+      "type": "code",
+      "text": "\nAssume not_x_le_0 : (¬ (x ≤ 0)).\nIt holds that x_gt_0 : (x > 0).\nBy eps_cond it holds that x_lt_x_div_2 : (x < x/2).\nIt holds that x_le_0 : (x ≤ 0)."
+    },
+    {
+      "type": "text",
+      "text": "Now we have derived that both $(x ≤ 0)$ and $¬ (x ≤ 0)$. In general, in a contradiction proof in Waterproof you need to make sure that you get a statement $P$ and the statement $¬ P$ in your list of hypotheses. Then you can finish the proof as follows."
+    },
+    {
+      "type": "code",
+      "text": "\nContradiction.\nQed."
+    },
+    {
+      "type": "text",
+      "text": "** Try it yourself: argue by contradiction"
+    },
+    {
+      "type": "code",
+      "text": "Lemma exercise_contradiction :\n  ∀ x : ℝ,\n    (∀ ε : ℝ, ε > 0 ⇒ x > 1 - ε) ⇒\n      x ≥ 1.\n      \nProof."
+    },
+    {
+      "type": "input",
+      "start": true,
+      "id": "input-9"
+    },
+    {
+      "type": "text",
+      "text": "\nWrite your solution here..."
+    },
+    {
+      "type": "code",
+      "text": "\nAdmitted."
+    },
+    {
+      "type": "input",
+      "start": false,
+      "id": "input-9"
+    },
+    {
+      "type": "code",
+      "text": " "
+    },
+    {
+      "type": "text",
+      "text": "* 10. Split into cases.\n\nAt times, you need to make a case distinction in your proof, as in the following example."
+    },
+    {
+      "type": "code",
+      "text": "Lemma example_cases : \n  ∀ x : ℝ, ∀ y : ℝ,\n    Rmax x y = x ∨ Rmax x y = y."
+    },
+    {
+      "type": "code",
+      "text": "Proof. \nTake x : ℝ. Take y : ℝ."
+    },
+    {
+      "type": "text",
+      "text": "We now make a case distinction."
+    },
+    {
+      "type": "code",
+      "text": "\nEither (x < y) or (x ≥ y).\n- Case (x < y).\n  It suffices to show that (Rmax x y = y).\n  By Rmax_right we conclude that (Rmax x y = y).\n- Case (x ≥ y).\n  It suffices to show that (Rmax x y = x).\n  By Rmax_left we conclude that (Rmax x y = x).\nQed."
+    },
+    {
+      "type": "text",
+      "text": "** Try it yourself: split into cases\n\nSee if you can find a proof of the following exercise using a case distinction."
+    },
+    {
+      "type": "code",
+      "text": "Lemma exercises_cases :\n  ∀ x : ℝ, ∀ y : ℝ,\n    Rmin x y = x ∨ Rmin x y = y.\n    \nProof."
+    },
+    {
+      "type": "input",
+      "start": true,
+      "id": "input-10"
+    },
+    {
+      "type": "text",
+      "text": "\nWrite your solution here..."
+    },
+    {
+      "type": "code",
+      "text": "\nAdmitted."
+    },
+    {
+      "type": "input",
+      "start": false,
+      "id": "input-10"
+    },
+    {
+      "type": "text",
+      "text": "* 11. Prove two statements: A ∧ B\n\nThe next example shows how you could prove a statement of the form $A ∧ B$."
+    },
+    {
+      "type": "code",
+      "text": "Lemma example_both_statements:\n  ∀ x : ℝ, x^2 ≥ 0 ∧ | x | ≥ 0."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake x : ℝ."
+    },
+    {
+      "type": "text",
+      "text": "We now need to show $(x^2 ≥ 0) ∧ (|x| ≥ 0)$."
+    },
+    {
+      "type": "code",
+      "text": "We show both statements.\n- We need to show that (x^2 ≥ 0).\n  We conclude that (x^2 ≥ 0).\n- We need to show that (| x | ≥ 0).\n  We conclude that (| x | ≥ 0).\nQed."
+    },
+    {
+      "type": "text",
+      "text": "** Try it yourself: show both statements\n\nThe following exercise gives some practice in showing two statements."
+    },
+    {
+      "type": "code",
+      "text": "Lemma exercise_both_statements:\n  ∀ x : ℝ, 0 * x = 0 ∧ x + 1 > x.\n  \nProof."
+    },
+    {
+      "type": "input",
+      "start": true,
+      "id": "input-11"
+    },
+    {
+      "type": "text",
+      "text": "Write your solution here..."
+    },
+    {
+      "type": "code",
+      "text": "\nAdmitted."
+    },
+    {
+      "type": "input",
+      "start": false,
+      "id": "input-11"
+    },
+    {
+      "type": "text",
+      "text": "** 12. Show both directions\n\nIf you need to show a statement of the form $A ⇔ B$, then you need to show both directions separately, namely $A ⇒ B$ and $B ⇒ A$. Here is an example."
+    },
+    {
+      "type": "code",
+      "text": "Lemma example_both_directions:\n  ∀ x : ℝ, ∀ y : ℝ,\n    x < y ⇔ y > x."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake x : ℝ. Take y : ℝ.\n"
+    },
+    {
+      "type": "text",
+      "text": "We need to indicate that we show both directions."
+    },
+    {
+      "type": "code",
+      "text": "We show both directions.\n- We need to show that (x < y ⇨ y > x ).\n  Assume x_lt_y : (x < y).\n  We conclude that (y > x).\n- We need to show that (y > x ⇨ x < y ).\n  Assume y_gt_x : (y > x).\n  We need to show that (x < y).\n  We conclude that (x < y).\nQed."
+    },
+    {
+      "type": "text",
+      "text": "** Try it yourself: show both directions\n\nSee if you can prove both directions in the following statement."
+    },
+    {
+      "type": "code",
+      "text": "Lemma exercise_both_directions:\n  ∀ x : ℝ, x > 1 ⇔ x - 1 > 0.\n  \nProof."
+    },
+    {
+      "type": "input",
+      "start": true,
+      "id": "input-12"
+    },
+    {
+      "type": "text",
+      "text": "Write your solution here..."
+    },
+    {
+      "type": "code",
+      "text": "\nAdmitted."
+    },
+    {
+      "type": "input",
+      "start": false,
+      "id": "input-12"
+    },
+    {
+      "type": "text",
+      "text": "* 13. Proof by induction\n\nThe following example shows how one could use mathematical induction to show a statement of the form\n\n $$∀ k : ℕ, ... $$\n\nNote that Waterproof will usually interpret any statement such as an inequality `n(k +1 ) > n k` as a statement comparing real numbers, while in this exercise we need statements that compare natural numbers. To indicate this, we have to write `(n (k+1) > n k)%nat` instead."
+    },
+    {
+      "type": "code",
+      "text": "Lemma example_induction :\n  ∀ n : ℕ -> ℕ, (∀ k : ℕ, (n (k + 1) > n k)%nat) ⇒\n    ∀ k : ℕ, (n k ≥ k)%nat."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake n : (ℕ -> ℕ).\nAssume n_increasing : (∀ k : ℕ, (n (k+1) > n k )%nat)."
+    },
+    {
+      "type": "text",
+      "text": "We can now perform the induction argument."
+    },
+    {
+      "type": "code",
+      "text": "\nWe use induction on k.\n- We first show the base case, namely ( (n 0 ≥ 0)%nat ).\n  We conclude that (n 0 ≥ 0)%nat.\n- We now show the induction step.\n  It suffices to show that (n (k + 1) ≥ k + 1)%nat.\n  It holds that n_k_plus_1_gt_n_k : (n (k + 1) > n k)%nat.\n  We conclude that (n (k + 1) ≥ k + 1)%nat.\nQed."
+    },
+    {
+      "type": "text",
+      "text": "** Try it yourself: a proof by induction"
+    },
+    {
+      "type": "code",
+      "text": "Lemma exercise_induction :\n  ∀ f : ℕ -> ℕ, (∀ k : ℕ, (f (k + 1) = f k)%nat) ⇒\n    ∀ k : ℕ, (f k = f 0)%nat.\n    \nProof."
+    },
+    {
+      "type": "input",
+      "start": true,
+      "id": "input-13"
+    },
+    {
+      "type": "text",
+      "text": "write your solution here..."
+    },
+    {
+      "type": "code",
+      "text": "\nAdmitted."
+    },
+    {
+      "type": "input",
+      "start": false,
+      "id": "input-13"
     }
   ]
 }
