@@ -208,30 +208,29 @@ function getGoalsFromResponse(response) {
  * @return {*} a
  */
 function detectUnfocusedGoal(response) {
-  console.log(response);
   if (response.length < 2
       || response[0] !== 'ObjList'
       || !Array.isArray(response[1])
       || !Array.isArray(response[1][0])) {
-    console.log('Not an objlist');
     return {};
   }
 
   response = response[1][0];
 
-  console.log(response);
-
   if (response.length < 2
       || response[0] !== 'CoqGoal'
       || !Array.isArray(response[1])) {
-    console.log('Not a coqGoal');
     return {};
   }
 
   response = response[1];
 
-  console.log(response);
 
+  /**
+   * Read string from Pp_glue and Pp_string structure
+   * @param {[*]} data the data
+   * @return {string|*} the string
+   */
   function recursiveReadPpString(data) {
     if (!Array.isArray(data)) {
       return '';
