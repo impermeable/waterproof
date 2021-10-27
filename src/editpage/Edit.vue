@@ -1,5 +1,8 @@
 <template>
   <div class="container-fluid" id="app">
+    <settings-modal
+      ref="settingsModal" :eventBus="mainBus">
+    </settings-modal>
     <topbar v-bind:shortKeys="shortKeys" :eventBus="mainBus" :recents="recents">
     </topbar>
     <div class="content">
@@ -60,6 +63,7 @@ import 'bootstrap-vue/dist/bootstrap-vue.css';
 import {TabsPlugin, ModalPlugin} from 'bootstrap-vue';
 
 import Recents from '../io/recents';
+import SettingsModal from './components/assistance/SettingsModal.vue';
 
 Vue.use(TabsPlugin);
 Vue.use(ModalPlugin);
@@ -71,6 +75,7 @@ export default {
     ProofWindow,
     Sidebar,
     Topbar,
+    SettingsModal,
   },
   data: function() {
     return {

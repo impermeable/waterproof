@@ -29,13 +29,15 @@ function findSertop(platform, remote=undefined) {
   const userName = os.userInfo()['username'];
   if (platform === 'win32') {
     const ocamlVariants =
-        ['default',
+        ['coq_for_waterproof',
+          'default',
           'ocaml-variants.4.07.1+mingw64c',
           '4.07.1+mingw64c',
           '4.11.1+mingw64c'];
 
     const baseFolderVariants =
-        [`C:\\OCaml64\\home\\${userName}\\.opam\\`,
+        ['C:\\cygwin_coq_platform\\home\\runneradmin\\.opam\\',
+          `C:\\OCaml64\\home\\${userName}\\.opam\\`,
           path.join(remote.app.getPath('home'), '.opam/')];
     for (const base of baseFolderVariants) {
       if (fs.existsSync(base)) {

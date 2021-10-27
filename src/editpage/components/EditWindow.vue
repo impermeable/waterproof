@@ -427,15 +427,16 @@ export default {
 
 #source-editor {
   width: 100%;
-  border: 1px solid black;
+  @include theme(border, color-black, 1px solid);
 }
 
 
 .CodeMirror-placeholder {
-  color: gray !important;
+  @include theme(background-color, color-gray, null, !important);
 }
 
 .edit-window {
+  //Sean: dit zou mss leuk zijn: @include theme(border, color-gray, 1px solid);
   display: flex;
   flex: 1 0 50%;
   min-height: 60%;
@@ -444,9 +445,8 @@ export default {
   overflow-y: scroll;
 }
 
-
 .highlightText {
-  background-color: $color-primary-extra-light;
+  @include theme(background-color, color-primary-extra-light);
 }
 
 .edit-holder {
@@ -464,7 +464,7 @@ export default {
 }
 
 .toggle-bar {
-  background-color: $color-primary-dark;
+  @include theme(background-color, color-primary-dark);
   height: 5px;
 }
 

@@ -6,22 +6,17 @@ Develop build status: [![Build Status](https://travis-ci.org/impermeable/waterpr
 
 ![Screenshot of waterproof](WaterproofScreenshot.png)
 
-## How to get started
+## How to get started - Windows
+
+* Download and execute the dependencies installer from its [release page](https://github.com/impermeable/waterproof-dependencies-installer/releases)
+* Install Waterproof using the installer from the [release page](http://github.com/impermeable/waterproof/releases)
+
+## How to get started - Linux and Mac
 
 The easiest way to get started with Waterproof is to follow the steps:
 
 * Step 1. Install SerAPI following the steps below
 * Step 2. Install Waterproof using the installer from the [release page](http://github.com/impermeable/waterproof/releases)
-
-### Step 1 for Windows. Installation of SerAPI.
-
-* Download the _graphical installer_ for Ocaml for Windows from https://fdopen.github.io/opam-repository-mingw/installation/.
-* Windows could indicate that the software is not used by many people. To use the software anyway, choose _keep_.
-* Select the .exe file, then right click on the .exe file, and choose *Run as administrator*. This also installs a cygwin terminal that you will need to use in the steps below.
-* Windows could still block the installer from running. To run the installer anyway, choose _More info_, and then _Run anyway_.
-* Run as administrator the cygwin terminal you just installed. In the terminal, type ```opam install coq-serapi``` and press enter. Choose 'Y'. This step could take up to an hour.
-
-If this worked, you can continue with Step 2.
 
 ### Step 1 for MacOS and Linux. Installation of SerAPI.
 
@@ -46,7 +41,7 @@ apt install opam
 
 #### Step 1.b for MacOS and Linux: Install an OCaml compiler
 
-In the terminal, execute the following commands (corresponding to instructions on https://ocaml.org/docs/install.html). **Note:** On Windows, run the cygwin terminal that was installed as administrator, and execute the next commands in the terminal.
+In the terminal, execute the following commands (corresponding to instructions on https://ocaml.org/docs/install.html).
 
 The first steps are common to all operating systems. First initialize the environment with
 ```

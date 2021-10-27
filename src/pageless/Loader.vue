@@ -34,20 +34,21 @@ export default {
 </script>
 
 <style lang="scss">
+@import '../assets/sass/_colors.scss';
     .loader-footer {
         position: absolute;
         bottom: 0;
         left: 5%;
-        color: $color-on-primary;
+        @include theme(color, color-on-primary);
         width: 95%;
-        background-color: $color-primary;
+        @include theme(background-color, color-primary);
         transition: max-height 0.5s;
         transition-delay: 0.5s;
         overflow: hidden;
     }
 
     .inner-load {
-        border: 5px solid $color-primary-dark;
+        @include theme(border, color-primary-dark, 5px solid);
         border-right: 0;
         padding: 0 25px;
     }

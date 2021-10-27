@@ -162,10 +162,12 @@ export default {
 </script>
 
 <style lang="scss">
+  @import '../../../assets/sass/_colors.scss';
+
     .side-window {
         flex: 1 0 25%;
         min-width: 250px;
-        background-color: $color-gray;
+        @include theme(background-color, color-gray);
 
         display: flex;
         flex-direction: column;
@@ -227,14 +229,14 @@ export default {
       }
 
       .label {
-        background-color: blue;
+        @include theme(background-color, color-primary);
       }
 
       .loader {
         display: inline;
 
         .v-pulse{
-          background-color: $color-primary !important;
+          @include theme(background-color, color-primary, null, !important);
         }
       }
     }
@@ -250,8 +252,8 @@ export default {
     }
 
     .checklabel {
-      background-color: $color-gray;
-      border: 1px solid $color-primary;
+      @include theme(background-color, color-gray);
+      @include theme(border, color-primary, 1px solid);
       border-radius: 5px;
       position: absolute;
       height: 20px;
@@ -261,7 +263,7 @@ export default {
     }
 
     .checklabel:after {
-      border: 2px solid $color-gray;
+      @include theme(border, color-gray, 2px solid);
       border-top: none;
       border-right: none;
       content: "";
@@ -284,8 +286,8 @@ export default {
     }
 
     .round input[type="checkbox"]:checked + label {
-      background-color: $color-primary;
-      border-color: $color-primary;
+      @include theme(background-color, color-primary);
+      @include theme(border-color, color-primary);
     }
 
     .round input[type="checkbox"]:checked + label:after {

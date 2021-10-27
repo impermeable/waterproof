@@ -75,16 +75,16 @@ export default {
           icon: require('../../../assets/images/looking_glass_grey.svg'),
           shortkeyTag: 'zoomIn',
           event: 'zoomIn',
-          eventType: 'on-proof-window',
-          requires: ['notebook'],
+          eventType: 'zoomIn',
+          requires: [],
         },
         {
           text: 'Zoom out',
           icon: require('../../../assets/images/looking_glass_grey.svg'),
           shortkeyTag: 'zoomOut',
           event: 'zoomOut',
-          eventType: 'on-proof-window',
-          requires: ['notebook'],
+          eventType: 'zoomOut',
+          requires: [],
           line: true,
         },
         {
@@ -154,6 +154,14 @@ export default {
           tooltip: true,
           findAndReplace: 'find',
         },
+        {
+          text: 'Settings',
+          icon: require('../../../assets/images/settingsGear.svg'),
+          event: 'openSettingsModal',
+          eventType: 'openSettingsModal',
+          requires: [],
+          tooltip: true,
+        },
       ],
     };
   },
@@ -191,7 +199,7 @@ export default {
 @import "../../../assets/sass/pages/_edit";
 
   .sidebar {
-    background-color: #2b3990;
+    @include theme(background-color, color-primary);
     padding-top: $tab-height-large;
     min-width: 40px;
     position: relative;

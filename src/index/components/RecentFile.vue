@@ -60,13 +60,14 @@ export default {
 </script>
 
 <style lang="scss">
+@import '../../assets/sass/_colors.scss';
 .recent-file {
   padding: 0.5rem;
   list-style: none;
   cursor: pointer;
 
   &:hover {
-    background: $color-primary-light;
+    @include theme(background-color, color-primary-light);
     border-radius: 5px;
   }
 

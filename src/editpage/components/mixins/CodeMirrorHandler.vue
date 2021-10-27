@@ -95,3 +95,17 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+@import "../../../assets/sass/_colors.scss";
+
+.CodeMirror {
+  @include theme(background-color, color-gray-light);
+  @include theme(color, color-on-background);
+
+  &-gutter {
+    @include theme(background-color, color-gray-dark);
+  }
+}
+
+</style>

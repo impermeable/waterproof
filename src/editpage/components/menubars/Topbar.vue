@@ -366,8 +366,9 @@ export default {
 </script>
 
 <style lang="scss">
+@import '../../../assets/sass/_colors.scss';
   .show > .btn-secondary.dropdown-toggle {
-    background-color: $color-primary-dark!important;
+    @include theme(background-color, color-primary-dark, null, !important);
     border: none;
   }
 </style>

@@ -36,7 +36,9 @@ export default {
   mixins: [WpBlock],
   computed: {
     formattedText: function() {
-      const text = this.block.text.trim();
+      const whitespaceLength = this.block.text.length
+          - this.block.text.trimStart().length;
+      const text = this.block.text.trimEnd();
 
       // Determine where to insert error, tick, or both
       const splitAt = this.foundSentences.map((i) => {
@@ -56,7 +58,7 @@ export default {
       const parts = [];
       // Sort from last to first
       splitAt.sort((obj1, obj2) => obj1.at - obj2.at);
-      let index = 0;
+      let index = whitespaceLength; // Instead of starting at 0.
       let inError = false;
       for (const obj of splitAt) {
         const newIndex = obj.at;
@@ -76,12 +78,8 @@ export default {
           let type = '';
           if (realIndex === this.executedIndex) {
             type = 'done';
-            // skip a character (the final .)
-            index++;
           } else if (realIndex === this.runningIndex) {
             type = 'doing';
-            // skip a character (the final .)
-            index++;
           }
 
           parts.push({
@@ -161,6 +159,8 @@ export default {
 
 
 <style lang="scss">
+  @import "../../../../assets/sass/_colors.scss";
+
   pre.code-block {
     margin: 5px 0;
     display: block;
@@ -173,12 +173,13 @@ export default {
   }
 
   .code-block-not-selected {
-    background: #f2f2f2;
+    @include theme(background-color, color-gray-light);
+    @include theme(color, color-on-background);
   }
 
   .code-block {
     margin-right: 5px;
-    font-family: monospace, monospace;
+    @include theme(font-family, font-stack-code);
     white-space: pre-wrap;
     word-break: break-word;
   }
@@ -196,9 +197,9 @@ export default {
   }
 
   .exec-error {
-    color: white;
-    background: red;
-    border: 1px solid red;
+    @include theme(color, color-error-text);
+    @include theme(background-color, color-error);
+    @include theme(border, color-error, 3px solid);
   }
 
   .exec-inline-error {

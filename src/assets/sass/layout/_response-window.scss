@@ -1,6 +1,8 @@
 $header-height-large: 40px;
 $header-height-small: 20px;
 
+@import '../colors.scss';
+
 .response-window {
   flex: 1 1 50%;
   display: flex;
@@ -17,8 +19,8 @@ $header-height-small: 20px;
     flex-flow: row nowrap;
     justify-content: space-between;
     height: $header-height-large;
-    background: $color-primary-light;
-    color: $color-on-primary;
+    @include theme(background-color, color-primary-light);
+    @include theme(color, color-text-in-primary);
     padding-left: 5px;
 
     @include respond-to(sm-lower) {
@@ -39,7 +41,7 @@ $header-height-small: 20px;
       transition: 0.3s;
 
       &:hover {
-          background-color: $color-primary-dark;
+          @include theme(background-color, color-primary-dark);
           cursor: pointer;
       }
 
@@ -58,11 +60,14 @@ $header-height-small: 20px;
     flex: 1 0 70%;
     overflow: hidden;
 
+    //Sean: This may be nice: @include theme(border, color-gray, 3px solid);
+
     @include respond-to(sm-lower) {
       flex-basis: 65%;
     }
 
     .goals {
+      //Sean: This may be nice: @include theme(border, color-gray, 3px solid);
       width: calc(100%);
       height: calc(100% - #{$header-height-large});
       margin-right: 5px;
