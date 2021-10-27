@@ -2,6 +2,7 @@ import SerapiProcessor from '../util/SerapiProcessor';
 import {
   COQ_EXCEPTION,
   getGoalsFromResponse,
+  detectUnfocusedGoal,
   parseErrorResponse,
 } from '../SerapiParser';
 import {
@@ -209,10 +210,19 @@ class SerapiExecutionProcessor extends SerapiProcessor {
     }
     const sentenceId = this.state.idOfSentence(index);
     const sentenceIndex = this.state.endIndexOfSentence(index);
-    return this.sendCommand(createGoalCommand(sentenceId), 'g')
-        .then((result) => {
-          this.editor.executeSuccess(result.goal, sentenceIndex, false);
-        });
+    const baseGoal = await this.sendCommand(createGoalCommand(sentenceId), 'g');
+    let goalString = baseGoal.goal;
+    if (baseGoal.goal === '') {
+      const serapiGoal = await this.sendCommand(
+          createGoalCommand(sentenceId.toString(), 'PpSer'), 'k');
+      if (serapiGoal.next_goal_message != null) {
+        goalString += '\n';
+        goalString += serapiGoal.next_goal_message;
+      }
+    }
+
+    this.editor.executeSuccess(goalString, sentenceIndex, false);
+    return goalString;
   }
 
   /**
@@ -271,12 +281,16 @@ class SerapiExecutionProcessor extends SerapiProcessor {
       return {
         goal: getGoalsFromResponse(data),
       };
+    } else if (extraTag === 'k') {
+      return detectUnfocusedGoal(data);
     } else if (extraTag === 'e') {
       if (data[0] === COQ_EXCEPTION) {
         return {
           error: parseErrorResponse(data),
         };
       }
+    } else {
+      console.log(`unknown tag ${extraTag} with data ${data}`);
     }
   }
 }

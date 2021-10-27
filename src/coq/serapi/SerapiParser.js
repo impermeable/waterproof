@@ -120,7 +120,7 @@ function parseErrorResponse(response) {
 
   if (responseContent.hasOwnProperty('stm_ids')) {
     if (Array.isArray(responseContent.stm_ids)
-          && responseContent.stm_ids.length > 0) {
+        && responseContent.stm_ids.length > 0) {
       const stms = responseContent.stm_ids[0];
       lastSentenceIdCorrect = +stms[0];
       failureSentenceId = +stms[1];
@@ -203,6 +203,69 @@ function getGoalsFromResponse(response) {
 }
 
 /**
+ * Check if contains unfocus
+ * @param {*} response
+ * @return {*} a
+ */
+function detectUnfocusedGoal(response) {
+  console.log(response);
+  if (response.length < 2
+      || response[0] !== 'ObjList'
+      || !Array.isArray(response[1])
+      || !Array.isArray(response[1][0])) {
+    console.log('Not an objlist');
+    return {};
+  }
+
+  response = response[1][0];
+
+  console.log(response);
+
+  if (response.length < 2
+      || response[0] !== 'CoqGoal'
+      || !Array.isArray(response[1])) {
+    console.log('Not a coqGoal');
+    return {};
+  }
+
+  response = response[1];
+
+  console.log(response);
+
+  function recursiveReadPpString(data) {
+    if (!Array.isArray(data)) {
+      return '';
+    }
+
+    if (data.length < 2) {
+      return '';
+    }
+    if (data[0] === 'Pp_string') {
+      return '' + data[1];
+    }
+
+    if (data[0] === 'Pp_glue' && Array.isArray(data[1])) {
+      return data[1].map((arr) => recursiveReadPpString(arr)).join('');
+    }
+
+    return '';
+  }
+
+  for (const item of response) {
+    if (item[0] === 'bullet' && item.length > 1) {
+      const str = recursiveReadPpString(item[1][0]);
+      if (str.includes('Focus next goal')) {
+        return {
+          next_goal_message: str,
+        };
+      }
+    }
+  }
+
+  return {};
+}
+
+/**
  * Checks whether a given message is acknowledge or complete (a general message)
  * @param {*} response the serapi message
  * @return {boolean} whether it is a general message
@@ -273,8 +336,8 @@ function byteIndexToStringIndex(str, byteIndex) {
 function byteIndicesToStringIndices(str) {
   const conversion = [];
 
-  for (let i = 0; i < str.length; i++ ) {
-    for (let j = 0; j < Buffer.byteLength(str[i]); j++ ) {
+  for (let i = 0; i < str.length; i++) {
+    for (let j = 0; j < Buffer.byteLength(str[i]); j++) {
       conversion.push(i);
     }
   }
@@ -288,7 +351,7 @@ function byteIndicesToStringIndices(str) {
 export {
   parseFeedback, parseErrorableFeedback, parseErrorResponse,
   sanitise, getLastValidFullStop, isReadyFeedback,
-  getGoalsFromResponse, isGeneralMessage, parseToSentence,
+  getGoalsFromResponse, detectUnfocusedGoal, isGeneralMessage, parseToSentence,
   byteIndexToStringIndex, byteIndicesToStringIndices,
   COQ_EXCEPTION, MESSAGE_ACK, MESSAGE_COMPLETED,
 };

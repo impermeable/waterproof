@@ -123,6 +123,7 @@ class SerapiContentProcessor extends SerapiProcessor {
     let newGoal = '';
     if (lastUnchangedSentence >= 0) {
       const sentenceId = this.state.idOfSentence(lastUnchangedSentence);
+      // FIXME: This does not do the unfocused goal check.
       const result = await this.sendCommand(createGoalCommand(sentenceId), 'g');
       newGoal = result.goal;
     }
