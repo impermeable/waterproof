@@ -36,7 +36,7 @@ function findSertop(platform, remote=undefined) {
           '4.11.1+mingw64c'];
 
     const baseFolderVariants =
-        ["C:\\cygwin_coq_platform\\home\\runneradmin\\.opam\\",
+        ['C:\\cygwin_coq_platform\\home\\runneradmin\\.opam\\',
           `C:\\OCaml64\\home\\${userName}\\.opam\\`,
           path.join(remote.app.getPath('home'), '.opam/')];
     for (const base of baseFolderVariants) {
