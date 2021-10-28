@@ -20,7 +20,7 @@ The easiest way to get started with Waterproof is to follow the steps:
 
 ### Step 1 for MacOS and Linux. Installation of SerAPI.
 
-The following steps (1.a, 1.b and 1.c) describe how to install SerAPI on MacOS or Linux.
+The following steps (1.a, 1.b, 1.c and 1.d) describe how to install SerAPI on MacOS or Linux.
 
 #### Step 1.a for MacOS and Linux: Install opam
 
@@ -75,9 +75,21 @@ Finally, execute again
 eval `opam env`
 ```
 
+#### Step 1.d for MacOS and Linux: Install the coq-waterproof library
+
+Navigate in the terminal to a folder in which you are willing to place a folder with necessary library files. Then run:
+
+```
+git clone https://github.com/impermeable/coq-waterproof
+cd coq-waterproof
+make
+make install
+```
+
+
 ### Step 2. Install Waterproof with the installer from the release page
 
-After installing SerAPI, you are ready to install Waterproof using your preferred installer from the [release page](http://github.com/impermeable/waterproof/releases).
+After installing SerAPI, you are ready to install Waterproof using your preferred installer from the [release page](http://github.com/impermeable/waterproof/releases). After installing Waterproof, it will ask you to point to a program called **sertop**. This is located in a hidden file folder. To show hidden file folders in the terminal press **⌘ + Shift + .** .
 
 > **Known issue**: Because Waterproof is relatively unknown software, it is possible that it will initially be blocked by a virus scanner. To run Waterproof anyway: **on Windows:** Choose 'run anyway', **on Mac:** right-click and choose 'open software'; you may need to go to security settings to allow for running the app.
 
