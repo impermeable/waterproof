@@ -55,11 +55,6 @@ opam init
 This may take a few minutes. In the meantime, opam will likely ask two questions. We recommend choosing 'y' to both, i.e. to opam modifying the `.bash_profile` and to opam adding a hook to the init scripts. Now execute the following line
 ```
 eval `opam env`
-```
-
-##### On Linux or macOS:
-Install OCaml with
-```
 opam switch create 4.11.1
 eval `opam env`
 ```
