@@ -13,22 +13,27 @@ Develop build status: [![Build Status](https://travis-ci.org/impermeable/waterpr
 
 ## How to get started - Linux and Mac
 
-The easiest way to get started with Waterproof is to follow the steps:
+The easiest way to get started with Waterproof on Linux or Mac is to follow the steps:
 
-* Step 1. Install SerAPI following the steps below
+* Step 1. Install SerAPI and coq-waterproof following the steps below
 * Step 2. Install Waterproof using the installer from the [release page](http://github.com/impermeable/waterproof/releases)
 
 ### Step 1 for MacOS and Linux. Installation of SerAPI.
 
-The following steps (1.a, 1.b, 1.c and 1.d) describe how to install SerAPI on MacOS or Linux.
+The following steps (1.a, 1.b, 1.c and 1.d) describe how to install SerAPI and coq-waterproof on MacOS or Linux.
 
 #### Step 1.a for MacOS and Linux: Install opam
 
 ##### On MacOS: 
-Install opam by running the following commands in the terminal (taken from https://opam.ocaml.org/doc/Install.html#OSX)
+Install opam. You can either do so throug homebrew (https://brew.sh/) or through MacPorts (https://www.macports.org/). If you want to use homebrew, you can run the following commands in the terminal (taken from https://opam.ocaml.org/doc/Install.html#OSX)
 ```
 brew install gpatch
 brew install opam
+```
+
+If you prefer MacPorts, instead run
+```
+port install opam
 ```
 
 ##### On Linux:
