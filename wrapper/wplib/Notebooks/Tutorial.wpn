@@ -7,11 +7,11 @@
     },
     {
       "type": "code",
-      "text": "Set Default Goal Selector \"!\".\nSet Default Timeout 3.\n\nRequire Import Reals.\n\nRequire Import Waterproof.AllTactics.\nRequire Import Waterproof.notations.notations.\nRequire Import Waterproof.load_database.RealsAndIntegers.\n\nOpen Scope R_scope."
+      "text": "Set Default Goal Selector \"!\".\nSet Default Timeout 3.\n\nRequire Import Rbase.\nRequire Import Rfunctions.\n\nRequire Import Waterproof.AllTactics.\nRequire Import Waterproof.notations.notations.\nRequire Import Waterproof.load_database.RealsAndIntegers.\n\nOpen Scope R_scope."
     },
     {
       "type": "text",
-      "text": "The code consists of five sentences. Every sentence finishes with a period. In these four sentences, libraries are imported that are necessary to make the rest of the notebook work."
+      "text": "The code consists of several *sentences*. Every sentence finishes with a period. These sentences are necessary to make the rest of the notebook work."
     },
     {
       "type": "text",
@@ -155,7 +155,7 @@
     },
     {
       "type": "text",
-      "text": "\nWe first choose $y=3$ by using the tactic `Choose y := ((* value *)).`."
+      "text": "\nWe first choose $y:=2$ by using the tactic `Choose y := ((* value *)).`."
     },
     {
       "type": "code",
@@ -163,7 +163,7 @@
     },
     {
       "type": "text",
-      "text": "\n(In this particular case we could also have written `Choose y := 3`, but in general the brackets are important.)\n\nWe now need to show that (y=3) (see **Proof progress** after executing the previous sentence). We can record this for our own convenience."
+      "text": "\n(In this particular case we could also have written `Choose y := 3`, but in general the brackets are important.)\n\nWe now need to show that (y<3) (see **Proof progress** after executing the previous sentence). We can record this for our own convenience."
     },
     {
       "type": "code",
@@ -171,7 +171,7 @@
     },
     {
       "type": "text",
-      "text": "\nWe might be tempted to write `We conclude that (y < 3).` but Waterproof would like us to explicitly substitute the value `2` for `y`. We can do this by using `We need to show that ` tactic to slightly reformulate the goal."
+      "text": "\nIn other words, we need to show that ($2 < 3$). We can also use the `We need to show that ` tactic to slightly reformulate the goal."
     },
     {
       "type": "code",
@@ -469,7 +469,7 @@
     },
     {
       "type": "code",
-      "text": "Lemma exercise_backwards :\n  ∀ ε : ℝ, ε > 0 ⇒ 5 - Rmax ε 3 ≥ 5."
+      "text": "Lemma exercise_backwards :\n  ∀ ε : ℝ, ε > 0 ⇒ 5 - Rmax ε 3 ≤ 5."
     },
     {
       "type": "input",
@@ -665,7 +665,7 @@
     },
     {
       "type": "code",
-      "text": "We show both directions.\n- We need to show that (x < y ⇨ y > x ).\n  Assume x_lt_y : (x < y).\n  We conclude that (y > x).\n- We need to show that (y > x ⇨ x < y ).\n  Assume y_gt_x : (y > x).\n  We need to show that (x < y).\n  We conclude that (x < y).\nQed."
+      "text": "We show both directions.\n- We need to show that (x < y ⇒ y > x ).\n  Assume x_lt_y : (x < y).\n  We conclude that (y > x).\n- We need to show that (y > x ⇒ x < y ).\n  Assume y_gt_x : (y > x).\n  We need to show that (x < y).\n  We conclude that (x < y).\nQed."
     },
     {
       "type": "text",
@@ -711,7 +711,7 @@
     },
     {
       "type": "code",
-      "text": "\nWe use induction on k.\n- We first show the base case, namely ( (n 0 ≥ 0)%nat ).\n  We conclude that (n 0 ≥ 0)%nat.\n- We now show the induction step.\n  It suffices to show that (n (k + 1) ≥ k + 1)%nat.\n  It holds that n_k_plus_1_gt_n_k : (n (k + 1) > n k)%nat.\n  We conclude that (n (k + 1) ≥ k + 1)%nat.\nQed."
+      "text": "\nWe use induction on k.\n- We first show the base case, namely ( (n 0 ≥ 0)%nat ).\n  We conclude that (n 0 ≥ 0)%nat.\n- We now show the induction step.\n  Assume IH : (n k ≥ k)%nat.\n  It holds that n_k_plus_1_gt_n_k : (n (k + 1) > n k)%nat.\n  We conclude that (n (k + 1) ≥ k + 1)%nat.\nQed."
     },
     {
       "type": "text",
