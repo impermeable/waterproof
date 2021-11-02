@@ -110,6 +110,7 @@
     {
         "name": "Other",
         "elements": [
+            {"symbol": "↯", "name": "contradiction"}
         ]
     }
 ]
