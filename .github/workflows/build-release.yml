@@ -1,8 +1,45 @@
 name: build-release
-on: [push]
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Version number (must be v[0-9]+\.[0-9]+\.[0-9]+), for example: v0.5.5'
+        required: true
 
 jobs:
+  set-version:
+    runs-on: ubuntu-latest
+    name: "Set version number"
+    steps:
+      - name: validate tag
+        id: check-tag
+        run: |
+          if [[ ${{github.event.inputs.tag}} =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+              echo ::set-output name=match::true
+          fi
+      - name: bad tag
+        if: steps.check-tag.outputs.match != 'true'
+        run: exit 1
+      - name: Cache node modules
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: small-npm-deps-ubuntu-latest-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: small-npm-deps-ubuntu-latest
+      - uses: actions/checkout@v2
+        with:
+          ref: 'develop'
+      - name: Setup git
+        run: |
+          git config --global user.email "build-release@waterproof.com"
+          git config --global user.name "BumpVersionNumber"
+      - name: set tag
+        run: "npm version ${{github.event.inputs.tag}} --allow-same-version --git-tag-version"
+      - name: push tag
+        run: git push
+
   lint-test-run:
+    needs: [set-version]
     strategy:
       fail-fast: false
       matrix:
@@ -11,6 +48,8 @@ jobs:
     name: Build distrubtable version on ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
+        with:
+          ref: 'develop'
       - name: Cache node modules
         uses: actions/cache@v2
         with:
@@ -26,17 +65,15 @@ jobs:
         run: npm run electron:generate-icons
       - name: Build it
         run: npm run electron:build
-      - run: npm install @actions/core @actions/glob
-      - name: Locate completed builds
-        id: locate
-        run: node scripts/actions/match-glob.js dist_electron/*.AppImage dist_electron/*.exe dist_electron/*.dmg
-      - name: Upload Artifacts
-        uses: actions/upload-artifact@v2
+      - name: Release
+        uses: softprops/action-gh-release@v1
         with:
-          name: ${{ steps.locate.outputs.name }}
-          path: |
+          tag_name: "${{github.event.inputs.tag}}"
+          name: "Waterproof ${{github.event.inputs.tag}} "
+          prerelease: false
+          draft: false
+          files: |
             dist_electron/*.AppImage
             dist_electron/*.exe
             dist_electron/*.dmg
-          retention-days: 5
-          if-no-files-found: error
+
