@@ -441,7 +441,7 @@ export default {
   flex: 1 0 50%;
   min-height: 60%;
   position: relative;
-  padding: 5px;
+  padding: 8px;
   overflow-y: scroll;
 }
 
