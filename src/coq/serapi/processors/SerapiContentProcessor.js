@@ -3,6 +3,7 @@ import {
   byteIndicesToStringIndices,
   COQ_EXCEPTION,
   getGoalsFromResponse,
+  detectUnfocusedGoal,
   getLastValidFullStop,
   parseErrorResponse,
   parseToSentence,
@@ -123,9 +124,18 @@ class SerapiContentProcessor extends SerapiProcessor {
     let newGoal = '';
     if (lastUnchangedSentence >= 0) {
       const sentenceId = this.state.idOfSentence(lastUnchangedSentence);
-      // FIXME: This does not do the unfocused goal check.
-      const result = await this.sendCommand(createGoalCommand(sentenceId), 'g');
-      newGoal = result.goal;
+      const baseGoal = await this.sendCommand(
+          createGoalCommand(sentenceId), 'g');
+      let goalString = baseGoal.goal;
+      if (baseGoal.goal === '') {
+        const serapiGoal = await this.sendCommand(
+            createGoalCommand(sentenceId.toString(), 'PpSer'), 'k');
+        if (serapiGoal.next_goal_message != null) {
+          goalString += '\n';
+          goalString += serapiGoal.next_goal_message;
+        }
+      }
+      newGoal = goalString;
     }
 
     this.state.lastExecuted = lastUnchangedSentence;
@@ -283,6 +293,8 @@ class SerapiContentProcessor extends SerapiProcessor {
           this.state.removeSentence(sid);
         }
       }
+    } else if (extraTag === 'k') {
+      return detectUnfocusedGoal(data);
     } else if (extraTag === 'g') {
       // rerolled goal
       return {
