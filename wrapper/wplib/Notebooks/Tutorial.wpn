@@ -15,7 +15,7 @@
     },
     {
       "type": "text",
-      "text": "\nWe recommend that while you read this notebook, you execute the code sentence-by-sentence by pressing **Alt + ↓**. (Alternatively, you can use the buttons on the left, but it is typically much faster to work with keyboard shortcuts.)"
+      "text": "\nWe recommend that while you read this notebook, you execute the code sentence-by-sentence by pressing **Alt + ↓** (on MacOS: **Option + ↓** or **⌥ + ↓**). (Alternatively, you can use the buttons on the left, but it is typically much faster to work with keyboard shortcuts.)"
     },
     {
       "type": "text",
@@ -163,7 +163,7 @@
     },
     {
       "type": "text",
-      "text": "\n(In this particular case we could also have written `Choose y := 3`, but in general the brackets are important.)\n\nWe now need to show that (y<3) (see **Proof progress** after executing the previous sentence). We can record this for our own convenience."
+      "text": "\n(In this particular case we could also have written `Choose y := 2`, but in general the brackets are important.)\n\nWe now need to show that (y<3) (see **Proof progress** after executing the previous sentence). We can record this for our own convenience."
     },
     {
       "type": "code",
@@ -187,7 +187,7 @@
     },
     {
       "type": "code",
-      "text": "Lemma exercise_choosing :\n  for all x : ℝ,\n    there exists z : ℝ,\n      x < z - 2.\nProof."
+      "text": "Lemma exercise_choosing :\n  there exists z : ℝ,\n    10 < z.\nProof."
     },
     {
       "type": "input",
@@ -209,7 +209,77 @@
     },
     {
       "type": "text",
-      "text": "* 4. Make an assumption\n\nThe following lemma expresses that for all $a : \\mathbb{R}$, if $a < 0$ then ($-a > 0$)."
+      "text": "* 4. Combine *for-all* and *there-exists* statements\n\nOften the statement you need to prove consists of many quantifiers. To deal with such a statement, it is useful to deal with this one quantifier at a time, using the techniques that you have just learnt. Here is an example."
+    },
+    {
+      "type": "code",
+      "text": "Lemma example_combine_quantifiers :\n  ∀ a : ℝ,\n    ∀ b : ℝ,\n      ∃ c : ℝ,\n        c > b - a."
+    },
+    {
+      "type": "code",
+      "text": "\nProof."
+    },
+    {
+      "type": "text",
+      "text": "We first deal with (∀ a : ℝ, ... ) by taking an arbitrary $a$ in $ℝ$."
+    },
+    {
+      "type": "code",
+      "text": "\nTake a : ℝ."
+    },
+    {
+      "type": "text",
+      "text": "\nNext, we need to deal with the quantified statement (∀ b : ℝ, ...). We take an arbitrary $b$ in $ℝ$."
+    },
+    {
+      "type": "code",
+      "text": "\nTake b : ℝ."
+    },
+    {
+      "type": "text",
+      "text": "\nNow we need to deal with (∃ c : ℝ, ...). We need to make a choice for $c$."
+    },
+    {
+      "type": "code",
+      "text": "\nChoose c := (b - a + 1)."
+    },
+    {
+      "type": "text",
+      "text": "\nNow we can finish the proof."
+    },
+    {
+      "type": "code",
+      "text": "\nWe need to show that (c > b - a).\nWe need to show that (b - a + 1 > b - a).\nWe conclude that (b - a + 1 > b - a).\nQed."
+    },
+    {
+      "type": "text",
+      "text": "** Try it yourself: combine *for-all* and *there-exists* statements.\n\nCan you prove the following lemma by dealing with one quantifier at a time?"
+    },
+    {
+      "type": "code",
+      "text": "Lemma exercise_combine_quantifiers :\n  ∀ x : ℝ,\n    ∀ y : ℝ,\n      ∃ z : ℝ,\n        x < z - y.\n        \nProof."
+    },
+    {
+      "type": "input",
+      "start": true,
+      "id": "input-16"
+    },
+    {
+      "type": "text",
+      "text": "Write your solution here..."
+    },
+    {
+      "type": "code",
+      "text": "\nAdmitted."
+    },
+    {
+      "type": "input",
+      "start": false,
+      "id": "input-16"
+    },
+    {
+      "type": "text",
+      "text": "* 5. Make an assumption\n\nThe following lemma expresses that for all $a : \\mathbb{R}$, if $a < 0$ then ($-a > 0$)."
     },
     {
       "type": "code",
@@ -287,7 +357,7 @@
     },
     {
       "type": "text",
-      "text": "* 5. Chains of (in)equalities\n\nAs a last step of a proof in Analysis, we often have a chain of (in)equalities. Consider for instance a case in which we would like to show that for all $ε : \\mathbb{R}$, if $ε > 0$ then $\\min(\\epsilon, 1) ≤ 2$. \n\nHere are the statement and a possible proof in Waterproof. Note that we need to write `Rmin x y` for the minimum of two real numbers $x$ and $y$."
+      "text": "* 6. Chains of (in)equalities\n\nAs a last step of a proof in Analysis, we often have a chain of (in)equalities. Consider for instance a case in which we would like to show that for all $ε : \\mathbb{R}$, if $ε > 0$ then $\\min(\\epsilon, 1) ≤ 2$. \n\nHere are the statement and a possible proof in Waterproof. Note that we need to write `Rmin x y` for the minimum of two real numbers $x$ and $y$."
     },
     {
       "type": "code",
@@ -329,7 +399,7 @@
     },
     {
       "type": "text",
-      "text": "* 6. Use a *there-exists* statement\n\nSuppose it is given that "
+      "text": "* 7. Use a *there-exists* statement\n\nSuppose it is given that "
     },
     {
       "type": "code",
@@ -379,7 +449,7 @@
     },
     {
       "type": "text",
-      "text": "* 7. Forward reasoning in smaller steps\n\nSometimes, the step to what you need to show is too big for Waterproof to find a proof. In that case, the tactic `We conclude that (...).` will not find a proof. Then it often helps to make smaller steps.\n\nHere is an example."
+      "text": "* 8. Forward reasoning in smaller steps\n\nSometimes, the step to what you need to show is too big for Waterproof to find a proof. In that case, the tactic `We conclude that (...).` will not find a proof. Then it often helps to make smaller steps.\n\nHere is an example."
     },
     {
       "type": "code",
@@ -437,7 +507,7 @@
     },
     {
       "type": "text",
-      "text": "* 8. Backward reasoning in smaller steps\n\nSometimes, what you need to show can be derived from another statement. In that case, you can tell Waterproof that it suffices to show the second statement. It will then try to verify that indeed the first statement can be derived from the second, and all that's left to do for you is show the second statement. Here is an example."
+      "text": "* 9. Backward reasoning in smaller steps\n\nSometimes, what you need to show can be derived from another statement. In that case, you can tell Waterproof that it suffices to show the second statement. It will then try to verify that indeed the first statement can be derived from the second, and all that's left to do for you is show the second statement. Here is an example."
     },
     {
       "type": "code",
@@ -491,7 +561,7 @@
     },
     {
       "type": "text",
-      "text": "* 9. Arguing by contradiction\n\nSometimes a direct proof is not easy to find, or maybe even impossible, and you need to use a contradiction argument. The following example illustrates how you can do this in Waterproof."
+      "text": "* 10. Arguing by contradiction\n\nSometimes a direct proof is not easy to find, or maybe even impossible, and you need to use a contradiction argument. The following example illustrates how you can do this in Waterproof."
     },
     {
       "type": "code",
@@ -557,7 +627,7 @@
     },
     {
       "type": "text",
-      "text": "* 10. Split into cases.\n\nAt times, you need to make a case distinction in your proof, as in the following example."
+      "text": "* 11. Split into cases.\n\nAt times, you need to make a case distinction in your proof, as in the following example."
     },
     {
       "type": "code",
@@ -603,7 +673,7 @@
     },
     {
       "type": "text",
-      "text": "* 11. Prove two statements: A ∧ B\n\nThe next example shows how you could prove a statement of the form $A ∧ B$."
+      "text": "* 12. Prove two statements: A ∧ B\n\nThe next example shows how you could prove a statement of the form $A ∧ B$."
     },
     {
       "type": "code",
@@ -649,7 +719,7 @@
     },
     {
       "type": "text",
-      "text": "** 12. Show both directions\n\nIf you need to show a statement of the form $A ⇔ B$, then you need to show both directions separately, namely $A ⇒ B$ and $B ⇒ A$. Here is an example."
+      "text": "** 13. Show both directions\n\nIf you need to show a statement of the form $A ⇔ B$, then you need to show both directions separately, namely $A ⇒ B$ and $B ⇒ A$. Here is an example."
     },
     {
       "type": "code",
@@ -695,7 +765,7 @@
     },
     {
       "type": "text",
-      "text": "* 13. Proof by induction\n\nThe following example shows how one could use mathematical induction to show a statement of the form\n\n $$∀ k : ℕ, ... $$\n\nNote that Waterproof will usually interpret any statement such as an inequality `n(k +1 ) > n k` as a statement comparing real numbers, while in this exercise we need statements that compare natural numbers. To indicate this, we have to write `(n (k+1) > n k)%nat` instead."
+      "text": "* 14. Proof by induction\n\nThe following example shows how one could use mathematical induction to show a statement of the form\n\n $$∀ k : ℕ, ... $$\n\nNote that Waterproof will usually interpret any statement such as an inequality `n(k +1 ) > n k` as a statement comparing real numbers, while in this exercise we need statements that compare natural numbers. To indicate this, we have to write `(n (k+1) > n k)%nat` instead."
     },
     {
       "type": "code",
