@@ -7,11 +7,11 @@
     },
     {
       "type": "code",
-      "text": "Set Default Goal Selector \"!\".\nSet Default Timeout 3.\n\nRequire Import Rbase.\nRequire Import Rfunctions.\n\nRequire Import Waterproof.AllTactics.\nRequire Import Waterproof.notations.notations.\nRequire Import Waterproof.load_database.RealsAndIntegers.\n\nOpen Scope R_scope."
+      "text": "Set Default Goal Selector \"!\".\nSet Default Timeout 5.\n\nRequire Import Rbase.\nRequire Import Rfunctions.\n\nRequire Import Waterproof.AllTactics.\nRequire Import Waterproof.notations.notations.\nRequire Import Waterproof.load_database.RealsAndIntegers.\n\nOpen Scope R_scope."
     },
     {
       "type": "text",
-      "text": "The code consists of several *sentences*. Every sentence finishes with a period. These sentences are necessary to make the rest of the notebook work."
+      "text": "The code consists of several *sentences*. Every sentence finishes with a period. These sentences above are necessary to make the rest of the notebook work."
     },
     {
       "type": "text",
@@ -35,7 +35,7 @@
     },
     {
       "type": "text",
-      "text": "\nExecute the code sentence after sentence (press **Alt + ↓**), until a blue checkmark appears in place of the period after `Proof.`. The checkmark means that Waterproof has checked every sentence before the checkmark. Note how in the part of the screen under **Proof progress** (either on the right of the screen, or down below) appeared what we need to show, namely `(0=0)`. We will often refer to this as the current **goal**."
+      "text": "\nExecute the code sentence after sentence (press **Alt + ↓** or **Option + ↓**), until a blue checkmark appears in place of the period after `Proof.`. The checkmark means that Waterproof has checked every sentence before the checkmark. Note how in the part of the screen under **Proof progress** (either on the right of the screen, or down below) appeared what we need to show, namely `(0=0)`. We will often refer to this as the current **goal**."
     },
     {
       "type": "text",
@@ -66,13 +66,17 @@
       "text": "Lemma exercise_reflexivity :\n  3 = 3.\nProof."
     },
     {
+      "type": "text",
+      "text": "The blue brackets below delineate an input area. You can freely work there. Move the mouse just below the first blue bracket until a blue, horizontal line appears and click on it. Then, you can add a code cell by pressing **Alt + c** (On MacOS: **Ctrl + c**), and add a text cell by pressing **Alt + t** (On MacOS: **Ctrl + t**).\n\nYou can also change the text that is already there between the blue brackets by clicking on it.\n\nBelow we already added one code cell, which says `Admitted.`. Executing that code cell (**Alt + ↓**), will also make the proof progress turn to `Done.` **However,** in that case it is not proven but assumed as an axiom. We do this so you can continue executing the notebook even if you cannot solve the exercise.\n\nAfter you have found a proof, replace the `Admitted.` by `Qed.` (click on the code cell and change the sentence)."
+    },
+    {
       "type": "input",
       "start": true,
       "id": "input-1"
     },
     {
       "type": "text",
-      "text": "The blue brackets mean that this is an input cell. You can freely work here. Move the mouse just below the blue bracket until a blue, horizontal line appears and click on it. Then, you can add a code cell by pressing **Alt + c** (On MacOS: **Ctrl + c**), and add a text cell by pressing **Alt + t** (On MacOS: **Ctrl + t**).\n\nYou can also change the text in this text cell by clicking on it.\n\nBelow we already added one code cell, which says `Admitted.`. Executing that code cell (**Alt + ↓**), will also make the proof progress turn to `Done.` **However,** in that case it is not proven but assumed as an axiom. We do this so you can continue executing the notebook even if you cannot solve the exercise.\n\nAfter you have found a proof, replace the `Admitted.` by `Qed.` (click on the code cell and change the sentence)."
+      "text": "Write your solution here, then change the `Admitted.` below to `Qed.`."
     },
     {
       "type": "code",
@@ -93,7 +97,7 @@
     },
     {
       "type": "text",
-      "text": "> **NOTE:** the notation $x : ℝ$ means $x$ is in $\\mathbb{R}$ (or more accurately, $x$ is of type $\\mathbb{R}$) may be unfamiliar to you, and you may be more familiar with the notation $x ∈ \\reals$. This difference is due to the fact that Waterproof is built on **type theory** and not on set theory. \n\n**HINT:** You can insert characters such as ℝ either from the symbol menu that opens when clicking on 'Σ' in the top right corner, or you can write '\\reals'. For many other unicode characters you can use a backslash command as well."
+      "text": "> **NOTE:** the notation $x : ℝ$ means $x$ is in $\\mathbb{R}$ (or more accurately, $x$ is of type $\\mathbb{R}$) may be unfamiliar to you, and you may be more familiar with the notation $x ∈ \\reals$. This difference is due to the fact that Waterproof is built on **type theory** and not on set theory. \n\n**HINT:** You can insert characters such as ℝ either from the symbol menu that opens when clicking on 'Σ' in the top right corner, or you can write '\\reals' until a menu pops up and press enter. Make sure that the code reads 'ℝ' and not '\\reals' itself. For many other unicode characters you can use a backslash command as well."
     },
     {
       "type": "code",
@@ -101,7 +105,7 @@
     },
     {
       "type": "text",
-      "text": "\nTo show a statement like \"for all $x : \\mathbb{R}$, ...\", you first need to take an arbitrary $x : \\mathbb{R}$. We do this by writing and executing the following sentence, i.e. by applying the following **tactic**."
+      "text": "\nTo show a statement like \"for all $x : \\mathbb{R}$, ...\", you first need to take an arbitrary $x : \\mathbb{R}$, and then continue showing ... . We do this by writing and executing the following sentence, i.e. by applying the following **tactic**."
     },
     {
       "type": "code",
@@ -109,7 +113,7 @@
     },
     {
       "type": "text",
-      "text": "\nAfter taking $x : \\mathbb{R}$, we are back in a situation we are by now familiar with. We finish the proof as before."
+      "text": "\nWhen showing $∀ x : ℝ, ...$, after taking $x : \\mathbb{R}$ we need to continue showing whatever statement is at the place of the dots $...$. In our case, we need to show that $x = x$. So we are back in a situation we are by now familiar with. We finish the proof as before."
     },
     {
       "type": "code",
@@ -122,6 +126,18 @@
     {
       "type": "code",
       "text": "Lemma exercise :\n  for all x : ℝ,\n    x + 3 = 3 + x.\nProof."
+    },
+    {
+      "type": "text",
+      "text": "\n**HINT:** If you would like to get a hint on what you need to do, you can write and execute the sentence `Help.`"
+    },
+    {
+      "type": "code",
+      "text": "\nHelp."
+    },
+    {
+      "type": "text",
+      "text": "\n\n**HINT:** We recommend that always after you write down a sentence, you immediately execute it (**Alt + ↓**)."
     },
     {
       "type": "input",
@@ -287,11 +303,7 @@
     },
     {
       "type": "text",
-      "text": "Before we prove the lemma, let us first add some brackets that indicate how to read such an expression:\n\n$∀ a : ℝ, \\Big( (a < 0) ⇒ (- a > 0)\\Big).$"
-    },
-    {
-      "type": "text",
-      "text": "In particular, after the comma after a for-all quantifier, after the comma after a there-exists statement, and after an implication arrow, there are implicit brackets around everything that follows after. \n\nLet us now start to prove the lemma."
+      "text": "Corresponding to what we explained above, if we want to show this statement, we first need to take an arbitrary $a : ℝ$. Afterwards, we need to show that $(a < 0) ⇒ (- a > 0)$. \n\nTo show such an implication, we should first assume whatever is on the left hand side of the implication arrow, and then continue showing the right-hand side. In Waterproof, this works as follows."
     },
     {
       "type": "code",
@@ -361,15 +373,15 @@
     },
     {
       "type": "code",
-      "text": "\nLemma example_inequalities :\n  ∀ ε : ℝ, ε > 0 ⇒ Rmin ε 1 ≤ 2."
+      "text": "\nLemma example_inequalities :\n  ∀ ε : ℝ, ε > 0 ⇒ Rmin ε 1 < 2."
     },
     {
       "type": "code",
-      "text": "Proof.\nTake ε : ℝ.\nAssume ε_gt_0 : (ε > 0).\nRewrite inequality (Rmin ε 1) \"≤\" (1)\n                              \"≤\" (2).\nQed."
+      "text": "Proof.\nTake ε : ℝ.\nAssume ε_gt_0 : (ε > 0).\nWe conclude that\n  (&  Rmin ε 1 &≤ 1\n               &< 2).\nQed."
     },
     {
       "type": "text",
-      "text": "\nNote how we used the tactic `Rewrite inequality` to represent the chain of inequalities\n\n$$\\min(\\epsilon, 1) ≤ 1 ≤ 2.$$\n\nThe `Rewrite inequality` tactic expects a chain of (in)equalities. the (in)equality signs need to be placed between quotes (like `\"≥\"`), and usually the terms (such as `x^2`) need to be put in between parentheses (as in `(4 + 0)` rather than just `4 + 0`)."
+      "text": "\nNote how we used special notation for the chain of inequalities\n\n``\n(&   Rmin ε 1 &≤ 1\n              &< 2).\n``\n\nWe think of this statement that **and** `Rmin ε 1 ≤ 1` **and** `1 < 2`. \n\n\n**IMPORTANT**: Here are a few issues to pay attention to:\n- After opening the first parenthesis, you need to write a '&' sign.\n- Directly in front of every comparison operator (such as '≤'), you also need to put the '&' sign.\n- Chains of inequalities go from smaller to larger. So only $=$, $≤$ and $<$ are supported."
     },
     {
       "type": "text",
@@ -377,7 +389,11 @@
     },
     {
       "type": "code",
-      "text": "Lemma exercise_inequalities :\n  ∀ ε : ℝ, ε > 0 ⇒ Rmin (ε / 2) 1 ≤ ε.\n  \nProof."
+      "text": "Lemma exercise_inequalities :\n  ∀ ε : ℝ, ε > 0 ⇒ Rmin (ε / 2) 1 < ε.\n  \nProof."
+    },
+    {
+      "type": "hint",
+      "text": "Click to open hint.\n<hint>\nAt the end of your proof, use the following chain of inequalities \n\n```\nRmin (ε / 2) 1 ≤ ε / 2 < ε\n```\n\nbut pay attention to the issues mentioned above: in particular use the '&' sign at the appropriate places."
     },
     {
       "type": "input",
@@ -403,11 +419,11 @@
     },
     {
       "type": "code",
-      "text": "\nLemma example_use_there_exists :\n  ∀ x : ℝ,\n    (∃ y : ℝ, y > 10 ∧ x > y) ⇒\n      x > 10."
+      "text": "\nLemma example_use_there_exists :\n  ∀ x : ℝ,\n    (∃ y : ℝ, 10 < y ∧ y < x) ⇒\n      10 < x."
     },
     {
       "type": "code",
-      "text": "Proof.\nTake x : ℝ.\nAssume exists_y_with_prop : (∃ y : ℝ, y > 10 ∧ x > y).\n"
+      "text": "Proof.\nTake x : ℝ.\nAssume exists_y_with_prop : (∃ y : ℝ, 10 < y ∧ y < x).\n"
     },
     {
       "type": "text",
@@ -419,7 +435,7 @@
     },
     {
       "type": "code",
-      "text": "Rewrite inequality x \">\" y \">\" 10.\nQed."
+      "text": "We conclude that\n  (&  10 &< y\n         &< x).\nQed."
     },
     {
       "type": "text",
@@ -427,7 +443,7 @@
     },
     {
       "type": "code",
-      "text": "Lemma exercise_use_there_exists :\n  ∀ z : ℝ,\n    (∃ x : ℝ, (x < -5) ∧ (z > x^2)) ⇒\n      z > 25.\n      \nProof."
+      "text": "Lemma exercise_use_there_exists :\n  ∀ z : ℝ,\n    (∃ x : ℝ, (x < -5) ∧ (z > x^2)) ⇒\n      25 < z.\n      \nProof."
     },
     {
       "type": "input",
@@ -477,7 +493,7 @@
     },
     {
       "type": "text",
-      "text": "\nSometimes, you also need to tell Waterproof what lemma to use in proving the intermediate step. The following line would tell Waterproof to use the lemma called `Rmax_r`.\n\n```\nBy Rmax_r it holds that Rmax_gt_1 : (Rmax ε 1 ≥ 1). \n```\n\nFor very difficult statements, it may happen that Waterproof cannot find a proof even when providing the name of a lemma. In that case you can first make an intermediate claim.\n\n```\nWe claim that Rmax_gt_1 : (Rmax ε 1 ≥ 1).\n{\n  (* proof of claim *)\n}\n```"
+      "text": "\nSometimes, you also need to tell Waterproof what lemma to use in proving the intermediate step. The following line would tell Waterproof to use the lemma called `Rmax_r`.\n\n```\nBy Rmax_r it holds that\n  Rmax_gt_1 : (Rmax ε 1 ≥ 1). \n```\n\nFor very difficult statements, it may happen that Waterproof cannot find a proof even when providing the name of a lemma. In that case you can first make an intermediate claim.\n\n```\nWe claim that Rmax_gt_1 : (Rmax ε 1 ≥ 1).\n{\n  (* proof of claim *)\n}\n```"
     },
     {
       "type": "text",
@@ -597,6 +613,10 @@
     },
     {
       "type": "text",
+      "text": "\nInstead of writing `Contradiction.` you can also write `↯.`. You can get the symbol `↯` with the backslash-command `\\contradiction`."
+    },
+    {
+      "type": "text",
       "text": "** Try it yourself: argue by contradiction"
     },
     {
@@ -654,6 +674,10 @@
       "text": "Lemma exercises_cases :\n  ∀ x : ℝ, ∀ y : ℝ,\n    Rmin x y = x ∨ Rmin x y = y.\n    \nProof."
     },
     {
+      "type": "hint",
+      "text": "Click to open hint.\n<hint>\nDistinguish between cases `x < y` and `x ≥ y`."
+    },
+    {
       "type": "input",
       "start": true,
       "id": "input-10"
@@ -689,7 +713,15 @@
     },
     {
       "type": "code",
-      "text": "We show both statements.\n- We need to show that (x^2 ≥ 0).\n  We conclude that (x^2 ≥ 0).\n- We need to show that (| x | ≥ 0).\n  We conclude that (| x | ≥ 0).\nQed."
+      "text": "\nWe show both statements."
+    },
+    {
+      "type": "text",
+      "text": "\nNow the proof splits into two parts, one for each statement. We need to indicate these two parts using bullet points. They can be indicated by any of `-`, `+`, `*`, `--` etc.. You can use a bulleted list inside of a bulleted list."
+    },
+    {
+      "type": "code",
+      "text": "\n- We need to show that (x^2 ≥ 0).\n  We conclude that (x^2 ≥ 0).\n- We need to show that (| x | ≥ 0).\n  We conclude that (| x | ≥ 0).\nQed."
     },
     {
       "type": "text",
@@ -706,7 +738,7 @@
     },
     {
       "type": "text",
-      "text": "Write your solution here..."
+      "text": "Write your solution here... Don't forget to use bullet points..."
     },
     {
       "type": "code",
@@ -735,7 +767,15 @@
     },
     {
       "type": "code",
-      "text": "We show both directions.\n- We need to show that (x < y ⇒ y > x ).\n  Assume x_lt_y : (x < y).\n  We conclude that (y > x).\n- We need to show that (y > x ⇒ x < y ).\n  Assume y_gt_x : (y > x).\n  We need to show that (x < y).\n  We conclude that (x < y).\nQed."
+      "text": "\nWe show both directions."
+    },
+    {
+      "type": "text",
+      "text": "\nAgain we need to make use of bullet points to indicate the two directions."
+    },
+    {
+      "type": "code",
+      "text": "\n- We need to show that (x < y ⇒ y > x ).\n  Assume x_lt_y : (x < y).\n  We conclude that (y > x).\n- We need to show that (y > x ⇒ x < y ).\n  Assume y_gt_x : (y > x).\n  We need to show that (x < y).\n  We conclude that (x < y).\nQed."
     },
     {
       "type": "text",
@@ -752,7 +792,7 @@
     },
     {
       "type": "text",
-      "text": "Write your solution here..."
+      "text": "Write your solution here... Don't forget to use bullet points..."
     },
     {
       "type": "code",
@@ -765,15 +805,81 @@
     },
     {
       "type": "text",
-      "text": "* 14. Proof by induction\n\nThe following example shows how one could use mathematical induction to show a statement of the form\n\n $$∀ k : ℕ, ... $$\n\nNote that Waterproof will usually interpret any statement such as an inequality `n(k +1 ) > n k` as a statement comparing real numbers, while in this exercise we need statements that compare natural numbers. To indicate this, we have to write `(n (k+1) > n k)%nat` instead."
+      "text": "* 14. Expand definitions\n\nIt happens that you need to use a definition of some object in Waterproof, for instance the definition of a function. Here is the definition of a function called `square`."
     },
     {
       "type": "code",
-      "text": "Lemma example_induction :\n  ∀ n : ℕ -> ℕ, (∀ k : ℕ, (n (k + 1) > n k)%nat) ⇒\n    ∀ k : ℕ, (n k ≥ k)%nat."
+      "text": "\nDefinition square (x : ℝ) := x^2."
+    },
+    {
+      "type": "text",
+      "text": "\nWe now aim to prove the following lemma."
     },
     {
       "type": "code",
-      "text": "Proof.\nTake n : (ℕ -> ℕ).\nAssume n_increasing : (∀ k : ℕ, (n (k+1) > n k )%nat)."
+      "text": "Lemma example_expand :\n  ∀ x : ℝ, square x ≥ 0."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake x : ℝ."
+    },
+    {
+      "type": "text",
+      "text": "At this stage, Waterproof does not know how to continue. We could immediately reformulate the goal by writing `We need to show that (x^2 ≥ 0).`, or we could write \n\n```\nWe conclude that\n  (& square x &= x^2\n              &≥ 0). \n```\nHowever these options aren't available if you do not know the definition of `square`. In that case you could write"
+    },
+    {
+      "type": "code",
+      "text": "\nExpand the definition of square."
+    },
+    {
+      "type": "text",
+      "text": "\nNow Waterproof has expanded the definition of `square` in the goal. It is always important to keep the proof readable, so that's why Waterproof asks you now to also reformulate the goal."
+    },
+    {
+      "type": "code",
+      "text": "\nThat is, write the goal as (x^2 ≥ 0).\nWe conclude that (x^2 ≥ 0).\nQed."
+    },
+    {
+      "type": "text",
+      "text": "You can also expand the definition in a hypothesis. For instance,\n```\nExpand the definition of square in H.\n```\nwould expand the definition of `square` in the hypothesis with the name `H`."
+    },
+    {
+      "type": "text",
+      "text": "** Try it yourself: expand a definition"
+    },
+    {
+      "type": "code",
+      "text": "Lemma exercise_expand :\n  ∀ x : ℝ, - (square x) ≤ 0.\n  \nProof."
+    },
+    {
+      "type": "input",
+      "start": true,
+      "id": "input-14"
+    },
+    {
+      "type": "text",
+      "text": "Write your solution here..."
+    },
+    {
+      "type": "code",
+      "text": "\nAdmitted."
+    },
+    {
+      "type": "input",
+      "start": false,
+      "id": "input-14"
+    },
+    {
+      "type": "text",
+      "text": "* 15. Proof by induction\n\nThe following example shows how one could use mathematical induction to show a statement of the form\n\n $$∀ k : ℕ, ... $$\n\nNote that Waterproof will usually interpret any statement such as an inequality `n(k +1 ) > n k` as a statement comparing real numbers, while in this exercise we need statements that compare natural numbers. To indicate this, we have to write `(n (k+1) > n k)%nat` instead."
+    },
+    {
+      "type": "code",
+      "text": "Lemma example_induction :\n  ∀ n : ℕ -> ℕ, (∀ k : ℕ, (n k < n (k + 1))%nat) ⇒\n    ∀ k : ℕ, (k ≤ n k)%nat."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake n : (ℕ → ℕ).\nAssume n_increasing : (∀ k : ℕ, (n k < n (k + 1))%nat)."
     },
     {
       "type": "text",
@@ -781,15 +887,15 @@
     },
     {
       "type": "code",
-      "text": "\nWe use induction on k.\n- We first show the base case, namely ( (n 0 ≥ 0)%nat ).\n  We conclude that (n 0 ≥ 0)%nat.\n- We now show the induction step.\n  Assume IH : (n k ≥ k)%nat.\n  It holds that n_k_plus_1_gt_n_k : (n (k + 1) > n k)%nat.\n  We conclude that (n (k + 1) ≥ k + 1)%nat.\nQed."
+      "text": "\nWe use induction on k.\n- We first show the base case, namely ( (0 ≤ n 0)%nat ).\n  We conclude that (0 ≤ n 0)%nat.\n- We now show the induction step.\n  Assume IH : (k ≤ n k)%nat.\n  It holds that n_k_lt_n_k_plus_1 : (n k < n (k + 1))%nat.\n  We conclude that (k + 1 ≤ n (k + 1))%nat.\nQed."
     },
     {
       "type": "text",
-      "text": "** Try it yourself: a proof by induction"
+      "text": "** Try it yourself: a proof by induction\n\nCan you prove the following statement using mathematical induction?"
     },
     {
       "type": "code",
-      "text": "Lemma exercise_induction :\n  ∀ f : ℕ -> ℕ, (∀ k : ℕ, (f (k + 1) = f k)%nat) ⇒\n    ∀ k : ℕ, (f k = f 0)%nat.\n    \nProof."
+      "text": "Lemma exercise_induction :\n  ∀ f : ℕ → ℕ, (∀ k : ℕ, (f (k + 1) = f k)%nat) ⇒\n    ∀ k : ℕ, (f k = f 0)%nat.\n    \nProof."
     },
     {
       "type": "input",

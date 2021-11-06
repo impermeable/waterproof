@@ -7,12 +7,12 @@
     {
         "name": "We conclude that ((*current goal*)).",
         "description": "Tries to automatically prove the current goal.",
-        "example": "Lemma 2_is_2 : 2 = 2. \nProof.\nIt holds that (2 = 2).\nQed."
+        "example": "Lemma 2_is_2 : 2 = 2. \nProof.\nWe conclude that (2 = 2).\nQed."
     },
     {
         "name": "Take (*name*) : ((*set*)).",
         "description": "Take an arbitrary element from (*set*) and call it (*name*).",
-        "example": "Lemma x_is_x : forall x : R, x = x.\nProof.\nTake x : R.\n(*This follows by*) reflexivity.\nQed."
+        "example": "Lemma x_is_x : forall x : R, x = x.\nProof.\nTake x : R.\nWe conclude that (x=x).\nQed."
     },
     {
         "name": "Choose (*name_var*) := ((*expression*)).",
@@ -25,9 +25,9 @@
         "example": "Lemma A_impl_A : forall A : Prop, A ⇒ A.\nProof.\nTake A : Prop.\nAssume H_A.\nApply H_A.Qed."
     },
     {
-        "name": "Rewrite inequality ((*statement_1*)) \"(*sign_1*)\" ((*statement_2*)) \"(*sign_2*)\" ((*statement_3*))",
-        "description": "Here (sign) is one of '=', '<', '>', '≤' or '≥'. Sometimes, you want to conclude something by concatenating a number of (in)equalities. For example, when you know that $a < b$ and $b < c$ and need to show that $a < c$, you could write $a < b < c$.",
-        "example": "Rewrite inequality (a) \"<\" (b) \"<\" (c)"
+        "name": "(& 3 &< 5 &= 2 + 3 &≤ 7 )",
+        "description": "Example of a chain of (in)equalities in which every inequality should.",
+        "example": "We conclude that (&  a &< b &< c)."
     },
     {
         "name": "Choose (*name_var*) such that (*name_property*) according to (*name_hyp*).",
