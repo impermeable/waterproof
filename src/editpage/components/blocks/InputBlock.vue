@@ -23,13 +23,15 @@ export default {
 
   .input-start-block {
     @include theme(border, color-primary-light, 3px solid);
-    border-bottom: 0;
+    /* We use important here since theme sets the border directly in a higher
+       priority style set (Same for below) */
+    border-bottom-width: 0 !important;
     margin-bottom: 7px;
   }
 
   .input-end-block {
     @include theme(border, color-primary-light, 3px solid);
     margin-top: 7px;
-    border-top: 0;
+    border-top-width: 0 !important;
   }
 </style>

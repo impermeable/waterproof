@@ -35,17 +35,30 @@ export default function createTexInputHints(symbols) {
      */
 
   function createUnicodeTable(symbols) {
-    let newSymbol;
-
     for (const category of symbols) {
       for (const element of category.elements) {
-        newSymbol = {
-          text: '\\' + element.name,
-          symbol: element.symbol,
-        };
-        unicodePreTable.push(newSymbol);
+        if (element.hasOwnProperty('names')) {
+          for (const name of element.names) {
+            unicodePreTable.push({
+              text: '\\' + name,
+              symbol: element.symbol,
+            });
+          }
+          if (element.hasOwnProperty('name')) {
+            console.log('WARNING: symbol has both "name" and "names"', element);
+          }
+        } else if (element.hasOwnProperty('name')) {
+          unicodePreTable.push({
+            text: '\\' + element.name,
+            symbol: element.symbol,
+          });
+        } else {
+          console.log('WARNING: symbol without name: ', element);
+        }
       }
     }
+
+    unicodePreTable.sort((a, b) => a.text.localeCompare(b.text));
   }
 
   function TeXInputHint(editor) {

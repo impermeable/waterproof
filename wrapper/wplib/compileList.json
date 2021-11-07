@@ -1,11 +1,2 @@
 [
-  "Definitions/SetDefinitions",
-  "Notations/Notations",
-  "Notations/NotationsVenA",
-  "Tactics/AdditionalLemmas",
-  "Tactics/Databases",
-  "Tactics/Waterprove",
-  "Tactics/Tactics",
-  "Tactics/TacticsContra",
-  "Tactics/SetTheoryTactics"
 ]
