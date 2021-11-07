@@ -55,7 +55,7 @@
     },
     {
       "type": "text",
-      "text": "\n**HINT:** When writing `We conclude that (...)`, it is important that at the place of the dots you write the current goal (which you can see under **Proof progress**), and not another statement.\n\n**HINT:** If you click on the hammer symbol on the top right, a list of tactics will open. You can click on any of the tactics, and the tactic will be inserted in the text, usually with some placeholders that you need to fill in."
+      "text": "\n**HINT:** When writing `We conclude that (...)`, it is important that at the place of the dots you write the current goal (which you can see under **Proof progress**), and not another statement.\n\n**HINT:** If you click on the hammer symbol on the top right, a list of tactics will open. You can click on one of the icons next to the tactics, and the tactic will be either be copied to the clipboard or inserted in the text at the place of the cursor, usually with some placeholders that you need to fill in."
     },
     {
       "type": "text",
@@ -415,40 +415,44 @@
     },
     {
       "type": "text",
-      "text": "* 7. Use a *there-exists* statement\n\nSuppose it is given that "
+      "text": "* 7. Backward reasoning in smaller steps\n\nSometimes, what you need to show can be derived from another statement. In that case, you can tell Waterproof that it suffices to show the second statement. It will then try to verify that indeed the first statement can be derived from the second, and all that's left to do for you is show the second statement. Here is an example."
     },
     {
       "type": "code",
-      "text": "\nLemma example_use_there_exists :\n  ∀ x : ℝ,\n    (∃ y : ℝ, 10 < y ∧ y < x) ⇒\n      10 < x."
+      "text": "Lemma example_backwards :\n  ∀ ε : ℝ,\n    ε > 0 ⇒\n      3 + Rmax ε 2 ≥ 3."
     },
     {
       "type": "code",
-      "text": "Proof.\nTake x : ℝ.\nAssume exists_y_with_prop : (∃ y : ℝ, 10 < y ∧ y < x).\n"
+      "text": "Proof.\nTake ε : ℝ.\nAssume ε_gt_0 : (ε > 0)."
     },
     {
       "type": "text",
-      "text": "We now would like to use that there exists a $y$ in $\\mathbb{R}$ such that $y>10$ and $x > y$. In other words, we would like to obtain such a $y$. We do this as follows."
+      "text": "\nWe now tell Waterproof that it suffices to show that ($\\max(  ε, 2)≥ 0$). It will automatically try to verify that this is indeed enough."
     },
     {
       "type": "code",
-      "text": "\nChoose y such that \n  y_gt_10_and_x_gt_y according to exists_y_with_prop.\n"
-    },
-    {
-      "type": "code",
-      "text": "We conclude that\n  (&  10 &< y\n         &< x).\nQed."
+      "text": "\nIt suffices to show that (Rmax ε 2 ≥ 0)."
     },
     {
       "type": "text",
-      "text": "** Try it yourself: use a *there-exists* statement"
+      "text": "\nWe can finish the proof."
     },
     {
       "type": "code",
-      "text": "Lemma exercise_use_there_exists :\n  ∀ z : ℝ,\n    (∃ x : ℝ, (x < -5) ∧ (z > x^2)) ⇒\n      25 < z.\n      \nProof."
+      "text": "\nRewrite inequality (Rmax ε 2) \"≥\" (2) \"≥\" 0.\nQed."
+    },
+    {
+      "type": "text",
+      "text": "** Try it yourself: backward reasoning in smaller steps\n\n"
+    },
+    {
+      "type": "code",
+      "text": "Lemma exercise_backwards :\n  ∀ ε : ℝ, ε > 0 ⇒ 5 - Rmax ε 3 ≤ 5."
     },
     {
       "type": "input",
       "start": true,
-      "id": "input-7"
+      "id": "input-8"
     },
     {
       "type": "text",
@@ -461,7 +465,7 @@
     {
       "type": "input",
       "start": false,
-      "id": "input-7"
+      "id": "input-8"
     },
     {
       "type": "text",
@@ -523,44 +527,44 @@
     },
     {
       "type": "text",
-      "text": "* 9. Backward reasoning in smaller steps\n\nSometimes, what you need to show can be derived from another statement. In that case, you can tell Waterproof that it suffices to show the second statement. It will then try to verify that indeed the first statement can be derived from the second, and all that's left to do for you is show the second statement. Here is an example."
+      "text": "* 9. Use a *for-all* statement\n\nA special case of the above is when you would like to *use* a for-all statement, as in the example below."
     },
     {
       "type": "code",
-      "text": "Lemma example_backwards :\n  ∀ ε : ℝ,\n    ε > 0 ⇒\n      3 + Rmax ε 2 ≥ 3."
+      "text": "Lemma example_use_for_all :\n  ∀ x : ℝ, ∀ y : ℝ,\n    (∀ δ : ℝ, δ > 0 ⇒ x < δ) ⇒\n      (∀ ε : ℝ, ε > 0 ⇒ y < ε) ⇒\n        x + y < 1."
     },
     {
       "type": "code",
-      "text": "Proof.\nTake ε : ℝ.\nAssume ε_gt_0 : (ε > 0)."
+      "text": "Proof.\nTake x : ℝ. Take y : ℝ.\nAssume del_cond : (∀ δ : ℝ, δ > 0 ⇒ x < δ).\nAssume eps_cond : (∀ ε : ℝ, ε > 0 ⇒ y < ε).\n"
     },
     {
       "type": "text",
-      "text": "\nWe now tell Waterproof that it suffices to show that ($\\max(  ε, 2)≥ 0$). It will automatically try to verify that this is indeed enough."
+      "text": "We can now **use** the statement that we called `del_cond` with $δ = 1/2$. We can do this by substituting $\\delta = 1/2$ as follows."
     },
     {
       "type": "code",
-      "text": "\nIt suffices to show that (Rmax ε 2 ≥ 0)."
+      "text": "\nBy del_cond it holds that x_lt_half : (x < 1/2)."
     },
     {
       "type": "text",
-      "text": "\nWe can finish the proof."
+      "text": "Similarly, we can use the statement that we called `eps_cond`. We can also indicate explicitly that we choose $ε = 1/2$ in the statement by writing `By (eps_cond (1/2)) ...` as in"
     },
     {
       "type": "code",
-      "text": "\nRewrite inequality (Rmax ε 2) \"≥\" (2) \"≥\" 0.\nQed."
+      "text": "\nBy (eps_cond (1/2)) it holds that y_lt_half : (y < 1/2).\n\nWe conclude that (x + y < 1).\nQed."
     },
     {
       "type": "text",
-      "text": "** Try it yourself: backward reasoning in smaller steps\n\n"
+      "text": "** Try it yourself: Use a for-all statement"
     },
     {
       "type": "code",
-      "text": "Lemma exercise_backwards :\n  ∀ ε : ℝ, ε > 0 ⇒ 5 - Rmax ε 3 ≤ 5."
+      "text": "Lemma exercise_use_for_all:\n  ∀ x : ℝ,\n    (∀ ε : ℝ, ε > 0 ⇒ x < ε) ⇒\n      10 * x < 1.\n      \nProof."
     },
     {
       "type": "input",
       "start": true,
-      "id": "input-8"
+      "id": "input-15"
     },
     {
       "type": "text",
@@ -573,11 +577,61 @@
     {
       "type": "input",
       "start": false,
-      "id": "input-8"
+      "id": "input-15"
     },
     {
       "type": "text",
-      "text": "* 10. Arguing by contradiction\n\nSometimes a direct proof is not easy to find, or maybe even impossible, and you need to use a contradiction argument. The following example illustrates how you can do this in Waterproof."
+      "text": "* 10. Use a *there-exists* statement\n\nIn this example we show how to **use** a there-exists statement (when you know it holds)."
+    },
+    {
+      "type": "code",
+      "text": "\nLemma example_use_there_exists :\n  ∀ x : ℝ,\n    (∃ y : ℝ, 10 < y ∧ y < x) ⇒\n      10 < x."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake x : ℝ.\nAssume exists_y_with_prop : (∃ y : ℝ, 10 < y ∧ y < x).\n"
+    },
+    {
+      "type": "text",
+      "text": "We now would like to use that there exists a $y$ in $\\mathbb{R}$ such that $y>10$ and $x > y$. In other words, we would like to obtain such a $y$. We do this as follows."
+    },
+    {
+      "type": "code",
+      "text": "\nChoose y such that \n  y_gt_10_and_x_gt_y according to exists_y_with_prop.\n"
+    },
+    {
+      "type": "code",
+      "text": "We conclude that\n  (&  10 &< y\n         &< x).\nQed."
+    },
+    {
+      "type": "text",
+      "text": "** Try it yourself: use a *there-exists* statement"
+    },
+    {
+      "type": "code",
+      "text": "Lemma exercise_use_there_exists :\n  ∀ z : ℝ,\n    (∃ x : ℝ, (x < -5) ∧ (z > x^2)) ⇒\n      25 < z.\n      \nProof."
+    },
+    {
+      "type": "input",
+      "start": true,
+      "id": "input-7"
+    },
+    {
+      "type": "text",
+      "text": "Write your solution here..."
+    },
+    {
+      "type": "code",
+      "text": "\nAdmitted."
+    },
+    {
+      "type": "input",
+      "start": false,
+      "id": "input-7"
+    },
+    {
+      "type": "text",
+      "text": "* 11. Argue by contradiction\n\nSometimes a direct proof is not easy to find, or maybe even impossible, and you need to use a contradiction argument. The following example illustrates how you can do this in Waterproof."
     },
     {
       "type": "code",
@@ -647,7 +701,7 @@
     },
     {
       "type": "text",
-      "text": "* 11. Split into cases.\n\nAt times, you need to make a case distinction in your proof, as in the following example."
+      "text": "* 12. Split into cases.\n\nAt times, you need to make a case distinction in your proof, as in the following example."
     },
     {
       "type": "code",
@@ -697,7 +751,7 @@
     },
     {
       "type": "text",
-      "text": "* 12. Prove two statements: A ∧ B\n\nThe next example shows how you could prove a statement of the form $A ∧ B$."
+      "text": "* 13. Prove two statements: A ∧ B\n\nThe next example shows how you could prove a statement of the form $A ∧ B$."
     },
     {
       "type": "code",
@@ -751,7 +805,7 @@
     },
     {
       "type": "text",
-      "text": "** 13. Show both directions\n\nIf you need to show a statement of the form $A ⇔ B$, then you need to show both directions separately, namely $A ⇒ B$ and $B ⇒ A$. Here is an example."
+      "text": "** 14. Show both directions\n\nIf you need to show a statement of the form $A ⇔ B$, then you need to show both directions separately, namely $A ⇒ B$ and $B ⇒ A$. Here is an example."
     },
     {
       "type": "code",
@@ -805,7 +859,53 @@
     },
     {
       "type": "text",
-      "text": "* 14. Expand definitions\n\nIt happens that you need to use a definition of some object in Waterproof, for instance the definition of a function. Here is the definition of a function called `square`."
+      "text": "* 15. Proof by induction\n\nThe following example shows how one could use mathematical induction to show a statement of the form\n\n $$∀ k : ℕ, ... $$\n\nNote that Waterproof will usually interpret any statement such as an inequality `n(k +1 ) > n k` as a statement comparing real numbers, while in this exercise we need statements that compare natural numbers. To indicate this, we have to write `(n (k+1) > n k)%nat` instead."
+    },
+    {
+      "type": "code",
+      "text": "Lemma example_induction :\n  ∀ n : ℕ → ℕ, (∀ k : ℕ, (n k < n (k + 1))%nat) ⇒\n    ∀ k : ℕ, (k ≤ n k)%nat."
+    },
+    {
+      "type": "code",
+      "text": "Proof.\nTake n : (ℕ → ℕ).\nAssume n_increasing : (∀ k : ℕ, (n k < n (k + 1))%nat)."
+    },
+    {
+      "type": "text",
+      "text": "We can now perform the induction argument."
+    },
+    {
+      "type": "code",
+      "text": "\nWe use induction on k.\n- We first show the base case, namely ( (0 ≤ n 0)%nat ).\n  We conclude that (0 ≤ n 0)%nat.\n- We now show the induction step.\n  Assume IH : (k ≤ n k)%nat.\n  It holds that n_k_lt_n_k_plus_1 : (n k < n (k + 1))%nat.\n  We conclude that (k + 1 ≤ n (k + 1))%nat.\nQed."
+    },
+    {
+      "type": "text",
+      "text": "** Try it yourself: a proof by induction\n\nCan you prove the following statement using mathematical induction?"
+    },
+    {
+      "type": "code",
+      "text": "Lemma exercise_induction :\n  ∀ f : ℕ → ℕ, (∀ k : ℕ, (f (k + 1) = f k)%nat) ⇒\n    ∀ k : ℕ, (f k = f 0)%nat.\n    \nProof."
+    },
+    {
+      "type": "input",
+      "start": true,
+      "id": "input-13"
+    },
+    {
+      "type": "text",
+      "text": "write your solution here..."
+    },
+    {
+      "type": "code",
+      "text": "\nAdmitted."
+    },
+    {
+      "type": "input",
+      "start": false,
+      "id": "input-13"
+    },
+    {
+      "type": "text",
+      "text": "* 16. Expand definitions\n\nIt happens that you need to use a definition of some object in Waterproof, for instance the definition of a function. Here is the definition of a function called `square`."
     },
     {
       "type": "code",
@@ -868,52 +968,6 @@
       "type": "input",
       "start": false,
       "id": "input-14"
-    },
-    {
-      "type": "text",
-      "text": "* 15. Proof by induction\n\nThe following example shows how one could use mathematical induction to show a statement of the form\n\n $$∀ k : ℕ, ... $$\n\nNote that Waterproof will usually interpret any statement such as an inequality `n(k +1 ) > n k` as a statement comparing real numbers, while in this exercise we need statements that compare natural numbers. To indicate this, we have to write `(n (k+1) > n k)%nat` instead."
-    },
-    {
-      "type": "code",
-      "text": "Lemma example_induction :\n  ∀ n : ℕ -> ℕ, (∀ k : ℕ, (n k < n (k + 1))%nat) ⇒\n    ∀ k : ℕ, (k ≤ n k)%nat."
-    },
-    {
-      "type": "code",
-      "text": "Proof.\nTake n : (ℕ → ℕ).\nAssume n_increasing : (∀ k : ℕ, (n k < n (k + 1))%nat)."
-    },
-    {
-      "type": "text",
-      "text": "We can now perform the induction argument."
-    },
-    {
-      "type": "code",
-      "text": "\nWe use induction on k.\n- We first show the base case, namely ( (0 ≤ n 0)%nat ).\n  We conclude that (0 ≤ n 0)%nat.\n- We now show the induction step.\n  Assume IH : (k ≤ n k)%nat.\n  It holds that n_k_lt_n_k_plus_1 : (n k < n (k + 1))%nat.\n  We conclude that (k + 1 ≤ n (k + 1))%nat.\nQed."
-    },
-    {
-      "type": "text",
-      "text": "** Try it yourself: a proof by induction\n\nCan you prove the following statement using mathematical induction?"
-    },
-    {
-      "type": "code",
-      "text": "Lemma exercise_induction :\n  ∀ f : ℕ → ℕ, (∀ k : ℕ, (f (k + 1) = f k)%nat) ⇒\n    ∀ k : ℕ, (f k = f 0)%nat.\n    \nProof."
-    },
-    {
-      "type": "input",
-      "start": true,
-      "id": "input-13"
-    },
-    {
-      "type": "text",
-      "text": "write your solution here..."
-    },
-    {
-      "type": "code",
-      "text": "\nAdmitted."
-    },
-    {
-      "type": "input",
-      "start": false,
-      "id": "input-13"
     }
   ]
 }
