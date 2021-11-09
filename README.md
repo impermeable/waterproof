@@ -8,7 +8,7 @@ Develop build status: [![Build Status](https://travis-ci.org/impermeable/waterpr
 
 ## How to get started - Windows
 
-* Download and execute the dependencies installer from its [release page](https://github.com/impermeable/waterproof-dependencies-installer/releases)
+* Download and execute the dependencies installer from its [release page](https://github.com/impermeable/waterproof-dependencies-installer/releases) **Note:** do not change the default installation location, otherwise Waterproof will not work.
 * Install Waterproof using the installer from the [release page](http://github.com/impermeable/waterproof/releases)
 
 ## How to get started - Linux and Mac
