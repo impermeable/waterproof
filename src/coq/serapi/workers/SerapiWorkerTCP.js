@@ -1,8 +1,6 @@
 'use strict';
 
-const path = require('path');
 import SerapiWorker from './SerapiWorker';
-import {getAppdataPath} from '../../../io/pathHelper';
 
 /**
  * Class that connects to serapi
@@ -17,11 +15,6 @@ class SerapiWorkerTCP extends SerapiWorker {
     super();
     this.socket = socket;
     this.socketId = -1;
-
-    // let wplibPath = path.join(getAppdataPath(), './wplib');
-    // if ( process.platform === 'win32' ) {
-    //   wplibPath = `"${wplibPath}"`;
-    // }
 
     this.sendMessage(
         this.createWrapperMessage('create',
