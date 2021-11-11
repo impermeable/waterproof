@@ -26,6 +26,29 @@ function findSertop(platform, remote=undefined) {
     // TODO: ugly for testing... can be done better
     remote = require('electron').remote;
   }
+
+  const checkOption = (guess) => {
+    if (fs.existsSync(guess)) {
+      const dialog = remote.dialog;
+
+      const useThisVersion = dialog.showMessageBoxSync({
+        type: 'question',
+        title: 'Found serapi version',
+        message: `Waterproof makes use of a program called sertop.` +
+            ` Waterproof found a version of sertop at:\n${guess}\n` +
+            `Should waterproof use this version?\n` +
+            `(This can be changed later in the configuration file)`,
+        buttons: [
+          'Yes',
+          'No',
+        ],
+      });
+
+      return useThisVersion === 0;
+    }
+    return false;
+  };
+
   const userName = os.userInfo()['username'];
   if (platform === 'win32') {
     const ocamlVariants =
@@ -39,31 +62,28 @@ function findSertop(platform, remote=undefined) {
         ['C:\\cygwin_coq_platform\\home\\runneradmin\\.opam\\',
           `C:\\OCaml64\\home\\${userName}\\.opam\\`,
           path.join(remote.app.getPath('home'), '.opam/')];
+
     for (const base of baseFolderVariants) {
       if (fs.existsSync(base)) {
         for (const variant of ocamlVariants) {
           const guess = base + `${variant}\\bin\\sertop.exe`;
-          if (fs.existsSync(guess)) {
-            const dialog = remote.dialog;
-
-            const useThisVersion =dialog.showMessageBoxSync({
-              type: 'question',
-              title: 'Found serapi version',
-              message: `Waterproof makes use of a program called sertop.` +
-                  ` Waterproof found a version of sertop at:\n${guess}\n` +
-                  `Should waterproof use this version?\n` +
-                  `(This can be changed later in the configuration file)`,
-              buttons: [
-                'Yes',
-                'No',
-              ],
-            });
-
-            if (useThisVersion === 0) {
-              return guess;
-            }
+          if (checkOption(guess)) {
+            return guess;
           }
         }
+      }
+    }
+  } else if (platform === 'linux') {
+    const homedir = os.userInfo()['homedir'];
+    const ocamlVariants =
+        ['coq_for_waterproof',
+          'default'];
+    const baseFolder = homedir + '/.opam/';
+
+    for (const variant of ocamlVariants) {
+      const guess = baseFolder + variant + '/bin/sertop';
+      if (checkOption(guess)) {
+        return guess;
       }
     }
   }
@@ -79,7 +99,7 @@ function findSertop(platform, remote=undefined) {
  * @return {Promise<string>} A promise which, when resolved,
  * gives back a string with the sertop Path
  */
-function userHelpFindSertop(remote, guess='') {
+function userHelpFindSertop(remote, guess = '') {
   const userPath = getAppdataPath();
   const configPath = path.join(userPath, 'wpconfig.json');
   const result = remote.dialog.showOpenDialogSync({
