@@ -31,10 +31,10 @@ jobs:
           ref: 'develop'
       - name: Setup git
         run: |
-          git config --global user.email "build-release@waterproof.com"
-          git config --global user.name "BumpVersionNumber"
+          git config --global user.email "waterproofdev@gmail.com"
+          git config --global user.name "WaterproofBot"
       - name: set tag
-        run: "npm version ${{github.event.inputs.tag}} --allow-same-version --git-tag-version"
+        run: "npm version ${{github.event.inputs.tag}} --allow-same-version --git-tag-version -m \"Bumped version number to %s\" "
       - name: push tag
         run: git push
 
@@ -65,15 +65,22 @@ jobs:
         run: npm run electron:generate-icons
       - name: Build it
         run: npm run electron:build
+      - name: Prepare release name
+        id: prepname
+        uses: actions/github-script@0.9.0
+        with:
+          script: |
+            const name = context.payload.inputs.tag.substring(1);
+            core.setOutput('name', name)
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
           tag_name: "${{github.event.inputs.tag}}"
-          name: "Waterproof ${{github.event.inputs.tag}} "
+          name: "Waterproof ${{steps.prepname.outputs.name}}"
+          body: "No changelog provided (yet)."
           prerelease: false
           draft: false
           files: |
             dist_electron/*.AppImage
             dist_electron/*.exe
             dist_electron/*.dmg
-
