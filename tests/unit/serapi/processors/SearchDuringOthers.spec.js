@@ -20,7 +20,7 @@ const emptyResponse = [
   '(ObjList())',
   'Completed'];
 
-describe('serapi combined content & execution processor', () => {
+describe('serapi combined search & others', () => {
   let contentProc;
   let execProc;
   let searchProc;
@@ -152,7 +152,13 @@ describe('serapi combined content & execution processor', () => {
       'Completed',
     ]);
 
-    worker.addExpectedCall('Query ((sid 2', [
+    worker.addExpectedCall('Query ((sid 2)(pp ((pp_format PpStr', [
+      'Ack',
+      '(ObjList())',
+      'Completed',
+    ]);
+
+    worker.addExpectedCall('Query ((sid 2)(pp ((pp_format PpSer', [
       'Ack',
       '(ObjList())',
       'Completed',
@@ -166,7 +172,7 @@ describe('serapi combined content & execution processor', () => {
 
     await execProc.executeNext();
     await searchProc.searchFor(query, onResult, onDone);
-    expect(worker.getCallAmount()).to.equal(5);
+    expect(worker.getCallAmount()).to.equal(6);
 
     expect(editor.executeStarted.callCount).to.be.at.least(1);
     expect(editor.executeSuccess.callCount).to.equal(1);
@@ -204,7 +210,13 @@ describe('serapi combined content & execution processor', () => {
       duringPromise = searchProc.searchFor(query, onResult, onDone);
     });
 
-    worker.addExpectedCall('Query ((sid 2', [
+    worker.addExpectedCall('Query ((sid 2)(pp ((pp_format PpStr', [
+      'Ack',
+      '(ObjList())',
+      'Completed',
+    ]);
+
+    worker.addExpectedCall('Query ((sid 2)(pp ((pp_format PpSer', [
       'Ack',
       '(ObjList())',
       'Completed',
@@ -218,7 +230,7 @@ describe('serapi combined content & execution processor', () => {
 
     await execProc.executeNext();
     await duringPromise;
-    expect(worker.getCallAmount()).to.equal(5);
+    expect(worker.getCallAmount()).to.equal(6);
 
     expect(editor.executeStarted.callCount).to.be.at.least(1);
     expect(editor.executeSuccess.callCount).to.equal(1);
@@ -254,13 +266,19 @@ describe('serapi combined content & execution processor', () => {
       'Completed',
     ]);
 
-    worker.addExpectedCall('Query ((sid 2', [
+    worker.addExpectedCall('Query ((sid 2)(pp ((pp_format PpStr', [
       'Ack',
       '(ObjList())',
       'Completed',
     ], async () => {
       duringPromise = searchProc.searchFor(query, onResult, onDone);
     });
+
+    worker.addExpectedCall('Query ((sid 2)(pp ((pp_format PpSer', [
+      'Ack',
+      '(ObjList())',
+      'Completed',
+    ]);
 
     worker.addExpectedCall(`Vernac "Check (${query})."`, emptyResponse);
 
@@ -270,7 +288,7 @@ describe('serapi combined content & execution processor', () => {
 
     await execProc.executeNext();
     await duringPromise;
-    expect(worker.getCallAmount()).to.equal(5);
+    expect(worker.getCallAmount()).to.equal(6);
 
     expect(editor.executeStarted.callCount).to.be.at.least(1);
     expect(editor.executeSuccess.callCount).to.equal(1);

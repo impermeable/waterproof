@@ -229,7 +229,13 @@ describe('serapi content processor', () => {
         proc.currentContent = baseText + 'Proof.';
         proc.state.lastExecuted = 2;
         // answer rerolled goal message
-        worker.addExpectedCall('Goals', [
+        worker.addExpectedCall('(pp ((pp_format PpStr)))) Goals', [
+          'Ack',
+          '(ObjList())',
+          'Completed',
+        ]);
+
+        worker.addExpectedCall('(pp ((pp_format PpSer)))) Goals', [
           'Ack',
           '(ObjList())',
           'Completed',
@@ -251,7 +257,7 @@ describe('serapi content processor', () => {
         ]);
 
         return proc.setContent(baseText + extraText).then(() => {
-          expect(worker.getCallAmount()).to.equal(3);
+          expect(worker.getCallAmount()).to.equal(4);
 
           expect(editor.setContentSuccess.callCount).to.be.at.least(1);
           expect(editor.setContentError.callCount).to.equal(0);

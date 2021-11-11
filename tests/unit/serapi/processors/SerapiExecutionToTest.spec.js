@@ -52,14 +52,21 @@ describe('serapi execute to processor', () => {
       'Completed',
     ]);
 
-    worker.addExpectedCall('Query ((sid 2', [
+    worker.addExpectedCall('Query ((sid 2)(pp ((pp_format PpStr', [
       'Ack',
       '(ObjList())',
       'Completed',
     ]);
 
+    worker.addExpectedCall('Query ((sid 2)(pp ((pp_format PpSer', [
+      'Ack',
+      '(ObjList())',
+      'Completed',
+    ]);
+
+
     return proc.executeTo(endIndex + 1).then(() => {
-      expect(worker.getCallAmount()).to.equal(2);
+      expect(worker.getCallAmount()).to.equal(3);
 
       expect(editor.executeStarted.callCount).to.be.at.least(1);
       expect(editor.executeSuccess.callCount).to.equal(1);
@@ -148,14 +155,20 @@ describe('serapi execute to processor', () => {
           'Completed',
         ]);
 
-        worker.addExpectedCall('Query ((sid 2', [
+        worker.addExpectedCall('Query ((sid 2)(pp ((pp_format PpStr', [
+          'Ack',
+          '(ObjList())',
+          'Completed',
+        ]);
+
+        worker.addExpectedCall('Query ((sid 2)(pp ((pp_format PpSer', [
           'Ack',
           '(ObjList())',
           'Completed',
         ]);
 
         return proc.executeTo(10).then(() => {
-          expect(worker.getCallAmount()).to.equal(2);
+          expect(worker.getCallAmount()).to.equal(3);
 
           expect(editor.executeStarted.callCount).to.be.at.least(1);
           expect(editor.executeSuccess.callCount).to.equal(1);
@@ -202,15 +215,22 @@ describe('serapi execute to processor', () => {
           'Completed',
         ]);
 
-        worker.addExpectedCall('Query ((sid 3', [
+        worker.addExpectedCall('Query ((sid 3)(pp ((pp_format PpStr', [
           'Ack',
           '(ObjList())',
           'Completed',
         ]);
 
+        worker.addExpectedCall('Query ((sid 3)(pp ((pp_format PpSer', [
+          'Ack',
+          '(ObjList())',
+          'Completed',
+        ]);
+
+
         await proc.executeTo(7);
         await duringPromise;
-        expect(worker.getCallAmount()).to.equal(3);
+        expect(worker.getCallAmount()).to.equal(4);
 
         expect(editor.executeStarted.callCount).to.be.at.least(1);
         expect(editor.executeSuccess.callCount).to.equal(2);
@@ -247,15 +267,22 @@ describe('serapi execute to processor', () => {
           duringPromise = proc.executeTo(7);
         });
 
-        worker.addExpectedCall('Query ((sid 2', [
+        worker.addExpectedCall('Query ((sid 2)(pp ((pp_format PpStr', [
           'Ack',
           '(ObjList())',
           'Completed',
         ]);
 
+        worker.addExpectedCall('Query ((sid 2)(pp ((pp_format PpSer', [
+          'Ack',
+          '(ObjList())',
+          'Completed',
+        ]);
+
+
         await proc.executeTo(15);
         await duringPromise;
-        expect(worker.getCallAmount()).to.equal(2);
+        expect(worker.getCallAmount()).to.equal(3);
 
         expect(editor.executeStarted.callCount).to.be.at.least(1);
         expect(editor.executeSuccess.callCount).to.equal(1);
@@ -301,15 +328,22 @@ describe('serapi execute to processor', () => {
           'Completed',
         ]);
 
-        worker.addExpectedCall('Query ((sid 3', [
+        worker.addExpectedCall('Query ((sid 3)(pp ((pp_format PpStr', [
           'Ack',
           '(ObjList())',
           'Completed',
         ]);
 
+        worker.addExpectedCall('Query ((sid 3)(pp ((pp_format PpSer', [
+          'Ack',
+          '(ObjList())',
+          'Completed',
+        ]);
+
+
         await proc.executeTo(7);
         await duringPromise;
-        expect(worker.getCallAmount()).to.equal(3);
+        expect(worker.getCallAmount()).to.equal(4);
 
         expect(editor.executeStarted.callCount).to.be.at.least(1);
         expect(editor.executeSuccess.callCount).to.equal(2);

@@ -63,7 +63,13 @@ describe('serapi combined content & execution processor', () => {
       'Completed',
     ]);
 
-    worker.addExpectedCall('Query ((sid 2', [
+    worker.addExpectedCall('Query ((sid 2)(pp ((pp_format PpStr', [
+      'Ack',
+      '(ObjList())',
+      'Completed',
+    ]);
+
+    worker.addExpectedCall('Query ((sid 2)(pp ((pp_format PpSer', [
       'Ack',
       '(ObjList())',
       'Completed',
@@ -72,7 +78,7 @@ describe('serapi combined content & execution processor', () => {
     await contentProc.setContent(text);
     await duringPromise;
 
-    expect(worker.getCallAmount()).to.equal(3);
+    expect(worker.getCallAmount()).to.equal(4);
 
     expect(worker.getCall(0).toLowerCase()).to.include('add');
 
@@ -129,7 +135,7 @@ describe('serapi combined content & execution processor', () => {
           'Completed',
         ]);
 
-        worker.addExpectedCall('Query ((sid 3', [
+        worker.addExpectedCall('Query ((sid 3)(pp ((pp_format PpStr', [
           'Ack',
           '(ObjList())',
           'Completed',
@@ -137,7 +143,19 @@ describe('serapi combined content & execution processor', () => {
           duringPromise = contentProc.setContent(baseText);
         });
 
-        worker.addExpectedCall('Query ((sid 2', [
+        worker.addExpectedCall('Query ((sid 3)(pp ((pp_format PpSer', [
+          'Ack',
+          '(ObjList())',
+          'Completed',
+        ]);
+
+        worker.addExpectedCall('Query ((sid 2)(pp ((pp_format PpStr', [
+          'Ack',
+          '(ObjList())',
+          'Completed',
+        ]);
+
+        worker.addExpectedCall('Query ((sid 2)(pp ((pp_format PpSer', [
           'Ack',
           '(ObjList())',
           'Completed',
@@ -152,7 +170,7 @@ describe('serapi combined content & execution processor', () => {
         await execProc.executeAll();
         await duringPromise;
 
-        expect(worker.getCallAmount()).to.equal(5);
+        expect(worker.getCallAmount()).to.equal(7);
 
         expect(editor.setContentSuccess.callCount).to.be.at.least(1);
         expect(editor.setContentError.callCount).to.equal(0);
@@ -211,7 +229,13 @@ describe('serapi combined content & execution processor', () => {
           'Completed',
         ]);
 
-        worker.addExpectedCall('Query ((sid 2', [
+        worker.addExpectedCall('Query ((sid 2)(pp ((pp_format PpStr', [
+          'Ack',
+          '(ObjList())',
+          'Completed',
+        ]);
+
+        worker.addExpectedCall('Query ((sid 2)(pp ((pp_format PpSer', [
           'Ack',
           '(ObjList())',
           'Completed',
@@ -220,7 +244,7 @@ describe('serapi combined content & execution processor', () => {
         await contentProc.setContent(finalText);
         await duringPromise;
 
-        expect(worker.getCallAmount()).to.equal(4);
+        expect(worker.getCallAmount()).to.equal(5);
 
         expect(editor.setContentSuccess.callCount).to.be.at.least(1);
         expect(editor.setContentError.callCount).to.equal(0);
@@ -263,7 +287,13 @@ describe('serapi combined content & execution processor', () => {
       'Completed',
     ]);
 
-    worker.addExpectedCall('Query ((sid 2', [
+    worker.addExpectedCall('Query ((sid 2)(pp ((pp_format PpStr', [
+      'Ack',
+      '(ObjList())',
+      'Completed',
+    ]);
+
+    worker.addExpectedCall('Query ((sid 2)(pp ((pp_format PpSer', [
       'Ack',
       '(ObjList())',
       'Completed',
@@ -272,7 +302,7 @@ describe('serapi combined content & execution processor', () => {
     await contentProc.setContent(newContent);
     await duringPromise;
 
-    expect(worker.getCallAmount()).to.equal(3);
+    expect(worker.getCallAmount()).to.equal(4);
 
     expect(editor.setContentSuccess.callCount).to.be.at.least(1);
     expect(editor.setContentError.callCount).to.equal(1);
@@ -322,7 +352,13 @@ describe('serapi combined content & execution processor', () => {
       'Completed',
     ]);
 
-    worker.addExpectedCall('Query ((sid 3', [
+    worker.addExpectedCall('Query ((sid 3)(pp ((pp_format PpStr', [
+      'Ack',
+      '(ObjList())',
+      'Completed',
+    ]);
+
+    worker.addExpectedCall('Query ((sid 3)(pp ((pp_format PpSer', [
       'Ack',
       '(ObjList())',
       'Completed',
@@ -353,7 +389,13 @@ describe('serapi combined content & execution processor', () => {
       'Completed',
     ]);
 
-    worker.addExpectedCall('Query ((sid 5', [
+    worker.addExpectedCall('Query ((sid 5)(pp ((pp_format PpStr', [
+      'Ack',
+      '(ObjList())',
+      'Completed',
+    ]);
+
+    worker.addExpectedCall('Query ((sid 5)(pp ((pp_format PpSer', [
       'Ack',
       '(ObjList())',
       'Completed',
@@ -373,7 +415,7 @@ describe('serapi combined content & execution processor', () => {
 
     await execProc.executeNext();
 
-    expect(worker.getCallAmount()).to.equal(8);
+    expect(worker.getCallAmount()).to.equal(10);
 
     expect(editor.executeStarted.callCount).to.be.at.least(3);
     expect(editor.executeStarted.lastCall.args[0]).to.equal(7);

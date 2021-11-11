@@ -60,14 +60,20 @@ describe('serapi execution processor', () => {
       'Completed',
     ]);
 
-    worker.addExpectedCall('Query ((sid 2', [
+    worker.addExpectedCall('Query ((sid 2)(pp ((pp_format PpStr', [
+      'Ack',
+      '(ObjList())',
+      'Completed',
+    ]);
+
+    worker.addExpectedCall('Query ((sid 2)(pp ((pp_format PpSer', [
       'Ack',
       '(ObjList())',
       'Completed',
     ]);
 
     return proc.executeNext().then(() => {
-      expect(worker.getCallAmount()).to.equal(2);
+      expect(worker.getCallAmount()).to.equal(3);
 
       expect(editor.executeSuccess.callCount).to.equal(1);
       // TODO: check params of success
@@ -143,14 +149,20 @@ describe('serapi execution processor', () => {
 
     setLastExecuted(1);
 
-    worker.addExpectedCall('Query ((sid 2', [
+    worker.addExpectedCall('Query ((sid 2)(pp ((pp_format PpStr', [
+      'Ack',
+      '(ObjList())',
+      'Completed',
+    ]);
+
+    worker.addExpectedCall('Query ((sid 2)(pp ((pp_format PpSer', [
       'Ack',
       '(ObjList())',
       'Completed',
     ]);
 
     return proc.executePrevious().then(() => {
-      expect(worker.getCallAmount()).to.equal(1);
+      expect(worker.getCallAmount()).to.equal(2);
 
       expect(editor.executeSuccess.callCount).to.equal(1);
       // TODO: check params of success
@@ -191,13 +203,25 @@ describe('serapi execution processor', () => {
           'Completed',
         ]);
 
-        worker.addExpectedCall('Query ((sid 3', [
+        worker.addExpectedCall('Query ((sid 3)(pp ((pp_format PpStr', [
           'Ack',
           '(ObjList())',
           'Completed',
         ]);
 
-        worker.addExpectedCall('Query ((sid 2', [
+        worker.addExpectedCall('Query ((sid 3)(pp ((pp_format PpSer', [
+          'Ack',
+          '(ObjList())',
+          'Completed',
+        ]);
+
+        worker.addExpectedCall('Query ((sid 2)(pp ((pp_format PpStr', [
+          'Ack',
+          '(ObjList())',
+          'Completed',
+        ]);
+
+        worker.addExpectedCall('Query ((sid 2)(pp ((pp_format PpSer', [
           'Ack',
           '(ObjList())',
           'Completed',
@@ -208,7 +232,7 @@ describe('serapi execution processor', () => {
         await proc.executeNext();
         await proc.executePrevious();
 
-        expect(worker.getCallAmount()).to.equal(3);
+        expect(worker.getCallAmount()).to.equal(5);
 
         expect(editor.executeSuccess.callCount).to.equal(2);
         // TODO: check params of success
@@ -257,7 +281,13 @@ describe('serapi execution processor', () => {
       during2 = proc.executePrevious();
     });
 
-    worker.addExpectedCall('Query ((sid 2', [
+    worker.addExpectedCall('Query ((sid 2)(pp ((pp_format PpStr', [
+      'Ack',
+      '(ObjList())',
+      'Completed',
+    ]);
+
+    worker.addExpectedCall('Query ((sid 2)(pp ((pp_format PpSer', [
       'Ack',
       '(ObjList())',
       'Completed',
@@ -267,7 +297,7 @@ describe('serapi execution processor', () => {
     await during1;
     await during2;
 
-    expect(worker.getCallAmount()).to.equal(3);
+    expect(worker.getCallAmount()).to.equal(4);
 
     expect(editor.executeSuccess.callCount).to.equal(3);
     // TODO: check params of success
@@ -314,7 +344,13 @@ describe('serapi execution processor', () => {
           'Completed',
         ]);
 
-        worker.addExpectedCall('Query ((sid 3', [
+        worker.addExpectedCall('Query ((sid 3)(pp ((pp_format PpStr', [
+          'Ack',
+          '(ObjList())',
+          'Completed',
+        ]);
+
+        worker.addExpectedCall('Query ((sid 3)(pp ((pp_format PpSer', [
           'Ack',
           '(ObjList())',
           'Completed',
@@ -323,7 +359,7 @@ describe('serapi execution processor', () => {
 
         await proc.executeNext();
 
-        expect(worker.getCallAmount()).to.equal(3);
+        expect(worker.getCallAmount()).to.equal(4);
         expect(editor.executeStarted.callCount).to.be.at.least(1);
         expect(editor.executeSuccess.callCount).to.be.at.least(2);
         expect(editor.executeSuccess.lastCall.args[1]).to.equal(12);
@@ -386,6 +422,7 @@ describe('serapi execution processor', () => {
           'Completed',
         ]);
 
+        // Has non empty goal thus no secondary PpSer call.
 
         await proc.executeNext();
         await duringCall;
@@ -573,6 +610,8 @@ describe('serapi execution processor', () => {
           'Completed',
         ]);
 
+        // Has non empty goal thus no secondary PpSer call.
+
 
         await proc.executeAll();
 
@@ -631,15 +670,22 @@ describe('serapi execution processor', () => {
       'Completed',
     ]);
 
-    worker.addExpectedCall('Query ((sid 2', [
+    worker.addExpectedCall('Query ((sid 2)(pp ((pp_format PpStr', [
       'Ack',
       '(ObjList())',
       'Completed',
     ]);
 
+    worker.addExpectedCall('Query ((sid 2)(pp ((pp_format PpSer', [
+      'Ack',
+      '(ObjList())',
+      'Completed',
+    ]);
+
+
     await proc.executeNext();
 
-    expect(worker.getCallAmount()).to.equal(2);
+    expect(worker.getCallAmount()).to.equal(3);
     expect(proc.state.target).to.equal(0);
 
     expect(editor.executeStarted.callCount).to.equal(1);
