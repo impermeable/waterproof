@@ -89,7 +89,7 @@ make install
 
 ### Step 2. Install Waterproof with the installer from the release page
 
-After installing SerAPI, you are ready to install Waterproof using your preferred installer from the [release page](http://github.com/impermeable/waterproof/releases). After installing Waterproof, it will ask you to point to a program called **sertop**. This is located in a hidden file folder. To show hidden file folders in the terminal press **⌘ + Shift + .** .
+After installing SerAPI, you are ready to install Waterproof using your preferred installer from the [release page](http://github.com/impermeable/waterproof/releases). After installing Waterproof, it will ask you to point to a program called **sertop**. This is located in a hidden file folder. To show hidden file folders in file chooser on MacOS press **⌘ + Shift + .** . On Linux, right-click somewhere in the file chooser and choose "Show hidden files".
 
 > **Known issue**: Because Waterproof is relatively unknown software, it is possible that it will initially be blocked by a virus scanner. To run Waterproof anyway: **on Windows:** Choose 'run anyway', **on Mac:** right-click and choose 'open software'; you may need to go to security settings to allow for running the app.
 
