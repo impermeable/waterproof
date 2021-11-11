@@ -7,7 +7,7 @@
     },
     {
       "type": "code",
-      "text": "Set Default Goal Selector \"!\".\nSet Default Timeout 5.\n\nRequire Import Rbase.\nRequire Import Rfunctions.\n\nRequire Import Waterproof.AllTactics.\nRequire Import Waterproof.notations.notations.\nRequire Import Waterproof.load_database.RealsAndIntegers.\n\nOpen Scope R_scope."
+      "text": "Require Import Rbase.\nRequire Import Rfunctions.\n\nRequire Import Waterproof.AllTactics.\nRequire Import Waterproof.notations.notations.\nRequire Import Waterproof.load_database.RealsAndIntegers.\n\nOpen Scope R_scope.\n\nSet Default Goal Selector \"!\".\nSet Default Timeout 5."
     },
     {
       "type": "text",
