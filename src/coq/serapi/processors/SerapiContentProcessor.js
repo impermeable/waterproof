@@ -163,8 +163,22 @@ class SerapiContentProcessor extends SerapiProcessor {
   async _setNewContent(contentToAdd) {
     const validatedContent = this._toValidContent(contentToAdd);
     if (validatedContent !== '') {
-      return this.sendCommand(createAddCommand(validatedContent), 'a')
-          .then((result) => this._processSentences(result, contentToAdd));
+      const messages = [];
+      return this.sendCommand(createAddCommand(validatedContent), 'a',
+          (feedback) => {
+            if (feedback.string == null || feedback.span_id == null
+                || feedback.errorFlag) {
+              return;
+            }
+            messages.push({
+              message: feedback.string,
+              span_id: feedback.span_id,
+            });
+          })
+          .then((result) => {
+            result.messages = messages;
+            this._processSentences(result, contentToAdd);
+          });
     } else {
       this.editor.setContentSuccess(null, -1, true);
       this.currentContent += contentToAdd;
@@ -184,7 +198,7 @@ class SerapiContentProcessor extends SerapiProcessor {
     const sentences = [];
     const conversion = byteIndicesToStringIndices(contentAdded);
     for (const [key, value] of Object.entries(result)) {
-      if (key !== 'error') {
+      if (key !== 'error' && key !== 'messages') {
         const bp = conversion[value.beginIndex];
         const ep = conversion[value.endIndex];
         const stringValue = contentAdded.slice(bp, ep);
@@ -198,6 +212,18 @@ class SerapiContentProcessor extends SerapiProcessor {
     for (const sentence of sentences.sort((a, b) => a.sid - b.sid)) {
       this.state.addSentence(sentence.sid,
           sentence.bp, sentence.ep, sentence.str);
+    }
+
+    if (result.hasOwnProperty('messages')) {
+      for (const {message, span_id: sentenceId} of result.messages) {
+        const sentence = this.state.getSentenceByIndex(
+            this.state.indexOfSentence(sentenceId)
+        );
+        if (sentence.messages == null) {
+          sentence.messages = [];
+        }
+        sentence.messages.push(message);
+      }
     }
 
     if (result.hasOwnProperty('error')) {
