@@ -57,6 +57,13 @@ function parseErrorableFeedback(data) {
   if (feedback.errorFlag === true) {
     feedback.string = 'Error: ' + feedback.string;
   }
+
+  for (const part of data[1]) {
+    if (part[0] === 'span_id') {
+      feedback.span_id = Number.parseInt(part[1]);
+    }
+  }
+
   return feedback;
 }
 
