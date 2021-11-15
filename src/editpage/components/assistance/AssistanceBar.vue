@@ -1,17 +1,17 @@
 <template>
   <div class="assistance-bar">
     <div class="query-area">
-      <textarea rows="1" id="query-input" ref="queryInput"
-        placeholder="Type your (search) query here..."
+      <textarea rows="1" id="query-input"
+        placeholder="Type your (search) query here..." v-model="searchQuery"
         @keydown.enter.exact.prevent
         @keyup.enter="query()" />
-      <div class="buttons-bottom">
+      <div :class="{'buttons-bottom': true, 'no-query': !hasQuery}">
         <assistance-button
           v-for="(button, index) in buttonsBottom"
-          v-bind:name="button.name"
-          v-bind:icon="button.icon"
-          v-bind:action="button.action"
-          v-bind:key="'assistance' + index" />
+          :name="button.name" :icon="button.icon" :key="'assistance' + index"
+          :action="button.action"
+          :title="hasQuery ? '' : `Enter query above to ${button.name}`"
+        />
       </div>
     </div>
     <div class="button-area">
@@ -36,6 +36,11 @@ export default {
   },
   props: {
     eventBus: Object,
+  },
+  computed: {
+    hasQuery: function() {
+      return this.searchQuery.trim() !== '';
+    },
   },
   data: function() {
     return {
@@ -86,12 +91,16 @@ export default {
           },
         },
       ],
+      searchQuery: '',
     };
   },
   methods: {
     query(command) {
-      const input = this.$refs.queryInput;
-      let query = input.value;
+      if (!this.hasQuery) {
+        return;
+      }
+
+      let query = this.searchQuery;
       if (command !== undefined) {
         query = command + ' ' + query + '.';
       }
@@ -122,6 +131,7 @@ export default {
 
       #query-input {
         @include theme(background-color, color-gray-light);
+        @include theme(color, color-on-background);
         width: 100%;
         flex-basis: 50%;
         margin: 0;
@@ -133,6 +143,14 @@ export default {
         display: flex;
         flex-basis: 50%;
         flex-flow: row wrap;
+      }
+    }
+
+    .no-query {
+      .assistance-button {
+        @include theme(background-color, color-gray-dark);
+        @include theme(color, color-gray-light);
+        cursor: not-allowed;
       }
     }
 
