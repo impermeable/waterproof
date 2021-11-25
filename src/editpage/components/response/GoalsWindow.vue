@@ -4,10 +4,10 @@
       <h3>Proof progress</h3>
     </div>
     <div v-if="ready" class="goals">
-      <Goal v-for="(goal, index) in coqGoals"
-            :goal="goal" :index="index" :key="'goal' + index"
-            :total="coqGoals.length">
-      </Goal>
+        <Goal v-for="(goal, index) in coqGoals"
+              :goal="goal" :index="index" :key="'goal' + index"
+              :total="coqGoals.length">
+        </Goal>
       <span v-if="!coqGoals.length">
         Done.
       </span>

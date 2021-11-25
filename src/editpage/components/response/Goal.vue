@@ -1,11 +1,13 @@
 <template>
   <div class="goal" @click="opened = !opened">
-    <ul class="hypothesis" ref="hypoth">
-      <li v-for="hypo in  hypothesis" v-bind:key="hypo">
-        <b> {{hypo.terms}} </b>
-        {{hypo.type}}
-      </li>
-    </ul>
+    <div v-show="showHypotheses">
+      <ul class="hypothesis" ref="hypoth">
+        <li v-for="hypo in  hypothesis" v-bind:key="hypo">
+          <b> {{hypo.terms}} </b>
+          {{hypo.type}}
+        </li>
+      </ul>
+    </div>
     <div class="hrfake">
       <span class="goal-id">({{index + 1}}/{{total}})</span>
     </div>
@@ -79,6 +81,9 @@ export default {
       if (this.parts.length > 1) {
         return this.parts[1].trim().replace(/\n/g, '<br>');
       }
+    },
+    showHypotheses: function() {
+      return this.$store.state.settings.goalStyle !== 'goal';
     },
   },
   watch: {
