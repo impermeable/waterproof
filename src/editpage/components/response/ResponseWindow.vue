@@ -1,7 +1,7 @@
 <template>
     <div class="response-window">
-        <goals-window
-                :goals="goals" :ready="ready">
+       <goals-window
+                v-show="showGoalWindow" :goals="goals" :ready="ready">
         </goals-window>
         <messages-window
                 :addError="addError" :ready="ready"
@@ -25,6 +25,11 @@ export default {
     addError: Object,
     goals: String,
     eventBus: Object,
+  },
+  computed: {
+    showGoalWindow: function() {
+      return this.$store.state.settings.goalStyle !== 'none';
+    },
   },
 };
 </script>

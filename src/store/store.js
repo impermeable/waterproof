@@ -24,6 +24,7 @@ export default {
     settings: {
       zoom: 1.0,
       theme: 'light',
+      goalStyle: 'all',
     },
   },
   mutations: {
@@ -100,6 +101,9 @@ export default {
       state.settings.theme = theme;
       document.documentElement.className = theme;
       updateConfiguration(remote, state.settings);
+    },
+    setGoalStyle: function(state, goalStyle) {
+      state.settings.goalStyle = goalStyle;
     },
   },
   actions: {

@@ -55,6 +55,28 @@
               </div>
             </td>
           </tr>
+          <tr>
+            <td>
+              <h6>Goals:</h6>
+            </td>
+            <td style='width: 50%; min-width: 60px'>
+              <h6>{{currentGoalStyle}}</h6>
+            </td>
+            <td>
+              <div style='width: 100%' class="dropdown">
+                <button style='width: 100%; height: 40px'
+                  class="dropbtn settings-modal-button">
+                  <span>{{currentGoalStyle}}</span>
+                  <span style="float: right">&blacktriangledown;</span>
+                </button>
+                <div class="dropdown-content" style="width: 100%">
+                  <a v-for="goalStyle in goalStyles" :key="goalStyle"
+                      @click="changeGoalStyle(goalStyle)">
+                      {{goalStyle}}</a>
+                </div>
+              </div>
+            </td>
+          </tr>
         </table>
         <h4 style='margin-top: 10%'>
             Configuration
@@ -87,6 +109,7 @@ export default {
       zoomMax: 3,
       zoomSliderValue: 0,
       styles: ['light', 'dark', 'light_roboto', 'dark_roboto'],
+      goalStyles: ['all', 'goal', 'none'],
     };
   },
   methods: {
@@ -123,6 +146,12 @@ export default {
         this.$store.commit('setTheme', theme);
       }
     },
+
+    changeGoalStyle: function(goalStyle) {
+      if (this.goalStyles.includes(goalStyle)) {
+        this.$store.commit('setGoalStyle', goalStyle);
+      }
+    },
   },
   computed: {
     zoomLevel() {
@@ -131,6 +160,9 @@ export default {
     },
     currentTheme() {
       return this.$store.state.settings.theme;
+    },
+    currentGoalStyle() {
+      return this.$store.state.settings.goalStyle;
     },
     configurationString() {
       const libs = this.$store.state.libraries;
