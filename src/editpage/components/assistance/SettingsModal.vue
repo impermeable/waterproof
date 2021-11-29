@@ -11,7 +11,7 @@
         <h3>
           View options
         </h3>
-        <table style='width: 50%; padding: 0;'
+        <table style='width: 75%; padding: 0;'
                class="alternateRows">
           <tr>
             <td>
@@ -60,19 +60,19 @@
               <h6>Goals:</h6>
             </td>
             <td style='width: 50%; min-width: 60px'>
-              <h6>{{currentGoalStyle}}</h6>
+              <h6>{{goalStyleNames[currentGoalStyle]}}</h6>
             </td>
             <td>
               <div style='width: 100%' class="dropdown">
                 <button style='width: 100%; height: 40px'
                   class="dropbtn settings-modal-button">
-                  <span>{{currentGoalStyle}}</span>
+                  <span>{{goalStyleNames[currentGoalStyle]}}</span>
                   <span style="float: right">&blacktriangledown;</span>
                 </button>
                 <div class="dropdown-content" style="width: 100%">
                   <a v-for="goalStyle in goalStyles" :key="goalStyle"
                       @click="changeGoalStyle(goalStyle)">
-                      {{goalStyle}}</a>
+                      {{goalStyleNames[goalStyle]}}</a>
                 </div>
               </div>
             </td>
@@ -110,6 +110,11 @@ export default {
       zoomSliderValue: 0,
       styles: ['light', 'dark', 'light_roboto', 'dark_roboto'],
       goalStyles: ['all', 'goal', 'none'],
+      goalStyleNames: {
+        'all': 'Show everything',
+        'goal': 'Show only the goal',
+        'none': 'Hide goal panel',
+      },
     };
   },
   methods: {
