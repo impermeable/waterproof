@@ -216,7 +216,7 @@ class SerapiExecutionProcessor extends SerapiProcessor {
       const serapiGoal = await this.sendCommand(
           createGoalCommand(sentenceId.toString(), 'PpSer'), 'k');
       if (serapiGoal.next_goal_message != null) {
-        goalString += '\n';
+        goalString += '\n\nDone.============================';
         goalString += serapiGoal.next_goal_message;
       }
     }
