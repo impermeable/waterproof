@@ -170,7 +170,7 @@ function sanitise(str) {
  * @return {number} the index of the last valid stop
  */
 function getLastValidFullStop(text) {
-  const pattern = /\.\s/g;
+  const pattern = /[-+*.]\s/g;
   let lastMatch = false;
   let match;
 

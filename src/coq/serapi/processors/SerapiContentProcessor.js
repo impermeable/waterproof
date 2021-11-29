@@ -252,20 +252,27 @@ class SerapiContentProcessor extends SerapiProcessor {
       return trimmed;
     }
 
-    if (!(trimmed.endsWith('.') || trimmed.endsWith('*)') )) {
-      let validSentenceIndex = getLastValidFullStop(contentToAdd + ' ');
-      if (validSentenceIndex < 0) {
-        validSentenceIndex = getLastValidFullStop(this.currentContent + ' ');
-        contentToAdd = '';
-      } else {
-        contentToAdd = contentToAdd.slice(0, validSentenceIndex + 1);
-        validSentenceIndex += this.currentContent.length;
-      }
-
-      this.editor.setContentError(
-          'Sentence not closed (did you forget a "." or "*)" ?)',
-          validSentenceIndex);
+    if (trimmed.endsWith('*)')) {
+      return contentToAdd;
     }
+
+    const lastChar = trimmed.charAt(trimmed.length - 1);
+    if (/[-+*.]/.test(lastChar)) {
+      return contentToAdd;
+    }
+
+    let validSentenceIndex = getLastValidFullStop(contentToAdd + ' ');
+    if (validSentenceIndex < 0) {
+      validSentenceIndex = getLastValidFullStop(this.currentContent + ' ');
+      contentToAdd = '';
+    } else {
+      contentToAdd = contentToAdd.slice(0, validSentenceIndex + 1);
+      validSentenceIndex += this.currentContent.length;
+    }
+
+    this.editor.setContentError(
+        'Sentence not closed (did you forget a "." or "*)" ?)',
+        validSentenceIndex);
     return contentToAdd;
   }
 
