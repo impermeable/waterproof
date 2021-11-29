@@ -1,7 +1,7 @@
 <template>
     <div class="response-window">
        <goals-window
-                v-show="showGoalWindow" :goals="goals" :ready="ready">
+                v-if="showGoalWindow" :goals="goals" :ready="ready">
         </goals-window>
         <messages-window
                 :addError="addError" :ready="ready"
