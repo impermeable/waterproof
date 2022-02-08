@@ -23,12 +23,13 @@
                       :goals="goals" :addError="addError" :ready="ready">
       </response-window>
     </div>
-    <side-window :event-bus="eventBus">
+    <side-window :event-bus="eventBus" :overview="overview">
     </side-window>
   </div>
   </b-tab>
 </template>
 <script>
+import {render} from './blocks/render.js';
 import BlockInsertion from './mixins/BlockInsertion';
 import ResponseWindow from './response/ResponseWindow';
 import EditWindow from './EditWindow';
@@ -74,6 +75,7 @@ export default {
   data: function() {
     return {
       eventBus: new Vue(),
+      overview: [],
       notebook: new Notebook(),
       undoRedo: new UndoRedo(null),
       lastSearch: null,
@@ -112,6 +114,33 @@ export default {
     },
   },
   methods: {
+    updateOverview: function() {
+      const newOverview = [];
+      const blocks = this.notebook.blocks;
+      // Object.keys(this).forEach((prop)=> console.log(prop));
+      for (let i = 0; i < blocks.length; i++) {
+        console.log('loop');
+        const block = blocks[i];
+        if (block.type !== 'text') {
+          continue;
+        }
+        const index = i;
+        const htmlText = render(block.text);
+        // Change this regexp to ensure that begin/end tags are the same!
+        // or just use some html interpretation instead... but that seems
+        // expensive
+        const regExp = '<h([1-6])>(.*)</h[1-6]>';
+        const matches = [...htmlText.matchAll(regExp)];
+        newOverview.push(...matches.map((match) => {
+          return {
+            depth: match[1],
+            title: match[2],
+            index: index,
+          };
+        }));
+      }
+      this.overview = newOverview;
+    },
     /**
      * Loads the notebook at the path specified by this.uri into this window,
      * and creates a new serapi worker
@@ -461,6 +490,7 @@ export default {
     this.eventBus.$on('exportToExerciseSheet', this.exportToExerciseSheet);
     this.eventBus.$on('compilewplib', this.compilewplib);
     this.eventBus.$on('close', this.close);
+    this.eventBus.$on('updateOverview', this.updateOverview);
 
     // When the proofwindow is mounted, update to disable all the buttons that
     // require a notebook to be opened

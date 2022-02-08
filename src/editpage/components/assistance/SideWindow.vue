@@ -8,7 +8,7 @@
         @click="closeWindow"
       />
       <div>
-        <h3>
+        <h3 @click="updateOverview">
           {{title}}
           <pulse-loader class="loader" :loading="isSearching" :size="'10px'">
           </pulse-loader>
@@ -57,6 +57,7 @@
 import SearchResult from './search/SearchResult';
 import Command from './commands/Command.vue';
 import SymbolCategory from './symbols/SymbolCategory.vue';
+import OverviewItem from './OverviewItem.vue';
 import Tactic from './tactics/Tactic.vue';
 import PulseLoader from 'vue-spinner/src/PulseLoader.vue';
 import orderBy from 'lodash.orderby';
@@ -65,11 +66,13 @@ export default {
   name: 'SideWindow',
   props: {
     eventBus: Object,
+    overview: Array,
   },
   components: {
     SearchResult,
     Command,
     SymbolCategory,
+    OverviewItem,
     Tactic,
     PulseLoader,
   },
@@ -99,6 +102,8 @@ export default {
         return [];
       } else if (this.windowIndex === 0) {
         return this.searchResults;
+      } else if (this.windowIndex === 4) {
+        return this.overview;
       } else {
         return this.$store.state.assistanceItems[this.windowIndex - 1];
       }
@@ -138,6 +143,9 @@ export default {
           this.title = 'Commands';
           this.component = 'command';
           break;
+        case 4:
+          this.title = 'Overview';
+          this.component = 'overview-item';
       }
     },
   },
@@ -153,6 +161,11 @@ export default {
   methods: {
     closeWindow: function() {
       this.$store.commit('closeSideWindow');
+    },
+    updateOverview() {
+      if (this.windowIndex === 4) {
+        this.eventBus.$emit('updateOverview');
+      }
     },
   },
   mounted: function() {
