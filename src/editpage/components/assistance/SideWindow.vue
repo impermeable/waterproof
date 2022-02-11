@@ -30,6 +30,8 @@
           </div>
         </div>-->
       </div>
+      <img src="../../../assets/images/refresh_black.svg" class="closing-icon"
+          @click="updateOverview"/>
     </div>
     <hr>
     <div :class="{'search-results': windowIndex === 0}">
