@@ -41,6 +41,10 @@ import FileInteraction from './mixins/FileInteraction';
 import Vue from 'vue';
 
 const snoopingOnEvents = false;
+const regExp =
+  '<h(?<depth_open>[1-6])>' +
+  '(?<content>(?:(?!<h[1-6]>).)*)' +
+  '</h(?<depth_close>[1-6])>';
 
 export default {
   name: 'ProofWindow',
@@ -117,24 +121,24 @@ export default {
     updateOverview: function() {
       const newOverview = [];
       const blocks = this.notebook.blocks;
-      // Object.keys(this).forEach((prop)=> console.log(prop));
+      // Scan per block for <h1> through <h6> tags and capture them.
+      // Per block, so we can store block indices.
       for (let i = 0; i < blocks.length; i++) {
-        console.log('loop');
         const block = blocks[i];
         if (block.type !== 'text') {
           continue;
         }
         const index = i;
         const htmlText = render(block.text);
-        // Change this regexp to ensure that begin/end tags are the same!
-        // or just use some html interpretation instead... but that seems
-        // expensive
-        const regExp = '<h([1-6])>(.*)</h[1-6]>';
         const matches = [...htmlText.matchAll(regExp)];
         newOverview.push(...matches.map((match) => {
+          if (match.groups.depth_open !== match.groups.depth_close) {
+            console.warn('Overview was misinterpreted.');
+          }
+          const depth = match.groups.depth_open;
           return {
-            depth: match[1],
-            title: match[2],
+            depth: depth,
+            title: match.groups.content,
             index: index,
           };
         }));
