@@ -38,6 +38,7 @@
       <template v-for="(item, index) in sortedItems">
         <component :is="component"
                    :item="item" :hasPrevious="index > 0"
+                   :parent="parent(index)" :children="children(index)"
                    :showAdvanced="showAdvanced"
                    :event-bus="eventBus" :key="'assistanceItem' + index" />
       </template>
@@ -168,6 +169,33 @@ export default {
       if (this.windowIndex === 4) {
         this.eventBus.$emit('updateOverview');
       }
+    },
+    parent: function(index) {
+      if (this.windowIndex === 4) {
+        const depth = this.items[index].depth;
+        let parentIndex = index;
+        while (this.items[parentIndex].depth <= depth) {
+          if (parentIndex === 0) {
+            return null; // or -1?
+          }
+          parentIndex -= 1;
+        }
+        return this.items[parentIndex];
+      } else {
+        return null;
+      }
+    },
+    children: function(index) {
+      const children = [];
+      if (this.windowIndex === 4) {
+        let childIndex = index + 1;
+        while (childIndex < this.items.length &&
+            this.items[childIndex].depth > this.items[index].depth) {
+          children.push(this.items[childIndex]);
+          childIndex += 1;
+        }
+      }
+      return children;
     },
   },
   mounted: function() {

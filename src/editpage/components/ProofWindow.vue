@@ -140,6 +140,8 @@ export default {
             depth: depth,
             title: match.groups.content,
             index: index,
+            visible: depth <= 1,
+            unfolded: false,
           };
         }));
       }
