@@ -556,17 +556,6 @@ function revertSafeCoqComment(text) {
 }
 
 /**
- * Small class to wrap errors
- */
-class ImportError extends Error {
-  // eslint-disable-next-line require-jsdoc
-  constructor(message) {
-    super(message);
-    this.name = 'ImportError';
-  }
-}
-
-/**
  * Converts coq code to a notebook format
  * This does not convert back any waterproof things and just puts all
  * special comments in text blocks and the rest in code blocks.
@@ -574,33 +563,24 @@ class ImportError extends Error {
  * @return {Array} the blocks from the code
  */
 function coqToWp(coqCode) {
+  // eslint-disable-next-line max-len
+  const regexp = /\(\*\*\s+\(\*(?<data>(?:(?!\*\))[\s\S])*)\*\)(?<text>(?:(?!\*\))[\s\S])*)\s\*\)(?<code>(?:(?!\(\*\*\s+\(\*)[\s\S])*)/g;
+  const blockMatches = [...coqCode.matchAll(regexp)];
   const blocks = []; // return array
-  const blockStrings = coqCode.split('(*💧'); // seperate block strings
-  // The first part after .split is the empty space before the first block start
-  if (blockStrings.shift().trim() !== '') {
-    throw new ImportError('Did not start with a block.');
-  }
   let inInputField = false;
-  for (let i = 0; i < blockStrings.length; i++) {
-    const blockString = blockStrings[i];
-    const dataEnd = blockString.indexOf('*)');
-    const dataString = blockString.substring(0, dataEnd);
-    // should contain type and possibly start and id
-    const block = JSON.parse(dataString);
+  for (let i = 0; i < blockMatches.length; i++) {
+    const blockMatch = blockMatches[i];
+    const data = blockMatch.groups.data.trim();
+    const text = blockMatch.groups.text.trim();
+    const code = blockMatch.groups.code.trim();
+    const block = JSON.parse(data);
     Notebook.setDefaultBlockState(block, inInputField);
     if (block.type !== 'input') {
-      // get text part, so skip '*)\n' which is 3 chars.
-      let textString = blockString.substring(dataEnd + 3);
-      if (i !== blockStrings.length - 1) {
-        // removing trailing \n, which was added by join.
-        textString = textString.substring(0, textString.length -1);
-      }
       if (block.type !== 'code') {
-        // remove everything around [text] of (*[text]*) revert [text]
-        textString = textString.substring(2, textString.length -2);
-        textString = revertSafeCoqComment(textString);
+        block.text = revertSafeCoqComment(text);
+      } else {
+        block.text = code;
       }
-      block.text = textString;
     } else {
       inInputField = block.start;
     }
@@ -618,19 +598,22 @@ function wpToCoq(blocks) {
   const blockStrings = [];
   for (const block of blocks) {
     let data = {type: block.type};
+    let text = '';
+    let code = '';
     if (block.type === 'input') {
       data.start = block.start;
       data.id = block.id;
     }
-    data = '(*💧' + JSON.stringify(data) + '*)';
+    data = JSON.stringify(data);
     if (block.type !== 'input') {
-      let text = block.text;
-      if (block.type !== 'code') {
-        text = '(*' + createSafeCoqComment(text) + '*)';
+      if (block.type === 'code') {
+        code = block.text;
+      } else {
+        text = createSafeCoqComment(block.text);
       }
-      data = data + '\n' + text;
     }
-    blockStrings.push(data);
+    const blockString = '(** (* ' + data + ' *) ' + text + ' *)' + code;
+    blockStrings.push(blockString);
   }
   return blockStrings.join('\n');
 }

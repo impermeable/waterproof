@@ -6,9 +6,11 @@ We aim to maintain consistent files when importing a previously exported file, w
 ## Block structure
 
 Waterproof notebooks are made out of a collection of text, code, input, and hint blocks. When exporting to a vernacular file, we do not want to lose this block information, so that the file can be imported again and the structure is maintained. Therefore, a waterproof block is translated to Coq as:
-> `(*💧 [data]*)[text]`
+> `(** (*[data]*)[text] *)[code]`
 
-Here, `💧` is meant to be a rare enough unicode character. Additional json data contained in the waterproof notebook is stored in json-structure as `[data]`. Except text or code, which is then put in place of `[text]`. For non-code blocks, `[text]` is wrapped in `(*` and `*)`.
+Where `[data]` is the json data contained in the waterproof notebook except the
+text or code, and `[text]` and `[code]` are the text and code respectively.
+We can accept some variability in terms of 
 
 ## Unintentional comment start/end
 
