@@ -6,11 +6,22 @@ We aim to maintain consistent files when importing a previously exported file, w
 ## Block structure
 
 Waterproof notebooks are made out of a collection of text, code, input, and hint blocks. When exporting to a vernacular file, we do not want to lose this block information, so that the file can be imported again and the structure is maintained. Therefore, a waterproof block is translated to Coq as:
-> `(** (*[data]*)[text] *)[code]`
+> `(** [text] (*[data]*) *)[code]`
 
 Where `[data]` is the json data contained in the waterproof notebook except the
 text or code, and `[text]` and `[code]` are the text and code respectively.
-We can accept some variability in terms of 
+We can accept some variability in terms of spacing.
+
+To be precise, to import blocks, we match .v text using the following regular expression (javascript regexp in this case):
+```
+/\(\*\*\s(?<text>(?:(?!\(\*)(?!\*\))[\s\S])*)\(\*(?<data>(?:(?!\*\))[\s\S])*)\*\)\s\*\)(?<code>(?:(?!\(\*\*\s)[\s\S])*)/g
+```
+Notice that we assume:
+- `[text]` does not contain `(*` or `*)`,
+- `[data]` does not contain `*)`,
+- `[code]` does not contain `(** `.
+
+Perhaps the latter assumption is a bit strong, as we do not allow coqdoc comments inside of code blocks.
 
 ## Unintentional comment start/end
 

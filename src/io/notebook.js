@@ -564,7 +564,7 @@ function revertSafeCoqComment(text) {
  */
 function coqToWp(coqCode) {
   // eslint-disable-next-line max-len
-  const regexp = /\(\*\*\s+\(\*(?<data>(?:(?!\*\))[\s\S])*)\*\)(?<text>(?:(?!\*\))[\s\S])*)\s\*\)(?<code>(?:(?!\(\*\*\s+\(\*)[\s\S])*)/g;
+  const regexp = /\(\*\*\s(?<text>(?:(?!\(\*)(?!\*\))[\s\S])*)\(\*(?<data>(?:(?!\*\))[\s\S])*)\*\)\s\*\)(?<code>(?:(?!\(\*\*\s)[\s\S])*)/g;
   const blockMatches = [...coqCode.matchAll(regexp)];
   const blocks = []; // return array
   let inInputField = false;
@@ -612,7 +612,7 @@ function wpToCoq(blocks) {
         text = createSafeCoqComment(block.text);
       }
     }
-    const blockString = '(** (* ' + data + ' *) ' + text + ' *)' + code;
+    const blockString = '(** ' + text + '(* ' + data + ' *) *)' + code;
     blockStrings.push(blockString);
   }
   return blockStrings.join('\n');
