@@ -26,8 +26,23 @@ jobs:
       - run: npm ci
       - name: Generate icons
         run: npm run electron:generate-icons
-      - name: Build it
+
+      - name: Build it (signed)
+        if: ${{ matrix.os == 'windows-latest' }}
+        env:
+          CSC_LINK: 'certificate\certificate.pfx'
+          CSC_KEY_PASSWORD: ${{ secrets.CODE_SIGNING_CERTIFICATE_PASS }}
+        run: |
+          New-Item -ItemType directory -Path certificate
+          Set-Content -Path certificate\certificate.txt -Value '${{ secrets.CODE_SIGNING_CERTIFICATE }}'
+          certutil -decode certificate\certificate.txt certificate\certificate.pfx
+          npm run electron:build
+          Remove-Item -Path certificate\*
+          
+      - name: Build it (no signing)
+        if: ${{ matrix.os != 'windows-latest' }}
         run: npm run electron:build
+
       - run: npm install @actions/core @actions/glob
       - name: Locate completed builds
         id: locate
