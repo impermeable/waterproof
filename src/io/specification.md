@@ -8,7 +8,7 @@ Waterproof notebooks are made out of a collection of blocks, and each has one of
 Concretely, a block in waterproof is an object containing a `type` and `text`. If it is an input block, it also contains `start` and `id`. We translate this as follows:
 - If it is a code block: simply return `text`. Note that we will not be able to interpret whether two code blocks should be separated.
 - If it is a text block: return `(** text *)`.
-- If it is a hint block: return `(** HINT text *)`. **And implement in waterproof that the hint-closed text is immutable**
+- If it is a hint block: return `(** HINT text *)`. **And implement in waterproof that the hint-closed text is immutable. Or, alternative: **`(** HINT (* hint-title *) text *)`
 - If it is an input block:
    - with `start == True`: return `(** INPUT-START *)`
    - with `start == False`: return `(** INPUT-END *)` **We could get away with only writing INPUT and inferring whether it is start or end, but this is more informative in .v files in my opinion**
@@ -23,6 +23,10 @@ Unfortunately, it is easy to unintentionally write these. For example, the follo
 > (Water *proof*) text
 
 is syntactically `(Water *proof*) text`, which inadvertently contains a comment ending in Coq. Therefore, we will add a special character to remove any comment start or end non-code. The above sentence will become `(Water *proof*💧) text`.
+
+## Code
+
+In-line Coq material (code) is encased in markdown with \`. In Coq, we can use \[ and \]. We can directly translate \` to \[ and \] alternatingly. However, as Coq code can be recursive, there can be an already existing \[ or \] inside code, and we do not want to translate this to \` as well. **So how should we do this?**
 
 ## String literals
 
