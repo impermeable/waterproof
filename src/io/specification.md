@@ -35,7 +35,7 @@ In waterproof (markdown) we may start text with `# `, `## `, ..., `###### ` to i
 In waterproof (markdown) we may use `**text**` and `*text*` to write bold/italics respectively. In coq, we can do emphasis (italics) with `_text_`. Bold is a bit harder, but we can use `#<strong>#text#</strong>#`.
 
 ## Coqdoc escape characters
-To simply output the characters $, % and # and escaping their escaping role in coqdoc, these characters are be doubled. In coqdoc, `$text$` would output text in latex math-mode. **However, this does not work for HTML-output, so it is quite useless.** 
+To simply output the characters \$, % and # and escaping their escaping role in coqdoc, these characters are be doubled. In coqdoc, `$text$` would output text in latex math-mode. **However, this does not work for HTML-output, so it is quite useless.** 
 It is a little bit of a problem, because stuff in # is simply discarded in latex output actually.
 https://coq.inria.fr/refman/using/tools/coqdoc.html#escaping-to-latex-and-html
 
