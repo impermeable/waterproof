@@ -50,6 +50,15 @@ export default {
       });
       // Replace coqdoc-style lists (-) with markdown lists (*)
       converted = converted.replace(/^([ ]*)- /gm, '$1* ');
+      // Remove coq-comment start & end
+      converted = converted.replace(/\(\*/g, '(💧');
+      converted = converted.replace(/\*\)/g, '💧)');
+      // Translate bold to md
+      converted = converted.replace(/#<\/?strong>#/g, '**');
+      // Translate italics to md
+      converted = converted.replace(/ _/g, ' *');
+      converted = converted.replace(/_ /g, '* ');
+
       return md.render(converted);
     },
     renderToSpan: function(text) {
