@@ -1,3 +1,6 @@
+import { Pass } from 'codemirror';
+import { assert, error } from 'console';
+
 const fs = require('fs');
 
 const DEFAULT_BLACKLIST = [
@@ -556,66 +559,117 @@ function revertSafeCoqComment(text) {
 }
 
 /**
- * Converts coq code to a notebook format
- * This does not convert back any waterproof things and just puts all
- * special comments in text blocks and the rest in code blocks.
+ * Importing from .v file according to specification.md
  * @param {String} coqCode the input code
  * @return {Array} the blocks from the code
  */
 function coqToWp(coqCode) {
-  // eslint-disable-next-line max-len
-  const regexp = /\(\*\*\s(?<text>(?:(?!\(\*)(?!\*\))[\s\S])*)\(\*(?<data>(?:(?!\*\))[\s\S])*)\*\)\s\*\)(?<code>(?:(?!\(\*\*\s)[\s\S])*)/g;
-  const blockMatches = [...coqCode.matchAll(regexp)];
   const blocks = []; // return array
   let inInputField = false;
-  for (let i = 0; i < blockMatches.length; i++) {
-    const blockMatch = blockMatches[i];
-    const data = blockMatch.groups.data.trim();
-    const text = blockMatch.groups.text.trim();
-    const code = blockMatch.groups.code.trim();
-    const block = JSON.parse(data);
-    Notebook.setDefaultBlockState(block, inInputField);
-    if (block.type !== 'input') {
-      if (block.type !== 'code') {
-        block.text = revertSafeCoqComment(text);
-      } else {
-        block.text = code;
-      }
-    } else {
-      inInputField = block.start;
+  let inputFieldId = 0;
+  let i = 0;
+  while (i < coqCode.length) {
+    let next = coqCode.indexOf('(**', i+3);
+    if (next === -1) {
+      next = coqCode.length;
     }
-    blocks.push(block);
+    const block = coqCode.substring(i, next).trim();
+    const finalCommentCloseIndex = block.lastIndexOf('*)');
+    if (finalCommentCloseIndex !== -1) {
+      const coqdoc = block.substring(3, finalCommentCloseIndex).trim();
+      if (coqdoc === '') {
+        // The block could have been (***) or an empty text block
+      } else if (coqdoc === 'INPUT-START') {
+        // FIXME: Open input blocks get closed before a next input
+        // block is opened, additional closures of input blocks are ignored
+        assert(inInputField === false,
+          'INPUT-START encountered, but input section has already started.'
+        );
+        blocks.push({type: 'input', start: true, id: inputFieldId});
+        inInputField = true;
+      } else if (coqdoc === 'INPUT-END') {
+        assert(inInputField === true,
+          'INPUT-END encountered, but not in an input section.'
+        );
+        blocks.push({type: 'input', start: false, id: inputFieldId});
+        inInputField = false;
+        inputFieldId++;
+      } else if (coqdoc.indexOf('<hint>') !== -1) {
+        blocks.push({type: 'hint', text: coqdoc, })
+      } else {
+        blocks.push({type: 'text', text: coqdoc});
+      }
+    }
+    let startCode;
+    if (finalCommentCloseIndex === -1) {
+      startCode = 0;
+    } else {
+      startCode = finalCommentCloseIndex + 2;
+    }
+    const code = block.substring(startCode).trim();
+    if (code !== -1) {
+      blocks.push({type: 'code', text: code});
+    }
+    i = next;
   }
-  return blocks;
 }
 
 /**
- * Convert blocks into coq parsable text, following specification.md
+ * Exporting to .v file according to specification.md
  * @param {[]} blocks the list of blocks
  * @return {string} the coq text
  */
 function wpToCoq(blocks) {
   const blockStrings = [];
+  let prevBlockType = null;
   for (const block of blocks) {
-    let data = {type: block.type};
-    let text = '';
-    let code = '';
-    if (block.type === 'input') {
-      data.start = block.start;
-      data.id = block.id;
+    if (block.type === 'code') {
+      if (prevBlockType === 'code') {
+        blockStrings.push('(***)');
+      }
+      blockStrings.push(block.text);
     }
-    data = JSON.stringify(data);
-    if (block.type !== 'input') {
-      if (block.type === 'code') {
-        code = block.text;
+    else if (block.type === 'text') {
+      blockStrings.push('(** ' + convert_to_valid(block.text) + ' *)');
+    }
+    else if (block.type === 'hint') {
+       const hint = block.text.split('<hint>');
+       if (hint.length == 2) {
+        blockStrings.push(
+          '(** ' + convert_to_valid(hint[0].trim()) + '\n<hint>\n'
+          + convert_to_valid(hint[1].trim()) + ' *)'
+        );
+       } else {
+         throw Error('Unexpected hint block: ' + hint.text)
+       }
+    }
+    else if (block.type === 'input') {
+      if (block.start) {
+        blockStrings.push('(** INPUT-START *)')
       } else {
-        text = createSafeCoqComment(block.text);
+        blockStrings.push('(** INPUT-END *)')
       }
     }
-    const blockString = '(** ' + text + '(* ' + data + ' *) *)' + code;
-    blockStrings.push(blockString);
+    
+    prevBlockType = block.type;
   }
   return blockStrings.join('\n');
+}
+
+function convert_to_valid(text) {
+  // Close string literal
+  let converted = text;
+  
+  // Close all open comments
+  // Open comments at the beginning
+  const opens = (converted.match(/\(\*/g) || []).length;
+  const closes = (converted.match(/\*\)/g) || []).length;
+  if (opens > closes) {
+    converted = converted + ' *)' * (opens - closes);
+  } else if (closes > opens) {
+    converted = (closes - opens) * '(* ' + converted;
+  }
+  // Seperate setting for doubling $, %, #
 }
 
 export {coqToWp, wpToCoq};
