@@ -393,7 +393,7 @@
     },
     {
       "type": "hint",
-      "text": "Click to open hint.\n<hint>\nAt the end of your proof, use the following chain of inequalities \n\n```\nRmin (ε / 2) 1 ≤ ε / 2 < ε\n```\n\nbut pay attention to the issues mentioned above: in particular use the '&' sign at the appropriate places."
+      "text": "Click to open hint.\n<hint>\nAt the end of your proof, use the following chain of inequalities \n\n[[\nRmin (ε / 2) 1 ≤ ε / 2 < ε\n]]\n\nbut pay attention to the issues mentioned above: in particular use the '&' sign at the appropriate places."
     },
     {
       "type": "input",
@@ -497,7 +497,7 @@
     },
     {
       "type": "text",
-      "text": "\nSometimes, you also need to tell Waterproof what lemma to use in proving the intermediate step. The following line would tell Waterproof to use the lemma called [Rmax_r].\n\n```\nBy Rmax_r it holds that\n  Rmax_gt_1 : (Rmax ε 1 ≥ 1). \n```\n\nFor very difficult statements, it may happen that Waterproof cannot find a proof even when providing the name of a lemma. In that case you can first make an intermediate claim.\n\n```\nWe claim that Rmax_gt_1 : (Rmax ε 1 ≥ 1).\n{\n  ( _proof of claim_ )\n}\n```"
+      "text": "\nSometimes, you also need to tell Waterproof what lemma to use in proving the intermediate step. The following line would tell Waterproof to use the lemma called [Rmax_r].\n\n[[\nBy Rmax_r it holds that\n  Rmax_gt_1 : (Rmax ε 1 ≥ 1). \n]]\n\nFor very difficult statements, it may happen that Waterproof cannot find a proof even when providing the name of a lemma. In that case you can first make an intermediate claim.\n\n[[\nWe claim that Rmax_gt_1 : (Rmax ε 1 ≥ 1).\n{\n  ( _proof of claim_ )\n}\n]]"
     },
     {
       "type": "text",
@@ -925,7 +925,7 @@
     },
     {
       "type": "text",
-      "text": "At this stage, Waterproof does not know how to continue. We could immediately reformulate the goal by writing [We need to show that (x^2 ≥ 0).], or we could write \n\n```\nWe conclude that\n  (& square x &= x^2\n              &≥ 0). \n```\nHowever these options aren't available if you do not know the definition of [square]. In that case you could write"
+      "text": "At this stage, Waterproof does not know how to continue. We could immediately reformulate the goal by writing [We need to show that (x^2 ≥ 0).], or we could write \n\n[[\nWe conclude that\n  (& square x &= x^2\n              &≥ 0). \n]]\nHowever these options aren't available if you do not know the definition of [square]. In that case you could write"
     },
     {
       "type": "code",
@@ -941,7 +941,7 @@
     },
     {
       "type": "text",
-      "text": "You can also expand the definition in a hypothesis. For instance,\n```\nExpand the definition of square in H.\n```\nwould expand the definition of [square] in the hypothesis with the name [H]."
+      "text": "You can also expand the definition in a hypothesis. For instance,\n[[\nExpand the definition of square in H.\n]]\nwould expand the definition of [square] in the hypothesis with the name [H]."
     },
     {
       "type": "text",

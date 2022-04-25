@@ -54,6 +54,8 @@ export default {
       converted = converted.replace(/\(\*/g, '(💧');
       converted = converted.replace(/\*\)/g, '💧)');
       // Translate code
+      converted = converted.replace(/\[\[/g, '```');
+      converted = converted.replace(/\]\]/g, '```');
       converted = converted.replace(/\[/g, '`');
       converted = converted.replace(/\]/g, '`');
       // Translate bold to md
@@ -62,7 +64,8 @@ export default {
       converted = converted.replace(/[\s]_/g, ' *');
       converted = converted.replace(/_[\s.,!?]/g, '* ');
 
-      return md.render(converted);
+      converted = md.render(converted);
+      return converted;
     },
     renderToSpan: function(text) {
       let htmlString = this.render(text);
