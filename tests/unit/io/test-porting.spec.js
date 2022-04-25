@@ -39,7 +39,9 @@ if (process.env.NODE_ENV !== 'coverage') {
     for (let i = 0; i < tests.length; i++) {
       const fname = tests[i];
       it('test ' + fname, (done) => {
-        const v = fs.readFileSync(testcasePath + fname + '.v', 'utf-8').toString();
+        const v = fs.readFileSync(
+          testcasePath + fname + '.v', 'utf-8'
+        ).toString();
         loadNotebook(testcasePath + fname + '.wpe').then(() => {
           /** EXPORTING */
           const text = notebook.parseToText();
