@@ -3,7 +3,7 @@
   "blocks": [
     {
       "type": "text",
-      "text": "# Tutorial: Getting used to Waterproof\n\nThis tutorial explains how to get started with Waterproof. The aim of Waterproof is to help learning how to prove mathematical statements.\n\nThis tutorial is in the form of an **exercise sheet** (sometimes we will call it a **notebook**). It is a mix of explanations and exercises in which you can try proving mathematical statements yourself. \n\nThe exercise sheet contains **text cells** (white background) and **code cells** (gray background). So far, we have been writing text, in text cells. But now we will introduce the first code cell.\n"
+      "text": "* Tutorial: Getting used to Waterproof\n\nThis tutorial explains how to get started with Waterproof. The aim of Waterproof is to help learning how to prove mathematical statements.\n\nThis tutorial is in the form of an #<strong>#exercise sheet#</strong># (sometimes we will call it a #<strong>#notebook#</strong>#). It is a mix of explanations and exercises in which you can try proving mathematical statements yourself. \n\nThe exercise sheet contains #<strong>#text cells#</strong># (white background) and #<strong>#code cells#</strong># (gray background). So far, we have been writing text, in text cells. But now we will introduce the first code cell.\n"
     },
     {
       "type": "code",
@@ -15,11 +15,11 @@
     },
     {
       "type": "text",
-      "text": "\nWe recommend that while you read this notebook, you execute the code sentence-by-sentence by pressing **Alt + ↓** (on MacOS: **Option + ↓** or **⌥ + ↓**). (Alternatively, you can use the buttons on the left, but it is typically much faster to work with keyboard shortcuts.)"
+      "text": "\nWe recommend that while you read this notebook, you execute the code sentence-by-sentence by pressing #<strong>#Alt + ↓#</strong># (on MacOS: #<strong>#Option + ↓#</strong># or #<strong>#⌥ + ↓#</strong>#). (Alternatively, you can use the buttons on the left, but it is typically much faster to work with keyboard shortcuts.)"
     },
     {
       "type": "text",
-      "text": "* 1. Prove a lemma\n\nIn the following code cell, we introduce a **lemma**. We called the lemma **example_reflexivity**."
+      "text": "* 1. Prove a lemma\n\nIn the following code cell, we introduce a #<strong>#lemma#</strong>#. We called the lemma #<strong>#example_reflexivity#</strong>#."
     },
     {
       "type": "code",
@@ -35,11 +35,11 @@
     },
     {
       "type": "text",
-      "text": "\nExecute the code sentence after sentence (press **Alt + ↓** or **Option + ↓**), until a blue checkmark appears in place of the period after `Proof.`. The checkmark means that Waterproof has checked every sentence before the checkmark. Note how in the part of the screen under **Proof progress** (either on the right of the screen, or down below) appeared what we need to show, namely `(0=0)`. We will often refer to this as the current **goal**."
+      "text": "\nExecute the code sentence after sentence (press #<strong>#Alt + ↓#</strong># or #<strong>#Option + ↓#</strong>#), until a blue checkmark appears in place of the period after `Proof.`. The checkmark means that Waterproof has checked every sentence before the checkmark. Note how in the part of the screen under #<strong>#Proof progress#</strong># (either on the right of the screen, or down below) appeared what we need to show, namely `(0=0)`. We will often refer to this as the current #<strong>#goal#</strong>#."
     },
     {
       "type": "text",
-      "text": "\nNext, we tell Waterproof what to do to prove the lemma. For such a simple statement, we can just write and execute the sentence `\"We conclude that (0=0).\"` and Waterproof will check automatically that this holds. We will often refer to executing such a sentence as **applying a tactic.**"
+      "text": "\nNext, we tell Waterproof what to do to prove the lemma. For such a simple statement, we can just write and execute the sentence `\"We conclude that (0=0).\"` and Waterproof will check automatically that this holds. We will often refer to executing such a sentence as #<strong>#applying a tactic.#</strong>#"
     },
     {
       "type": "code",
@@ -47,7 +47,7 @@
     },
     {
       "type": "text",
-      "text": "\nExecute the above sentence, with **Alt + ↓**, until the checkmark appears after the sentence. Note how under proof progress it says `Done.`. The lemma is proved! We close the proof by writing `Qed.`."
+      "text": "\nExecute the above sentence, with #<strong>#Alt + ↓#</strong>#, until the checkmark appears after the sentence. Note how under proof progress it says `Done.`. The lemma is proved! We close the proof by writing `Qed.`."
     },
     {
       "type": "code",
@@ -55,11 +55,11 @@
     },
     {
       "type": "text",
-      "text": "\n**HINT:** When writing `We conclude that (...)`, it is important that at the place of the dots you write the current goal (which you can see under **Proof progress**), and not another statement.\n\n**HINT:** If you click on the hammer symbol on the top right, a list of tactics will open. You can click on one of the icons next to the tactics, and the tactic will be either be copied to the clipboard or inserted in the text at the place of the cursor, usually with some placeholders that you need to fill in."
+      "text": "\n#<strong>#HINT:#</strong># When writing `We conclude that (...)`, it is important that at the place of the dots you write the current goal (which you can see under #<strong>#Proof progress#</strong>#), and not another statement.\n\n#<strong>#HINT:#</strong># If you click on the hammer symbol on the top right, a list of tactics will open. You can click on one of the icons next to the tactics, and the tactic will be either be copied to the clipboard or inserted in the text at the place of the cursor, usually with some placeholders that you need to fill in."
     },
     {
       "type": "text",
-      "text": "** Try it yourself: prove a lemma\n\nYou can now try this for yourself. We prepared a lemma below, that we named **exercise_reflexivity**."
+      "text": "** Try it yourself: prove a lemma\n\nYou can now try this for yourself. We prepared a lemma below, that we named #<strong>#exercise_reflexivity#</strong>#."
     },
     {
       "type": "code",
@@ -67,7 +67,7 @@
     },
     {
       "type": "text",
-      "text": "The blue brackets below delineate an input area. You can freely work there. Move the mouse just below the first blue bracket until a blue, horizontal line appears and click on it. Then, you can add a code cell by pressing **Alt + c** (On MacOS: **Ctrl + c**), and add a text cell by pressing **Alt + t** (On MacOS: **Ctrl + t**).\n\nYou can also change the text that is already there between the blue brackets by clicking on it.\n\nBelow we already added one code cell, which says `Admitted.`. Executing that code cell (**Alt + ↓**), will also make the proof progress turn to `Done.` **However,** in that case it is not proven but assumed as an axiom. We do this so you can continue executing the notebook even if you cannot solve the exercise.\n\nAfter you have found a proof, replace the `Admitted.` by `Qed.` (click on the code cell and change the sentence)."
+      "text": "The blue brackets below delineate an input area. You can freely work there. Move the mouse just below the first blue bracket until a blue, horizontal line appears and click on it. Then, you can add a code cell by pressing #<strong>#Alt + c#</strong># (On MacOS: #<strong>#Ctrl + c#</strong>#), and add a text cell by pressing #<strong>#Alt + t#</strong># (On MacOS: #<strong>#Ctrl + t#</strong>#).\n\nYou can also change the text that is already there between the blue brackets by clicking on it.\n\nBelow we already added one code cell, which says `Admitted.`. Executing that code cell (#<strong>#Alt + ↓#</strong>#), will also make the proof progress turn to `Done.` #<strong>#However,#</strong># in that case it is not proven but assumed as an axiom. We do this so you can continue executing the notebook even if you cannot solve the exercise.\n\nAfter you have found a proof, replace the `Admitted.` by `Qed.` (click on the code cell and change the sentence)."
     },
     {
       "type": "input",
@@ -97,7 +97,7 @@
     },
     {
       "type": "text",
-      "text": "> **NOTE:** the notation $x : ℝ$ means $x$ is in $\\mathbb{R}$ (or more accurately, $x$ is of type $\\mathbb{R}$) may be unfamiliar to you, and you may be more familiar with the notation $x ∈ \\reals$. This difference is due to the fact that Waterproof is built on **type theory** and not on set theory. \n\n**HINT:** You can insert characters such as ℝ either from the symbol menu that opens when clicking on 'Σ' in the top right corner, or you can write '\\reals' until a menu pops up and press enter. Make sure that the code reads 'ℝ' and not '\\reals' itself. For many other unicode characters you can use a backslash command as well."
+      "text": "> #<strong>#NOTE:#</strong># the notation $x : ℝ$ means $x$ is in $\\mathbb{R}$ (or more accurately, $x$ is of type $\\mathbb{R}$) may be unfamiliar to you, and you may be more familiar with the notation $x ∈ \\reals$. This difference is due to the fact that Waterproof is built on #<strong>#type theory#</strong># and not on set theory. \n\n#<strong>#HINT:#</strong># You can insert characters such as ℝ either from the symbol menu that opens when clicking on 'Σ' in the top right corner, or you can write '\\reals' until a menu pops up and press enter. Make sure that the code reads 'ℝ' and not '\\reals' itself. For many other unicode characters you can use a backslash command as well."
     },
     {
       "type": "code",
@@ -105,7 +105,7 @@
     },
     {
       "type": "text",
-      "text": "\nTo show a statement like \"for all $x : \\mathbb{R}$, ...\", you first need to take an arbitrary $x : \\mathbb{R}$, and then continue showing ... . We do this by writing and executing the following sentence, i.e. by applying the following **tactic**."
+      "text": "\nTo show a statement like \"for all $x : \\mathbb{R}$, ...\", you first need to take an arbitrary $x : \\mathbb{R}$, and then continue showing ... . We do this by writing and executing the following sentence, i.e. by applying the following #<strong>#tactic#</strong>#."
     },
     {
       "type": "code",
@@ -129,7 +129,7 @@
     },
     {
       "type": "text",
-      "text": "\n**HINT:** If you would like to get a hint on what you need to do, you can write and execute the sentence `Help.`"
+      "text": "\n#<strong>#HINT:#</strong># If you would like to get a hint on what you need to do, you can write and execute the sentence `Help.`"
     },
     {
       "type": "code",
@@ -137,7 +137,7 @@
     },
     {
       "type": "text",
-      "text": "\n\n**HINT:** We recommend that always after you write down a sentence, you immediately execute it (**Alt + ↓**)."
+      "text": "\n\n#<strong>#HINT:#</strong># We recommend that always after you write down a sentence, you immediately execute it (#<strong>#Alt + ↓#</strong>#)."
     },
     {
       "type": "input",
@@ -159,7 +159,7 @@
     },
     {
       "type": "text",
-      "text": "* 3. Show *there-exists* statements: choose values\n\nIf you want to show that *there exists* $y : \\mathbb{R}$ such that $(\\dots)$, you need to **choose** a candidate for $y$, and continue showing $(\\dots)$ with your choice."
+      "text": "* 3. Show *there-exists* statements: choose values\n\nIf you want to show that *there exists* $y : \\mathbb{R}$ such that $(\\dots)$, you need to #<strong>#choose#</strong># a candidate for $y$, and continue showing $(\\dots)$ with your choice."
     },
     {
       "type": "code",
@@ -179,7 +179,7 @@
     },
     {
       "type": "text",
-      "text": "\n(In this particular case we could also have written `Choose y := 2`, but in general the brackets are important.)\n\nWe now need to show that (y<3) (see **Proof progress** after executing the previous sentence). We can record this for our own convenience."
+      "text": "\n(In this particular case we could also have written `Choose y := 2`, but in general the brackets are important.)\n\nWe now need to show that (y<3) (see #<strong>#Proof progress#</strong># after executing the previous sentence). We can record this for our own convenience."
     },
     {
       "type": "code",
@@ -319,7 +319,7 @@
     },
     {
       "type": "text",
-      "text": "\nIf you now execute the code up to previous sentence, you can see in the **Proof progress** that we need to show `a < 0 ⇒ -a > 0.` Remembering the rules for brackets, this means:"
+      "text": "\nIf you now execute the code up to previous sentence, you can see in the #<strong>#Proof progress#</strong># that we need to show `a < 0 ⇒ -a > 0.` Remembering the rules for brackets, this means:"
     },
     {
       "type": "code",
@@ -335,7 +335,7 @@
     },
     {
       "type": "text",
-      "text": "\nThe **name** of this assumption is in this case **a_lt_0**. What you are actually assuming is written after the colon, namely **a < 0**. Note how after executing the sentence, the assumption $a < 0$ is added under **Proof progress** with the name **a_lt_0**.\n\nWe finish the proof."
+      "text": "\nThe #<strong>#name#</strong># of this assumption is in this case #<strong>#a_lt_0#</strong>#. What you are actually assuming is written after the colon, namely #<strong>#a < 0#</strong>#. Note how after executing the sentence, the assumption $a < 0$ is added under #<strong>#Proof progress#</strong># with the name #<strong>#a_lt_0#</strong>#.\n\nWe finish the proof."
     },
     {
       "type": "code",
@@ -381,7 +381,7 @@
     },
     {
       "type": "text",
-      "text": "\nNote how we used special notation for the chain of inequalities\n\n``\n(&   Rmin ε 1 &≤ 1\n              &< 2).\n``\n\nWe think of this statement that **and** `Rmin ε 1 ≤ 1` **and** `1 < 2`. \n\n\n**IMPORTANT**: Here are a few issues to pay attention to:\n- After opening the first parenthesis, you need to write a '&' sign.\n- Directly in front of every comparison operator (such as '≤'), you also need to put the '&' sign.\n- Chains of inequalities go from smaller to larger. So only $=$, $≤$ and $<$ are supported."
+      "text": "\nNote how we used special notation for the chain of inequalities\n\n``\n(&   Rmin ε 1 &≤ 1\n              &< 2).\n``\n\nWe think of this statement that #<strong>#and#</strong># `Rmin ε 1 ≤ 1` #<strong>#and#</strong># `1 < 2`. \n\n\n#<strong>#IMPORTANT#</strong>#: Here are a few issues to pay attention to:\n- After opening the first parenthesis, you need to write a '&' sign.\n- Directly in front of every comparison operator (such as '≤'), you also need to put the '&' sign.\n- Chains of inequalities go from smaller to larger. So only $=$, $≤$ and $<$ are supported."
     },
     {
       "type": "text",
@@ -539,7 +539,7 @@
     },
     {
       "type": "text",
-      "text": "We can now **use** the statement that we called `del_cond` with $δ = 1/2$. We can do this by substituting $\\delta = 1/2$ as follows."
+      "text": "We can now #<strong>#use#</strong># the statement that we called `del_cond` with $δ = 1/2$. We can do this by substituting $\\delta = 1/2$ as follows."
     },
     {
       "type": "code",
@@ -581,7 +581,7 @@
     },
     {
       "type": "text",
-      "text": "* 10. Use a *there-exists* statement\n\nIn this example we show how to **use** a there-exists statement (when you know it holds)."
+      "text": "* 10. Use a *there-exists* statement\n\nIn this example we show how to #<strong>#use#</strong># a there-exists statement (when you know it holds)."
     },
     {
       "type": "code",
