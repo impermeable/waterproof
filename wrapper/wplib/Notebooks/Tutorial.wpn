@@ -696,10 +696,6 @@
       "id": "input-9"
     },
     {
-      "type": "code",
-      "text": " "
-    },
-    {
       "type": "text",
       "text": "* 12. Split into cases.\n\nAt times, you need to make a case distinction in your proof, as in the following example."
     },
