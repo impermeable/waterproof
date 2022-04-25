@@ -101,7 +101,7 @@ if (process.env.NODE_ENV !== 'coverage') {
       const writeFile = readFile + '.temp';
       const expected = {
         type: 'hint',
-        text: 'It\'s really not that hard.',
+        text: 'Click to open hint or something.\n<hint>\nHint itself.',
       };
 
       loadNotebook(readFile).then(() => {

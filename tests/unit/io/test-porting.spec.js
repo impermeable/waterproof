@@ -19,17 +19,15 @@ const notebook = new Notebook;
  *    or rejects when a read or parse error occurs
  */
 function loadNotebook(file) {
-  
   notebook.filePath = file;
-
   return new Promise((resolve, reject) => {
     notebook.read(
-      () => {
-        resolve();
-      },
-      (err) => {
-        reject(err);
-      }
+        () => {
+          resolve();
+        },
+        (err) => {
+          reject(err);
+        }
     );
   });
 }
@@ -40,7 +38,7 @@ if (process.env.NODE_ENV !== 'coverage') {
       const fname = tests[i];
       it('test ' + fname, (done) => {
         const v = fs.readFileSync(
-          testcasePath + fname + '.v', 'utf-8'
+            testcasePath + fname + '.v', 'utf-8'
         ).toString();
         loadNotebook(testcasePath + fname + '.wpe').then(() => {
           /** EXPORTING */

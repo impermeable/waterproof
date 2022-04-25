@@ -1,5 +1,4 @@
 import Notebook from '../../../../src/io/notebook';
-import {COQ_SPECIAL_COMMENT_START} from '../../../../src/io/notebook';
 
 const chai = require('chai');
 const expect = chai.expect;
@@ -34,7 +33,7 @@ describe('Notebook parse to text ', () => {
     notebook.blocks.push(
         notebook.createTextBlock(code, false));
     const output = notebook.parseToText();
-    expect(output.trim()).to.equal(COQ_SPECIAL_COMMENT_START + code + '*)');
+    expect(output.trim()).to.equal('(** ' + code + ' *)');
 
     done();
   });
@@ -44,7 +43,6 @@ describe('Notebook parse to text ', () => {
     notebook.blocks.push(notebook.createHintBlock(code));
     const output = notebook.parseToText();
     expect(output).includes(code);
-    expect(output).to.endsWith('\n');
 
     done();
   });
@@ -52,10 +50,8 @@ describe('Notebook parse to text ', () => {
   it('should parse input blocks to comments with text', (done) => {
     notebook.blocks = notebook.blocks.concat(notebook.createInputArea('1'));
     const output = notebook.parseToText();
-    expect(output.trim()).startsWith('(*');
-    expect(output.trim()).endsWith('*)');
-    expect(output).includes('(* Start of input area *)');
-    expect(output).includes('(* End of input area *)');
+    expect(output).includes('(** INPUT-START *)');
+    expect(output).includes('(** INPUT-END *)');
 
     done();
   });
