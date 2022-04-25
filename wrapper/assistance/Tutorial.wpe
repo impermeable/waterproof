@@ -11,7 +11,7 @@
     },
     {
       "type": "text",
-      "text": "The code consists of several *sentences*. Every sentence finishes with a period. These sentences above are necessary to make the rest of the notebook work."
+      "text": "The code consists of several _sentences_. Every sentence finishes with a period. These sentences above are necessary to make the rest of the notebook work."
     },
     {
       "type": "text",
@@ -497,7 +497,7 @@
     },
     {
       "type": "text",
-      "text": "\nSometimes, you also need to tell Waterproof what lemma to use in proving the intermediate step. The following line would tell Waterproof to use the lemma called `Rmax_r`.\n\n```\nBy Rmax_r it holds that\n  Rmax_gt_1 : (Rmax ε 1 ≥ 1). \n```\n\nFor very difficult statements, it may happen that Waterproof cannot find a proof even when providing the name of a lemma. In that case you can first make an intermediate claim.\n\n```\nWe claim that Rmax_gt_1 : (Rmax ε 1 ≥ 1).\n{\n  (* proof of claim *)\n}\n```"
+      "text": "\nSometimes, you also need to tell Waterproof what lemma to use in proving the intermediate step. The following line would tell Waterproof to use the lemma called `Rmax_r`.\n\n```\nBy Rmax_r it holds that\n  Rmax_gt_1 : (Rmax ε 1 ≥ 1). \n```\n\nFor very difficult statements, it may happen that Waterproof cannot find a proof even when providing the name of a lemma. In that case you can first make an intermediate claim.\n\n```\nWe claim that Rmax_gt_1 : (Rmax ε 1 ≥ 1).\n{\n  ( _proof of claim_ )\n}\n```"
     },
     {
       "type": "text",
@@ -527,7 +527,7 @@
     },
     {
       "type": "text",
-      "text": "* 9. Use a *for-all* statement\n\nA special case of the above is when you would like to *use* a for-all statement, as in the example below."
+      "text": "* 9. Use a _for-all_ statement\n\nA special case of the above is when you would like to _use_ a for-all statement, as in the example below."
     },
     {
       "type": "code",
@@ -581,7 +581,7 @@
     },
     {
       "type": "text",
-      "text": "* 10. Use a *there-exists* statement\n\nIn this example we show how to #<strong>#use#</strong># a there-exists statement (when you know it holds)."
+      "text": "* 10. Use a _there-exists_ statement\n\nIn this example we show how to #<strong>#use#</strong># a there-exists statement (when you know it holds)."
     },
     {
       "type": "code",
@@ -605,7 +605,7 @@
     },
     {
       "type": "text",
-      "text": "** Try it yourself: use a *there-exists* statement"
+      "text": "** Try it yourself: use a _there-exists_ statement"
     },
     {
       "type": "code",
