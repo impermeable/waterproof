@@ -1,6 +1,5 @@
 import Notebook from '../../../src/io/notebook';
 import {coqToWp} from '../../../src/io/notebook';
-/* eslint-disable */
 
 const fs = require('fs');
 const chai = require('chai');
@@ -50,14 +49,14 @@ if (process.env.NODE_ENV !== 'coverage') {
           const blocks = coqToWp(v);
           expect(blocks.length).to.equal(notebook.blocks.length);
           for (let j = 0; j < blocks.length; j++) {
-              const a = blocks[j];
-              const b = notebook.blocks[j];
-              expect(a.type).to.equal(b.type);
-              if (b.text !== undefined) {
-                expect(a.text).to.equal(b.text.trim());
-              }
-              expect(a.start).to.equal(b.start);
-              //  expect(a.id).to.equal(b.id);
+            const a = blocks[j];
+            const b = notebook.blocks[j];
+            expect(a.type).to.equal(b.type);
+            if (b.text !== undefined) {
+              expect(a.text).to.equal(b.text.trim());
+            }
+            expect(a.start).to.equal(b.start);
+            //  expect(a.id).to.equal(b.id);
           }
           done();
         }).catch(done);
