@@ -507,6 +507,7 @@ class Notebook {
     fs.readFile(filename, callback);
   }
 
+  // TODO: unused function, perhaps in future when WP docs are one big doc.
   /**
    * Cuts a string up in an array of strings. The cut points are
    * exactly at the beginning of the matches of the regular expression keywords
