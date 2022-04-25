@@ -537,28 +537,6 @@ class Notebook {
 export default Notebook;
 
 /**
- * Convert text to never break a Coq comment
- * @param {string} text
- * @return {string}
- */
-function createSafeCoqComment(text) {
-  return text.replaceAll('*)', '*💧)')
-      .replaceAll('(*', '(💧*')
-      .replaceAll('"', '""');
-}
-
-/**
- * Revert the changes made by createSafeCoqComment
- * @param {string} text
- * @return {string}
- */
-function revertSafeCoqComment(text) {
-  return text.replaceAll('*💧)', '*)')
-      .replaceAll('(💧*', '(*')
-      .replaceAll('""', '"');
-}
-
-/**
  * Importing from .v file according to specification.md
  * @param {String} coqCode the input code
  * @return {Array} the blocks from the code
