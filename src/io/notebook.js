@@ -1,5 +1,4 @@
-import { Pass } from 'codemirror';
-import { assert, error } from 'console';
+import {assert} from 'console';
 
 const fs = require('fs');
 
@@ -560,20 +559,22 @@ function coqToWp(coqCode) {
       } else if (coqdoc === 'INPUT-START') {
         // FIXME: Open input blocks get closed before a next input
         // block is opened, additional closures of input blocks are ignored
-        assert(inInputField === false,
-          'INPUT-START encountered, but input section has already started.'
+        assert(
+            inInputField === false,
+            'INPUT-START encountered, but input section has already started.'
         );
         blocks.push({type: 'input', start: true, id: inputFieldId});
         inInputField = true;
       } else if (coqdoc === 'INPUT-END') {
-        assert(inInputField === true,
-          'INPUT-END encountered, but not in an input section.'
+        assert(
+            inInputField === true,
+            'INPUT-END encountered, but not in an input section.'
         );
         blocks.push({type: 'input', start: false, id: inputFieldId});
         inInputField = false;
         inputFieldId++;
       } else if (coqdoc.indexOf('<hint>') !== -1) {
-        blocks.push({type: 'hint', text: coqdoc, })
+        blocks.push({type: 'hint', text: coqdoc});
       } else {
         blocks.push({type: 'text', text: coqdoc});
       }
@@ -590,6 +591,7 @@ function coqToWp(coqCode) {
     }
     i = next;
   }
+  return blocks;
 }
 
 /**
@@ -606,38 +608,39 @@ function wpToCoq(blocks) {
         blockStrings.push('(***)');
       }
       blockStrings.push(block.text);
-    }
-    else if (block.type === 'text') {
-      blockStrings.push('(** ' + convert_to_valid(block.text) + ' *)');
-    }
-    else if (block.type === 'hint') {
-       const hint = block.text.split('<hint>');
-       if (hint.length == 2) {
+    } else if (block.type === 'text') {
+      blockStrings.push('(** ' + convertToValid(block.text) + ' *)');
+    } else if (block.type === 'hint') {
+      const hint = block.text.split('<hint>');
+      if (hint.length == 2) {
         blockStrings.push(
-          '(** ' + convert_to_valid(hint[0].trim()) + '\n<hint>\n'
-          + convert_to_valid(hint[1].trim()) + ' *)'
+            '(** ' + convertToValid(hint[0].trim()) + '\n<hint>\n'
+            + convertToValid(hint[1].trim()) + ' *)'
         );
-       } else {
-         throw Error('Unexpected hint block: ' + hint.text)
-       }
-    }
-    else if (block.type === 'input') {
-      if (block.start) {
-        blockStrings.push('(** INPUT-START *)')
       } else {
-        blockStrings.push('(** INPUT-END *)')
+        throw Error('Unexpected hint block: ' + hint.text);
+      }
+    } else if (block.type === 'input') {
+      if (block.start) {
+        blockStrings.push('(** INPUT-START *)');
+      } else {
+        blockStrings.push('(** INPUT-END *)');
       }
     }
-    
+
     prevBlockType = block.type;
   }
   return blockStrings.join('\n');
 }
 
-function convert_to_valid(text) {
+/**
+ * Convert a block's text to something that is valid.
+ * @param {string} text
+ */
+function convertToValid(text) {
   // Close string literal
   let converted = text;
-  
+
   // Close all open comments
   // Open comments at the beginning
   const opens = (converted.match(/\(\*/g) || []).length;
