@@ -550,33 +550,46 @@ function coqToWp(coqCode) {
     if (next === -1) {
       next = coqCode.length;
     }
-    const block = coqCode.substring(i, next).trim();
-    const finalCommentCloseIndex = block.lastIndexOf('*)');
+    const blockContent = coqCode.substring(i, next).trim();
+    const finalCommentCloseIndex = blockContent.lastIndexOf('*)');
     if (finalCommentCloseIndex !== -1) {
-      const coqdoc = block.substring(3, finalCommentCloseIndex).trim();
+      const coqdoc = blockContent.substring(3, finalCommentCloseIndex).trim();
       if (coqdoc === '') {
-        // The block could have been (***) or an empty text block
-      } else if (coqdoc === 'INPUT-START') {
-        // FIXME: Open input blocks get closed before a next input
-        // block is opened, additional closures of input blocks are ignored
-        assert(
-            inInputField === false,
-            'INPUT-START encountered, but input section has already started.'
-        );
-        blocks.push({type: 'input', start: true, id: inputFieldId});
-        inInputField = true;
-      } else if (coqdoc === 'INPUT-END') {
-        assert(
-            inInputField === true,
-            'INPUT-END encountered, but not in an input section.'
-        );
-        blocks.push({type: 'input', start: false, id: inputFieldId});
-        inInputField = false;
-        inputFieldId++;
-      } else if (coqdoc.indexOf('<hint>') !== -1) {
-        blocks.push({type: 'hint', text: coqdoc});
+        // The block could have been (***) or an empty text block. We don't add
+        // a block in that case.
       } else {
-        blocks.push({type: 'text', text: coqdoc});
+        const block = {};
+        if (coqdoc === 'INPUT-START') {
+          // FIXME: Open input blocks get closed before a next input
+          // block is opened, additional closures of input blocks are ignored
+          assert(
+              inInputField === false,
+              'INPUT-START encountered, but input section has already started.'
+          );
+          block.type = 'input';
+          block.start = true;
+          block.id = inputFieldId;
+          inInputField = true;
+        } else if (coqdoc === 'INPUT-END') {
+          assert(
+              inInputField === true,
+              'INPUT-END encountered, but not in an input section.'
+          );
+          block.type = 'input';
+          block.start = false;
+          block.id = inputFieldId;
+          inInputField = false;
+          inputFieldId++;
+        } else if (coqdoc.indexOf('<hint>') !== -1) {
+          block.type = 'hint';
+          block.text = coqdoc;
+        } else {
+          block.type = 'text';
+          block.text = coqdoc;
+        }
+        const withinInputFieldMarkers = inInputField && block.type !== 'input';
+        Notebook.setDefaultBlockState(block, withinInputFieldMarkers);
+        blocks.push(block);
       }
     }
     let startCode;
@@ -585,9 +598,11 @@ function coqToWp(coqCode) {
     } else {
       startCode = finalCommentCloseIndex + 2;
     }
-    const code = block.substring(startCode).trim();
+    const code = blockContent.substring(startCode).trim();
     if (code !== -1) {
-      blocks.push({type: 'code', text: code});
+      const block = {type: 'code', text: code};
+      Notebook.setDefaultBlockState(block, inInputField);
+      blocks.push(block);
     }
     i = next;
   }
