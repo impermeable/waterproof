@@ -54,7 +54,7 @@ Convert in rendering (in the `render` function in `WpBlock.vue`)
 - Header-*'s to #'s
 - `#<strong>#` and `#</strong>#` both to `**`
 - Consecutive `[` and `]` both to backticks.
-- \_arbitrary text\_ to \*arbitrary text\* 
+- \_arbitrary text\_ to \*arbitrary text\* if \_ preceded by a whitespace or followed by a whitespace or punctuation.
 - If markdown lists with '*' don't work: Coqdoc lists (with '-') to markdown lists (with '*')
 
 ---
