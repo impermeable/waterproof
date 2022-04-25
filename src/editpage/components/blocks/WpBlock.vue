@@ -61,8 +61,8 @@ export default {
       // Translate bold to md
       converted = converted.replace(/#<\/?strong>#/g, '**');
       // Translate italics to md
-      converted = converted.replace(/[\s]_/g, ' *');
-      converted = converted.replace(/_[\s.,!?]/g, '* ');
+      converted = converted.replace(/\W_/g, ' *');
+      converted = converted.replace(/_\W/g, '* ');
 
       converted = md.render(converted);
       return converted;

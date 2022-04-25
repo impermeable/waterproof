@@ -55,7 +55,7 @@ Convert in rendering (in the `render` function in `WpBlock.vue`)
 - `#<strong>#` and `#</strong>#` both to `**`
 - Consecutive `[[` and `]]` both to triple backticks. (TODO figure out how to color this the same)
 - Consecutive `[` and `]` both to backticks.
-- \_arbitrary text\_ to \*arbitrary text\* if \_ preceded by a whitespace or followed by a whitespace or punctuation.
+- \_arbitrary text\_ to \*arbitrary text\* if \_ preceded or followed by an alphanumeric or underscore.
 - If markdown lists with '*' don't work: Coqdoc lists (with '-') to markdown lists (with '*')
 
 ---

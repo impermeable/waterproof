@@ -626,6 +626,8 @@ function wpToCoq(blocks) {
       } else {
         blockStrings.push('(** INPUT-END *)');
       }
+    } else {
+      throw Error('Can not interpret block type ' + block.type);
     }
 
     prevBlockType = block.type;
@@ -636,6 +638,7 @@ function wpToCoq(blocks) {
 /**
  * Convert a block's text to something that is valid.
  * @param {string} text
+ * @return {string} converted text
  */
 function convertToValid(text) {
   // Close string literal
@@ -651,6 +654,8 @@ function convertToValid(text) {
     converted = (closes - opens) * '(* ' + converted;
   }
   // Seperate setting for doubling $, %, #
+
+  return converted;
 }
 
 export {coqToWp, wpToCoq};
