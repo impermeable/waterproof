@@ -53,6 +53,9 @@ export default {
       // Remove coq-comment start & end
       converted = converted.replace(/\(\*/g, '(💧');
       converted = converted.replace(/\*\)/g, '💧)');
+      // Translate code
+      converted = converted.replace(/\[/g, '`');
+      converted = converted.replace(/\]/g, '`');
       // Translate bold to md
       converted = converted.replace(/#<\/?strong>#/g, '**');
       // Translate italics to md
