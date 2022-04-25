@@ -339,6 +339,7 @@ class Notebook {
       }
 
       try {
+        // TODO move this to seperate function, also for coqToWp?
         this.clearContent();
         const read = JSON.parse(data);
 
@@ -543,7 +544,7 @@ export default Notebook;
 function coqToWp(coqCode) {
   const blocks = []; // return array
   let inInputField = false;
-  let inputFieldId = 0;
+  let inputFieldId = 1;
   let i = 0;
   while (i < coqCode.length) {
     let next = coqCode.indexOf('(**', i+3);
@@ -568,7 +569,7 @@ function coqToWp(coqCode) {
           );
           block.type = 'input';
           block.start = true;
-          block.id = inputFieldId;
+          block.id = 'input-' + inputFieldId;
           inInputField = true;
         } else if (coqdoc === 'INPUT-END') {
           assert(
@@ -577,7 +578,7 @@ function coqToWp(coqCode) {
           );
           block.type = 'input';
           block.start = false;
-          block.id = inputFieldId;
+          block.id = 'input-' + inputFieldId;
           inInputField = false;
           inputFieldId++;
         } else if (coqdoc.indexOf('<hint>') !== -1) {
@@ -599,7 +600,7 @@ function coqToWp(coqCode) {
       startCode = finalCommentCloseIndex + 2;
     }
     const code = blockContent.substring(startCode).trim();
-    if (code !== -1) {
+    if (code !== '') {
       const block = {type: 'code', text: code};
       Notebook.setDefaultBlockState(block, inInputField);
       blocks.push(block);
