@@ -5,7 +5,7 @@ const util = require('util');
 const execFile = util.promisify(require('child_process').execFile);
 import {getAppdataPath, getResourcesPath} from './pathHelper';
 import read, {deleteFile, doesFileExist, readFile} from './readfile';
-import {blockToCoqText} from './notebook';
+import {wpToCoq} from './notebook';
 
 const extensions = ['wpn', 'v', 'vo'];
 
@@ -105,7 +105,7 @@ class VOCompiler {
       return;
     }
     const notebook = await readFile(filepath);
-    const text = blockToCoqText(notebook.blocks);
+    const text = wpToCoq(notebook.blocks);
 
     return new Promise((resolve, reject) => {
       fs.writeFile(filepath.substring(0, filepath.length - 3) + 'v', text,

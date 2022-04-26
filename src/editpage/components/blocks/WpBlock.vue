@@ -50,7 +50,22 @@ export default {
       });
       // Replace coqdoc-style lists (-) with markdown lists (*)
       converted = converted.replace(/^([ ]*)- /gm, '$1* ');
-      return md.render(converted);
+      // Remove coq-comment start & end
+      converted = converted.replace(/\(\*/g, '(💧');
+      converted = converted.replace(/\*\)/g, '💧)');
+      // Translate code
+      converted = converted.replace(/\[\[/g, '```');
+      converted = converted.replace(/\]\]/g, '```');
+      converted = converted.replace(/\[/g, '`');
+      converted = converted.replace(/\]/g, '`');
+      // Translate bold to md
+      converted = converted.replace(/#<\/?strong>#/g, '**');
+      // Translate italics to md
+      converted = converted.replace(/\W_/g, ' *');
+      converted = converted.replace(/_\W/g, '* ');
+
+      converted = md.render(converted);
+      return converted;
     },
     renderToSpan: function(text) {
       let htmlString = this.render(text);

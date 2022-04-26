@@ -1,10 +1,6 @@
-const fs = require('fs');
+import {assert} from 'console';
 
-const COQ_COMMENT_START = '(*';
-const COQ_SPECIAL_COMMENT_START = '(** ';
-const COQ_COMMENT_END = '*)';
-const COQ_INPUT_START = '(* Start of input area *)';
-const COQ_INPUT_END = '(* End of input area *)';
+const fs = require('fs');
 
 const DEFAULT_BLACKLIST = [
   // commands that allow introducing theorems without proof
@@ -275,7 +271,7 @@ class Notebook {
    * @return {String} text that will be displayed
    */
   parseToText(hints = true, textblocks = true, coqcode = true) {
-    return blockToCoqText(this.blocks);
+    return wpToCoq(this.blocks);
   }
 
   /**
@@ -343,6 +339,7 @@ class Notebook {
       }
 
       try {
+        // TODO move this to seperate function, also for coqToWp?
         this.clearContent();
         const read = JSON.parse(data);
 
@@ -503,13 +500,14 @@ class Notebook {
           this.createCodeBlock(coqText),
         ];
       } else {
-        this.blocks = this.coqToCodeAndText(coqText);
+        this.blocks = coqToWp(coqText);
       }
     };
 
     fs.readFile(filename, callback);
   }
 
+  // TODO: unused function, perhaps in future when WP docs are one big doc.
   /**
    * Cuts a string up in an array of strings. The cut points are
    * exactly at the beginning of the matches of the regular expression keywords
@@ -535,88 +533,146 @@ class Notebook {
 
     return stringPieces;
   }
-
-  /**
-   * Converts coq code to a notebook format
-   * This does not convert back any waterproof things and just puts all
-   * special comments in text blocks and the rest in code blocks.
-   * @param {String} coqCode the input code
-   * @return {Array} the blocks from the code
-   */
-  coqToCodeAndText(coqCode) {
-    const blocks = [];
-    let contentLeft = coqCode.replace(/\r/g, '');
-    while (contentLeft.length > 0) {
-      let nextComment = contentLeft.indexOf(COQ_SPECIAL_COMMENT_START);
-
-      if (nextComment < 0 || nextComment > 0) {
-        const codeBeforeComment = nextComment >= 0 ?
-            contentLeft.substring(0, nextComment) : contentLeft;
-        const codePieces =
-            this.cutStringBetweenKeywords(codeBeforeComment.trim());
-        for (let i = 0; i < codePieces.length; i++) {
-          blocks.push(this.createCodeBlock(codePieces[i]));
-        }
-        if (nextComment < 0) {
-          break;
-        }
-      }
-
-      contentLeft = contentLeft.substring(nextComment)
-          .replace(COQ_SPECIAL_COMMENT_START, '');
-
-      let startPos = 0;
-      let endPos = 0;
-      nextComment = contentLeft.indexOf(COQ_COMMENT_START, startPos);
-      let commentEnd = contentLeft.indexOf(COQ_COMMENT_END, endPos);
-
-      while (commentEnd >= 0 && nextComment >=0 && nextComment < commentEnd) {
-        startPos = nextComment + 2;
-        endPos = commentEnd + 2;
-        nextComment = contentLeft.indexOf(COQ_COMMENT_START, startPos);
-        commentEnd = contentLeft.indexOf(COQ_COMMENT_END, endPos);
-      }
-
-      if (commentEnd < 0) {
-        blocks.push(this.createTextBlock(contentLeft));
-        break;
-      }
-
-      blocks.push(this.createTextBlock(contentLeft.substring(0, commentEnd)));
-      contentLeft = contentLeft.substring(commentEnd)
-          .replace(COQ_COMMENT_END, '');
-    }
-
-    return blocks;
-  }
 }
 
 export default Notebook;
 
 /**
- * Convert blocks into a coq parsable text
- * @param {[]} blocks the list of blocks
- * @return {string} the coq valid text
+ * Importing from .v file according to specification.md
+ * @param {String} coqCode the input code
+ * @return {Array} the blocks from the code
  */
-function blockToCoqText(blocks) {
-  let coqContent = '';
-  for (const block of blocks) {
-    if (block.type === 'code') {
-      coqContent += block.text;
-    } else if (block.type === 'input') {
-      if (block.start) {
-        coqContent += COQ_SPECIAL_COMMENT_START + COQ_INPUT_START
-          + COQ_COMMENT_END;
-      } else {
-        coqContent += COQ_SPECIAL_COMMENT_START + COQ_INPUT_END
-          + COQ_COMMENT_END;
-      }
-    } else {
-      coqContent += COQ_SPECIAL_COMMENT_START + block.text + COQ_COMMENT_END;
+function coqToWp(coqCode) {
+  const blocks = []; // return array
+  let inInputField = false;
+  let inputFieldId = 1;
+  let i = 0;
+  while (i < coqCode.length) {
+    let next = coqCode.indexOf('(**', i+3);
+    if (next === -1) {
+      next = coqCode.length;
     }
-    coqContent += '\n';
+    const blockContent = coqCode.substring(i, next).trim();
+    const finalCommentCloseIndex = blockContent.lastIndexOf('*)');
+    if (finalCommentCloseIndex !== -1) {
+      const coqdoc = blockContent.substring(3, finalCommentCloseIndex).trim();
+      if (coqdoc === '') {
+        // The block could have been (***) or an empty text block. We don't add
+        // a block in that case.
+      } else {
+        const block = {};
+        if (coqdoc === 'INPUT-START') {
+          // FIXME: Open input blocks get closed before a next input
+          // block is opened, additional closures of input blocks are ignored
+          assert(
+              inInputField === false,
+              'INPUT-START encountered, but input section has already started.'
+          );
+          block.type = 'input';
+          block.start = true;
+          block.id = 'input-' + inputFieldId;
+          inInputField = true;
+        } else if (coqdoc === 'INPUT-END') {
+          assert(
+              inInputField === true,
+              'INPUT-END encountered, but not in an input section.'
+          );
+          block.type = 'input';
+          block.start = false;
+          block.id = 'input-' + inputFieldId;
+          inInputField = false;
+          inputFieldId++;
+        } else if (coqdoc.indexOf('<hint>') !== -1) {
+          block.type = 'hint';
+          block.text = coqdoc;
+        } else {
+          block.type = 'text';
+          block.text = coqdoc;
+        }
+        const withinInputFieldMarkers = inInputField && block.type !== 'input';
+        Notebook.setDefaultBlockState(block, withinInputFieldMarkers);
+        blocks.push(block);
+      }
+    }
+    let startCode;
+    if (finalCommentCloseIndex === -1) {
+      startCode = 0;
+    } else {
+      startCode = finalCommentCloseIndex + 2;
+    }
+    const code = blockContent.substring(startCode).trim();
+    if (code !== '') {
+      const block = {type: 'code', text: code};
+      Notebook.setDefaultBlockState(block, inInputField);
+      blocks.push(block);
+    }
+    i = next;
   }
-  return coqContent;
+  return blocks;
 }
 
-export {blockToCoqText, COQ_SPECIAL_COMMENT_START};
+/**
+ * Exporting to .v file according to specification.md
+ * @param {[]} blocks the list of blocks
+ * @return {string} the coq text
+ */
+function wpToCoq(blocks) {
+  const blockStrings = [];
+  let prevBlockType = null;
+  for (const block of blocks) {
+    if (block.type === 'code') {
+      if (prevBlockType === 'code') {
+        blockStrings.push('(***)');
+      }
+      blockStrings.push(block.text);
+    } else if (block.type === 'text') {
+      blockStrings.push('(** ' + convertToValid(block.text) + ' *)');
+    } else if (block.type === 'hint') {
+      const hint = block.text.split('<hint>');
+      if (hint.length == 2) {
+        blockStrings.push(
+            '(** ' + convertToValid(hint[0].trim()) + '\n<hint>\n'
+            + convertToValid(hint[1].trim()) + ' *)'
+        );
+      } else {
+        throw Error('Unexpected hint block: ' + hint.text);
+      }
+    } else if (block.type === 'input') {
+      if (block.start) {
+        blockStrings.push('(** INPUT-START *)');
+      } else {
+        blockStrings.push('(** INPUT-END *)');
+      }
+    } else {
+      throw Error('Can not interpret block type ' + block.type);
+    }
+
+    prevBlockType = block.type;
+  }
+  return blockStrings.join('\n');
+}
+
+/**
+ * Convert a block's text to something that is valid.
+ * @param {string} text
+ * @return {string} converted text
+ */
+function convertToValid(text) {
+  // Close string literal
+  let converted = text;
+
+  // Close all open comments
+  // Open comments at the beginning
+  const opens = (converted.match(/\(\*/g) || []).length;
+  const closes = (converted.match(/\*\)/g) || []).length;
+  if (opens > closes) {
+    converted = converted + ' *)' * (opens - closes);
+  } else if (closes > opens) {
+    converted = (closes - opens) * '(* ' + converted;
+  }
+  // Seperate setting for doubling $, %, #
+
+  return converted;
+}
+
+export {coqToWp, wpToCoq};

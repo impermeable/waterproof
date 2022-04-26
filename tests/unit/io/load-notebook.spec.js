@@ -67,7 +67,7 @@ if (process.env.NODE_ENV !== 'coverage') {
       const file = notebookPath + 'hint-block.wpn';
       const expected = {
         type: 'hint',
-        text: 'It\'s really not that hard.',
+        text: 'Click to open hint or something.\n<hint>\nHint itself.',
       };
 
       loadNotebook(file).then(() => {
