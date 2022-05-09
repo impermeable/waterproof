@@ -272,7 +272,6 @@ export default {
      */
     setTabURI: function(index, fileURI) {
       this.tabs[index].fileURI = fileURI;
-      console.log(this.tabs);
     },
 
     /**

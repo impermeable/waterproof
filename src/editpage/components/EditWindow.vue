@@ -115,7 +115,6 @@ export default {
   },
   data: function() {
     return {
-      testValue: 'Proof.',
       floating: false,
       executed: false,
       nextCursorPos: -1,
