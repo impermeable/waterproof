@@ -5,6 +5,7 @@
 import {app, BrowserWindow, ipcMain, protocol} from 'electron';
 import {execFile} from 'child_process';
 import path from 'path';
+import fs from 'fs';
 import {
   createProtocol,
 } from 'vue-cli-plugin-electron-builder/lib';
@@ -106,7 +107,7 @@ function createWindow() {
   });
 
   win.on('close', function(e) {
-    onActivity('close-requested');
+    onActivity({type: 'closing', running: running});
     writePendingActivities();
     if (running) {
       win.webContents.send('closing-application');
@@ -166,13 +167,12 @@ const pendingActivities = [];
 function onActivity(activity) {
   const timeSinceStart = new Date - startTime;
   Object.assign(activity, {sinceBoot: timeSinceStart});
-  console.log('ACTIVITY: ', activity);
   pendingActivities.push(activity);
 }
 
 const startTime = (() => {
   const now = new Date;
-  pendingActivities.push({sinceBoot: 0, time: now, type: 'boot'});
+  pendingActivities.push({type: 'boot', time: now, sinceBoot: 0});
   return +now;
 })();
 
@@ -180,8 +180,27 @@ ipcMain.on('activity', (event, args) => {
   onActivity(args);
 });
 
+const activityFile = (() => {
+  const basePath = app.getPath('userData');
+  const fileName = 'activity-' +
+      (+ new Date).toString().padStart(12, '0') + '.log';
+  return path.join(basePath, 'activity-logs', fileName);
+})();
+
+const activityStream = fs.createWriteStream(activityFile, {
+  flags: 'a', autoClose: true,
+});
+
 function writePendingActivities() {
-  console.log(pendingActivities);
+  if (process.env.NODE_ENV === 'test') {
+    console.log('Skipping activity log writing because of testing');
+    console.log('Would have written', pendingActivities);
+    pendingActivities.length = 0;
+    return;
+  }
+  pendingActivities.forEach((act) => {
+    activityStream.write(JSON.stringify(act) + '\n');
+  });
   pendingActivities.length = 0;
 }
 

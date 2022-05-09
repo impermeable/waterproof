@@ -1,10 +1,16 @@
-import {ipcRenderer} from 'electron';
+const ipcRenderer = (() => {
+  if (process.env.NODE_ENV === 'test') {
+    return {
+      send(channel, activity) {
+        console.log('Would have written', activity, 'to', channel);
+      },
+    };
+  } else {
+    return require('electron').ipcRenderer;
+  }
+})();
 
-/**
- * Write message to activity log (eventually)
- * @param {String} type type of message to write
- * @param {{}} details the details of the message
- */
 export function writeActivity(type, details = {}) {
+
   ipcRenderer.send('activity', Object.assign({type}, details));
 }
