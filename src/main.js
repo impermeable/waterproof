@@ -35,7 +35,7 @@ if (url.indexOf('?') >= 0) {
 
   for (const part of parts) {
     if (part.startsWith('location=')) {
-      const location = part.replace('location=', '');
+      const location = decodeURIComponent(part.replace('location=', ''));
       router.replace({name: 'edit', query: {location}});
     }
   }
