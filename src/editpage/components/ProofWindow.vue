@@ -18,6 +18,7 @@
                   :executeIndex="executedIndex"
                   :pendingIndex="startedExecutionIndex"
                   :tabindex="index" :event-bus="eventBus"
+                  :notebook-uri="notebook.filePath"
                   :showFind="showFind" :shortKeys="shortKeys" />
       <response-window :event-bus="eventBus"
                       :goals="goals" :addError="addError" :ready="ready">
@@ -38,6 +39,7 @@ import {UndoRedo} from './undoredo';
 import CoqInteraction from './mixins/CoqInteraction';
 import FileInteraction from './mixins/FileInteraction';
 import Vue from 'vue';
+import {writeActivity} from '@/activity-log';
 
 const snoopingOnEvents = false;
 
@@ -135,6 +137,11 @@ export default {
             'exercise sheet' : 'notebook';
         if (this.uri !== null) {
           this.notebook.read(() => {
+            writeActivity('loaded-file', {
+              file: this.uri,
+              tabIndex: this.index,
+            });
+
             // When the notebook is loaded, update to enable the buttons for
             // inserting blocks etc.
             this.updateButtons();
@@ -461,6 +468,30 @@ export default {
     this.eventBus.$on('exportToExerciseSheet', this.exportToExerciseSheet);
     this.eventBus.$on('compilewplib', this.compilewplib);
     this.eventBus.$on('close', this.close);
+
+    const noParamCoqEvent = (name) => {
+      return () => {
+        writeActivity('coq-exec-' + name, {
+          file: this.notebook.filePath,
+        });
+      };
+    };
+
+    this.eventBus.$on('coqNext', noParamCoqEvent('next'));
+    this.eventBus.$on('coqPrev', noParamCoqEvent('prev'));
+    this.eventBus.$on('coqAll', noParamCoqEvent('all'));
+    this.eventBus.$on('coqToCursor', () => {
+      writeActivity('coq-exec-to-cursor', {
+        targetIndex: this.findCodeIndex(),
+        file: this.notebook.filePath,
+      });
+    });
+    this.eventBus.$on('coqTo', (index) => {
+      writeActivity('coq-exec-to', {
+        targetIndex: index,
+        file: this.notebook.filePath,
+      });
+    });
 
     // When the proofwindow is mounted, update to disable all the buttons that
     // require a notebook to be opened
