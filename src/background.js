@@ -106,6 +106,8 @@ function createWindow() {
   });
 
   win.on('close', function(e) {
+    onActivity('close-requested');
+    writePendingActivities();
     if (running) {
       win.webContents.send('closing-application');
       e.preventDefault();
@@ -158,3 +160,34 @@ if (isDevelopment) {
     });
   }
 }
+
+const pendingActivities = [];
+
+function onActivity(activity) {
+  const timeSinceStart = new Date - startTime;
+  Object.assign(activity, {sinceBoot: timeSinceStart});
+  console.log('ACTIVITY: ', activity);
+  pendingActivities.push(activity);
+}
+
+const startTime = (() => {
+  const now = new Date;
+  pendingActivities.push({sinceBoot: 0, time: now, type: 'boot'});
+  return +now;
+})();
+
+ipcMain.on('activity', (event, args) => {
+  onActivity(args);
+});
+
+function writePendingActivities() {
+  console.log(pendingActivities);
+  pendingActivities.length = 0;
+}
+
+setInterval(() => {
+  if (pendingActivities.length === 0) {
+    onActivity({type: 'heartbeat'});
+  }
+  writePendingActivities();
+}, 30000);

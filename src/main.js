@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import App from './App.vue';
 import BootstrapVue from 'bootstrap-vue';
+import {writeActivity} from '@/activity-log';
 
 // add the coq mode to codemirror
 import './codemirror/CoqCodemirrorMode';
@@ -9,6 +10,7 @@ import './codemirror/CoqCodemirrorMode';
 import VueRouter from 'vue-router';
 import routes from './router';
 
+writeActivity('startup');
 
 Vue.config.productionTip = false;
 Vue.use(require('vue-shortkey'));
@@ -23,6 +25,13 @@ import store from './store/store';
 import './assets/sass/main.scss';
 
 const router = new VueRouter(routes);
+router.afterEach((to, from) => {
+  const location = to.query.location;
+  writeActivity('navigation', {
+    to: to.name,
+    location: location,
+  });
+});
 
 let url = window.location.href;
 
