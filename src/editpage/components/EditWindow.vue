@@ -91,6 +91,7 @@ import Find from './Find';
 import Gutter from './Gutter';
 import CodeExecution from './mixins/CodeExecution';
 import CodeMirrorHandler from './mixins/CodeMirrorHandler';
+import {writeActivity} from '@/activity-log';
 
 export default {
   name: 'EditWindow',
@@ -112,6 +113,7 @@ export default {
     shortKeys: Object,
     tabindex: Number,
     eventBus: Object,
+    notebookUri: String,
   },
   data: function() {
     return {
@@ -158,6 +160,10 @@ export default {
       }
     },
     setFocusedElement: function(index, find = false) {
+      writeActivity('focusing-element', {
+        tabIndex: index,
+        file: this.notebookUri,
+      });
       if (this.focusedElement === index) {
         // If we click again on the element that already has focus, it should
         // already have a CodeMirror open. So, we make sure to just focus on it
