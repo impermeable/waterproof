@@ -7,7 +7,7 @@ chai.use(require('chai-string'));
 const expect = chai.expect;
 
 const testcasePath = './tests/unit/io/test-porting/';
-const tests = ['tutorial'];
+const tests = ['tutorial', 'block_structure'];
 
 const notebook = new Notebook;
 
@@ -32,6 +32,10 @@ function loadNotebook(file) {
   });
 }
 
+function normalizeLineEndings(s) {
+  return s.replace(/\r/g, '').replace(/\n/g, '');
+}
+
 if (process.env.NODE_ENV !== 'coverage') {
   describe('Full standardized test suite', () => {
     for (let i = 0; i < tests.length; i++) {
@@ -43,7 +47,9 @@ if (process.env.NODE_ENV !== 'coverage') {
         loadNotebook(testcasePath + fname + '.wpe').then(() => {
           /** EXPORTING */
           const text = notebook.parseToText();
-          expect(text).to.equal(v);
+          expect(normalizeLineEndings(text)).to.equal(
+              normalizeLineEndings(v)
+          );
 
           /** IMPORTING */
           const blocks = coqToWp(v);
@@ -53,7 +59,9 @@ if (process.env.NODE_ENV !== 'coverage') {
             const b = notebook.blocks[j];
             expect(a.type).to.equal(b.type);
             if (b.text !== undefined) {
-              expect(a.text).to.equal(b.text.trim());
+              expect(normalizeLineEndings(a.text)).to.equal(
+                  normalizeLineEndings(b.text.trim())
+              );
             }
             expect(a.start).to.equal(b.start);
             //  expect(a.id).to.equal(b.id);
