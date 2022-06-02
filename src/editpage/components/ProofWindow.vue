@@ -140,6 +140,7 @@ export default {
             writeActivity('loaded-file', {
               file: this.uri,
               tabIndex: this.index,
+              isExercise: this.notebook.exerciseSheet,
             });
 
             // When the notebook is loaded, update to enable the buttons for

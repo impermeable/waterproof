@@ -184,6 +184,7 @@ const activityFile = (() => {
   const basePath = app.getPath('userData');
   const fileName = 'activity-' +
       (+ new Date).toString().padStart(12, '0') + '.log';
+  fs.mkdirSync(path.join(basePath, 'activity-logs'), {recursive: true});
   return path.join(basePath, 'activity-logs', fileName);
 })();
 
