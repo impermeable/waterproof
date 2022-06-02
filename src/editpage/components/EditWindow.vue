@@ -159,10 +159,35 @@ export default {
         return 'text-block';
       }
     },
+    exerciseIndexFor(index) {
+      if (index >= this.blocks.length) {
+        return {part: -1, inside: false, error: 'out-of-range'};
+      }
+
+      let beforeExercise = 0;
+      let inside = false;
+
+      for (let i = 0; i < index; i++) {
+        const block = this.blocks[i];
+        if (block.type !== 'input') {
+          continue;
+        }
+
+        if (block.start) {
+          inside = true;
+        } else {
+          ++beforeExercise;
+        }
+      }
+
+      return {inOrBeforeInput: beforeExercise, inside};
+    },
     setFocusedElement: function(index, find = false) {
       writeActivity('focusing-element', {
-        tabIndex: index,
+        tabIndex: this.tabIndex,
         file: this.notebookUri,
+        blockIndex: index,
+        exerciseIndex: this.exerciseIndexFor(index),
       });
       if (this.focusedElement === index) {
         // If we click again on the element that already has focus, it should
