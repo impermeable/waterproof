@@ -1,0 +1,27 @@
+{
+  "exerciseSheet": true,
+  "blocks": [
+    {
+      "type": "text",
+      "text": "text block"
+    },
+    {
+      "type": "code",
+      "text": "code"
+    },
+    {
+      "type": "hint",
+      "text": "before\n<hint>\nafter"
+    },
+    {
+      "type": "input",
+      "start": true,
+      "id": "input-1"
+    },
+    {
+      "type": "input",
+      "start": false,
+      "id": "input-1"
+    }
+  ]
+}
