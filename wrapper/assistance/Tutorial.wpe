@@ -7,7 +7,7 @@
     },
     {
       "type": "code",
-      "text": "Require Import Rbase.\nRequire Import Rfunctions.\n\nRequire Import Waterproof.AllTactics.\nRequire Import Waterproof.notations.notations.\nRequire Import Waterproof.load_database.RealsAndIntegers.\n\nOpen Scope R_scope.\n\nSet Default Goal Selector \"!\".\nSet Default Timeout 5."
+      "text": "Require Import Rbase.\nRequire Import Rfunctions.\n\nRequire Import Waterproof.AllTactics.\nRequire Import Waterproof.notations.notations.\nRequire Import Waterproof.load_database.RealsAndIntegers.\nRequire Import Waterproof.theory.analysis.sup_and_inf_new_definitions.\n\nOpen Scope R_scope.\nOpen Scope subset_scope.\n\nSet Default Goal Selector \"!\".\nSet Default Timeout 5."
     },
     {
       "type": "text",
@@ -179,7 +179,7 @@
     },
     {
       "type": "text",
-      "text": "\n(In this particular case we could also have written `Choose y := 2`, but in general the brackets are important.)\n\nWe now need to show that (y<3) (see **Proof progress** after executing the previous sentence). We can record this for our own convenience."
+      "text": "\n(In this particular case we could also have written `Choose y := 2`, but in general the brackets are important.)\n\nWe now need to show that ($y<3$) (see **Proof progress** after executing the previous sentence). We can record this for our own convenience."
     },
     {
       "type": "code",
@@ -331,11 +331,11 @@
     },
     {
       "type": "code",
-      "text": "\nAssume a_lt_0 : (a < 0)."
+      "text": "\nAssume that (a < 0) (i)."
     },
     {
       "type": "text",
-      "text": "\nThe **name** of this assumption is in this case **a_lt_0**. What you are actually assuming is written after the colon, namely **a < 0**. Note how after executing the sentence, the assumption $a < 0$ is added under **Proof progress** with the name **a_lt_0**.\n\nWe finish the proof."
+      "text": "\nIn the above we have labeled the assumed property ($a < 0$) with ($i$),\nyou can use this label to refer to the fact that ($a < 0$) througout the proof. Labeling assumptions is optional.\n\nWe finish the proof."
     },
     {
       "type": "code",
@@ -369,19 +369,19 @@
     },
     {
       "type": "text",
-      "text": "* 6. Chains of (in)equalities\n\nAs a last step of a proof in Analysis, we often have a chain of (in)equalities. Consider for instance a case in which we would like to show that for all $ε : \\mathbb{R}$, if $ε > 0$ then $\\min(\\epsilon, 1) ≤ 2$. \n\nHere are the statement and a possible proof in Waterproof. Note that we need to write `Rmin x y` for the minimum of two real numbers $x$ and $y$."
+      "text": "* 6. Chains of (in)equalities\n\nAs a last step of a proof in Analysis, we often have a chain of (in)equalities. Consider for instance a case in which we would like to show that for all $ε : \\mathbb{R}$, if $ε > 0$ then $\\min(\\epsilon, 1) ≤ 2$. \n\nHere are the statement and a possible proof in Waterproof. Note that we need to write `Rmin(x,y)` for the minimum of two real numbers $x$ and $y$."
     },
     {
       "type": "code",
-      "text": "\nLemma example_inequalities :\n  ∀ ε : ℝ, ε > 0 ⇒ Rmin ε 1 < 2."
+      "text": "\nLemma example_inequalities :\n  ∀ ε : ℝ, ε > 0 ⇒ Rmin(ε,1) < 2."
     },
     {
       "type": "code",
-      "text": "Proof.\nTake ε : ℝ.\nAssume ε_gt_0 : (ε > 0).\nWe conclude that\n  (&  Rmin ε 1 &≤ 1\n               &< 2).\nQed."
+      "text": "Proof.\nTake ε : ℝ.\nAssume that (ε > 0).\nWe conclude that (& Rmin(ε,1) &≤ 1 &< 2).\nQed."
     },
     {
       "type": "text",
-      "text": "\nNote how we used special notation for the chain of inequalities\n\n``\n(&   Rmin ε 1 &≤ 1\n              &< 2).\n``\n\nWe think of this statement that **and** `Rmin ε 1 ≤ 1` **and** `1 < 2`. \n\n\n**IMPORTANT**: Here are a few issues to pay attention to:\n- After opening the first parenthesis, you need to write a '&' sign.\n- Directly in front of every comparison operator (such as '≤'), you also need to put the '&' sign.\n- Chains of inequalities go from smaller to larger. So only $=$, $≤$ and $<$ are supported."
+      "text": "\nNote how we used special notation for the chain of inequalities\n\n``\n(& Rmin(ε,1) &≤ 1 &< 2).\n``\n\nWe think of this statement that **and** `Rmin(ε,1) ≤ 1` **and** `1 < 2`. \n\n\n**IMPORTANT**: Here are a few issues to pay attention to:\n- After opening the first parenthesis, you need to write a '&' sign.\n- Directly in front of every comparison operator (such as '≤'), you also need to put the '&' sign."
     },
     {
       "type": "text",
@@ -389,11 +389,11 @@
     },
     {
       "type": "code",
-      "text": "Lemma exercise_inequalities :\n  ∀ ε : ℝ, ε > 0 ⇒ Rmin (ε / 2) 1 < ε.\n  \nProof."
+      "text": "Lemma exercise_inequalities :\n  ∀ ε : ℝ, ε > 0 ⇒ Rmin(ε / 2, 1) < ε.\n  \nProof."
     },
     {
       "type": "hint",
-      "text": "Click to open hint.\n<hint>\nAt the end of your proof, use the following chain of inequalities \n\n```\nRmin (ε / 2) 1 ≤ ε / 2 < ε\n```\n\nbut pay attention to the issues mentioned above: in particular use the '&' sign at the appropriate places."
+      "text": "Click to open hint.\n<hint>\nAt the end of your proof, use the following chain of inequalities \n\n`\nRmin(ε / 2, 1) ≤ ε / 2 < ε\n`\n\nbut use the '&' sign at the appropriate places."
     },
     {
       "type": "input",
@@ -419,11 +419,11 @@
     },
     {
       "type": "code",
-      "text": "Lemma example_backwards :\n  ∀ ε : ℝ,\n    ε > 0 ⇒\n      3 + Rmax ε 2 ≥ 3."
+      "text": "Lemma example_backwards :\n  ∀ ε : ℝ,\n    ε > 0 ⇒\n      3 + Rmax(ε,2) ≥ 3."
     },
     {
       "type": "code",
-      "text": "Proof.\nTake ε : ℝ.\nAssume ε_gt_0 : (ε > 0)."
+      "text": "Proof.\nTake ε : ℝ.\nAssume that (ε > 0)."
     },
     {
       "type": "text",
@@ -431,7 +431,7 @@
     },
     {
       "type": "code",
-      "text": "\nIt suffices to show that (Rmax ε 2 ≥ 0)."
+      "text": "\nIt suffices to show that (Rmax(ε,2) ≥ 0)."
     },
     {
       "type": "text",
@@ -439,7 +439,7 @@
     },
     {
       "type": "code",
-      "text": "\nRewrite inequality (Rmax ε 2) \"≥\" (2) \"≥\" 0.\nQed."
+      "text": "\nWe conclude that (& Rmax(ε,2) &≥ 2 &> 0).\nQed."
     },
     {
       "type": "text",
@@ -447,7 +447,7 @@
     },
     {
       "type": "code",
-      "text": "Lemma exercise_backwards :\n  ∀ ε : ℝ, ε > 0 ⇒ 5 - Rmax ε 3 ≤ 5."
+      "text": "Lemma exercise_backwards :\n  ∀ ε : ℝ, ε > 0 ⇒ 5 - Rmax(ε,3) ≤ 5."
     },
     {
       "type": "input",
@@ -473,31 +473,31 @@
     },
     {
       "type": "code",
-      "text": "Lemma example_smaller_steps :\n  ∀ ε : ℝ, ε > 0 ⇒\n    4 - Rmax ε 1 ≤ 3."
+      "text": "Lemma example_smaller_steps :\n  ∀ ε : ℝ, ε > 0 ⇒\n    4 - Rmax(ε,1) ≤ 3."
     },
     {
       "type": "code",
-      "text": "Proof.\nTake ε : ℝ.\nAssume ε_gt_0 : (ε > 0).\n"
+      "text": "Proof.\nTake ε : ℝ.\nAssume that (ε > 0).\n"
     },
     {
       "type": "text",
-      "text": "\nWe now make an intermediate step. We let Waterproof automatically show that `(Rmax ε 1 ≥ 1)`, and we call that statement `Rmax_gt_1`."
+      "text": "\nWe now make an intermediate step. We let Waterproof automatically show that `Rmax(ε,1) ≥ 1`."
     },
     {
       "type": "code",
-      "text": "\nIt holds that Rmax_gt_1 : (Rmax ε 1 ≥ 1)."
+      "text": "\nIt holds that (Rmax ε 1 ≥ 1) (i)."
     },
     {
       "type": "text",
-      "text": "\nNow Waterproof can finish the proof."
+      "text": "\nNote that we have labeled the property that `Rmax(ε,1) ≥ 1` with `(i)` like we did when we made an assumption. Labeling is again optional.\n\nNow Waterproof can finish the proof."
     },
     {
       "type": "code",
-      "text": "\nWe conclude that (4 - Rmax ε 1 ≤ 3).\nQed."
+      "text": "\nWe conclude that (4 - Rmax(ε,1) ≤ 3).\nQed."
     },
     {
       "type": "text",
-      "text": "\nSometimes, you also need to tell Waterproof what lemma to use in proving the intermediate step. The following line would tell Waterproof to use the lemma called `Rmax_r`.\n\n```\nBy Rmax_r it holds that\n  Rmax_gt_1 : (Rmax ε 1 ≥ 1). \n```\n\nFor very difficult statements, it may happen that Waterproof cannot find a proof even when providing the name of a lemma. In that case you can first make an intermediate claim.\n\n```\nWe claim that Rmax_gt_1 : (Rmax ε 1 ≥ 1).\n{\n  (* proof of claim *)\n}\n```"
+      "text": "\nSometimes, you also need to tell Waterproof what lemma to use in proving the intermediate step. The following line would tell Waterproof to use the lemma called `Rmax_r`.\n\n`\nBy Rmax_r it holds that (Rmax(ε,1) ≥ 1). \n`\n\nFor very difficult statements, it may happen that Waterproof cannot find a proof even when providing the name of a lemma. In that case you can first make an intermediate claim.\n\n`\nWe claim that (Rmax ε 1 ≥ 1).\n{` _proof of claim_ `}`"
     },
     {
       "type": "text",
@@ -505,7 +505,7 @@
     },
     {
       "type": "code",
-      "text": "\nLemma exercise_smallers_steps :\n  ∀ ε : ℝ, ε > 0 ⇒\n    3 + Rmax 2 ε ≥ 5. \n    \nProof."
+      "text": "\nLemma exercise_smallers_steps :\n  ∀ ε : ℝ, ε > 0 ⇒\n    3 + Rmax(2,ε) ≥ 5. \n    \nProof."
     },
     {
       "type": "input",
@@ -535,23 +535,23 @@
     },
     {
       "type": "code",
-      "text": "Proof.\nTake x : ℝ. Take y : ℝ.\nAssume del_cond : (∀ δ : ℝ, δ > 0 ⇒ x < δ).\nAssume eps_cond : (∀ ε : ℝ, ε > 0 ⇒ y < ε).\n"
+      "text": "Proof.\nTake x : ℝ. Take y : ℝ.\nAssume that (∀ δ : ℝ, δ > 0 ⇒ x < δ) (i).\nAssume that (∀ ε : ℝ, ε > 0 ⇒ y < ε) (ii).\n"
     },
     {
       "type": "text",
-      "text": "We can now **use** the statement that we called `del_cond` with $δ = 1/2$. We can do this by substituting $\\delta = 1/2$ as follows."
+      "text": "We can now **use** the statement that we labeled `(i)` with $δ = 1/2$. We can do this by substituting $\\delta = 1/2$ as follows."
     },
     {
       "type": "code",
-      "text": "\nBy del_cond it holds that x_lt_half : (x < 1/2)."
+      "text": "\nBy (i) it holds that (x < 1/2)."
     },
     {
       "type": "text",
-      "text": "Similarly, we can use the statement that we called `eps_cond`. We can also indicate explicitly that we choose $ε = 1/2$ in the statement by writing `By (eps_cond (1/2)) ...` as in"
+      "text": "Similarly, we can use the statement that we labaled `(ii)`. We can also indicate explicitly that we choose $ε = 1/2$ in the statement by writing `By ((ii) (1/2)) ...` as in"
     },
     {
       "type": "code",
-      "text": "\nBy (eps_cond (1/2)) it holds that y_lt_half : (y < 1/2).\n\nWe conclude that (x + y < 1).\nQed."
+      "text": "\nBy ((ii) (1/2)) it holds that (y < 1/2).\n\nWe conclude that (x + y < 1).\nQed."
     },
     {
       "type": "text",
@@ -589,7 +589,7 @@
     },
     {
       "type": "code",
-      "text": "Proof.\nTake x : ℝ.\nAssume exists_y_with_prop : (∃ y : ℝ, 10 < y ∧ y < x).\n"
+      "text": "Proof.\nTake x : ℝ.\nAssume that (∃ y : ℝ, 10 < y ∧ y < x) (i).\n"
     },
     {
       "type": "text",
@@ -597,11 +597,11 @@
     },
     {
       "type": "code",
-      "text": "\nChoose y such that \n  y_gt_10_and_x_gt_y according to exists_y_with_prop.\n"
+      "text": "\nObtain y according to (i), so for y : ℝ it holds that (10 < y ∧ y < x).\n"
     },
     {
       "type": "code",
-      "text": "We conclude that\n  (&  10 &< y\n         &< x).\nQed."
+      "text": "We conclude that (& 10 &< y &< x).\nQed."
     },
     {
       "type": "text",
@@ -639,7 +639,7 @@
     },
     {
       "type": "code",
-      "text": "Proof. \nTake x : ℝ.\nAssume eps_cond : (∀ ε : ℝ, ε > 0 ⇒ x < ε).\nWe need to show that (x ≤ 0)."
+      "text": "Proof. \nTake x : ℝ.\nAssume that (∀ ε : ℝ, ε > 0 ⇒ x < ε) (i).\nWe need to show that (x ≤ 0)."
     },
     {
       "type": "text",
@@ -651,11 +651,11 @@
     },
     {
       "type": "text",
-      "text": "\nNote how we need to show that $¬ (¬ (x ≤ 0))$. To do so, we first need to assume that $¬ (x ≤ 0)$ and try to arrive at a contradiction."
+      "text": "\nNote how we need to show that $¬ (¬ (x ≤ 0))$. To do so, we first need to assume that $¬ (x ≤ 0)$ and then try to derive a contradiction."
     },
     {
       "type": "code",
-      "text": "\nAssume not_x_le_0 : (¬ (x ≤ 0)).\nIt holds that x_gt_0 : (x > 0).\nBy eps_cond it holds that x_lt_x_div_2 : (x < x/2).\nIt holds that x_le_0 : (x ≤ 0)."
+      "text": "\nAssume that (¬ (x ≤ 0)).\nIt holds that (x > 0).\nBy (i) it holds that (x < x/2).\nIt holds that (x ≤ 0)."
     },
     {
       "type": "text",
@@ -705,7 +705,7 @@
     },
     {
       "type": "code",
-      "text": "Lemma example_cases : \n  ∀ x : ℝ, ∀ y : ℝ,\n    Rmax x y = x ∨ Rmax x y = y."
+      "text": "Lemma example_cases : \n  ∀ x : ℝ, ∀ y : ℝ,\n    Rmax(x,y) = x ∨ Rmax(x,y) = y."
     },
     {
       "type": "code",
@@ -717,7 +717,7 @@
     },
     {
       "type": "code",
-      "text": "\nEither (x < y) or (x ≥ y).\n- Case (x < y).\n  It suffices to show that (Rmax x y = y).\n  By Rmax_right we conclude that (Rmax x y = y).\n- Case (x ≥ y).\n  It suffices to show that (Rmax x y = x).\n  By Rmax_left we conclude that (Rmax x y = x).\nQed."
+      "text": "\nEither (x < y) or (x ≥ y).\n- Case (x < y).\n  It suffices to show that (Rmax(x,y) = y).\n  We conclude that (Rmax(x,y) = y).\n- Case (x ≥ y).\n  It suffices to show that (Rmax(x,y) = x).\n  We conclude that (Rmax(x,y) = x).\nQed."
     },
     {
       "type": "text",
@@ -725,7 +725,7 @@
     },
     {
       "type": "code",
-      "text": "Lemma exercises_cases :\n  ∀ x : ℝ, ∀ y : ℝ,\n    Rmin x y = x ∨ Rmin x y = y.\n    \nProof."
+      "text": "Lemma exercises_cases :\n  ∀ x : ℝ, ∀ y : ℝ,\n    Rmin(x,y) = x ∨ Rmin(x,y) = y.\n    \nProof."
     },
     {
       "type": "hint",
@@ -829,7 +829,7 @@
     },
     {
       "type": "code",
-      "text": "\n- We need to show that (x < y ⇒ y > x ).\n  Assume x_lt_y : (x < y).\n  We conclude that (y > x).\n- We need to show that (y > x ⇒ x < y ).\n  Assume y_gt_x : (y > x).\n  We need to show that (x < y).\n  We conclude that (x < y).\nQed."
+      "text": "\n- We need to show that (x < y ⇒ y > x ).\n  Assume that (x < y).\n  We conclude that (y > x).\n- We need to show that (y > x ⇒ x < y ).\n  Assume that (y > x).\n  We need to show that (x < y).\n  We conclude that (x < y).\nQed."
     },
     {
       "type": "text",
@@ -859,15 +859,15 @@
     },
     {
       "type": "text",
-      "text": "* 15. Proof by induction\n\nThe following example shows how one could use mathematical induction to show a statement of the form\n\n $$∀ k : ℕ, ... $$\n\nNote that Waterproof will usually interpret any statement such as an inequality `n(k +1 ) > n k` as a statement comparing real numbers, while in this exercise we need statements that compare natural numbers. To indicate this, we have to write `(n (k+1) > n k)%nat` instead."
+      "text": "* 15. Proof by induction\n\nThe following example shows how one could use mathematical induction to show a statement of the form\n\n $$∀ k : ℕ, ... $$\n\nNote that Waterproof will usually interpret any statement such as an inequality `n(k+1) > n(k)` as a statement comparing real numbers, while in this exercise we need statements that compare natural numbers. To indicate this, we have to write `(n(k+1) > n(k))%nat` instead."
     },
     {
       "type": "code",
-      "text": "Lemma example_induction :\n  ∀ n : ℕ → ℕ, (∀ k : ℕ, (n k < n (k + 1))%nat) ⇒\n    ∀ k : ℕ, (k ≤ n k)%nat."
+      "text": "Lemma example_induction :\n  ∀ n : ℕ → ℕ, (∀ k : ℕ, (n(k) < n(k + 1))%nat) ⇒\n    ∀ k : ℕ, (k ≤ n(k))%nat."
     },
     {
       "type": "code",
-      "text": "Proof.\nTake n : (ℕ → ℕ).\nAssume n_increasing : (∀ k : ℕ, (n k < n (k + 1))%nat)."
+      "text": "Proof.\nTake n : (ℕ → ℕ).\nAssume that (∀ k : ℕ, n(k) < n(k + 1))%nat."
     },
     {
       "type": "text",
@@ -875,7 +875,7 @@
     },
     {
       "type": "code",
-      "text": "\nWe use induction on k.\n- We first show the base case, namely ( (0 ≤ n 0)%nat ).\n  We conclude that (0 ≤ n 0)%nat.\n- We now show the induction step.\n  Assume IH : (k ≤ n k)%nat.\n  It holds that n_k_lt_n_k_plus_1 : (n k < n (k + 1))%nat.\n  We conclude that (k + 1 ≤ n (k + 1))%nat.\nQed."
+      "text": "\nWe use induction on k.\n- We first show the base case, namely (0 ≤ n(0))%nat.\n  We conclude that (0 ≤ n(0))%nat.\n- We now show the induction step.\n  Assume that (k ≤ n(k))%nat.\n  It holds that (n(k) < n(k + 1))%nat.\n  We conclude that (k + 1 ≤ n(k + 1))%nat.\nQed."
     },
     {
       "type": "text",
@@ -883,7 +883,7 @@
     },
     {
       "type": "code",
-      "text": "Lemma exercise_induction :\n  ∀ f : ℕ → ℕ, (∀ k : ℕ, (f (k + 1) = f k)%nat) ⇒\n    ∀ k : ℕ, (f k = f 0)%nat.\n    \nProof."
+      "text": "Lemma exercise_induction :\n  ∀ f : ℕ → ℕ, (∀ k : ℕ, (f(k + 1) = f(k))%nat) ⇒\n    ∀ k : ℕ, (f(k) = f(0))%nat.\n    \nProof."
     },
     {
       "type": "input",
@@ -925,7 +925,7 @@
     },
     {
       "type": "text",
-      "text": "At this stage, Waterproof does not know how to continue. We could immediately reformulate the goal by writing `We need to show that (x^2 ≥ 0).`, or we could write \n\n```\nWe conclude that\n  (& square x &= x^2\n              &≥ 0). \n```\nHowever these options aren't available if you do not know the definition of `square`. In that case you could write"
+      "text": "At this stage, Waterproof does not know how to continue. We could immediately reformulate the goal by writing \n\n`We need to show that (x^2 ≥ 0).`\n, or we could write \n\n`\nWe conclude that\n  (& square x &= x^2\n              &≥ 0). \n`\n\nHowever these options aren't available if you do not know the definition of `square`. In that case you could write"
     },
     {
       "type": "code",
@@ -941,7 +941,7 @@
     },
     {
       "type": "text",
-      "text": "You can also expand the definition in a hypothesis. For instance,\n```\nExpand the definition of square in H.\n```\nwould expand the definition of `square` in the hypothesis with the name `H`."
+      "text": "You can also expand the definition in a hypothesis. For instance,\n\n`\nExpand the definition of square in (i).\n`\n\nwould expand the definition of `square` in the hypothesis with the label `(i)`."
     },
     {
       "type": "text",
@@ -968,6 +968,56 @@
       "type": "input",
       "start": false,
       "id": "input-14"
+    },
+    {
+      "type": "text",
+      "text": "\nFor some mathematical objects we use natural language as part of the notation. For example, we write `0 is a lower bound of [0,1]` for the logical expression $∀x : ℝ, x : [0,1] ⇒ 0 ≤ x$, which is the definition of $0$ being a lower bound of the interval $[0,1]$.\n\nSuppose we want to show the following."
+    },
+    {
+      "type": "code",
+      "text": "Lemma example_expand_2 : \n  0 is a lower bound of [0,1].\n  \nProof."
+    },
+    {
+      "type": "text",
+      "text": "\nNow we don't know how to continue, but like with `square`, we can use \n\n`Expand the definition of lower bound.`\n\nto turn our goal into a familiar logical formula.\n"
+    },
+    {
+      "type": "code",
+      "text": "Expand the definition of lower bound."
+    },
+    {
+      "type": "text",
+      "text": "\n**Note** that we only need to use the main adjective-noun pair `lower bound` instead of the full notation `is a lower bound of`.\n\nWe continue the proof."
+    },
+    {
+      "type": "code",
+      "text": "That is, write the goal as (for all a : ℝ, a : [0,1] ⇒ 0 ≤ a).\nTake a : ℝ.\nAssume that (a : [0,1]).\nWe conclude that (0 ≤ a).\nQed."
+    },
+    {
+      "type": "text",
+      "text": "** Try it yourself: expand another definition"
+    },
+    {
+      "type": "code",
+      "text": "Lemma exercise_expand_2 : \n  100 is an upper bound of [0,1].\n  \nProof."
+    },
+    {
+      "type": "input",
+      "start": true,
+      "id": "input-17"
+    },
+    {
+      "type": "text",
+      "text": "Write your solution here..."
+    },
+    {
+      "type": "code",
+      "text": "\nAdmitted."
+    },
+    {
+      "type": "input",
+      "start": false,
+      "id": "input-17"
     }
   ]
 }
