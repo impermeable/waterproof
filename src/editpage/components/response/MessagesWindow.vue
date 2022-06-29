@@ -48,6 +48,8 @@
 </template>
 
 <script>
+import {writeActivity} from '@/activity-log';
+
 const ignoredErrors = [
   // 'Nested proofs are not allowed unless you ' +
   //   'turn option Nested Proofs Allowed on',
@@ -170,6 +172,14 @@ export default {
           // bit strange but allows for no timeout (also for testing)
           this.showingAddError = true;
         }
+      }
+    },
+    showingAddError(newValue) {
+      if (newValue && this.haveAddError) {
+        writeActivity('coq-add-error-shown', {
+          error: this.addError.message,
+          file: this.addError.file,
+        });
       }
     },
   },

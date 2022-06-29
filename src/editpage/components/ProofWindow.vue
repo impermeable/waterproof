@@ -243,6 +243,12 @@ export default {
         this.goals = goal;
       }
       this.executedIndex = index;
+      const sentence = this.coq.getState().getSentenceEndingAt(index);
+      writeActivity('coq-success-sentence', {
+        text: sentence.text,
+        coqID: sentence.sentenceId,
+        file: this.notebook.filePath,
+      });
 
       // Also clear errors
       this.notebook.blocks
@@ -286,6 +292,14 @@ export default {
       this.notebook.blocks
           .filter((block) => block.type === 'code')
           .forEach((block) => block.state.error = null);
+
+      writeActivity('coq-execute-error', {
+        error: error,
+        beginIndex: errorBeginIndex,
+        endIndex: errorEndIndex,
+        coqID: sentence.sentenceId,
+        file: this.notebook.filePath,
+      });
 
       let index = 0;
       for (const block of this.notebook.blocks) {

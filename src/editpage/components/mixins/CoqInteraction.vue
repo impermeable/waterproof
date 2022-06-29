@@ -153,7 +153,11 @@ export default {
      * @param {number} errorIndex  The index where the error occured
      */
     setContentError: function(error, errorIndex) {
-      this.addError = {message: error, index: errorIndex};
+      this.addError = {
+        message: error,
+        index: errorIndex,
+        file: this.notebook.filePath,
+      };
     },
 
     executeStarted: function(index) {
