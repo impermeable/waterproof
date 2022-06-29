@@ -219,6 +219,11 @@ class SerapiState extends CoqState {
     return text.slice(this.sentences[sentenceNr].beginIndex,
         this.sentences[sentenceNr].endIndex);
   }
+
+  getSentenceEndingAt(endIndex) {
+    // FIXME: This should probably be chances (same with other indices)
+    return this.sentences.find((sen) => sen.endIndex === endIndex);
+  }
 }
 
 export default SerapiState;

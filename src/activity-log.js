@@ -11,6 +11,5 @@ const ipcRenderer = (() => {
 })();
 
 export function writeActivity(type, details = {}) {
-
   ipcRenderer.send('activity', Object.assign({type}, details));
 }
