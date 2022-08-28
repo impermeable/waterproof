@@ -105,7 +105,7 @@ export default {
         query = command + ' ' + query + '.';
       }
 
-      this.eventBus.$emit('coqSearch', query);
+      this.eventBus.$emit('coqSearch', {query});
     },
   },
 };

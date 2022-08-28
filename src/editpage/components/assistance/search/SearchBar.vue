@@ -45,7 +45,7 @@ export default {
     showResults() {
       this.eventBus.$emit('on-proof-window', {
         event: 'coqSearch',
-        payload: this.searchText,
+        payload: {query: this.searchText},
       });
     },
     showTactics() {
