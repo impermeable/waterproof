@@ -569,6 +569,14 @@ export default {
       });
     });
 
+    this.eventBus.$on('coqSearch', ({query, fromExample = null}) => {
+      writeActivity('coq-search', {
+        searchQuery: query,
+        fromExample,
+        file: this.notebook.filePath,
+      });
+    });
+
     // When the proofwindow is mounted, update to disable all the buttons that
     // require a notebook to be opened
     this.updateButtons();
