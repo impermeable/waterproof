@@ -1,5 +1,6 @@
 <script>
 import TCPManager from '../../../coq/serapi/workers/TCPManager';
+import {writeActivity} from '@/activity-log';
 
 export default {
   name: 'CoqInteraction',
@@ -56,7 +57,16 @@ export default {
      * Executes the next coq sentence
      */
     coqNext: function() {
-      this.coq.executeNext().then();
+      this.coq.executeNext().then((val) => {
+        if (typeof val === 'object' && val.noSentenceToExecute === true) {
+          writeActivity('coq-next-beyond-sentences', {
+            file: this.notebook.filePath,
+            tabIndex: this.index,
+            executedIndex: this.executedIndex,
+            addErrorIndex: this.addError.index,
+          });
+        }
+      });
     },
 
     /**
