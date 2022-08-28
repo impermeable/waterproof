@@ -169,6 +169,7 @@ export default {
     this.eventBus.$on('notebook-opened', this.updateButtons);
     this.eventBus.$on('swap-tooltips', this.swapTooltips);
 
+    // FIXME: tooltips-hidden should come from settings
     if (window.localStorage.getItem('tooltips-hidden')) {
       this.tooltips = false;
     }
