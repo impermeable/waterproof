@@ -100,7 +100,7 @@ export default {
       this.coq.getAST(sentenceNr);
     },
 
-    coqSearch: function(detail) {
+    coqSearch: function({query: detail}) {
       if (!detail || detail === this.lastSearch) {
         this.$store.commit('openSideWindow', 0);
         return;
