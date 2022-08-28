@@ -77,6 +77,28 @@
               </div>
             </td>
           </tr>
+          <tr>
+            <td>
+              <h6>Logging:</h6>
+            </td>
+            <td style='width: 50%; min-width: 60px'>
+              <h6>{{logOptionNames[currentLogOption]}}</h6>
+            </td>
+            <td>
+              <div style='width: 100%' class="dropdown">
+                <button style='width: 100%; height: 40px'
+                        class="dropbtn settings-modal-button">
+                  <span>{{logOptionNames[currentLogOption]}}</span>
+                  <span style="float: right">&blacktriangledown;</span>
+                </button>
+                <div class="dropdown-content" style="width: 100%">
+                  <a v-for="option in logOptions" :key="option"
+                     @click="changeLogOption(option)">
+                    {{logOptionNames[option]}}</a>
+                </div>
+              </div>
+            </td>
+          </tr>
         </table>
         <h4 style='margin-top: 10%'>
             Configuration
@@ -114,6 +136,12 @@ export default {
         'all': 'Show everything',
         'goal': 'Show only the goal',
         'none': 'Hide goal panel',
+      },
+      logOptions: ['all', 'exercise', 'exercise-input'],
+      logOptionNames: {
+        'all': 'Allways',
+        'exercise': 'Exercise sheets only',
+        'exercise-input': 'Input blocks in exercises only',
       },
     };
   },
@@ -157,6 +185,13 @@ export default {
         this.$store.commit('setGoalStyle', goalStyle);
       }
     },
+
+    changeLogOption: function(logOption) {
+      if (this.logOptions.includes(logOption)
+          && logOption !== this.currentLogOption) {
+        this.$store.commit('setLogOption', logOption);
+      }
+    },
   },
   computed: {
     zoomLevel() {
@@ -168,6 +203,9 @@ export default {
     },
     currentGoalStyle() {
       return this.$store.state.settings.goalStyle;
+    },
+    currentLogOption() {
+      return this.$store.state.settings.logAllSentences;
     },
     configurationString() {
       const libs = this.$store.state.libraries;
