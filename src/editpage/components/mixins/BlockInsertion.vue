@@ -2,6 +2,8 @@
 /**
  * ProofWindow's block insertion functionality
  */
+import {writeActivity} from '@/activity-log';
+
 export default {
   name: 'BlockInsertion',
   data: function() {
@@ -113,6 +115,14 @@ export default {
         index = this.insertionIndex();
       }
 
+      writeActivity('inserting-block', {
+        file: this.notebook.filePath,
+        blockType: type,
+        blockIndex: index,
+        insertingBlockInBlock: inBlock,
+        tabIndex: this.index,
+      });
+
       if (inBlock && !focusAfter) {
         // We are in a block
         const newBlocks = this.notebook.splitBlock(this.cursorPos.block,
@@ -157,9 +167,16 @@ export default {
      */
     removeBlocks: function(index) {
       this.undoRedo.startGroup();
+      const blockTypes = {};
       for (let i = index.length - 1; i >= 0; i--) {
+        blockTypes[i] = this.notebook.blocks[i].type;
         this.undoRedo.removeBlocks(index[i], 1);
       }
+      writeActivity('removing-blocks', {
+        file: this.notebook.filePath,
+        blocksRemoved: blockTypes,
+        tabIndex: this.index,
+      });
       this.undoRedo.endGroup();
     },
 
