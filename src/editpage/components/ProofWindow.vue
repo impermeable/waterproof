@@ -230,6 +230,41 @@ export default {
       this.undoRedo.redo();
     },
 
+    exerciseSheetIndexForCodeIndex(index) {
+      let beforeOrInExercise = 0;
+      let blockIndex = 0;
+      let inInputBlock = false;
+      let indexInBlock = undefined;
+      if (index < 0) {
+        return {blockIndex, beforeOrInExercise, inInputBlock, indexInBlock};
+      }
+      for (const block of this.notebook.blocks) {
+        if (block.type === 'code') {
+          index -= block.text.length + 1;
+          if (index < 0) {
+            indexInBlock = index + block.text.length + 1;
+            break;
+          }
+        } else if (block.type === 'input') {
+          if (block.start) {
+            if (inInputBlock) {
+              console.warn('already in input block?');
+            }
+            inInputBlock = true;
+          } else {
+            inInputBlock = false;
+            ++beforeOrInExercise;
+          }
+        }
+        ++blockIndex;
+      }
+      return {
+        exerciseIndex: {beforeOrInExercise, inInputBlock},
+        blockIndex,
+        indexInBlock,
+      };
+    },
+
     /**
      * To be called after the execution of some code succeeded
      * Updates the goals if there were changes, updates
@@ -243,12 +278,25 @@ export default {
         this.goals = goal;
       }
       this.executedIndex = index;
-      const sentence = this.coq.getState().getSentenceEndingAt(index);
-      writeActivity('coq-success-sentence', {
-        text: sentence.text,
-        coqID: sentence.sentenceId,
-        file: this.notebook.filePath,
-      });
+      {
+        const sentence = this.coq.getState().getSentenceEndingAt(index);
+        const info = this.exerciseSheetIndexForCodeIndex(index);
+        if (this.$store.getters.shouldLogDirectCode(
+            {
+              inExercise: this.notebook.exerciseSheet,
+              inInput: info.exerciseIndex.inInputBlock,
+            })) {
+          writeActivity('coq-success-sentence', {
+            text: sentence.text,
+            coqID: sentence.sentenceId,
+            blockIndex: info.blockIndex,
+            indexInBlock: info.indexInBlock,
+            exerciseIndex: info.exerciseIndex,
+            file: this.notebook.filePath,
+          });
+        }
+      }
+
 
       // Also clear errors
       this.notebook.blocks
@@ -293,13 +341,26 @@ export default {
           .filter((block) => block.type === 'code')
           .forEach((block) => block.state.error = null);
 
-      writeActivity('coq-execute-error', {
-        error: error,
-        beginIndex: errorBeginIndex,
-        endIndex: errorEndIndex,
-        coqID: sentence.sentenceId,
-        file: this.notebook.filePath,
-      });
+      {
+        const info = this.exerciseSheetIndexForCodeIndex(this.executedIndex);
+        if (this.$store.getters.shouldLogDirectCode(
+            {
+              inExercise: this.notebook.exerciseSheet,
+              inInput: info.exerciseIndex.inInputBlock,
+            })) {
+          writeActivity('coq-execute-error', {
+            error: error,
+            beginIndex: errorBeginIndex,
+            endIndex: errorEndIndex,
+            coqID: sentence.sentenceId,
+            blockIndex: info.blockIndex,
+            indexInBlock: info.indexInBlock,
+            exerciseIndex: info.exerciseIndex,
+            file: this.notebook.filePath,
+          });
+        }
+      }
+
 
       let index = 0;
       for (const block of this.notebook.blocks) {
