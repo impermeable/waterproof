@@ -159,13 +159,14 @@ export default {
         return 'text-block';
       }
     },
-    exerciseIndexFor(index) {
+    exerciseIndexForBlockIndex(index) {
+      let beforeOrInExercise = 0;
+      let inInputBlock = false;
+
       if (index >= this.blocks.length) {
-        return {part: -1, inside: false, error: 'out-of-range'};
+        return {beforeOrInExercise, inInputBlock, error: 'out-of-range'};
       }
 
-      let beforeExercise = 0;
-      let inside = false;
 
       for (let i = 0; i < index; i++) {
         const block = this.blocks[i];
@@ -174,20 +175,21 @@ export default {
         }
 
         if (block.start) {
-          inside = true;
+          inInputBlock = true;
         } else {
-          ++beforeExercise;
+          inInputBlock = false;
+          ++beforeOrInExercise;
         }
       }
 
-      return {inOrBeforeInput: beforeExercise, inside};
+      return {beforeOrInExercise, inInputBlock};
     },
     setFocusedElement: function(index, find = false) {
       writeActivity('focusing-element', {
         tabIndex: this.tabIndex,
         file: this.notebookUri,
         blockIndex: index,
-        exerciseIndex: this.exerciseIndexFor(index),
+        exerciseIndex: this.exerciseIndexForBlockIndex(index),
       });
       if (this.focusedElement === index) {
         // If we click again on the element that already has focus, it should
