@@ -204,10 +204,10 @@ function writePendingActivities() {
   });
   pendingActivities.length = 0;
 }
-
+const logWriteTime = process.env.NODE_ENV === 'development' ? 3000 : 30000;
 setInterval(() => {
   if (pendingActivities.length === 0) {
     onActivity({type: 'heartbeat'});
   }
   writePendingActivities();
-}, 30000);
+}, logWriteTime);

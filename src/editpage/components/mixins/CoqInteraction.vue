@@ -167,6 +167,7 @@ export default {
         message: error,
         index: errorIndex,
         file: this.notebook.filePath,
+        tabIndex: this.index,
       };
     },
 

@@ -293,6 +293,7 @@ export default {
             indexInBlock: info.indexInBlock,
             exerciseIndex: info.exerciseIndex,
             file: this.notebook.filePath,
+            tabIndex: this.index,
           });
         }
       }
@@ -357,6 +358,7 @@ export default {
             indexInBlock: info.indexInBlock,
             exerciseIndex: info.exerciseIndex,
             file: this.notebook.filePath,
+            tabIndex: this.index,
           });
         }
       }
@@ -549,6 +551,7 @@ export default {
       return () => {
         writeActivity('coq-exec-' + name, {
           file: this.notebook.filePath,
+          tabIndex: this.index,
         });
       };
     };
@@ -560,12 +563,14 @@ export default {
       writeActivity('coq-exec-to-cursor', {
         targetIndex: this.findCodeIndex(),
         file: this.notebook.filePath,
+        tabIndex: this.index,
       });
     });
     this.eventBus.$on('coqTo', (index) => {
       writeActivity('coq-exec-to', {
         targetIndex: index,
         file: this.notebook.filePath,
+        tabIndex: this.index,
       });
     });
 
@@ -574,6 +579,7 @@ export default {
         searchQuery: query,
         fromExample,
         file: this.notebook.filePath,
+        tabIndex: this.index,
       });
     });
 
