@@ -64,6 +64,7 @@ import {TabsPlugin, ModalPlugin} from 'bootstrap-vue';
 
 import Recents from '../io/recents';
 import SettingsModal from './components/assistance/SettingsModal.vue';
+import {writeActivity} from '@/activity-log';
 
 Vue.use(TabsPlugin);
 Vue.use(ModalPlugin);
@@ -139,8 +140,9 @@ export default {
      * @param {number} id  The index of the tab to which should be switched
      * @param {boolean} updateGutter  Whether the gutter containing
      *   the execution status should also be updated
+     * @param {boolean} newTab Whether this is a new or already existing tab
      */
-    switchToTab: function(id, updateGutter = true) {
+    switchToTab: function(id, updateGutter = true, newTab = false) {
       const pw = this.$refs.proofWindow[id];
       const args = pw ? {
         notebook: pw.notebook,
@@ -155,6 +157,12 @@ export default {
       }
       this.$refs.tabs.currentTab = id;
       this.currentTab = id;
+      if (!newTab) {
+        writeActivity('switch-tab', {
+          file: args.notebook.filePath === '' ? null : args.notebook.filePath,
+          tabIndex: id,
+        });
+      }
       if (updateGutter) {
         this.$refs
             .proofWindow[this.currentTab]
@@ -183,13 +191,17 @@ export default {
         this.switchToTab(duplicateIndex);
         return;
       }
+      writeActivity('open-new-tab', {
+        file: fileURI,
+        tabIndex: this.tabIdCounter,
+      });
       const newId = this.tabs.length;
       this.tabs.push({
         fileURI: fileURI,
         id: this.tabIdCounter++,
       });
       this.$nextTick(() => {
-        this.switchToTab(newId, false);
+        this.switchToTab(newId, false, true);
         if (fileURI !== null) {
           this.recents.addFileListEntry(fileURI);
         }
