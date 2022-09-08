@@ -185,7 +185,7 @@ export default {
       return {beforeOrInExercise, inInputBlock};
     },
     setFocusedElement: function(index, find = false) {
-      writeActivity('focusing-element', {
+      writeActivity('focusing-block', {
         tabIndex: this.tabIndex,
         file: this.notebookUri,
         blockIndex: index,
