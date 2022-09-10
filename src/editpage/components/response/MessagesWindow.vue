@@ -159,6 +159,7 @@ export default {
       return message;
     },
   },
+  inject: ['tabIndex', 'notebookFilePath'],
   watch: {
     addError(newValue) {
       clearTimeout(this.showTimeout);
@@ -178,7 +179,8 @@ export default {
       if (newValue && this.haveAddError) {
         writeActivity('coq-add-error-shown', {
           error: this.addError.message,
-          file: this.addError.file,
+          file: this.notebookFilePath,
+          tabIndex: this.tabIndex,
         });
         if (typeof(requestAnimationFrame) !== 'undefined') {
           if (this.showingAddError) {
