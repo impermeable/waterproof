@@ -38,6 +38,7 @@
    * }
    */
 import WpBlock from './WpBlock';
+import {writeActivity} from '@/activity-log';
 const HINT_SEPARATOR = '<hint>';
 const DEFAULT_TITLE = 'Click to open hint';
 
@@ -80,10 +81,19 @@ export default {
       return !this.exercise || this.opened;
     },
   },
+  inject: ['tabIndex', 'notebookFilePath'],
   methods: {
     onClick: function(event) {
       if (this.exercise) {
         this.opened = !this.opened;
+        if (this.opened) {
+          writeActivity('hint-opened', {
+            body: this.body,
+            blockIndex: this.blockIndex,
+            file: this.notebookFilePath,
+            tabIndex: this.tabIndex,
+          });
+        }
       } else {
         this.handleClick(event);
       }
