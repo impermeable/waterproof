@@ -57,6 +57,12 @@ export default {
 
     this.loadNotebook();
   },
+  provide() {
+    return {
+      notebookFilePath: this.uri,
+      tabIndex: this.index,
+    };
+  },
   components: {
     EditWindow,
     ResponseWindow,
