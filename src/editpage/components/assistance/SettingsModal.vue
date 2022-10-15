@@ -99,6 +99,23 @@
               </div>
             </td>
           </tr>
+          <tr>
+            <td>
+              <h6>Export:</h6>
+            </td>
+            <td style='width: 50%; min-width: 60px'>
+              <h6>{{ 'Export button ' }}</h6>
+            </td>
+            <td style='min-width: 40px'>
+              <button
+                style='width: 100%; height: 40px'
+                class='settings-modal-button'
+                @click='exportLogs'
+              >
+                Export
+              </button>
+           </td>
+          </tr>
         </table>
         <h4 style='margin-top: 10%'>
             Configuration
@@ -119,6 +136,7 @@
 
 
 <script>
+import {getLogfilesPath} from '../../../io/pathHelper';
 export default {
   name: 'SettingsModal',
   components: {},
@@ -172,6 +190,20 @@ export default {
       const boundedZoom = Math.max(0.3, Math.min(newZoom, 3.0));
       this.$store.commit('setZoom', boundedZoom);
       this.updateConfigurationString();
+    },
+
+    exportLogs: function() {
+      const electron = require('electron');
+      const {dialog} = electron.remote;
+      const options = {defaultPath: 'logs.zip'};
+      const targetDir = dialog.showSaveDialogSync(options);
+      const sourceDir = getLogfilesPath();
+      const zipper = require('zip-local');
+      zipper.zip(sourceDir, function(error, zipped) {
+        if (!error) {
+          zipped.compress().save(targetDir);
+        }
+      });
     },
 
     changeTheme: function(theme) {
