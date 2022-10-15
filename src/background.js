@@ -2,6 +2,7 @@
 
 /* global __static */
 
+import {getLogfilesPath} from './io/pathHelper';
 import {app, BrowserWindow, ipcMain, protocol} from 'electron';
 import {execFile} from 'child_process';
 import path from 'path';
@@ -181,11 +182,11 @@ ipcMain.on('activity', (event, args) => {
 });
 
 const activityFile = (() => {
-  const basePath = app.getPath('userData');
+  const basePath = getLogfilesPath();
   const fileName = 'activity-' +
       (+ new Date).toString().padStart(12, '0') + '.log';
-  fs.mkdirSync(path.join(basePath, 'activity-logs'), {recursive: true});
-  return path.join(basePath, 'activity-logs', fileName);
+  fs.mkdirSync(basePath, {recursive: true});
+  return path.join(basePath, fileName);
 })();
 
 const activityStream = fs.createWriteStream(activityFile, {
