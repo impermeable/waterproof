@@ -68,7 +68,7 @@
     "jquery": "^3.5.1",
     "lodash.debounce": "^4.0.8",
     "lodash.orderby": "^4.6.0",
-    "markdown-it": "^8.4.2",
+    "markdown-it": "^12.3.2",
     "node-ipc": "^9.1.1",
     "node-sass": "^4.14.1",
     "s-expression": "^3.0.3",
