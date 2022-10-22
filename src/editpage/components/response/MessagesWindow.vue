@@ -9,12 +9,6 @@
         </div>
         <div class="messages" v-if="ready"
              ref="messagesBox">
-            <div class="message message-error"
-                 v-if="haveAddError && showingAddError">
-                <span class="messageText">
-                    {{addErrorText}}
-                </span>
-            </div>
             <div class="message highlight"
                  style="animation-name: blinkColors;"
                  @animationend="removeAnimation"
@@ -29,6 +23,12 @@
                     <div class="clear-message"></div>
                 </a>
             </div>
+            <div class="message message-error"
+               v-if="haveAddError && showingAddError" ref="addErrorElement">
+                <span class="messageText">
+                    {{addErrorText}}
+                </span>
+          </div>
         </div>
         <div style="text-align: center" v-else>
             <span>
@@ -180,6 +180,16 @@ export default {
           error: this.addError.message,
           file: this.addError.file,
         });
+        if (typeof(requestAnimationFrame) !== 'undefined') {
+          if (this.showingAddError) {
+            requestAnimationFrame(() => {
+              this.$refs.addErrorElement.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start',
+              });
+            });
+          }
+        }
       }
     },
   },
