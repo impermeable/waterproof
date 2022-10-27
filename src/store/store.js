@@ -24,7 +24,7 @@ export default {
     settings: {
       zoom: 1.0,
       theme: 'light',
-      goalStyle: 'all',
+      goalStyle: 'goal',
       logAllSentences: 'exercise',
     },
   },
