@@ -79,7 +79,8 @@ export default {
     },
     subGoal: function() {
       if (this.parts.length > 1) {
-        return this.parts[1].trim().replace(/\n/g, '<br>');
+        return this.parts[1].trim().replace(
+            /\n/g, '<br>').replace(/<br> {2}/g, '<br>&emsp;&nbsp;');
       }
     },
     showHypotheses: function() {
