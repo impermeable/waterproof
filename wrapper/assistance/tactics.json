@@ -2,7 +2,7 @@
     {
         "name": "Help.",
         "description": "Tries to give you a hint on what to do next.",
-        "example": "Lemma x_is_x : forall x : R, x = x.\nProof.\nHelp."
+        "example": "Lemma x_is_x : forall x : ℝ, x = x.\nProof.\nHelp."
     },
     {
         "name": "We conclude that ((*current goal*)).",
@@ -12,7 +12,7 @@
     {
         "name": "Take (*name*) : ((*set*)).",
         "description": "Take an arbitrary element from (*set*) and call it (*name*).",
-        "example": "Lemma x_is_x : forall x : R, x = x.\nProof.\nTake x : R.\nWe conclude that (x=x).\nQed."
+        "example": "Lemma x_is_x : forall x : ℝ, x = x.\nProof.\nTake x : ℝ.\nWe conclude that (x=x).\nQed."
     },
     {
         "name": "Choose (*name_var*) := ((*expression*)).",
@@ -20,33 +20,33 @@
         "example": "Lemma exist_0 : ∃ x : ℝ, x = 0.\nProof.\nChoose y:=(0).\nThis follows immediately.\nQed."
     },
     {
-        "name": "Assume (*name*) : ((*statement*)).",
-        "description": "If you need to prove (*statement*) ⇒ B, this allows you to assume that (*statement*) holds, giving this assumption the name (*name*).",
-        "example": "Lemma A_impl_A : forall A : Prop, A ⇒ A.\nProof.\nTake A : Prop.\nAssume H_A.\nApply H_A.Qed."
+        "name": "Assume that ((*statement*)) ((*optional_label*)).",
+        "description": "If you need to prove (*statement*) ⇒ B, this allows you to assume that (*statement*) holds, giving it the label (*optional_label*). You can leave out ((*optional_label*)) if you don't wish to name your assumption.",
+        "example": "Lemma A_impl_A : forall A : Prop, A ⇒ A.\nProof.\nTake A : Prop.\nAssume that (A) (H_A).\nApply H_A.Qed."
     },
     {
-        "name": "(& 3 &< 5 &= 2 + 3 &≤ 7 )",
+        "name": "(& 3 < 5 = 2 + 3 ≤ 7 )",
         "description": "Example of a chain of (in)equalities in which every inequality should.",
-        "example": "We conclude that (&  a &< b &< c)."
+        "example": "We conclude that (& a < b < c)."
     },
     {
-        "name": "Choose (*name_var*) such that (*name_property*) according to (*name_hyp*).",
-        "description": "In case a hypothesis (*name_hyp*) starts with 'there exists' s.t. some property holds, then you can use this tactic to select such a variable. The variable will be named (*name_var*) and the property it satisfies (*name_property*).",
-        "example": ""
+        "name": "Obtain (*name_var*) according to ((*name_hyp*)), so for (*name_var*) : (*type_of_var*) it holds that ((*statement*)) ((*optional_label*)).",
+        "description": "In case a hypothesis (*name_hyp*) starts with 'there exists (*name_var_2*) : (*type_of_var*), ((*statement*))', then you can use this tactic to select such a variable (*name_var*) of type (*type_var*) satisfying ((*statement*)), giving this property the name (*optional_label*). You can leave out ((*optional_label*)) if you don't wish to name the property.",
+        "example": "Obtain y according to (i), so for y : ℝ it holds that (10 < y ∧ y < x) (my_prop)."
     },
     {
-        "name": "It holds that (*name*) : ((*statement*)).",
-        "description": "Tries to automatically prove (*statement*). If that works, (*statement*) is added as a hypothesis with name (*name*).",
+        "name": "It holds that ((*statement*)) ((*optional_label*)).",
+        "description": "Tries to automatically prove (*statement*). If that works, (*statement*) is added as a hypothesis with name (*optional_label*).",
         "example": "It holds that (3=3) (three_equals_itself)."
     },
     {
-        "name": "By ((*lemma or assumption*)) it holds that (*name*) : ((*statement*)).",
-        "description": "Tries to prove (*statement*) using (*lemma*) or (*assumption*). If that works, (*statement*) is added as a hypothesis with name (*name*).",
+        "name": "By ((*lemma or assumption*)) it holds that ((*statement*)) ((*optional_label*)).",
+        "description": "Tries to prove (*statement*) using (*lemma*) or (*assumption*). If that works, (*statement*) is added as a hypothesis with name (*optional_label*). You can leave out ((*optional_label*)) if you don't wish to name the statement.",
         "example": "Lemma two_is_2 : 0 + 2 = 2. \nProof.\nBy (plus_O_n 2) it holds that (0 + 2 = 2) (H2). \nApply H2. \nQed."
     },
     {
-        "name": "We claim that (*name*) : ((*statement*)).",
-        "description": "Lets you first show (*statement*) before continuing with the rest of the proof. After you showed (*statement*), it will be available as a hypothesis with name (*name*).",
+        "name": "We claim that ((*statement*)) ((*optional_label*)).",
+        "description": "Lets you first show (*statement*) before continuing with the rest of the proof. After you showed (*statement*), it will be available as a hypothesis with name (*optional_name*).",
         "example": "We claim that (2 = 2) (two_is_two)."
     },
     {
@@ -56,12 +56,12 @@
     },
     {
         "name": "We argue by contradiction.",
-        "description": "Assumes the opposite of what you need to show. Afterwards, you can try to derive a contradiction.",
+        "description": "Assumes the opposite of what you need to show. Afterwards, you need to make substeps that show that both A and ¬ A (i.e. not A) for some statement A. Finally, you can finish your proof with 'Contradiction.'",
         "example": "We argue by contradiction."
     },
     {
         "name": "Contradiction",
-        "description": "If you find two contradictory hypotheses in the proof context, you can write \"Contradiction\" to finish the proof of the current goal.",
+        "description": "If you have shown both A and not A for some statement A, you can write \"Contradiction\" to finish the proof of the current goal.",
         "example": "Contradiction."
     },
     {
@@ -73,7 +73,7 @@
     {
         "name": "Apply (*lemma or assumption*).",
         "description": "Apply a lemma or an assumption.",
-        "example": "Lemma a: forall A B: Prop, (A -> B) -> A -> B.\nProof.\n  intros.\n  apply H.\n  apply H0.\nQed.",
+        "example": "Lemma a: forall A B: Prop, (A -> B) -> A -> B.\nProof.\n  Assume that (A -> B) (H). Assume that (A) (H0).\n  Apply H.\n  Apply H0.\nQed.",
         "advanced": true
     },
     {
