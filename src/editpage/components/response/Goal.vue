@@ -11,8 +11,13 @@
     <div class="hrfake">
       <span class="goal-id">({{index + 1}}/{{total}})</span>
     </div>
-    <div :class="{opened: opened, 'opened-tick': true}">▶</div>
-    <span class="goal-target" v-html="subGoal"></span>
+    <div v-if="showHypotheses" :class="{opened: opened, 'opened-tick': true}">
+      ▶
+    </div>
+    <span :class="{'goal-target': true,
+      'goal-with-hypotheses': showHypotheses}"
+          v-html="subGoal">
+    </span>
   </div>
 </template>
 
@@ -79,7 +84,8 @@ export default {
     },
     subGoal: function() {
       if (this.parts.length > 1) {
-        return this.parts[1].trim().replace(/\n/g, '<br>');
+        return this.parts[1].trim().replace(
+            /\n/g, '<br>').replace(/<br> {2}/g, '<br>&emsp;&nbsp;');
       }
     },
     showHypotheses: function() {
@@ -171,9 +177,12 @@ export default {
     margin-bottom: -1.3em;
   }
 
-  .goal-target {
+  .goal-with-hypotheses {
     margin-top: 0.3em;
     margin-left: 1em;
   }
 
+  .goal-target {
+    margin-top: 0.3em;
+  }
 </style>
