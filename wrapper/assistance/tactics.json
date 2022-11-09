@@ -2,47 +2,58 @@
     {
         "name": "Help.",
         "description": "Tries to give you a hint on what to do next.",
-        "example": "Lemma x_is_x : forall x : ℝ, x = x.\nProof.\nHelp."
+        "example": "Lemma example_help :\n  0 = 0.\nProof.\nHelp.\nWe conclude that (0 = 0).\nQed."
+    },
+    {
+        "name": "We need to show that ((*(alternative) formulation of current goal*)).",
+        "description": "Generally makes a proof more readable. Has the additional functionality that you can write a slightly different but equivalent formulation of the goal: you can for instance change names of certain variables.",
+        "example": "Lemma example_we_need_to_show_that :\n  0 = 0.\nProof.\nWe need to show that (0 = 0).\nWe conclude that (0 = 0).\nQed."
     },
     {
         "name": "We conclude that ((*current goal*)).",
         "description": "Tries to automatically prove the current goal.",
-        "example": "Lemma 2_is_2 : 2 = 2. \nProof.\nWe conclude that (2 = 2).\nQed."
+        "example": "Lemma example_we_conclude_that :\n  0 = 0.\nProof.\nWe conclude that (0 = 0).\nQed."
     },
     {
         "name": "Take (*name*) : ((*set*)).",
         "description": "Take an arbitrary element from (*set*) and call it (*name*).",
-        "example": "Lemma x_is_x : forall x : ℝ, x = x.\nProof.\nTake x : ℝ.\nWe conclude that (x=x).\nQed."
+        "example": "Lemma example_take :\n  for all x : ℝ,\n    x = x.\nProof.\nTake x : (ℝ).\nWe conclude that (x = x).\nQed."
     },
     {
         "name": "Choose (*name_var*) := ((*expression*)).",
         "description": "You can use this tactic when you need to show that there exists an x such that a certain property holds. You do this by proposing (*expression*) as a choice for x, giving it the name (*name_var*).",
-        "example": "Lemma exist_0 : ∃ x : ℝ, x = 0.\nProof.\nChoose y:=(0).\nThis follows immediately.\nQed."
+        "example": "Lemma example_choose : \n  there exists y : ℝ,\n    y < 3.\nProof.\nChoose y := (2).\nWe conclude that (& y = 2 < 3).\nQed."
     },
     {
         "name": "Assume that ((*statement*)) ((*optional_label*)).",
         "description": "If you need to prove (*statement*) ⇒ B, this allows you to assume that (*statement*) holds, giving it the label (*optional_label*). You can leave out ((*optional_label*)) if you don't wish to name your assumption.",
-        "example": "Lemma A_impl_A : forall A : Prop, A ⇒ A.\nProof.\nTake A : Prop.\nAssume that (A) (H_A).\nApply H_A.Qed."
+        "example": "Lemma example_assume :\n  ∀ a : ℝ, a < 0 ⇒ - a > 0.\nProof.\nTake a : (ℝ).\nAssume that (a < 0).\nWe conclude that (- a > 0).\nQed."
     },
     {
         "name": "(& 3 < 5 = 2 + 3 ≤ 7 )",
         "description": "Example of a chain of (in)equalities in which every inequality should.",
-        "example": "We conclude that (& a < b < c)."
+        "example": "Lemma example_inequalities :\n  ∀ ε : ℝ, ε > 0 ⇒ Rmin(ε,1) < 2.\nProof.\nTake ε : (ℝ).\nAssume that (ε > 0).\nWe conclude that (& Rmin(ε,1) ≤ 1 < 2).\nQed."
     },
     {
         "name": "Obtain (*name_var*) according to ((*name_hyp*)), so for (*name_var*) : (*type_of_var*) it holds that ((*statement*)) ((*optional_label*)).",
         "description": "In case a hypothesis (*name_hyp*) starts with 'there exists (*name_var_2*) : (*type_of_var*), ((*statement*))', then you can use this tactic to select such a variable (*name_var*) of type (*type_var*) satisfying ((*statement*)), giving this property the name (*optional_label*). You can leave out ((*optional_label*)) if you don't wish to name the property.",
-        "example": "Obtain y according to (i), so for y : ℝ it holds that (10 < y ∧ y < x) (my_prop)."
+        "example": "Lemma example_obtain :\n  ∀ x : ℝ,\n    (∃ y : ℝ, 10 < y ∧ y < x) ⇒\n      10 < x.\nProof.\nTake x : (ℝ).\nAssume that (∃ y : ℝ, 10 < y ∧ y < x) (i).\nObtain y according to (i), so for y : ℝ it holds that (10 < y ∧ y < x).\nWe conclude that (& 10 < y < x).\nQed."
+    },
+    {
+        "name": "It suffices to show that ((*statement*)).",
+        "description": "Waterproof tries to verify automatically whether it is indeed enough to show (*statement*) to prove the current goal. If so, (*statement*) becomes the new goal.",
+        "example": "Lemma example_it_suffices_to_show_that :\n  ∀ ε : ℝ,\n    ε > 0 ⇒\n      3 + Rmax(ε,2) ≥ 3.\nProof.\nTake ε : (ℝ).\nAssume that (ε > 0).\nIt suffices to show that (Rmax(ε,2) ≥ 0).\nWe conclude that (& Rmax(ε,2) ≥ 2 ≥ 0).\nQed.",
+        "advanced": false
     },
     {
         "name": "It holds that ((*statement*)) ((*optional_label*)).",
         "description": "Tries to automatically prove (*statement*). If that works, (*statement*) is added as a hypothesis with name (*optional_label*).",
-        "example": "It holds that (3=3) (three_equals_itself)."
+        "example": "Lemma example_it_holds_that :\n  ∀ ε : ℝ, ε > 0 ⇒\n    4 - Rmax(ε,1) ≤ 3.\n    \nProof.\nTake ε : (ℝ).\nAssume that (ε > 0).\nIt holds that (Rmax(ε,1) ≥ 1) (i).\nWe conclude that (4 - Rmax(ε,1) ≤ 3).\nQed."
     },
     {
         "name": "By ((*lemma or assumption*)) it holds that ((*statement*)) ((*optional_label*)).",
         "description": "Tries to prove (*statement*) using (*lemma*) or (*assumption*). If that works, (*statement*) is added as a hypothesis with name (*optional_label*). You can leave out ((*optional_label*)) if you don't wish to name the statement.",
-        "example": "Lemma two_is_2 : 0 + 2 = 2. \nProof.\nBy (plus_O_n 2) it holds that (0 + 2 = 2) (H2). \nApply H2. \nQed."
+        "example": "Lemma example_by_it_holds_that :\n  ∀ x : ℝ, ∀ y : ℝ,\n    (∀ δ : ℝ, δ > 0 ⇒ x < δ) ⇒\n      (∀ ε : ℝ, ε > 0 ⇒ y < ε) ⇒\n        x + y < 1.\nProof.\nTake x : (ℝ). Take y : (ℝ).\nAssume that (∀ δ : ℝ, δ > 0 ⇒ x < δ) (i).\nAssume that (∀ ε : ℝ, ε > 0 ⇒ y < ε) (ii).\nBy (i) it holds that (x < 1/2).\nBy ((ii) (1/2)) it holds that (y < 1/2).\n\nWe conclude that (x + y < 1).\n\nQed."
     },
     {
         "name": "We claim that ((*statement*)) ((*optional_label*)).",
@@ -50,14 +61,9 @@
         "example": "We claim that (2 = 2) (two_is_two)."
     },
     {
-        "name": "It suffices to show that ((*statement*)).",
-        "description": "Waterproof tries to verify automatically whether it is indeed enough to show (*statement*) to prove the current goal. If so, (*statement*) becomes the new goal.",
-        "advanced": false
-    },
-    {
         "name": "We argue by contradiction.",
         "description": "Assumes the opposite of what you need to show. Afterwards, you need to make substeps that show that both A and ¬ A (i.e. not A) for some statement A. Finally, you can finish your proof with 'Contradiction.'",
-        "example": "We argue by contradiction."
+        "example": "Lemma example_contradiction :\n  ∀ x : ℝ,\n   (∀ ε : ℝ, ε > 0 ⇒ x < ε) ⇒\n     x ≤ 0.\nProof. \nTake x : (ℝ).\nAssume that (∀ ε : ℝ, ε > 0 ⇒ x < ε) (i).\nWe need to show that (x ≤ 0).\nWe argue by contradiction.\nAssume that (¬ (x ≤ 0)).\nDefine ε1 := (x).\nIt holds that (ε1 > 0).\nBy (i) it holds that (x < x).\nIt holds that (¬ (x < x)).\nContradiction.\nQed."
     },
     {
         "name": "Contradiction",
@@ -96,12 +102,13 @@
     },
     {
         "name": "Either ((*case_1*)) or ((*case_2*)).",
-        "description": "Case distinction when always precisely one of (*case_1*) or (*case_2*) occurs."
+        "description": "Split in two cases (*case_1*) and (*case_2*).",
+        "example": "Lemma example_cases : \n  ∀ x : ℝ, ∀ y : ℝ,\n    Rmax(x,y) = x ∨ Rmax(x,y) = y.\nProof. \nTake x : ℝ. Take y : ℝ.\nEither (x < y) or (x ≥ y).\n- Case (x < y).\n  It suffices to show that (Rmax(x,y) = y).\n  We conclude that (Rmax(x,y) = y).\n- Case (x ≥ y).\n  It suffices to show that (Rmax(x,y) = x).\n  We conclude that (Rmax(x,y) = x).\nQed."
     },
     {
         "name": "Expand the definition of (*name_kw*).",
         "description": "Expands the definition of the keyword (*name_kw*) in the current goal.",
-        "example": "Expand the definition of is_upper_bound.",
+        "example": "Lemma example_expand_the_definition_of : \n  0 is a _lower bound_ of [0,1].\n  \nProof.\nExpand the definition of lower bound.\nThat is, write the goal as (for all a : ℝ, a : [0,1] ⇒ 0 ≤ a).\nTake a : ℝ.\nAssume that (a : [0,1]).\nWe conclude that (0 ≤ a).\nQed.",
         "advanced": false
     },
     {
@@ -113,21 +120,17 @@
     {
         "name": "We show both statements.",
         "description": "Splits the goal in two separate goals, if it is of the form A ∧ B",
-        "example": "Lemma ex_split : forall A B: Prop, A ⇒ (B ⇒ A ∧ B).\nProof.\n Take A : Prop. Take B : Prop.\nAssume H_A. Assume H_B.\nWe show both statements.\nApply H_A. Apply H_B. Qed."
+        "example": "Lemma example_both_statements:\n  ∀ x : ℝ, (x^2 ≥ 0) ∧ (| x | ≥ 0).\nProof.\nTake x : (ℝ).\nWe show both statements.\n- We conclude that (x^2 ≥ 0).\n- We conclude that (| x | ≥ 0).\nQed."
     },
     {
         "name": "We show both directions.",
         "description": "Splits a goal of the form A ⇔ B, into the goals (A ⇒ B) and (B ⇒ A)",
-        "example": ""
+        "example": "Lemma example_both_directions:\n  ∀ x : ℝ, ∀ y : ℝ,\n    x < y ⇔ y > x.\nProof.\nTake x : (ℝ). Take y : (ℝ).\nWe show both directions.\n- We need to show that (x < y ⇒ y > x).\n  Assume that (x < y).\n  We conclude that (y > x).\n- We need to show that (y > x ⇒ x < y).\n  Assume that (y > x).\n  We conclude that (x < y).\nQed."
     },
     {
-        "name": "We need to show that ((*(alternative) formulation of current goal*)).",
-        "description": "Generally makes a proof more readable. Has the additional functionality that you can write a slightly different but equivalent formulation of the goal: you can for instance change names of certain variables.",
-        "example": "Lemma example_reflexivity : 0 = 0.\nProof.\nWe need to show that (0=0)."
-    },
-    {
-        "name": "We prove by induction on (*name_1*), calling the induction hypothesis (*name_2*).",
-        "description": "Prove a statement by induction on the variable with (*name_1*), calling the induction hypothesis (*name_2*)."
+        "name": "We use induction on (*name*)",
+        "description": "Prove a statement by induction on the variable with (*name*).",
+        "example": "Lemma example_induction :\n  ∀ n : ℕ → ℕ, (∀ k : ℕ, n(k) < n(k + 1))%nat ⇒\n    ∀ k : ℕ, (k ≤ n(k))%nat.\nProof.\nTake n : (ℕ → ℕ).\nAssume that (∀ k : ℕ, n(k) < n(k + 1))%nat (i).\nWe use induction on k.\n- We first show the base case, namely (0 ≤ n(0))%nat.\n  We conclude that (0 ≤ n(0))%nat.\n- We now show the induction step.\n  Assume that (k ≤ n(k))%nat.\n  By (i) it holds that (n(k) < n(k + 1))%nat.\n  We conclude that (& k + 1 ≤ n(k) + 1 ≤ n(k + 1))%nat.\nQed."
     },
     {
         "name": "By ((*lemma or assumption*)) it holds that ((*statement*)).",

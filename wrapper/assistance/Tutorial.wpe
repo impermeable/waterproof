@@ -213,7 +213,7 @@
     },
     {
       "type": "text",
-      "text": "* 5. Make an assumption\n\nThe following lemma expresses that for all $a : \\mathbb{R}$, if $a < 0$ then ($-a > 0$)."
+      "text": "* 4. Make an assumption\n\nThe following lemma expresses that for all $a : \\mathbb{R}$, if $a < 0$ then ($-a > 0$)."
     },
     {
       "type": "code",
