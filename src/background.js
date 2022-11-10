@@ -184,7 +184,7 @@ ipcMain.on('activity', (event, args) => {
 const activityFile = (() => {
   const basePath = getLogfilesPath();
   const fileName = 'activity-' +
-      (+ new Date).toString().padStart(12, '0') + '.log';
+      (+new Date).toString().padStart(12, '0') + '.log';
   fs.mkdirSync(basePath, {recursive: true});
   return path.join(basePath, fileName);
 })();
@@ -192,6 +192,50 @@ const activityFile = (() => {
 const activityStream = fs.createWriteStream(activityFile, {
   flags: 'a', autoClose: true,
 });
+
+/**
+ * Calculate a 32 bit FNV-1a hash
+ * Found here: https://gist.github.com/vaiorabbit/5657561
+ * Ref.: http://isthe.com/chongo/tech/comp/fnv/
+ *
+ * @param {string} str the input value
+ * @param {integer} [seed] optionally pass the hash of the previous chunk
+ * @return {string}
+ */
+function hashFnv32a(str) {
+  // This comes from https://stackoverflow.com/a/22429679
+  let hval = 0x5BC230F9;
+  const l = str.length;
+  for (let i = 0; i < l; i++) {
+    hval ^= str.charCodeAt(i);
+    hval += (hval << 1) + (hval << 4) +
+        (hval << 7) + (hval << 8) + (hval << 24);
+  }
+
+  return (hval >>> 0).toString(16).padStart(8, '0');
+}
+
+function anonymizePath(pathAsString) {
+  if (pathAsString == null) {
+    return null;
+  }
+  try {
+    const pathObject = path.parse(pathAsString);
+    const dirHash = hashFnv32a(pathObject.dir);
+    return dirHash + '-' + pathObject.base;
+  } catch (e) {
+    return null;
+  }
+}
+
+function preProcessActivity(activity) {
+  if ('file' in activity) {
+    activity.file = anonymizePath(activity.file);
+  } else if ('location' in activity) {
+    activity.location = anonymizePath(activity.location);
+  }
+  return activity;
+}
 
 function writePendingActivities() {
   if (process.env.NODE_ENV === 'test') {
@@ -201,10 +245,12 @@ function writePendingActivities() {
     return;
   }
   pendingActivities.forEach((act) => {
+    act = preProcessActivity(act);
     activityStream.write(JSON.stringify(act) + '\n');
   });
   pendingActivities.length = 0;
 }
+
 const logWriteTime = process.env.NODE_ENV === 'development' ? 3000 : 30000;
 setInterval(() => {
   if (pendingActivities.length === 0) {
