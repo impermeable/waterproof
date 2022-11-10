@@ -9,8 +9,14 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest, macos-11]
+        with_installer: [false]
+
+        include:
+          - os: windows-latest
+            with_installer: true
+
     runs-on: ${{ matrix.os }}
-    name: Build distrubtable version on ${{ matrix.os }}
+    name: Build for ${{ matrix.os }} installer ${{ matrix.with_installer && 'with bundled installer' || '' }}
     steps:
       - uses: actions/checkout@v2
       - name: Cache node modules
@@ -19,28 +25,46 @@ jobs:
           path: ~/.npm
           key: small-npm-deps-${{ matrix.os }}-${{ hashFiles('**/package-lock.json') }}
           restore-keys: small-npm-deps-${{ matrix.os }}
+
       - name: Use Node.js
         uses: actions/setup-node@v1
         with:
           node-version: '12.x'
+
       - run: npm ci
+
       - name: Generate icons
         run: npm run electron:generate-icons
+
+      - name: Download installer
+        if: ${{ matrix.with_installer == true }}
+        uses: robinraju/release-downloader@v1.6
+        with:
+          repository: "impermeable/waterproof-dependencies-installer"
+          latest: true
+          fileName: "*.exe"
+
+      - name: Rename installer
+        if: ${{ matrix.with_installer == true }}
+        run: Get-ChildItem Coq-*x86_64.exe | Rename-Item -NewName Coq-Waterproof-installer.exe
 
       - name: Build it (signed)
         if: ${{ matrix.os == 'windows-latest' }}
         env:
           CSC_LINK: 'certificate\certificate.pfx'
           CSC_KEY_PASSWORD: ${{ secrets.CODE_SIGNING_CERTIFICATE_PASS }}
+          WATERPROOF_BUILD_WITH_BUNDLED_INSTALLER: ${{ matrix.with_installer }}
         run: |
           New-Item -ItemType directory -Path certificate
           Set-Content -Path certificate\certificate.txt -Value '${{ secrets.CODE_SIGNING_CERTIFICATE }}'
           certutil -decode certificate\certificate.txt certificate\certificate.pfx
           npm run electron:build
           Remove-Item -Path certificate\*
-          
+
       - name: Build it (no signing)
         if: ${{ matrix.os != 'windows-latest' }}
+        env:
+          WATERPROOF_BUILD_WITH_BUNDLED_INSTALLER: ${{ matrix.with_installer }}
         run: npm run electron:build
 
       - run: npm install @actions/core @actions/glob
