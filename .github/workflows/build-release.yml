@@ -34,7 +34,7 @@ jobs:
           git config --global user.email "waterproofdev@gmail.com"
           git config --global user.name "WaterproofBot"
       - name: set tag
-        run: "npm version ${{github.event.inputs.tag}} --allow-same-version --git-tag-version -m \"Bumped version number to %s\" "
+        run: "npm version ${{github.event.inputs.tag}} --git-tag-version -m \"Bumped version number to %s\" || :"
       - name: push tag
         run: git push
 
