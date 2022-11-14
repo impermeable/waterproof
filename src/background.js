@@ -141,7 +141,10 @@ function createWindow() {
     createProtocol('app');
     // Load the index.html when not in development
 
-    if (process.argv.length > 1) {
+    const hasFilename = process.argv.slice(1)
+        .filter((p) => !p.startsWith('-')).length > 0;
+
+    if (process.argv.length > 1 && hasFilename) {
       // TODO check on different platforms
       win.loadURL('app://./index.html?location=' + encodeURIComponent(process.argv[1])).then(() => {
         if (process.argv.includes('--shutdown-on-pageload')) {
