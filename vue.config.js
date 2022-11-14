@@ -43,7 +43,7 @@ module.exports = {
   pluginOptions: {
     electronBuilder: {
       // Sandboxing interferes with running the app on the GitLab runners.
-      // mainProcessArgs: ['--no-sandbox'],
+      mainProcessArgs: ['--no-sandbox'],
       nodeIntegration: true,
       builderOptions: {
         productName: 'Waterproof',
