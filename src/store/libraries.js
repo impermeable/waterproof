@@ -200,7 +200,8 @@ export default {
     },
     async createCoqInstance(store, editorInterface) {
       await store.dispatch('loadSerapi');
-      const worker = store.state.socket.createNewWorker(store.state.sertopPath);
+      const worker =
+          await store.state.socket.createNewWorker(store.state.sertopPath);
       return new CoqSerapiProcessors(worker, editorInterface);
     },
     async shutdownSerapi(store) {
