@@ -78,7 +78,7 @@ class TCPManager {
    * @param {string} sertopPath The path of sertop
    * @return {SerapiWorkerTCP} the worker
    */
-  createNewWorker(sertopPath='') {
+  async createNewWorker(sertopPath='') {
     const worker = new SerapiWorkerTCP(this, sertopPath);
     this.serapis.push(worker);
     return worker;
