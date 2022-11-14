@@ -24,6 +24,23 @@ protocol.registerSchemesAsPrivileged([
   {scheme: 'app', privileges: {secure: true, standard: true}},
 ]);
 
+let wrapperPort = -1;
+const wrapperPortWaiters = [];
+
+/**
+ * Set port
+ * @param {Number} val the port
+ */
+function setPort(val) {
+  if (wrapperPort >= 0) {
+    console.log('WARNING ALREADY HAVE PORT', wrapperPort);
+    return;
+  }
+
+  wrapperPort = val;
+  wrapperPortWaiters.forEach((fn) => fn(wrapperPort));
+}
+
 /**
  * Creates Waterproof's main window.
  */
@@ -50,12 +67,49 @@ function createWindow() {
   const wrapperPath = path.join(basePath, 'wrapper/' + wrapperExecutable);
 
   wrapper = execFile(wrapperPath, {cwd: app.getPath('home')},
-      (error) => {
+      (error, stdout, stderr) => {
         if (running && error && error.signal !== 'SIGTERM') {
           console.log('Could not start wrapper');
           console.log(error);
         }
       });
+
+  const portListener = (chunk) => {
+    const lines = chunk.replaceAll('\r', '')
+        .split('\n')
+        .filter((l) => l.includes('started listening on port '));
+    if (lines.length === 0) {
+      return;
+    }
+
+    const parts = lines[0].split('started listening on port ');
+    if (parts.length === 2) {
+      const number = parts[1].trim();
+      const result = Number.parseInt(number);
+      console.log('got serapi port', result);
+      if (!Number.isNaN(result)) {
+        setPort(result);
+        wrapper.stdout.removeListener('data', portListener);
+        return;
+      }
+    } else {
+      console.log('did not find port in log', parts);
+    }
+
+    wrapper.stdout.removeListener('data', portListener);
+    // fallback to default
+    setPort(51613);
+  };
+
+  wrapper.stdout.addListener('data', portListener);
+  setTimeout(() => {
+    // In case we don't get a message assume we got the default but keep
+    // listening in case we're just early.
+    if (wrapperPort === -1) {
+      setPort(51613);
+      wrapper.stdout.removeListener('data', portListener);
+    }
+  }, 5000);
 
   win = new BrowserWindow({
     width: 800,
@@ -121,6 +175,15 @@ function createWindow() {
   ipcMain.on('confirmClosing', () => {
     running = false;
     app.quit();
+  });
+
+  ipcMain.handle('serapi-port', async (event) => {
+    if (wrapperPort >= 0) {
+      return wrapperPort;
+    }
+    return await new Promise((resolve) => {
+      wrapperPortWaiters.push(resolve);
+    });
   });
 }
 
