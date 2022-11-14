@@ -16,7 +16,7 @@ class TCPManager {
    * @param {Integer} port the port of the TCP socket
    * @param {Boolean} createSocket create the socket immediately
    */
-  constructor(port=51613, createSocket=true) {
+  constructor(port=-1, createSocket=true) {
     this.port = port;
     this.socketId = 'waterproof-wrapper';
     this.serapis = [];
@@ -29,14 +29,24 @@ class TCPManager {
     this.partialBuffer = null;
 
     if (createSocket) {
-      this.setupConnection();
+      this.ready = false;
+      this.readyWaiters = [];
+      this.setupConnection()
+          .then((port) => {
+            this.port = port;
+            this.ready = true;
+            this.readyWaiters.forEach((fn) => fn());
+            this.readyWaiters.length = 0;
+          });
+    } else {
+      this.ready = true;
     }
   }
 
   /**
    * Start the connection to the socket
    */
-  setupConnection() {
+  async setupConnection() {
     if (ipc.of[this.socketId] !== undefined) {
       ipc.of[this.socketId].on(
           'data',
@@ -56,8 +66,12 @@ class TCPManager {
     const oldError = console.error;
     console.error = () => {};
 
+    const {ipcRenderer} = require('electron');
+
+    const port = await ipcRenderer.invoke('serapi-port');
+
     ipc.connectToNet(this.socketId,
-        this.port,
+        port,
         () => {
           ipc.of[this.socketId].on(
               'data',
@@ -71,6 +85,21 @@ class TCPManager {
       }
     }, 0);
     /* eslint-enable no-console */
+
+    return port;
+  }
+
+  /**
+   * Check if we can create workers already
+   */
+  async readyForConnections() {
+    if (this.ready) {
+      return;
+    }
+
+    return new Promise((resolve) => {
+      this.readyWaiters.push(resolve);
+    });
   }
 
   /**
@@ -79,6 +108,7 @@ class TCPManager {
    * @return {SerapiWorkerTCP} the worker
    */
   async createNewWorker(sertopPath='') {
+    await this.readyForConnections();
     const worker = new SerapiWorkerTCP(this, sertopPath);
     this.serapis.push(worker);
     return worker;
