@@ -30,7 +30,6 @@
   </b-tab>
 </template>
 <script>
-import {render} from './blocks/render.js';
 import BlockInsertion from './mixins/BlockInsertion';
 import ResponseWindow from './response/ResponseWindow';
 import EditWindow from './EditWindow';
@@ -43,10 +42,6 @@ import Vue from 'vue';
 import {writeActivity} from '@/activity-log';
 
 const snoopingOnEvents = false;
-const regExp =
-  '<h(?<depth_open>[1-6])>' +
-  '(?<content>(?:(?!<h[1-6]>).)*)' +
-  '</h(?<depth_close>[1-6])>';
 
 export default {
   name: 'ProofWindow',
@@ -128,31 +123,22 @@ export default {
   methods: {
     updateOverview: function() {
       const newOverview = [];
-      const blocks = this.notebook.blocks;
-      // Scan per block for <h1> through <h6> tags and capture them.
-      // Per block, so we can store block indices.
-      for (let i = 0; i < blocks.length; i++) {
-        const block = blocks[i];
-        if (block.type !== 'text') {
-          continue;
-        }
-        const index = i;
-        const htmlText = render(block.text);
-        const matches = [...htmlText.matchAll(regExp)];
-        newOverview.push(...matches.map((match) => {
-          if (match.groups.depth_open !== match.groups.depth_close) {
-            console.warn('Overview was misinterpreted.');
-          }
-          const depth = match.groups.depth_open;
+      const tags = ['h1', 'h2', 'h3'];
+      for (let i = 0; i < tags.length; i++) {
+        const headers = this.$refs.editWindow.$el.getElementsByTagName(tags[i]);
+        const headersExpanded = [...headers];
+        newOverview.push(...headersExpanded.map((header) => {
+          const depth = parseInt(header.nodeName.charAt(1));
           return {
             depth: depth,
-            title: match.groups.content,
-            index: index,
+            text: header.innerText,
+            offset: header.offsetTop,
             visible: depth <= 1,
             unfolded: false,
           };
         }));
       }
+      newOverview.sort((a, b) => a.offset - b.offset);
       this.overview = newOverview;
     },
     /**
@@ -496,6 +482,10 @@ export default {
       }
     },
 
+    scrollToOffset: function(offset) {
+      this.$refs.editWindow.$el.scrollTop = offset;
+    },
+
     previousInput: function() {
       const currentScroll = this.$refs.editWindow.$el.scrollTop;
       const inputs =
@@ -588,6 +578,7 @@ export default {
     this.eventBus.$on('compilewplib', this.compilewplib);
     this.eventBus.$on('close', this.close);
     this.eventBus.$on('updateOverview', this.updateOverview);
+    this.eventBus.$on('scrollToOffset', this.scrollToOffset);
 
     const noParamCoqEvent = (name) => {
       return () => {
