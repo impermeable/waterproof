@@ -1,6 +1,7 @@
 <script>
-import {render} from './render.js';
-
+const md = require('markdown-it')();
+const mk = require('@iktakahiro/markdown-it-katex');
+md.use(mk);
 const regExp = /<p>(.*)<\/p>/si;
 
 export default {
@@ -42,8 +43,17 @@ export default {
         this.$parent.$refs.menu.open(event, this.block);
       }
     },
+    render: function(text) {
+      // Replace coqdoc-style headers (*) with markdown headers (#)
+      let converted = text.replace(/^[ ]*([*]+) /gm, (match, p1) => {
+        return '#'.repeat(p1.length) + ' ';
+      });
+      // Replace coqdoc-style lists (-) with markdown lists (*)
+      converted = converted.replace(/^([ ]*)- /gm, '$1* ');
+      return md.render(converted);
+    },
     renderToSpan: function(text) {
-      let htmlString = render(text);
+      let htmlString = this.render(text);
       // htmlString = htmlString.replace(/\n/g, '<br>');
       htmlString = htmlString.replace(regExp, '<span>$1</span>');
       return htmlString;
