@@ -232,7 +232,7 @@ class SerapiContentProcessor extends SerapiProcessor {
       if (furthestIndex > -1) {
         this.editor.setContentSuccess(null, -1, true);
       }
-      this.editor.setContentError(result.error);
+      this.editor.setContentError(result.error, result.error.beginIndex);
     } else {
       // no error
       this.currentContent += contentAdded;

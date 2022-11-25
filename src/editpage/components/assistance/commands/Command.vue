@@ -46,7 +46,10 @@ export default {
       this.unfolded = !this.unfolded;
     },
     execute: function() {
-      this.eventBus.$emit('coqSearch', this.item.example);
+      this.eventBus.$emit('coqSearch', {
+        query: this.item.example,
+        fromExample: this.item.name,
+      });
     },
   },
 };

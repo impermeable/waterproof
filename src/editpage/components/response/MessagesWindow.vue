@@ -9,12 +9,6 @@
         </div>
         <div class="messages" v-if="ready"
              ref="messagesBox">
-            <div class="message message-error"
-                 v-if="haveAddError && showingAddError">
-                <span class="messageText">
-                    {{addErrorText}}
-                </span>
-            </div>
             <div class="message highlight"
                  style="animation-name: blinkColors;"
                  @animationend="removeAnimation"
@@ -29,6 +23,12 @@
                     <div class="clear-message"></div>
                 </a>
             </div>
+            <div class="message message-error"
+               v-if="haveAddError && showingAddError" ref="addErrorElement">
+                <span class="messageText">
+                    {{addErrorText}}
+                </span>
+          </div>
         </div>
         <div style="text-align: center" v-else>
             <span>
@@ -48,6 +48,8 @@
 </template>
 
 <script>
+import {writeActivity} from '@/activity-log';
+
 const ignoredErrors = [
   // 'Nested proofs are not allowed unless you ' +
   //   'turn option Nested Proofs Allowed on',
@@ -157,6 +159,7 @@ export default {
       return message;
     },
   },
+  inject: ['tabIndex', 'notebookFilePath'],
   watch: {
     addError(newValue) {
       clearTimeout(this.showTimeout);
@@ -169,6 +172,25 @@ export default {
         } else {
           // bit strange but allows for no timeout (also for testing)
           this.showingAddError = true;
+        }
+      }
+    },
+    showingAddError(newValue) {
+      if (newValue && this.haveAddError) {
+        writeActivity('coq-add-error-shown', {
+          error: this.addError.message,
+          file: this.notebookFilePath,
+          tabIndex: this.tabIndex,
+        });
+        if (typeof(requestAnimationFrame) !== 'undefined') {
+          if (this.showingAddError) {
+            requestAnimationFrame(() => {
+              this.$refs.addErrorElement.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start',
+              });
+            });
+          }
         }
       }
     },

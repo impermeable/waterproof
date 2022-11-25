@@ -64,6 +64,7 @@ import OverviewItem from './OverviewItem.vue';
 import Tactic from './tactics/Tactic.vue';
 import PulseLoader from 'vue-spinner/src/PulseLoader.vue';
 import orderBy from 'lodash.orderby';
+import {writeActivity} from '@/activity-log';
 
 export default {
   name: 'SideWindow',
@@ -150,6 +151,11 @@ export default {
           this.title = 'Overview';
           this.component = 'overview-item';
       }
+
+      writeActivity('side-window-change', {
+        sideWindowName: newValue === -1 ? null : this.title,
+        openedSideWindow: newValue !== -1,
+      });
     },
   },
   data: function() {

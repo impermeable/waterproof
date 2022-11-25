@@ -1,5 +1,18 @@
 const path = require('path');
 
+const bundleEnvName = 'WATERPROOF_BUILD_WITH_BUNDLED_INSTALLER';
+
+let nsisConfig = undefined;
+if (process.env[bundleEnvName] === 'true') {
+  nsisConfig = {
+    include: 'wrapper/windows-installer.nsh',
+    allowElevation: true,
+    oneClick: false,
+    perMachine: true,
+    artifactName: '${productName} and Coq Setup ${version}.${ext}',
+  };
+}
+
 module.exports = {
   chainWebpack: (config) => {
     // config.plugins.delete('preload-index');
@@ -55,6 +68,7 @@ module.exports = {
             name: 'Waterproof exercise',
           },
         ],
+        nsis: nsisConfig,
       },
     },
   },

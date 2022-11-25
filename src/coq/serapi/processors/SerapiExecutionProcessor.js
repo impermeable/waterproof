@@ -31,7 +31,7 @@ class SerapiExecutionProcessor extends SerapiProcessor {
     const stateRelease = await this.state.stateLock.acquire();
     if (this.state.target >= this.state.sentenceSize() - 1) {
       stateRelease();
-      return Promise.resolve();
+      return Promise.resolve({noSentenceToExecute: true});
     }
 
     this.state.target++;

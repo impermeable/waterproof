@@ -1,6 +1,6 @@
 {
   "name": "waterproof",
-  "version": "0.5.9",
+  "version": "0.6.1",
   "private": true,
   "description": "The Waterproof proof assistant.",
   "main": "background.js",
@@ -82,6 +82,7 @@
     "vue-shortkey": "^3.1.7",
     "vue-spinner": "^1.0.4",
     "vue-template-compiler": "^2.6.12",
-    "vuex": "^3.5.1"
+    "vuex": "^3.5.1",
+    "zip-local": "^0.3.5"
   }
 }

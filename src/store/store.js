@@ -24,7 +24,8 @@ export default {
     settings: {
       zoom: 1.0,
       theme: 'light',
-      goalStyle: 'all',
+      goalStyle: 'goal',
+      logAllSentences: 'exercise',
     },
   },
   mutations: {
@@ -105,6 +106,9 @@ export default {
     setGoalStyle: function(state, goalStyle) {
       state.settings.goalStyle = goalStyle;
     },
+    setLogOption: function(state, logOption) {
+      state.settings.logAllSentences = logOption;
+    },
   },
   actions: {
     readAssistanceItems: function({commit, state}) {
@@ -147,6 +151,14 @@ export default {
               reject(err);
             });
       });
+    },
+  },
+  getters: {
+    shouldLogDirectCode: (state) => ({inExercise, inInput}) => {
+      const setting = state.settings.logAllSentences;
+      return setting === 'all'
+          || (setting === 'exercise' && inExercise)
+          || (inExercise && inInput);
     },
   },
 };

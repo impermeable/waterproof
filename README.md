@@ -8,8 +8,13 @@ Develop build status: [![Build Status](https://travis-ci.org/impermeable/waterpr
 
 ## How to get started - Windows
 
-* Download and execute the dependencies installer from its [release page](https://github.com/impermeable/waterproof-dependencies-installer/releases) **Note:** do not change the default installation location, otherwise Waterproof will not work.
-* Install Waterproof using the installer from the [release page](http://github.com/impermeable/waterproof/releases)
+### Bundled installer
+Download and execute the bundled installer `Waterproof.and.Coq.Setup.[version].exe` from the [release page](http://github.com/impermeable/waterproof/releases).
+**Note:** do not change the default installation location, otherwise Waterproof will not work.
+
+### Separate installers for dependencies and Waterproof
+* Download and execute the dependencies installer from its [release page](https://github.com/impermeable/waterproof-dependencies-installer/releases). **Note:** do not change the default installation location, otherwise Waterproof will not work.
+* Install Waterproof using the installer `Waterproof.Setup.[version].exe` from the [release page](http://github.com/impermeable/waterproof/releases).
 
 ## How to get started - Linux and Mac
 
@@ -54,9 +59,9 @@ opam init
 ```
 This may take a few minutes. In the meantime, opam will likely ask two questions. We recommend choosing 'y' to both, i.e. to opam modifying the `.bash_profile` and to opam adding a hook to the init scripts. Now execute the following line
 ```
-eval `opam env`
+eval $(opam env)
 opam switch create 4.11.1
-eval `opam env`
+eval $(opam env)
 ```
 
 #### Step 1.c for MacOS and Linux: Install SerAPI with opam
@@ -64,7 +69,7 @@ eval `opam env`
 After installing OCaml, run the following command in the terminal:
 
 ```
-opam install coq-serapi
+opam install coq-serapi.8.15.0+0.15.2
 ```
 
 Opam will ask to install several packages. Choose 'y' to install them. This step will at least take several minutes, but may take up to an hour.
@@ -72,7 +77,7 @@ Opam will ask to install several packages. Choose 'y' to install them. This step
 Finally, execute again
 
 ```
-eval `opam env`
+eval $(opam env)
 ```
 
 #### Step 1.d for MacOS and Linux: Install the coq-waterproof library

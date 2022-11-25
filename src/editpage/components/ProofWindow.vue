@@ -18,6 +18,7 @@
                   :executeIndex="executedIndex"
                   :pendingIndex="startedExecutionIndex"
                   :tabindex="index" :event-bus="eventBus"
+                  :notebook-uri="notebook.filePath"
                   :showFind="showFind" :shortKeys="shortKeys" />
       <response-window :event-bus="eventBus"
                       :goals="goals" :addError="addError" :ready="ready">
@@ -39,6 +40,7 @@ import {UndoRedo} from './undoredo';
 import CoqInteraction from './mixins/CoqInteraction';
 import FileInteraction from './mixins/FileInteraction';
 import Vue from 'vue';
+import {writeActivity} from '@/activity-log';
 
 const snoopingOnEvents = false;
 const regExp =
@@ -59,6 +61,12 @@ export default {
     }
 
     this.loadNotebook();
+  },
+  provide() {
+    return {
+      notebookFilePath: this.uri,
+      tabIndex: this.index,
+    };
   },
   components: {
     EditWindow,
@@ -170,6 +178,12 @@ export default {
             'exercise sheet' : 'notebook';
         if (this.uri !== null) {
           this.notebook.read(() => {
+            writeActivity('loaded-file', {
+              file: this.uri,
+              tabIndex: this.index,
+              isExercise: this.notebook.exerciseSheet,
+            });
+
             // When the notebook is loaded, update to enable the buttons for
             // inserting blocks etc.
             this.updateButtons();
@@ -257,6 +271,41 @@ export default {
       this.undoRedo.redo();
     },
 
+    exerciseSheetIndexForCodeIndex(index) {
+      let beforeOrInExercise = 0;
+      let blockIndex = 0;
+      let inInputBlock = false;
+      let indexInBlock = undefined;
+      if (index < 0) {
+        return {blockIndex, beforeOrInExercise, inInputBlock, indexInBlock};
+      }
+      for (const block of this.notebook.blocks) {
+        if (block.type === 'code') {
+          index -= block.text.length + 1;
+          if (index < 0) {
+            indexInBlock = index + block.text.length + 1;
+            break;
+          }
+        } else if (block.type === 'input') {
+          if (block.start) {
+            if (inInputBlock) {
+              console.warn('already in input block?');
+            }
+            inInputBlock = true;
+          } else {
+            inInputBlock = false;
+            ++beforeOrInExercise;
+          }
+        }
+        ++blockIndex;
+      }
+      return {
+        exerciseIndex: {beforeOrInExercise, inInputBlock},
+        blockIndex,
+        indexInBlock,
+      };
+    },
+
     /**
      * To be called after the execution of some code succeeded
      * Updates the goals if there were changes, updates
@@ -270,6 +319,26 @@ export default {
         this.goals = goal;
       }
       this.executedIndex = index;
+      {
+        const sentence = this.coq.getState().getSentenceEndingAt(index);
+        const info = this.exerciseSheetIndexForCodeIndex(index);
+        if (this.$store.getters.shouldLogDirectCode(
+            {
+              inExercise: this.notebook.exerciseSheet,
+              inInput: info.exerciseIndex.inInputBlock,
+            })) {
+          writeActivity('coq-success-sentence', {
+            text: sentence.text,
+            coqID: sentence.sentenceId,
+            blockIndex: info.blockIndex,
+            indexInBlock: info.indexInBlock,
+            exerciseIndex: info.exerciseIndex,
+            file: this.notebook.filePath,
+            tabIndex: this.index,
+          });
+        }
+      }
+
 
       // Also clear errors
       this.notebook.blocks
@@ -313,6 +382,28 @@ export default {
       this.notebook.blocks
           .filter((block) => block.type === 'code')
           .forEach((block) => block.state.error = null);
+
+      {
+        const info = this.exerciseSheetIndexForCodeIndex(this.executedIndex);
+        if (this.$store.getters.shouldLogDirectCode(
+            {
+              inExercise: this.notebook.exerciseSheet,
+              inInput: info.exerciseIndex.inInputBlock,
+            })) {
+          writeActivity('coq-execute-error', {
+            error: error,
+            beginIndex: errorBeginIndex,
+            endIndex: errorEndIndex,
+            coqID: sentence.sentenceId,
+            blockIndex: info.blockIndex,
+            indexInBlock: info.indexInBlock,
+            exerciseIndex: info.exerciseIndex,
+            file: this.notebook.filePath,
+            tabIndex: this.index,
+          });
+        }
+      }
+
 
       let index = 0;
       for (const block of this.notebook.blocks) {
@@ -497,6 +588,42 @@ export default {
     this.eventBus.$on('compilewplib', this.compilewplib);
     this.eventBus.$on('close', this.close);
     this.eventBus.$on('updateOverview', this.updateOverview);
+
+    const noParamCoqEvent = (name) => {
+      return () => {
+        writeActivity('coq-exec-' + name, {
+          file: this.notebook.filePath,
+          tabIndex: this.index,
+        });
+      };
+    };
+
+    this.eventBus.$on('coqNext', noParamCoqEvent('next'));
+    this.eventBus.$on('coqPrev', noParamCoqEvent('prev'));
+    this.eventBus.$on('coqAll', noParamCoqEvent('all'));
+    this.eventBus.$on('coqToCursor', () => {
+      writeActivity('coq-exec-to-cursor', {
+        targetIndex: this.findCodeIndex(),
+        file: this.notebook.filePath,
+        tabIndex: this.index,
+      });
+    });
+    this.eventBus.$on('coqTo', (index) => {
+      writeActivity('coq-exec-to', {
+        targetIndex: index,
+        file: this.notebook.filePath,
+        tabIndex: this.index,
+      });
+    });
+
+    this.eventBus.$on('coqSearch', ({query, fromExample = null}) => {
+      writeActivity('coq-search', {
+        searchQuery: query,
+        fromExample,
+        file: this.notebook.filePath,
+        tabIndex: this.index,
+      });
+    });
 
     // When the proofwindow is mounted, update to disable all the buttons that
     // require a notebook to be opened

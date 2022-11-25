@@ -91,6 +91,7 @@ import Find from './Find';
 import Gutter from './Gutter';
 import CodeExecution from './mixins/CodeExecution';
 import CodeMirrorHandler from './mixins/CodeMirrorHandler';
+import {writeActivity} from '@/activity-log';
 
 export default {
   name: 'EditWindow',
@@ -112,10 +113,10 @@ export default {
     shortKeys: Object,
     tabindex: Number,
     eventBus: Object,
+    notebookUri: String,
   },
   data: function() {
     return {
-      testValue: 'Proof.',
       floating: false,
       executed: false,
       nextCursorPos: -1,
@@ -158,7 +159,38 @@ export default {
         return 'text-block';
       }
     },
+    exerciseIndexForBlockIndex(index) {
+      let beforeOrInExercise = 0;
+      let inInputBlock = false;
+
+      if (index >= this.blocks.length) {
+        return {beforeOrInExercise, inInputBlock, error: 'out-of-range'};
+      }
+
+
+      for (let i = 0; i < index; i++) {
+        const block = this.blocks[i];
+        if (block.type !== 'input') {
+          continue;
+        }
+
+        if (block.start) {
+          inInputBlock = true;
+        } else {
+          inInputBlock = false;
+          ++beforeOrInExercise;
+        }
+      }
+
+      return {beforeOrInExercise, inInputBlock};
+    },
     setFocusedElement: function(index, find = false) {
+      writeActivity('focusing-block', {
+        tabIndex: this.tabIndex,
+        file: this.notebookUri,
+        blockIndex: index,
+        exerciseIndex: this.exerciseIndexForBlockIndex(index),
+      });
       if (this.focusedElement === index) {
         // If we click again on the element that already has focus, it should
         // already have a CodeMirror open. So, we make sure to just focus on it

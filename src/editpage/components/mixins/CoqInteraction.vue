@@ -1,5 +1,6 @@
 <script>
 import TCPManager from '../../../coq/serapi/workers/TCPManager';
+import {writeActivity} from '@/activity-log';
 
 export default {
   name: 'CoqInteraction',
@@ -56,7 +57,16 @@ export default {
      * Executes the next coq sentence
      */
     coqNext: function() {
-      this.coq.executeNext().then();
+      this.coq.executeNext().then((val) => {
+        if (typeof val === 'object' && val.noSentenceToExecute === true) {
+          writeActivity('coq-next-beyond-sentences', {
+            file: this.notebook.filePath,
+            tabIndex: this.index,
+            executedIndex: this.executedIndex,
+            addErrorIndex: this.addError.index,
+          });
+        }
+      });
     },
 
     /**
@@ -100,7 +110,7 @@ export default {
       this.coq.getAST(sentenceNr);
     },
 
-    coqSearch: function(detail) {
+    coqSearch: function({query: detail}) {
       if (!detail || detail === this.lastSearch) {
         this.$store.commit('openSideWindow', 0);
         return;
@@ -153,7 +163,10 @@ export default {
      * @param {number} errorIndex  The index where the error occured
      */
     setContentError: function(error, errorIndex) {
-      this.addError = {message: error, index: errorIndex};
+      this.addError = {
+        message: error,
+        index: errorIndex,
+      };
     },
 
     executeStarted: function(index) {
