@@ -17,6 +17,7 @@ export default {
         lineWrapping: true,
         line: true,
         placeholder: 'Type your ' + type + ' here...',
+        theme: type === 'code' ? 'lucario' : 'xq-light',
         // gutters: ['exec-gutter'],
         extraKeys: {
           // Close editor with Esc, shift-enter or ctrl-enter
@@ -100,8 +101,8 @@ export default {
 @import "../../../assets/sass/_colors.scss";
 
 .CodeMirror {
-  @include theme(background-color, color-gray-light);
-  @include theme(color, color-on-background);
+  //@include theme(background-color, color-gray-light);
+  //@include theme(color, color-on-background);
 
   &-gutter {
     @include theme(background-color, color-gray-dark);

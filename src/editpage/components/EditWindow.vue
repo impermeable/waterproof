@@ -73,6 +73,8 @@
 <script>
 import {codemirror} from 'vue-codemirror';
 import 'codemirror/lib/codemirror.css';
+import 'codemirror/theme/lucario.css';
+import 'codemirror/theme/xq-light.css';
 import 'codemirror/addon/display/placeholder';
 import 'codemirror/addon/search/searchcursor';
 import 'codemirror/addon/edit/matchbrackets';
