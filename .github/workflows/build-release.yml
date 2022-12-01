@@ -21,12 +21,12 @@ jobs:
         if: steps.check-tag.outputs.match != 'true'
         run: exit 1
       - name: Cache node modules
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ~/.npm
           key: small-npm-deps-ubuntu-latest-${{ hashFiles('**/package-lock.json') }}
           restore-keys: small-npm-deps-ubuntu-latest
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           ref: 'develop'
       - name: Setup git
@@ -57,13 +57,13 @@ jobs:
         with:
           ref: 'develop'
       - name: Cache node modules
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ~/.npm
           key: small-npm-deps-${{ matrix.os }}-${{ hashFiles('**/package-lock.json') }}
           restore-keys: small-npm-deps-${{ matrix.os }}
       - name: Use Node.js
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2
         with:
           node-version: '12.x'
       - run: npm ci
