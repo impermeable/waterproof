@@ -167,14 +167,19 @@ export default {
      */
     removeBlocks: function(index) {
       this.undoRedo.startGroup();
-      const blockTypes = {};
+      const blocksRemoved = [];
+      index.sort((a, b) => a - b);
       for (let i = index.length - 1; i >= 0; i--) {
-        blockTypes[i] = this.notebook.blocks[i].type;
-        this.undoRedo.removeBlocks(index[i], 1);
+        const indexInNoteBook = index[i];
+        blocksRemoved.push({
+          blockIndex: indexInNoteBook,
+          type: this.notebook.blocks[indexInNoteBook].type,
+        });
+        this.undoRedo.removeBlocks(indexInNoteBook, 1);
       }
       writeActivity('removing-blocks', {
         file: this.notebook.filePath,
-        blocksRemoved: blockTypes,
+        blocksRemoved,
         tabIndex: this.index,
       });
       this.undoRedo.endGroup();
