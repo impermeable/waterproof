@@ -235,6 +235,12 @@ export default {
 
       if (this.blocks[this.focusedElement].text === '') {
         removed = true;
+        writeActivity('emptied-block', {
+          tabIndex: this.tabIndex,
+          file: this.notebookUri,
+          blockIndex: this.focusedElement,
+          blockType: this.blocks[this.focusedElement].type,
+        });
         this.dispatchTextChange(
             'remove-block',
             this.focusedElement,
