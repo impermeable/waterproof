@@ -33,7 +33,21 @@ export default {
             this.eventBus.$emit('unfold', this.block);
           }
           if (this.block.type !== 'input') {
-            this.eventBus.$emit('set-focus', this.index);
+            let cursorIndex = 0;
+
+            const sel = window.getSelection();
+            let node = sel.focusNode;
+            if (node.nodeType === Node.TEXT_NODE) {
+              node = node.parentNode;
+            }
+
+            const textIndex = node.getAttribute('data-text-index');
+            if (sel.isCollapsed && textIndex !== '' &&
+                !Number.isNaN(parseInt(textIndex))) {
+              cursorIndex = parseInt(textIndex) + sel.anchorOffset;
+            }
+
+            this.eventBus.$emit('set-focus', this.index, {cursorIndex});
           }
         }
       }

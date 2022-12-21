@@ -13,6 +13,7 @@
                             @execTo="executeTo"/>
               <span v-else
                     :key="'code-' + index + '-part-' + index2"
+                    :data-text-index="part.textIndex"
                     :class="{'exec-inline-error': part.error}"
                     v-html="codeToHtml(part.text)">
               </span>
@@ -66,6 +67,7 @@ export default {
           parts.push({
             text: text.slice(index, newIndex),
             error: inError,
+            textIndex: index,
           });
         }
         index = newIndex;
@@ -91,6 +93,7 @@ export default {
           if (this.inline && index === text.length) {
             parts.push({
               text: ' ',
+              textIndex: index - 1,
             });
           }
         }
@@ -99,6 +102,7 @@ export default {
       if (index < text.length) {
         parts.push({
           text: text.slice(index),
+          textIndex: index,
         });
       }
 
