@@ -69,6 +69,18 @@ export function createQueryVernacCommand(command) {
 }
 
 /**
+ * Partial method for vernac commands to execute the command
+ * after a specific sentece
+ * @param {String} command the vernac commmand to execute
+ * @param {number} sentenceId the sentence id after which
+ * the command should execute
+ * @return {string} the command
+ */
+export function createIndexedQueryVernacCommand(command, sentenceId) {
+  return `(Query ((sid ${sentenceId})) (Vernac "${sanitise(command)}"))`;
+}
+
+/**
  * Create a serapi check command
  * @param {String} query the term to check for
  * @return {string} the command
