@@ -197,7 +197,7 @@ export default {
         // already have a CodeMirror open. So, we make sure to just focus on it
         if (this.$refs.codeMirrors && this.$refs.codeMirrors.length === 1) {
           const cm = this.$refs.codeMirrors[0].codemirror;
-          if (!find) {
+          if (!find && cursorIndex !== -1) {
             cm.setCursor(cm.posFromIndex(cursorIndex));
             this.cursorMove(cm);
           }
@@ -205,7 +205,7 @@ export default {
           return;
         }
       }
-      if (!find) {
+      if (!find && cursorIndex !== -1) {
         this.nextCursorPos = cursorIndex;
       }
       this.selectedInterblock = -1;
