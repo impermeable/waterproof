@@ -1,7 +1,76 @@
 <script>
-const md = require('markdown-it')();
 const mk = require('@iktakahiro/markdown-it-katex');
-md.use(mk);
+const md = require('markdown-it')()
+    .use(mk)
+    .use((md) => {
+      {
+        md.core.ruler.push('index-counter', function(state) {
+          try {
+            const content = state.src;
+
+            let currentIndex = -1;
+
+            const recurseTokens = (tokens) => {
+              if (tokens == null) {
+                return;
+              }
+
+              for (const token of tokens) {
+                let index = -1;
+                if (token == null) {
+                  continue;
+                }
+
+                const tokenContent =
+                    token.markup + token.content + token.markup;
+
+                if (tokenContent !== '') {
+                  index = content.indexOf(tokenContent, currentIndex);
+                  if (index >= 0) {
+                    token.attrSet('data-text-index', index);
+                    if (!token.children) {
+                      currentIndex = index + tokenContent.length - 1;
+                    }
+                  }
+                }
+
+                recurseTokens(token.children);
+              }
+            };
+
+            recurseTokens(state.tokens);
+          } catch (e) {
+            console.log('failed markdown with', e);
+          }
+        });
+      }
+
+      {
+        const replaceRenderer = (name, wrapped=false) => {
+          const original = md.renderer.rules[name];
+          md.renderer.rules[name] = function(tokens, idx, ...rest) {
+            const textIndex = tokens[idx].attrGet('data-text-index');
+            if (textIndex != null) {
+              if (wrapped) {
+                return `<span data-text-index="${textIndex}">` +
+                        original(tokens, idx, ...rest) +
+                        `</span>`;
+              } else {
+                return `<span data-text-index="${textIndex}"></span>`
+                    + original(tokens, idx, ...rest);
+              }
+            }
+            // eslint-disable-next-line prefer-rest-params
+            return original(tokens, idx, ...rest);
+          };
+        };
+
+        replaceRenderer('text');
+        replaceRenderer('math_inline', true);
+        replaceRenderer('math_block', true);
+      }
+    });
+
 const regExp = /<p>(.*)<\/p>/si;
 
 export default {
