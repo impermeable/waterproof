@@ -33,18 +33,54 @@ export default {
             this.eventBus.$emit('unfold', this.block);
           }
           if (this.block.type !== 'input') {
-            let cursorIndex = 0;
+            let cursorIndex = -1;
 
             const sel = window.getSelection();
-            let node = sel.focusNode;
-            if (node.nodeType === Node.TEXT_NODE) {
-              node = node.parentNode;
+            if (!sel.isCollapsed) {
+              this.eventBus.$emit('set-focus', this.index, {cursorIndex});
+              return;
             }
 
-            const textIndex = node.getAttribute('data-text-index');
-            if (sel.isCollapsed && textIndex !== '' &&
-                !Number.isNaN(parseInt(textIndex))) {
-              cursorIndex = parseInt(textIndex) + sel.anchorOffset;
+            try {
+              let node = sel.focusNode;
+              const dataTextIndexAttribute = 'data-text-index';
+
+              if (node.nodeType === Node.TEXT_NODE) {
+                const parent = node.parentNode;
+                const sibling = node.previousElementSibling;
+
+                // Prefer parent element, then previous sibling
+                // and otherwise go up the tree.
+                if (parent.getAttribute(dataTextIndexAttribute) != null) {
+                  node = parent;
+                } else if (sibling != null && sibling.getAttribute(
+                    dataTextIndexAttribute) != null) {
+                  node = sibling;
+                } else {
+                  node = parent;
+                }
+              }
+
+              while (node != null
+                && node.getAttribute(dataTextIndexAttribute) == null) {
+                const parent = node.parentNode;
+                if (parent.getAttribute('data-block-search-stop') != null) {
+                  node = null;
+                  break;
+                }
+                node = parent;
+              }
+
+              if (node != null) {
+                const textIndex =
+                    node.getAttribute(dataTextIndexAttribute) || '';
+                const number = parseInt(textIndex);
+                if (textIndex !== '' && !Number.isNaN(number)) {
+                  cursorIndex = parseInt(textIndex) + sel.anchorOffset;
+                }
+              }
+            } catch (e) {
+              console.log('went wrong in text index look up', e);
             }
 
             this.eventBus.$emit('set-focus', this.index, {cursorIndex});

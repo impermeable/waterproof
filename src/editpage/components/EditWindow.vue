@@ -10,6 +10,7 @@
     <div ref="editPane"
         class="edit-pane"
         @click.self="onClick"
+        data-block-search-stop="yes"
         @paste="paste">
       <inter-block
           :key="'interblock-' + 0"
