@@ -147,7 +147,31 @@ export default {
       const value = cm.getValue();
 
       this.dispatchTextChange('input', this.focusedElement, value);
-      this.refreshExecStatus(false);
+      this.refreshExecStatus(false, cm);
+    },
+    updateCmGutter: function(cm) {
+      const execInfo = this.findCodeIndex(this.executeIndex, false);
+
+      if (execInfo.blockIndex != null && execInfo.posInBlock != null) {
+        if (this.focusedElement == execInfo.blockIndex) {
+          // Remove marker from any other lines in the codeMirror
+          cm.eachLine((line) => {
+            cm.setGutterMarker(line, 'CodeMirror-linenumbers', null);
+          });
+
+          // Set marker on active line
+          const line = this.runningSentenceIndex - 1;
+          cm.setGutterMarker(line, 'CodeMirror-linenumbers',
+              this.makeMarker());
+        }
+      }
+    },
+    makeMarker: function() {
+      console.log('marker_set');
+      const marker = document.createElement('div');
+      marker.style.color = '#822';
+      marker.innerHTML = '●';
+      return marker;
     },
     toComponent: function(type) {
       if (type === 'code') {
@@ -267,7 +291,7 @@ export default {
       }
       cm.setCursor(cm.posFromIndex(cursorPos));
       this.cursorMove(cm);
-
+      this.updateCmGutter(cm);
       cm.focus();
       this.$refs.find.currentCm = cm;
       this.$refs.find.onCodeMirrorReady();
@@ -292,6 +316,8 @@ export default {
       }
     },
     keyup: function(cm, key, event) {
+      this.updateCmGutter(cm);
+
       if (event.shiftKey ||
           !(key.includes('Right')
             || key.includes('Left')
@@ -436,13 +462,16 @@ export default {
       const index = this.sentenceIndices.indexOf(this.executeIndex) + 1;
       return this.sentenceIndices[index];
     },
+    runningSentenceIndex() {
+      return this.sentenceIndices.indexOf(this.executeIndex) + 1;
+    },
   },
   watch: {
-    executeIndex: function() {
-      this.refreshExecStatus(true);
+    executeIndex: function(cm) {
+      this.refreshExecStatus(true, cm);
     },
-    pendingIndex: function() {
-      this.refreshExecStatus(true);
+    pendingIndex: function(cm) {
+      this.refreshExecStatus(true, cm);
     },
   },
   /**
