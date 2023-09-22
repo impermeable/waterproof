@@ -1,7 +1,7 @@
 # Waterproof's application structure
 
 Waterproof is built on the proof assistant *CoQ*.
-It communicaties with the proof assistant using a library called *SerAPI*.
+It communicates with the proof assistant using a library called *SerAPI*.
 This communication is indirect: Waterproof starts an application called *wpwrapper*, 
 which in turn runs several instances of *sertop*.
 
@@ -25,7 +25,7 @@ a new sentence should be executed, and handles the response by SerAPI.
 Because the communication with SerAPI is asynchronous, a large part of the tasks of the Processors is 
 to manage this asynchronicity, for instance with the use of locks.
 
-The responsibility for composing the correct message, the correct string, is defered to 
+The responsibility for composing the correct message, the correct string, is deferred to 
 the *SerapiCommandFactory*.
 
 ## SerapiProcessors
