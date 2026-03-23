@@ -1,3 +1,10 @@
+> [!WARNING]
+> This archived repository concerns the first, and outdated, version of Waterproof, which is no longer maintained.
+> The new version of Waterproof is implemented as an extension for Visual Studio code.
+> For the active repository, including manual installation instructions and source code, please check out [https://github.com/impermeable/waterproof-vscode](https://github.com/impermeable/waterproof-vscode) instead.
+> More information on Waterproof itself can be found on our [landing page](https://impermeable.github.io).
+
+
 # Waterproof
 
 Waterproof is an educational tool in which students can interactively prove mathematical statements. Here is an example of an exercise and part of its solution in Waterproof.
