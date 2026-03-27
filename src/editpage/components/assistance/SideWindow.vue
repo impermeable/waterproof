@@ -8,7 +8,7 @@
         @click="closeWindow"
       />
       <div>
-        <h3>
+        <h3 @click="updateOverview">
           {{title}}
           <pulse-loader class="loader" :loading="isSearching" :size="'10px'">
           </pulse-loader>
@@ -30,12 +30,15 @@
           </div>
         </div>-->
       </div>
+      <img src="../../../assets/images/refresh_black.svg" class="closing-icon"
+          @click="updateOverview"/>
     </div>
     <hr>
     <div :class="{'search-results': windowIndex === 0}">
       <template v-for="(item, index) in sortedItems">
         <component :is="component"
                    :item="item" :hasPrevious="index > 0"
+                   :parent="parent(index)" :children="children(index)"
                    :showAdvanced="showAdvanced"
                    :event-bus="eventBus" :key="'assistanceItem' + index" />
       </template>
@@ -57,6 +60,7 @@
 import SearchResult from './search/SearchResult';
 import Command from './commands/Command.vue';
 import SymbolCategory from './symbols/SymbolCategory.vue';
+import OverviewItem from './OverviewItem.vue';
 import Tactic from './tactics/Tactic.vue';
 import PulseLoader from 'vue-spinner/src/PulseLoader.vue';
 import orderBy from 'lodash.orderby';
@@ -66,11 +70,13 @@ export default {
   name: 'SideWindow',
   props: {
     eventBus: Object,
+    overview: Array,
   },
   components: {
     SearchResult,
     Command,
     SymbolCategory,
+    OverviewItem,
     Tactic,
     PulseLoader,
   },
@@ -100,6 +106,8 @@ export default {
         return [];
       } else if (this.windowIndex === 0) {
         return this.searchResults;
+      } else if (this.windowIndex === 4) {
+        return this.overview;
       } else {
         return this.$store.state.assistanceItems[this.windowIndex - 1];
       }
@@ -139,6 +147,9 @@ export default {
           this.title = 'Commands';
           this.component = 'command';
           break;
+        case 4:
+          this.title = 'Overview';
+          this.component = 'overview-item';
       }
 
       writeActivity('side-window-change', {
@@ -159,6 +170,38 @@ export default {
   methods: {
     closeWindow: function() {
       this.$store.commit('closeSideWindow');
+    },
+    updateOverview() {
+      if (this.windowIndex === 4) {
+        this.eventBus.$emit('updateOverview');
+      }
+    },
+    parent: function(index) {
+      if (this.windowIndex === 4) {
+        const depth = this.items[index].depth;
+        let parentIndex = index;
+        while (this.items[parentIndex].depth <= depth) {
+          if (parentIndex === 0) {
+            return null; // or -1?
+          }
+          parentIndex -= 1;
+        }
+        return this.items[parentIndex];
+      } else {
+        return null;
+      }
+    },
+    children: function(index) {
+      const children = [];
+      if (this.windowIndex === 4) {
+        let childIndex = index + 1;
+        while (childIndex < this.items.length &&
+            this.items[childIndex].depth > this.items[index].depth) {
+          children.push(this.items[childIndex]);
+          childIndex += 1;
+        }
+      }
+      return children;
     },
   },
   mounted: function() {

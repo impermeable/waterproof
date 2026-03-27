@@ -8,6 +8,8 @@
         class="sidewindow-button" @click="showSymbols" title="Symbols" />
       <img src="../../../../assets/images/tacticButton.svg"
         class="sidewindow-button" @click="showTactics" title="Tactics" />
+      <img src="../../../../assets/images/list.svg"
+        class="sidewindow-button" @click="showOverview" title="Overview" />
     </div>
     <div v-bind:class="{ 'hide-assistance-buttons': !isSearchOpen }"
          class="search-container">
@@ -47,6 +49,9 @@ export default {
         event: 'coqSearch',
         payload: {query: this.searchText},
       });
+    },
+    showOverview() {
+      this.$store.commit('openSideWindow', 4);
     },
     showTactics() {
       this.$store.commit('openSideWindow', 1);

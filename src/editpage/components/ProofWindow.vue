@@ -24,7 +24,7 @@
                       :goals="goals" :addError="addError" :ready="ready">
       </response-window>
     </div>
-    <side-window :event-bus="eventBus">
+    <side-window :event-bus="eventBus" :overview="overview">
     </side-window>
   </div>
   </b-tab>
@@ -82,6 +82,7 @@ export default {
   data: function() {
     return {
       eventBus: new Vue(),
+      overview: [],
       notebook: new Notebook(),
       undoRedo: new UndoRedo(null),
       lastSearch: null,
@@ -120,6 +121,26 @@ export default {
     },
   },
   methods: {
+    updateOverview: function() {
+      const newOverview = [];
+      const tags = ['h1', 'h2', 'h3'];
+      for (let i = 0; i < tags.length; i++) {
+        const headers = this.$refs.editWindow.$el.getElementsByTagName(tags[i]);
+        const headersExpanded = [...headers];
+        newOverview.push(...headersExpanded.map((header) => {
+          const depth = parseInt(header.nodeName.charAt(1));
+          return {
+            depth: depth,
+            text: header.innerText,
+            offset: header.offsetTop,
+            visible: depth <= 1,
+            unfolded: false,
+          };
+        }));
+      }
+      newOverview.sort((a, b) => a.offset - b.offset);
+      this.overview = newOverview;
+    },
     /**
      * Loads the notebook at the path specified by this.uri into this window,
      * and creates a new serapi worker
@@ -461,6 +482,10 @@ export default {
       }
     },
 
+    scrollToOffset: function(offset) {
+      this.$refs.editWindow.$el.scrollTop = offset;
+    },
+
     previousInput: function() {
       const currentScroll = this.$refs.editWindow.$el.scrollTop;
       const inputs =
@@ -552,6 +577,8 @@ export default {
     this.eventBus.$on('exportToExerciseSheet', this.exportToExerciseSheet);
     this.eventBus.$on('compilewplib', this.compilewplib);
     this.eventBus.$on('close', this.close);
+    this.eventBus.$on('updateOverview', this.updateOverview);
+    this.eventBus.$on('scrollToOffset', this.scrollToOffset);
 
     const noParamCoqEvent = (name) => {
       return () => {

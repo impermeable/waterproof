@@ -3,6 +3,8 @@ export default {
   props: {
     item: Object,
     hasPrevious: Boolean,
+    parent: Object,
+    children: Array,
     eventBus: Object,
     showAdvanced: Boolean,
   },
