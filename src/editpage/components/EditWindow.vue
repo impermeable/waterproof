@@ -10,6 +10,7 @@
     <div ref="editPane"
         class="edit-pane"
         @click.self="onClick"
+        data-block-search-stop="yes"
         @paste="paste">
       <inter-block
           :key="'interblock-' + 0"
@@ -184,20 +185,29 @@ export default {
 
       return {beforeOrInExercise, inInputBlock};
     },
-    setFocusedElement: function(index, find = false) {
+    setFocusedElement: function(index, {find = false, cursorIndex = -1} = {}) {
       writeActivity('focusing-block', {
         tabIndex: this.tabIndex,
         file: this.notebookUri,
         blockIndex: index,
+        cursorIndex: cursorIndex,
         exerciseIndex: this.exerciseIndexForBlockIndex(index),
       });
       if (this.focusedElement === index) {
         // If we click again on the element that already has focus, it should
         // already have a CodeMirror open. So, we make sure to just focus on it
         if (this.$refs.codeMirrors && this.$refs.codeMirrors.length === 1) {
-          this.$refs.codeMirrors[0].codemirror.focus();
+          const cm = this.$refs.codeMirrors[0].codemirror;
+          if (!find && cursorIndex !== -1) {
+            cm.setCursor(cm.posFromIndex(cursorIndex));
+            this.cursorMove(cm);
+          }
+          cm.focus();
           return;
         }
+      }
+      if (!find && cursorIndex !== -1) {
+        this.nextCursorPos = cursorIndex;
       }
       this.selectedInterblock = -1;
       if (this.focusedElement !== -1) {

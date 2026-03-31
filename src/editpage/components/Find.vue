@@ -216,8 +216,7 @@ export default {
         }
         this.findPos = this.findList[this.findIndex].index;
       }
-      this.eventBus.$emit('set-focus', this.findPos, true);
-      // this.setFocusedElement(this.findPos, true);
+      this.eventBus.$emit('set-focus', this.findPos, {find: true});
     },
 
     replaceAll: function() {
