@@ -2,7 +2,7 @@ import SerapiProcessor from '../util/SerapiProcessor';
 import {Mutex} from 'async-mutex';
 import {
   createCheckCommand, createQueryVernacCommand,
-  createSearchCommand,
+  createIndexedQueryVernacCommand, createSearchCommand,
 } from '../util/SerapiCommandFactory';
 import {COQ_EXCEPTION, parseErrorResponse} from '../SerapiParser';
 
@@ -217,20 +217,41 @@ class SerapiSearchProcessor extends SerapiProcessor {
    * @private
    */
   async _queryCommand(command) {
-    return this.sendCommand(createQueryVernacCommand(command), 'raw',
-        (feedback) => {
-          return {
-            result: feedback.string,
-          };
-        })
-        .then((result) => {
-          if (result.hasOwnProperty('result')) {
-            this.editor.message(result.result);
-          }
-          if (result.error) {
-            this.editor.message(result.errorMessage);
-          }
-        });
+    try {
+      return this.sendCommand(
+          createIndexedQueryVernacCommand(
+              command, this.state.idOfSentence(this.state.lastExecuted)), 'raw',
+          (feedback) => {
+            return {
+              result: feedback.string,
+            };
+          })
+          .then((result) => {
+            if (result.hasOwnProperty('result')) {
+              this.editor.message(result.result);
+            }
+            if (result.error) {
+              this.editor.message(result.errorMessage);
+            }
+          });
+    } catch (e) {
+      return this.sendCommand(
+          createQueryVernacCommand(
+              command), 'raw',
+          (feedback) => {
+            return {
+              result: feedback.string,
+            };
+          })
+          .then((result) => {
+            if (result.hasOwnProperty('result')) {
+              this.editor.message(result.result);
+            }
+            if (result.error) {
+              this.editor.message(result.errorMessage);
+            }
+          });
+    }
   }
 
   /**
